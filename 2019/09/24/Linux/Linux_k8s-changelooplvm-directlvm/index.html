@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="LiarLee">
+
+
+
+<meta name="description" content="对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。">
+<meta name="keywords" content="Kubernetes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K8S将loop-lvm改为direct-lvm说明">
+<meta property="og:url" content="http://liarlee.site/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/index.html">
+<meta property="og:site_name" content="LiarLee&#39;s Notebook">
+<meta property="og:description" content="对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-06T10:07:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="K8S将loop-lvm改为direct-lvm说明">
+<meta name="twitter:description" content="对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="LiarLee&#39;s Notebook" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/yellow/pace-theme-bounce.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>K8S将loop-lvm改为direct-lvm说明 | LiarLee&#39;s Notebook</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?edd562dfbae3c6705d37b00034076bc8";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <link rel="stylesheet" href="/lib/gitalk/gitalk.css">
+    <script src="/lib/gitalk/gitalk.min.js"></script>
+
+
+
+
+
+
+
+
+</head>
+</html>
+<head>
+	<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+	<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+	<script type="text/javascript" src="/js/firework.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">LiarLee</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:625610036@qq.com" title="Email"></a>
+                            
+                                <a class="fa QQ" href="http://wpa.qq.com/msgrd?v=3&uin=625610036&site=qq&menu=yes" title="QQ"></a>
+                            
+                                <a class="fa 微信" href="/625610036" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ArchLinux/">ArchLinux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cacti/">Cacti</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cobbler/">Cobbler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/English/">English</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fedora/">Fedora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Firefox/">Firefox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KVM/">KVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lantern/">Lantern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Office/">Office</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Orthanc/">Orthanc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Personal/">Personal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grub2/">grub2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/佛教/">佛教</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心学/">心学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/诗/">诗</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://martinhan.site">Martinhan</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">诸行无常，诸法无我。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=200 height=52 src="//music.163.com/outchain/player?type=2&id=28285910&auto=1&height=32"></iframe>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">LiarLee</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">LiarLee</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:625610036@qq.com" title="Email"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=625610036&site=qq&menu=yes" title="QQ"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/625610036" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Linux/Linux_k8s-changelooplvm-directlvm" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/" class="article-date">
+      <time datetime="2019-09-24T03:10:36.000Z" itemprop="datePublished">2019-09-24</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      K8S将loop-lvm改为direct-lvm说明
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kubernetes/">Kubernetes</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。</p>
+<a id="more"></a>
+<h2 id="k8s的几种不同的存储驱动"><a href="#k8s的几种不同的存储驱动" class="headerlink" title="k8s的几种不同的存储驱动"></a>k8s的几种不同的存储驱动</h2><ol>
+<li>AUFS - 这是一个经过时间检验的存储驱动</li>
+<li>DeviceMapper - Redhat系默认的驱动，有loop和direct两种不同配置</li>
+<li>Btrfs - 我…. 这个文件系统的快照真的是贼好用，但是性能什么的….我倒觉得都一般</li>
+<li>ZFS - 还没用过</li>
+<li>VFS - 还没用过</li>
+<li>Overlay2 - 简单的接触了一下，docker目前推荐的存储驱动</li>
+</ol>
+<h2 id="关于存储驱动选择的相关博客及文章"><a href="#关于存储驱动选择的相关博客及文章" class="headerlink" title="关于存储驱动选择的相关博客及文章"></a>关于存储驱动选择的相关博客及文章</h2><blockquote>
+<p><a href="https://www.jianshu.com/p/6bf1bc011ade" target="_blank" rel="noopener">Docker引擎 - 选择存储驱动</a><br><a href="http://dockone.io/article/1513" target="_blank" rel="noopener">Docker五种存储驱动原理及应用场景和性能测试对比</a><br><a href="https://www.cnblogs.com/Terry-Wu/p/7471476.html" target="_blank" rel="noopener">Docker系统八：Docker的存储驱动</a> </p>
+</blockquote>
+<h2 id="loop-lvm"><a href="#loop-lvm" class="headerlink" title="loop-lvm"></a>loop-lvm</h2><p>这是docker默认安装之后的选择，因为这样可以out-of-box，但是据说稳定性不佳，我没遇到稳定性的问题，但是遇到了IO高导致的整个虚拟机运行缓慢。<br>Loop-LVM其实使用了linux中的使用loop设备<br>我之前安装的一套k8s默认是使用overlay2的存储，可能是内核的版本过低导致无法使用其他的存储驱动，所以我觉得默认使用了loop-lvm。</p>
+<blockquote>
+<p>loop-lvm的工作模式是，默认在/var/lib/docker/devicemapper/devicemapper/目录下生成data&amp;metadata两个<strong>稀疏文件</strong>（我目前还不知道什么叫做稀疏文件），并将两个文件挂载为loop设备做为块设备来使用。<br>按照这个说法的话确实如果直接对裸设备的想能和稳定性都应该更强。所以下面可以动手啦~</p>
+</blockquote>
+<h2 id="direct-lvm"><a href="#direct-lvm" class="headerlink" title="direct-lvm"></a>direct-lvm</h2><p>这里直接放一个官方文档的链接好了。<br><a href="https://docs.docker.com/storage/storagedriver/device-mapper-driver/" target="_blank" rel="noopener">Device-Mapper-driver</a></p>
+<h3 id="切换loop-lvm到direct-lvm"><a href="#切换loop-lvm到direct-lvm" class="headerlink" title="切换loop-lvm到direct-lvm"></a>切换loop-lvm到direct-lvm</h3><p>想要切换的原因其实是已经安装好的这个k8s的master节点在跑了很久之后，总是被zabbix监控到报警，硬盘负载高；cpu进程数高。cpu的进程数量高可以理解，毕竟监控了如此多的容器。硬盘负载高这个报警在系统中发现是/dev/loop2这个设备。对应去查找 docker info中的信息，发现这是k8s的存储所使用的。进而搜索到了关于loop-lvm&amp;direct-lvm的相关问题，发现使用loop设备的方式应该实在性能上有影响的，k8s不推荐生产环境使用，所以考虑切换过来，今后毕竟还是要长期使用的。<strong>值得注意的是</strong>：切换一定会导致之前的容器无法使用。而且目前来看关键的数据是不能恢复的，所以最好是在之前已经做好了计划。</p>
+<h4 id="自动托管配置"><a href="#自动托管配置" class="headerlink" title="自动托管配置"></a>自动托管配置</h4><p>自动托管的配置主要是两部分，首先是建立一个空的LVM，不需要挂载，只要系统识别到即可。之后是更改配置文件及重启docker服务。</p>
+<ol>
+<li>在虚拟机中加入一块新的硬盘，fdisk中识别为/dev/sdb；</li>
+<li>关闭docker。systemctl stop docker.</li>
+<li><p>在配置文件中加入如下的配置，注意格式不要错，不要丢下末尾的逗号：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"storage-driver"</span>: <span class="string">"devicemapper"</span>,   # 告诉docker应用使用的存储驱动</span><br><span class="line">  <span class="string">"storage-opts"</span>: [</span><br><span class="line">    <span class="string">"dm.directlvm_device=/dev/sdb"</span>,	# 指定使用的块设备，不需要格式化，不需要分区。在这里指定了设备docker会自动完成创建LVM等等操作。</span><br><span class="line">    <span class="string">"dm.thinp_percent=95"</span>,	# 指定Thinpool占用的百分比</span><br><span class="line">    <span class="string">"dm.thinp_metapercent=1"</span>,	# 指定Thinpool Meta数据使用的百分比</span><br><span class="line">    <span class="string">"dm.thinp_autoextend_threshold=80"</span>,	# 指定自动扩容的阈值</span><br><span class="line">    <span class="string">"dm.thinp_autoextend_percent=20"</span>,	# 指定自动扩容的比例</span><br><span class="line">    <span class="string">"dm.directlvm_device_force=false"</span>	# 是否强制格式化设备，默认是false。如果使用dockerd启动的时候出现了提供需要强行格式化设备的提示，就改为<span class="literal">True</span>。</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新启动docker服务。如果正常启动可通过docker info 查看是否已经切换过来。</p>
+</li>
+<li>如果没有能成功启动，尝试重启虚拟机；尝试使用dockerd命令直接启动，根据dockerd的日志信息进行相应的修改。</li>
+<li>常见错误有：<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Sep 23 18:38:03 k8s-master dockerd: <span class="attribute">time</span>=<span class="string">"2019-09-23T18:38:03.931876136+08:00"</span> <span class="attribute">level</span>=warning <span class="attribute">msg</span>=<span class="string">"[graphdriver] WARNING: the devicemapper storage-driver is deprecated, and will be removed in a future release"</span></span><br><span class="line"><span class="comment"># 存储驱动将会在未来的版本被移除的警告。这不会导致docker无法运行。</span></span><br><span class="line">Sep 23 18:25:52 localhost dockerd: <span class="builtin-name">Error</span> starting daemon: <span class="builtin-name">error</span> initializing graphdriver: /dev/sdb is already part of a volume<span class="built_in"> group </span><span class="string">"docker"</span>: must <span class="builtin-name">remove</span> this device <span class="keyword">from</span> any volume<span class="built_in"> group </span><span class="keyword">or</span> provide a different device</span><br><span class="line"><span class="comment"># 这个问题说明 docker 认为你的/dev/sdb上已经被创建了LVM，你需要手动指定，自动托管不会对这个设备进行操作。这会导致docker无法启动。</span></span><br><span class="line"><span class="comment"># 首先你需要把/dev/sdb这个设备从LVM里面移除，lvdelete,pvdelete,vgdelete, 将设备还原为默认的状态，之后重启docker，将设备的所有操作控制都交给docker来做，就不会有这个错误了。</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在更换之后目前性能稳定，IO的负载也下来了。总体来看还是不错的。不过随着kubernetes的发展，我觉得这种问题应该会越来越少。还是推荐在安装的时候直接调整，不然数据的随时确实带来了一些麻烦。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/">K8S将loop-lvm改为direct-lvm说明</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">LiarLee</a></p>
+        <p><span>发布时间:</span>2019-09-24, 11:10:36</p>
+        <p><span>最后更新:</span>2019-11-06, 18:07:09</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/" title="K8S将loop-lvm改为direct-lvm说明">http://liarlee.site/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://liarlee.site/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/　　作者: LiarLee" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2019/09/24/Linux/Linux_k8s-basic-3/">
+                    Kubernetes集群的学习笔记(3)
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2019/09/23/Linux/Linux_RabbitMQ-Problems/">
+                    RabbitMQ_SysV风格管理脚本模板
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#k8s的几种不同的存储驱动"><span class="toc-number">1.</span> <span class="toc-text">k8s的几种不同的存储驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于存储驱动选择的相关博客及文章"><span class="toc-number">2.</span> <span class="toc-text">关于存储驱动选择的相关博客及文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#loop-lvm"><span class="toc-number">3.</span> <span class="toc-text">loop-lvm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#direct-lvm"><span class="toc-number">4.</span> <span class="toc-text">direct-lvm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#切换loop-lvm到direct-lvm"><span class="toc-number">4.1.</span> <span class="toc-text">切换loop-lvm到direct-lvm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#自动托管配置"><span class="toc-number">4.1.1.</span> <span class="toc-text">自动托管配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"true"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"K8S将loop-lvm改为direct-lvm说明　| LiarLee's Notebook　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2019/09/24/Linux/Linux_k8s-basic-3/" title="上一篇: Kubernetes集群的学习笔记(3)">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2019/09/23/Linux/Linux_RabbitMQ-Problems/" title="下一篇: RabbitMQ_SysV风格管理脚本模板">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/11/06/Linux/Linux_k8s-basic-7/">Kubernetes集群的学习笔记(7)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/06/Linux/Linux_k8s-basic-6/">Kubernetes集群的学习笔记(6)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/22/Linux/Linux_ChangeGnometoi3wm/">i3wm的简单配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/18/Linux/Linux_k8s-basic-5/">Kubernetes集群的学习笔记(5)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/14/Linux/Linux_k8s-basic-4/">Kubernetes集群的学习笔记(4)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/10/Linux/Linux_tricks/">Linux及vim的技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/09/Linux/Linux_k8s-namespace-delete-terminating/">k8s所有的NS删除的时候都进入Terminating状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/">Linux_Cobbler搭建本地YUM源同步k8s阿里云</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/24/Linux/Linux_k8s-basic-3/">Kubernetes集群的学习笔记(3)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/">K8S将loop-lvm改为direct-lvm说明</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/23/Linux/Linux_RabbitMQ-Problems/">RabbitMQ_SysV风格管理脚本模板</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/All this I did without you/">All this I did without you</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/Linux/Linux_Gnome-Tricks/">Gnome快捷键</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/Linux/Linux_Nginx-if-try-files-Notwork/">Nginx配置文件中if判断与try_files</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/18/Linux/Linux_CentOS7-VM-Template/">虚拟机制作模板的步骤及设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/17/Linux/Linux_Systemctl-ManageService/">通过systemd管理软件和服务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/Linux/Linux_FirstMeet-With-ElasticSeach-1/">ElasticSearch初探 - 1</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/24/Linux/Linux_FileManagement/">文件系统及文件管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/Linux/Linux_k8s-basic-2/">Kubernetes集群的学习笔记(2)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/21/Linux/Linux_k8s-basic-1/">Kubernetes集群的学习笔记(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/18/Other_Interview-testing/">面试记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/13/Linux/Linux_Nginx-Proxy/">Nginx反向代理笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/13/Linux/Linux_Boot-sequence/">Linux启动流程简述</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/08/Linux/Linux_vim-note/">vim笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/07/Linux/Linux_Ansible-Note-2/">Ansible笔记-2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Linux/Linux_Ansible-Note-1/">Ansible笔记-1</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/25/Linux/Linux_VM-timer/">KVM中windows7虚拟机时间问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/25/Linux/Linux_IO-Redirect/">IO重定向笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/17/Python-Script-ForGame/">pyautogui自动脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/17/Linux/Linux_Archlinux-Installation/">Archlinux安装过程记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/Linux/Linux_DockerFile笔记/">DockerFile笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/13/Linux/Linux_Fedora-bootspeedup/">Fedora开机启动速度的优化</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/09/2018-2019/">2018-2019 Review</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/08/Linux/Linux_VMwareTools共享文件夹方案/">VMwareTools共享文件夹方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/24/诗词收集/">诗词收集</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/08/Honor8InstallLineageOS/">荣耀8-刷LineageOS14.1简述</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/Hexo-backup-restore/">Hexo备份和恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/Linux/Linux_BuildRPMs/">RPM制作的笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/02/DCM4CHEE_RunDocker/">Docker中运行DCM4CHEE-arc-light</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/25/Linux/Linux_Install-Maven-Guide/">安装Maven教程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/23/Linux/Linux_ip-forward-active/">配置Ip-forward参数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/28/Linux/Linux_DockerCommands/">Docker基本命令说明</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/11/Linux/Linux_关闭Fedora防火墙/">Fedora防火墙关闭，如何开机运行脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/25/Linux/Linux_Orthanc_InstallationNote/">Orthanc的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/19/Windows_DISM命令/">DISM的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/01/Linux/Linux_Cacti-installation/">Cacti的安装教程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/25/Linux/Fw-Fedora安装Lantern/">Fw:Fedora使用Lantern</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/Linux/Linux_电话面试/">Linux-电话面试</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/Linux/Linux_进程管理笔记/">Linux-进程管理笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/书摘-正见-诸行无常/">书摘-正见-诸行无常</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/Linux/Linux_Nginx-InstalltionNote/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/Linux/Linux_内核参数笔记/">Linux-内核参数笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/本地方式安装-Net3-5教程/">本地方式安装.Net3.5笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/15/PPTConvertTOWORD/">PPT转换WORD</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/Python入门笔记/Python入门笔记-2/">Python入门笔记 (三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/传习录/传习录-2/">传习录 (三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/传习录/传习录-3/">传习录 (四)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/Python入门笔记/Python入门笔记-1/">Python入门笔记 (二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/传习录/传习录-1/">传习录 (二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/Linux/Linux_Grub2repair/">grub2手动修复引导错误</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/Python入门笔记/Python入门笔记/">Python入门笔记 (一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/传习录/传习录/">传习录 (一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/02/如何给自己的电脑重装系统/">如何使用微软官方镜像重装系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Linux/Firefox-Openh264/">Firefox-Openh264的问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/Hexo-Install/">Hexo+Github建立个人博客记录</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+
+
+<div class="gitalk">
+	<div id="gitalk-container"></div>
+	<script src="/js/md5.min.js"></script>
+	<script type="text/javascript">
+		const gitalk = new Gitalk({
+			clientID: '90afaa397718112f845e',
+			clientSecret: '03c2c402d78a57f57aa0eec5ec216e1bb3411f1b',
+			repo: 'liarlee_gitalk',
+			owner: 'LiarLee',
+			admin: ['LiarLee'],
+			// id: (location.pathname).split("/").pop().substring(0, 49), // Ensure uniqueness and length less than 50
+			id: md5(location.pathname),
+			distractionFreeMode: true // Facebook-like distraction free mode
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+</div>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2020 LiarLee
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 2;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  </div>
+</body>
+</html>
+

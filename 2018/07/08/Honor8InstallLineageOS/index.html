@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="LiarLee">
+
+
+
+<meta name="description" content="荣耀8刷LineageOS 14.1 , 感谢XDA的大神们。用到的刷机包我转存了一份到微云，链接在末尾。">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="荣耀8-刷LineageOS14.1简述">
+<meta property="og:url" content="http://liarlee.site/2018/07/08/Honor8InstallLineageOS/index.html">
+<meta property="og:site_name" content="LiarLee&#39;s Notebook">
+<meta property="og:description" content="荣耀8刷LineageOS 14.1 , 感谢XDA的大神们。用到的刷机包我转存了一份到微云，链接在末尾。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/08/02/5b628ca68c86f.png">
+<meta property="og:image" content="https://i.loli.net/2018/08/02/5b628c9965473.png">
+<meta property="og:image" content="https://i.loli.net/2018/08/02/5b628c9962113.png">
+<meta property="og:image" content="https://i.loli.net/2018/08/02/5b628c9961462.png">
+<meta property="og:image" content="https://i.loli.net/2018/08/02/5b628c9964202.png">
+<meta property="og:updated_time" content="2019-11-06T10:07:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="荣耀8-刷LineageOS14.1简述">
+<meta name="twitter:description" content="荣耀8刷LineageOS 14.1 , 感谢XDA的大神们。用到的刷机包我转存了一份到微云，链接在末尾。">
+<meta name="twitter:image" content="https://i.loli.net/2018/08/02/5b628ca68c86f.png">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="LiarLee&#39;s Notebook" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/yellow/pace-theme-bounce.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>荣耀8-刷LineageOS14.1简述 | LiarLee&#39;s Notebook</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?edd562dfbae3c6705d37b00034076bc8";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <link rel="stylesheet" href="/lib/gitalk/gitalk.css">
+    <script src="/lib/gitalk/gitalk.min.js"></script>
+
+
+
+
+
+
+
+
+</head>
+</html>
+<head>
+	<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+	<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+	<script type="text/javascript" src="/js/firework.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">LiarLee</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:625610036@qq.com" title="Email"></a>
+                            
+                                <a class="fa QQ" href="http://wpa.qq.com/msgrd?v=3&uin=625610036&site=qq&menu=yes" title="QQ"></a>
+                            
+                                <a class="fa 微信" href="/625610036" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ArchLinux/">ArchLinux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cacti/">Cacti</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cobbler/">Cobbler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/English/">English</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fedora/">Fedora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Firefox/">Firefox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KVM/">KVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lantern/">Lantern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Office/">Office</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Orthanc/">Orthanc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Personal/">Personal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grub2/">grub2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/佛教/">佛教</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心学/">心学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/诗/">诗</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://martinhan.site">Martinhan</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">诸行无常，诸法无我。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=200 height=52 src="//music.163.com/outchain/player?type=2&id=28285910&auto=1&height=32"></iframe>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">LiarLee</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">LiarLee</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:625610036@qq.com" title="Email"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=625610036&site=qq&menu=yes" title="QQ"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/625610036" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Honor8InstallLineageOS" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/08/Honor8InstallLineageOS/" class="article-date">
+      <time datetime="2018-07-08T09:47:39.000Z" itemprop="datePublished">2018-07-08</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      荣耀8-刷LineageOS14.1简述
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>荣耀8刷LineageOS 14.1 , 感谢XDA的大神们。用到的刷机包我转存了一份到微云，链接在末尾。  </p>
+<a id="more"></a>  
+<p><img src="https://i.loli.net/2018/08/02/5b628ca68c86f.png" alt="SystemHome.png"></p>
+<h2 id="一-基本情况"><a href="#一-基本情况" class="headerlink" title="一 基本情况"></a>一 基本情况</h2><ol>
+<li>设备： 华为荣耀8 FRD-AL10 国行  </li>
+<li>初始系统版本： B396   EMUI 5.0.1   </li>
+<li>解锁状态： Phone Unlocked  </li>
+</ol>
+<hr>
+<h2 id="二-需要准备的原料"><a href="#二-需要准备的原料" class="headerlink" title="二 需要准备的原料"></a>二 需要准备的原料</h2><ol>
+<li>手机  </li>
+<li>SD卡  </li>
+<li>电脑一台，USB线一根  </li>
+<li>荣耀8海外版安装包<br> Name:update.zip &amp; update_data_full_hw_usa.zip</li>
+<li>OpenKirin TWRP 3.1.1.1<br> Name:twrp-3.1.1-1-frd.img </li>
+<li>LineageOS ROM From XDA<br> Name:lineage-14.1-20170812-Unofficial.zip</li>
+<li>OpenGAPPS<br> Name:open_gapps-arm64-7.1-stock-20180705.zip </li>
+<li>SuperSU<br> Name:SuperSU-v2.82-201705271822.zip</li>
+<li>Dolby ATOM安装包<br><img src="https://i.loli.net/2018/08/02/5b628c9965473.png" alt="Install Packages.png"></li>
+</ol>
+<hr>
+<h2 id="三-流程"><a href="#三-流程" class="headerlink" title="三 流程"></a>三 流程</h2><h3 id="1-解锁手机"><a href="#1-解锁手机" class="headerlink" title="1 解锁手机"></a>1 解锁手机</h3><ol>
+<li>首先需要进行华为手机的解锁，百度一下有很多，所以不再过多的介绍。</li>
+<li>需要知道是我大华为要关闭后续的解锁服务了，所以今后即便是刷如果你没有解锁码也只能作罢。</li>
+</ol>
+<hr>
+<h3 id="2-复制安装包到SD卡"><a href="#2-复制安装包到SD卡" class="headerlink" title="2 复制安装包到SD卡"></a>2 复制安装包到SD卡</h3><ol>
+<li>在SD卡上新建一个文件夹，名字叫做packages , 或者其他也可以。</li>
+<li>复制4-9项文件到SD卡</li>
+<li>将SD卡放入手机。</li>
+</ol>
+<hr>
+<h3 id="3-写入TWRP"><a href="#3-写入TWRP" class="headerlink" title="3 写入TWRP"></a>3 写入TWRP</h3><ol>
+<li>解锁之后可以使用命令来写入TWRP Recovery。 Recovery使用的openkirin项目组的版本。请自行确保驱动及手机的连接处于正常状态即可。</li>
+<li>打开adb工具目录，在工具目录中使用Shift+鼠标右键，将文件夹在命令行或Powershell中打开。</li>
+<li>adb.exe devices   ——  ## 查看是否识别手机成功。</li>
+<li>adb.exe reboot fastboot ——— ## 将手机重启至fastboot模式.<br> <strong>NOTE</strong> – 进入fastboot的方式，除了adb reboot fastboot之外还可以，关机，手机连接电脑，<em>开机键</em>加<em>音量-</em>，直到出现fastboot界面为止。</li>
+<li>fastboot.exe flash recovery ./twrp-3.1.1.1-frd.img ——  ## 写入Recovery</li>
+<li>fastboot.exe reboot ——  ## 重启手机。<br><img src="https://i.loli.net/2018/08/02/5b628c9962113.png" alt="HomeScreenTWRP.png"></li>
+</ol>
+<hr>
+<h3 id="4-安装海外版ROM"><a href="#4-安装海外版ROM" class="headerlink" title="4 安装海外版ROM"></a>4 安装海外版ROM</h3><ol>
+<li>XDA原帖 – <a href="https://forum.xda-developers.com/honor-8/how-to/to-emui5-custom-roms-tested-openkirin-t3638445" target="_blank" rel="noopener">HERE</a></li>
+<li>拔掉数据线，关机，长按 <em>音量+</em> 和 <em>开机</em> ， 直到出现 <em>解锁警告</em> 和 <em>Your device is booting now …</em></li>
+<li>进入Recovery，一次进入Install – Select Storage – Micro SDCard – OK – Packages。</li>
+<li>点击update.zip – Swipt to confirm Flash. </li>
+<li>等待写入成功后会自动重启。</li>
+<li>自动进入eRecovery安装更新，这个是正常的，不用管他就好。</li>
+<li>安装更新之后会自动重启，<strong>这个时候TWRP会被覆盖</strong>，也就是说你的TWRP手机上已经没有了，被替换成了ROM里面华为默认的recovery，需要重新进入fastboot再写入一次TWRP。</li>
+<li>按照写入TWRP的步骤再来一次即可。<br> <strong>NOTE</strong> – 如果提示写入TWRP失败，需要再使用解锁码解锁一次手机，不要需要管fastboot界面的那个提示。我的手机当时显示的是已经解锁，但是其实是没有的，需要2次解锁手机才可以写入TWRP。</li>
+<li>再次进入TWRP之后，重复第2步，找到update_data_full_hw_usa.zip – Swipt to confirm Flash.</li>
+<li>自动写入成功后会自动重启，进入系统后查看关于手机，其中名称变为NRD90M。说明我们已经可以写入LineageOS了。</li>
+</ol>
+<hr>
+<h3 id="5-卡刷LineageOS"><a href="#5-卡刷LineageOS" class="headerlink" title="5 卡刷LineageOS"></a>5 卡刷LineageOS</h3><ol>
+<li>XDA原帖 – <a href="https://forum.xda-developers.com/honor-8/development/rom-lineageos-14-1-honor-8-t3615506" target="_blank" rel="noopener">HERE</a></li>
+<li>我用的是US Model – FRD-L14C567 – B360 ，可以使用。</li>
+<li>重启手机，进入TWRP， 双清，格式化data分区。<br><img src="https://i.loli.net/2018/08/02/5b628c9961462.png" alt="Wipe.png"></li>
+<li>选择lineage-14.1-20170812-Unofficial.zip – Swipt to confirm Flash.</li>
+<li>等待写入成功之后重启。<br><strong>NOTE</strong> – 如果写入之后一直卡在开机动画，解决方法是进入TWRP – 格式化data分区即可。</li>
+<li>第一次开机的过程可能有些慢，但是只要第一进入了系统就可以了，后面不会再出现问题了。</li>
+<li>刷入LineageOS完成。</li>
+</ol>
+<hr>
+<h3 id="6-安装SuperSU"><a href="#6-安装SuperSU" class="headerlink" title="6 安装SuperSU"></a>6 安装SuperSU</h3><ol>
+<li>SuperSU官网 – <a href="http://www.supersu.com/" target="_blank" rel="noopener">HERE</a></li>
+<li>选择SuperSU-v2.82-201705271822.zip – Swipt to confirm Flash.</li>
+<li>进入系统就可以看到了，可以直接使用。</li>
+<li>如果不是用SuperSU，可以使用Magisk，好像这个好用一些。<br><img src="https://i.loli.net/2018/08/02/5b628c9964202.png" alt="Magisk.png"></li>
+</ol>
+<hr>
+<h3 id="7-安装OpenGAPPS"><a href="#7-安装OpenGAPPS" class="headerlink" title="7 安装OpenGAPPS"></a>7 安装OpenGAPPS</h3><ol>
+<li>OpenGAPPS官网 – <a href="https://opengapps.org/" target="_blank" rel="noopener">HERE</a></li>
+<li>进入TWRP， 选择open_gapps-arm64-7.1-stock-20180705.zip – Swipt to confirm Flash.</li>
+<li>重启之后就可以在系统里面看到了，我选择的这个版本是替换系统应用的版本，所以可以提供一个近乎于原生的体验。</li>
+</ol>
+<hr>
+<h3 id="8-安装杜比ATOMS"><a href="#8-安装杜比ATOMS" class="headerlink" title="8 安装杜比ATOMS"></a>8 安装杜比ATOMS</h3><ol>
+<li><strong>XDA原帖</strong> – <a href="https://forum.xda-developers.com/android/apps-games/soundmod-axon-7-dolby-atmos-t3412342" target="_blank" rel="noopener">HERE</a></li>
+<li>选择dax_lemax2_v1.6.3.zip – Swipe to confirm Flash.<br><strong>NOTE</strong> – 帖子中给出了五个安装包，我基本上是尝试到第二个的时候成功了，所以我在这个把原帖放出来是说，可能这个需要不同的机型去尝试。</li>
+<li>重启可以在系统应用中直接看到。可以开启或者关闭。  </li>
+<li>可以选择使用Viper或者Dolby，看自己的喜好了。<br><strong>NOTE</strong> – 这种应用，我觉得有一个就够了，其实只是优化一下外放的效果。</li>
+</ol>
+<hr>
+<h2 id="四-结尾"><a href="#四-结尾" class="headerlink" title="四 结尾"></a>四 结尾</h2><p>只是不习惯如此多的ROM里面内置了很多我不使用的应用，还不能删除。<br><strong>其实还是那句话，不建议刷机，如果你知道自己在做什么。</strong></p>
+<hr>
+<h2 id="五-共享下载资源"><a href="#五-共享下载资源" class="headerlink" title="五 共享下载资源"></a>五 共享下载资源</h2><p>包括我所有文中使用到的安装包及文件，我上传到了微云，下载链接如下。<br><strong>NOTE</strong> – opengapps的安装包我替换成了pico，这样不需要翻墙，只有Google的框架和基础应用，也不会替换系统应用。<br><strong>下载地址</strong> – <a href="https://share.weiyun.com/5wQdXtO" target="_blank" rel="noopener">HERE</a><br>密码：9yn57o</p>
+<hr>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/08/Honor8InstallLineageOS/">荣耀8-刷LineageOS14.1简述</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">LiarLee</a></p>
+        <p><span>发布时间:</span>2018-07-08, 17:47:39</p>
+        <p><span>最后更新:</span>2019-11-06, 18:07:09</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/08/Honor8InstallLineageOS/" title="荣耀8-刷LineageOS14.1简述">http://liarlee.site/2018/07/08/Honor8InstallLineageOS/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://liarlee.site/2018/07/08/Honor8InstallLineageOS/　　作者: LiarLee" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/12/24/诗词收集/">
+                    诗词收集
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/03/Hexo-backup-restore/">
+                    Hexo备份和恢复
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一-基本情况"><span class="toc-number">1.</span> <span class="toc-text">一 基本情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二-需要准备的原料"><span class="toc-number">2.</span> <span class="toc-text">二 需要准备的原料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三-流程"><span class="toc-number">3.</span> <span class="toc-text">三 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-解锁手机"><span class="toc-number">3.1.</span> <span class="toc-text">1 解锁手机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-复制安装包到SD卡"><span class="toc-number">3.2.</span> <span class="toc-text">2 复制安装包到SD卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-写入TWRP"><span class="toc-number">3.3.</span> <span class="toc-text">3 写入TWRP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-安装海外版ROM"><span class="toc-number">3.4.</span> <span class="toc-text">4 安装海外版ROM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-卡刷LineageOS"><span class="toc-number">3.5.</span> <span class="toc-text">5 卡刷LineageOS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-安装SuperSU"><span class="toc-number">3.6.</span> <span class="toc-text">6 安装SuperSU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-安装OpenGAPPS"><span class="toc-number">3.7.</span> <span class="toc-text">7 安装OpenGAPPS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-安装杜比ATOMS"><span class="toc-number">3.8.</span> <span class="toc-text">8 安装杜比ATOMS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四-结尾"><span class="toc-number">4.</span> <span class="toc-text">四 结尾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五-共享下载资源"><span class="toc-number">5.</span> <span class="toc-text">五 共享下载资源</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"true"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"荣耀8-刷LineageOS14.1简述　| LiarLee's Notebook　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/12/24/诗词收集/" title="上一篇: 诗词收集">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/03/Hexo-backup-restore/" title="下一篇: Hexo备份和恢复">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/11/06/Linux/Linux_k8s-basic-7/">Kubernetes集群的学习笔记(7)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/06/Linux/Linux_k8s-basic-6/">Kubernetes集群的学习笔记(6)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/22/Linux/Linux_ChangeGnometoi3wm/">i3wm的简单配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/18/Linux/Linux_k8s-basic-5/">Kubernetes集群的学习笔记(5)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/14/Linux/Linux_k8s-basic-4/">Kubernetes集群的学习笔记(4)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/10/Linux/Linux_tricks/">Linux及vim的技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/09/Linux/Linux_k8s-namespace-delete-terminating/">k8s所有的NS删除的时候都进入Terminating状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/">Linux_Cobbler搭建本地YUM源同步k8s阿里云</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/24/Linux/Linux_k8s-basic-3/">Kubernetes集群的学习笔记(3)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/">K8S将loop-lvm改为direct-lvm说明</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/23/Linux/Linux_RabbitMQ-Problems/">RabbitMQ_SysV风格管理脚本模板</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/All this I did without you/">All this I did without you</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/Linux/Linux_Gnome-Tricks/">Gnome快捷键</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/Linux/Linux_Nginx-if-try-files-Notwork/">Nginx配置文件中if判断与try_files</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/18/Linux/Linux_CentOS7-VM-Template/">虚拟机制作模板的步骤及设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/17/Linux/Linux_Systemctl-ManageService/">通过systemd管理软件和服务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/Linux/Linux_FirstMeet-With-ElasticSeach-1/">ElasticSearch初探 - 1</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/24/Linux/Linux_FileManagement/">文件系统及文件管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/Linux/Linux_k8s-basic-2/">Kubernetes集群的学习笔记(2)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/21/Linux/Linux_k8s-basic-1/">Kubernetes集群的学习笔记(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/18/Other_Interview-testing/">面试记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/13/Linux/Linux_Nginx-Proxy/">Nginx反向代理笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/13/Linux/Linux_Boot-sequence/">Linux启动流程简述</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/08/Linux/Linux_vim-note/">vim笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/07/Linux/Linux_Ansible-Note-2/">Ansible笔记-2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Linux/Linux_Ansible-Note-1/">Ansible笔记-1</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/25/Linux/Linux_VM-timer/">KVM中windows7虚拟机时间问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/25/Linux/Linux_IO-Redirect/">IO重定向笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/17/Python-Script-ForGame/">pyautogui自动脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/17/Linux/Linux_Archlinux-Installation/">Archlinux安装过程记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/Linux/Linux_DockerFile笔记/">DockerFile笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/13/Linux/Linux_Fedora-bootspeedup/">Fedora开机启动速度的优化</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/09/2018-2019/">2018-2019 Review</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/08/Linux/Linux_VMwareTools共享文件夹方案/">VMwareTools共享文件夹方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/24/诗词收集/">诗词收集</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/08/Honor8InstallLineageOS/">荣耀8-刷LineageOS14.1简述</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/Hexo-backup-restore/">Hexo备份和恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/Linux/Linux_BuildRPMs/">RPM制作的笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/02/DCM4CHEE_RunDocker/">Docker中运行DCM4CHEE-arc-light</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/25/Linux/Linux_Install-Maven-Guide/">安装Maven教程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/23/Linux/Linux_ip-forward-active/">配置Ip-forward参数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/28/Linux/Linux_DockerCommands/">Docker基本命令说明</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/11/Linux/Linux_关闭Fedora防火墙/">Fedora防火墙关闭，如何开机运行脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/25/Linux/Linux_Orthanc_InstallationNote/">Orthanc的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/19/Windows_DISM命令/">DISM的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/01/Linux/Linux_Cacti-installation/">Cacti的安装教程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/25/Linux/Fw-Fedora安装Lantern/">Fw:Fedora使用Lantern</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/Linux/Linux_电话面试/">Linux-电话面试</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/Linux/Linux_进程管理笔记/">Linux-进程管理笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/书摘-正见-诸行无常/">书摘-正见-诸行无常</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/Linux/Linux_Nginx-InstalltionNote/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/Linux/Linux_内核参数笔记/">Linux-内核参数笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/本地方式安装-Net3-5教程/">本地方式安装.Net3.5笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/15/PPTConvertTOWORD/">PPT转换WORD</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/Python入门笔记/Python入门笔记-2/">Python入门笔记 (三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/传习录/传习录-2/">传习录 (三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/传习录/传习录-3/">传习录 (四)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/Python入门笔记/Python入门笔记-1/">Python入门笔记 (二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/传习录/传习录-1/">传习录 (二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/Linux/Linux_Grub2repair/">grub2手动修复引导错误</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/Python入门笔记/Python入门笔记/">Python入门笔记 (一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/传习录/传习录/">传习录 (一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/02/如何给自己的电脑重装系统/">如何使用微软官方镜像重装系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Linux/Firefox-Openh264/">Firefox-Openh264的问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/Hexo-Install/">Hexo+Github建立个人博客记录</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+
+
+<div class="gitalk">
+	<div id="gitalk-container"></div>
+	<script src="/js/md5.min.js"></script>
+	<script type="text/javascript">
+		const gitalk = new Gitalk({
+			clientID: '90afaa397718112f845e',
+			clientSecret: '03c2c402d78a57f57aa0eec5ec216e1bb3411f1b',
+			repo: 'liarlee_gitalk',
+			owner: 'LiarLee',
+			admin: ['LiarLee'],
+			// id: (location.pathname).split("/").pop().substring(0, 49), // Ensure uniqueness and length less than 50
+			id: md5(location.pathname),
+			distractionFreeMode: true // Facebook-like distraction free mode
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+</div>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2020 LiarLee
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 2;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  </div>
+</body>
+</html>
+
