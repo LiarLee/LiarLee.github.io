@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="LiarLee&#39;s Notebook">
 <meta property="og:description" content="hexo项目的备份和还原方法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-06T10:07:09.000Z">
+<meta property="og:updated_time" content="2020-04-04T15:12:43.433Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo备份和恢复">
 <meta name="twitter:description" content="hexo项目的备份和还原方法。">
@@ -378,13 +378,14 @@
 <li>hexo clean &amp;&amp; hexo g -d</li>
 </ol>
 <h3 id="4-恢复hexo的工作目录"><a href="#4-恢复hexo的工作目录" class="headerlink" title="4. 恢复hexo的工作目录"></a>4. 恢复hexo的工作目录</h3><ol>
-<li>只需要在一个新的电脑上git clone branch hexo 即可<br> git clone -b hexo <a href="https://github.com/xxxx/xxxx.github.io.git" target="_blank" rel="noopener">https://github.com/xxxx/xxxx.github.io.git</a> </li>
-<li>在项目的目录下,先执行git init </li>
-<li><p>在博客项目的目录下，执行</p>
- <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cnpm <span class="keyword">install</span> hexo </span><br><span class="line">cnpm <span class="keyword">install</span></span><br><span class="line">sudo cnpm <span class="keyword">install</span> hexo-cli -g </span><br><span class="line">cnpm <span class="keyword">install</span> hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>1.</p>
-</li>
+<li>sudo cnpm install -g hexo-cli</li>
+<li>dnf install -y npm</li>
+<li>sudo npm install -g cnpm –registry=<a href="https://registry.npm.taobao.org" target="_blank" rel="noopener">https://registry.npm.taobao.org</a></li>
+<li>cd Liarlee.github.io/Liarlee</li>
+<li>sudo cnpm install -no-bin-links</li>
+<li>sudo cnpm install hexo-deployer-git</li>
+<li>去Github上面添加机器的ssh public key </li>
+<li>尝试使用hexo d , 查看是否可以成功。</li>
 </ol>
 
       
@@ -397,7 +398,7 @@
         <p><span>本文标题:</span><a href="/2018/07/03/Hexo-backup-restore/">Hexo备份和恢复</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">LiarLee</a></p>
         <p><span>发布时间:</span>2018-07-03, 16:39:23</p>
-        <p><span>最后更新:</span>2019-11-06, 18:07:09</p>
+        <p><span>最后更新:</span>2020-04-04, 23:12:43</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/07/03/Hexo-backup-restore/" title="Hexo备份和恢复">http://liarlee.site/2018/07/03/Hexo-backup-restore/</a>
             <span class="copy-path" data-clipboard-text="原文: http://liarlee.site/2018/07/03/Hexo-backup-restore/　　作者: LiarLee" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
