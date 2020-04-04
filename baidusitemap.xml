@@ -67,7 +67,13 @@
     <loc>http://liarlee.site/2018/04/01/Linux/Linux_Cacti-installation/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
+    <loc>http://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
     <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
@@ -104,12 +110,6 @@
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/04/25/Linux/Linux_Orthanc_InstallationNote/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/10/22/Linux/Linux_ChangeGnometoi3wm/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/09/23/Linux/Linux_RabbitMQ-Problems/</loc>
@@ -172,6 +172,9 @@
     <loc>http://liarlee.site/2018/01/29/Linux/Linux_%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
+    <loc>http://liarlee.site/2019/10/22/Linux/Linux_ChangeGnometoi3wm/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
     <loc>http://liarlee.site/2018/01/09/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-1/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
@@ -191,9 +194,6 @@
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/08/%E4%BC%A0%E4%B9%A0%E5%BD%95/%E4%BC%A0%E4%B9%A0%E5%BD%95/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>
 </urlset>
