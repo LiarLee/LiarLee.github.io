@@ -2854,7 +2854,7 @@ status 1   ---   forward is active
       </tags>
   </entry>
   <entry>
-    <title>脚本运行占用内存过大的处理</title>
+    <title>less命令占用内存过高</title>
     <url>/2020/04/06/Linux/Linux_cat-and-less/</url>
     <content><![CDATA[<p>在华为的月度报告中， 发现了奇怪的问题，有一台机器在每天都会内存使用率飙到100%，每天如此。在查找问题的过程中，发现机器上每天的2，4，6，8点会自动运行处理日志的脚本，并统计关键字的数量。但是为什么会导致占用高呢？</p>
 <a id="more"></a>
