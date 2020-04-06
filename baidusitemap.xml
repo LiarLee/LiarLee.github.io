@@ -67,10 +67,10 @@
     <loc>http://liarlee.site/2018/04/01/Linux/Linux_Cacti-installation/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/</loc>
+    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
+    <loc>http://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
@@ -89,12 +89,6 @@
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/09/Linux/Linux_Grub2repair/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/10/22/Linux/Linux_ChangeGnometoi3wm/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/06/25/Linux/Linux_IO-Redirect/</loc>
@@ -143,6 +137,12 @@
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/10/18/Linux/Linux_k8s-basic-5/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/10/22/Linux/Linux_ChangeGnometoi3wm/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/11/06/Linux/Linux_k8s-basic-6/</loc>
