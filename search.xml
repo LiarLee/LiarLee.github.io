@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>12123</title>
+    <url>/2020/04/10/12123/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>2018-2019 Review</title>
     <url>/2019/01/09/2018-2019/</url>
     <content><![CDATA[<p>那么新的一年，我会做什么呢? 显示器、遥控器、路呀路由器～（(╯‵□′)╯︵┻━┻ 洗脑了MD）</p>
@@ -62,6 +67,61 @@
       </categories>
       <tags>
         <tag>English</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker中运行DCM4CHEE-arc-light</title>
+    <url>/2018/07/02/DCM4CHEE_RunDocker/</url>
+    <content><![CDATA[<p>在Docker中安装DCM4CHEE-arc-light项目。</p>
+<a id="more"></a>
+<p>因为需要进行测试所以使用了DCM4CHEE， 但是DCM4CHEE现在的版本已经很古老了， 从而我接触了两个古老的PACS程序， 一个是Windows平台上有名的ClearCanvas, 还有一个就是DCM4CHEE。<br>在安装的过程中遇到了很多的麻烦。 看到官方有把项目放在docker上， 所以决定直接使用。直接记录了所有的组件启动的方式和命令， 方便今后的查阅。</p>
+<p>DCM4CHEE-arc-light是目前比较新项目了，我这里写下了最小的安装模式， 基本上足够我日常测试使用了。</p>
+<p>这几个Docker容器是：</p>
+<ol>
+<li>Docker</li>
+<li>docker网桥</li>
+<li>DAOCloud加速器</li>
+<li>OpenLDAP</li>
+<li>PostgreSQL数据库</li>
+<li>DCM4CHEE-arc-light本体</li>
+</ol>
+<h2 id="DCM4CHEE-Docker-Command"><a href="#DCM4CHEE-Docker-Command" class="headerlink" title="DCM4CHEE_Docker_Command"></a>DCM4CHEE_Docker_Command</h2><ol>
+<li><p>Install Docker component:   </p>
+ <figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">dnf <span class="keyword">install</span> -y docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Create the dcm4chee bridge network:  </p>
+ <figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">docker<span class="built_in"> network </span>create dcm4chee_default</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>DAOCloud加速器配置docker：</p>
+ <figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">curl -sSL http<span class="variable">s:</span>//<span class="built_in">get</span>.daocloud.io/daotools/set_mirror.<span class="keyword">sh</span> | <span class="keyword">sh</span> -s http://f1dac9f0.<span class="keyword">m</span>.daocloud.io</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Start OpenLDAP Server: </p>
+ <figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">docker run --network=dcm4chee_default --name ldap \</span><br><span class="line">       -p <span class="number">389</span>:<span class="number">389</span> \</span><br><span class="line">       -v <span class="regexp">/etc/</span><span class="string">localtime:</span><span class="regexp">/etc/</span><span class="string">localtime:</span>ro \</span><br><span class="line">       -v <span class="regexp">/var/</span>local<span class="regexp">/dcm4chee-arc/</span><span class="string">ldap:</span><span class="regexp">/var/</span>lib/ldap \</span><br><span class="line">       -v <span class="regexp">/var/</span>local<span class="regexp">/dcm4chee-arc/</span>slapd.<span class="string">d:</span><span class="regexp">/etc/</span>ldap/slapd.d \</span><br><span class="line">       -d dcm4che/slapd-<span class="string">dcm4chee:</span><span class="number">2.4</span><span class="number">.44</span><span class="number">-13.2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Start PostgreSQL:   </p>
+ <figure class="highlight crystal"><table><tr><td class="code"><pre><span class="line">docker run --network=dcm4chee_default --name db \</span><br><span class="line">       -p <span class="number">5432</span>:<span class="number">5432</span> \</span><br><span class="line">       -e POSTGRES_DB=pacsdb \</span><br><span class="line">       -e POSTGRES_USER=pacs \</span><br><span class="line">       -e POSTGRES_PASSWORD=pacs \</span><br><span class="line">       -v /etc/<span class="symbol">localtime:</span>/etc/<span class="symbol">localtime:</span>ro \</span><br><span class="line">       -v /var/local/dcm4chee-arc/<span class="symbol">db:</span>/var/<span class="class"><span class="keyword">lib</span>/<span class="title">postgresql</span>/<span class="title">data</span> \</span></span><br><span class="line">       -d dcm4che/postgres-<span class="symbol">dcm4chee:</span><span class="number">10.0</span>-<span class="number">13</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Start Wildfly With DCM4CHEE Archive 5:  </p>
+ <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">docker run --network=dcm4chee_default --name arc <span class="string">\</span></span><br><span class="line">       -p <span class="number">8080</span>:<span class="number">8080</span> <span class="string">\</span></span><br><span class="line">       -p <span class="number">8443</span>:<span class="number">8443</span> <span class="string">\</span></span><br><span class="line">       -p <span class="number">9990</span>:<span class="number">9990</span> <span class="string">\</span></span><br><span class="line">       -p <span class="number">11112</span>:<span class="number">11112</span> <span class="string">\</span></span><br><span class="line">       -p <span class="number">2575</span>:<span class="number">2575</span> <span class="string">\</span></span><br><span class="line">       -e POSTGRES_DB=pacsdb <span class="string">\</span></span><br><span class="line">       -e POSTGRES_USER=pacs <span class="string">\</span></span><br><span class="line">       -e POSTGRES_PASSWORD=pacs <span class="string">\</span></span><br><span class="line">       -e WILDFLY_WAIT_FOR=<span class="string">"ldap:389 db:5432"</span> <span class="string">\</span></span><br><span class="line">       -v /etc/localtime:/etc/localtime:ro <span class="string">\</span></span><br><span class="line">       -v /<span class="keyword">var</span>/local/dcm4chee-arc/wildfly:/opt/wildfly/standalone <span class="string">\</span></span><br><span class="line">       -d dcm4che/dcm4chee-arc-psql:<span class="number">5.13</span>.<span class="number">2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Start the three applications use on command:  </p>
+ <figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">docker <span class="literal">start</span> ldap db arc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Stop the three application:  </p>
+ <figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">stop</span> ldap db arc</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="附加说明："><a href="#附加说明：" class="headerlink" title="附加说明："></a>附加说明：</h2><h3 id="Host-说明："><a href="#Host-说明：" class="headerlink" title="Host 说明："></a>Host 说明：</h3><pre><code>dcm4chee_docker: 11.11.11.209/dcm4chee-arc/ui2
+</code></pre><h3 id="github-project-DCM4CHEE-arc-light-Note"><a href="#github-project-DCM4CHEE-arc-light-Note" class="headerlink" title="github project DCM4CHEE-arc-light Note"></a>github project DCM4CHEE-arc-light Note</h3><ol>
+<li><a href="https://github.com/dcm4che/dcm4chee-arc-light/wiki/HL7-Related-Features" target="_blank" rel="noopener">HL7 Relative Features</a></li>
+<li><a href>Weasis Integration</a><a href="https://github.com/dcm4che/dcm4chee-arc-light/wiki/Weasis-Viewer-Integration" target="_blank" rel="noopener">https://github.com/dcm4che/dcm4chee-arc-light/wiki/Weasis-Viewer-Integration</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Healthcare-IT</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -267,61 +327,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker中运行DCM4CHEE-arc-light</title>
-    <url>/2018/07/02/DCM4CHEE_RunDocker/</url>
-    <content><![CDATA[<p>在Docker中安装DCM4CHEE-arc-light项目。</p>
-<a id="more"></a>
-<p>因为需要进行测试所以使用了DCM4CHEE， 但是DCM4CHEE现在的版本已经很古老了， 从而我接触了两个古老的PACS程序， 一个是Windows平台上有名的ClearCanvas, 还有一个就是DCM4CHEE。<br>在安装的过程中遇到了很多的麻烦。 看到官方有把项目放在docker上， 所以决定直接使用。直接记录了所有的组件启动的方式和命令， 方便今后的查阅。</p>
-<p>DCM4CHEE-arc-light是目前比较新项目了，我这里写下了最小的安装模式， 基本上足够我日常测试使用了。</p>
-<p>这几个Docker容器是：</p>
-<ol>
-<li>Docker</li>
-<li>docker网桥</li>
-<li>DAOCloud加速器</li>
-<li>OpenLDAP</li>
-<li>PostgreSQL数据库</li>
-<li>DCM4CHEE-arc-light本体</li>
-</ol>
-<h2 id="DCM4CHEE-Docker-Command"><a href="#DCM4CHEE-Docker-Command" class="headerlink" title="DCM4CHEE_Docker_Command"></a>DCM4CHEE_Docker_Command</h2><ol>
-<li><p>Install Docker component:   </p>
- <figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">dnf <span class="keyword">install</span> -y docker</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Create the dcm4chee bridge network:  </p>
- <figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">docker<span class="built_in"> network </span>create dcm4chee_default</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>DAOCloud加速器配置docker：</p>
- <figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">curl -sSL http<span class="variable">s:</span>//<span class="built_in">get</span>.daocloud.io/daotools/set_mirror.<span class="keyword">sh</span> | <span class="keyword">sh</span> -s http://f1dac9f0.<span class="keyword">m</span>.daocloud.io</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Start OpenLDAP Server: </p>
- <figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">docker run --network=dcm4chee_default --name ldap \</span><br><span class="line">       -p <span class="number">389</span>:<span class="number">389</span> \</span><br><span class="line">       -v <span class="regexp">/etc/</span><span class="string">localtime:</span><span class="regexp">/etc/</span><span class="string">localtime:</span>ro \</span><br><span class="line">       -v <span class="regexp">/var/</span>local<span class="regexp">/dcm4chee-arc/</span><span class="string">ldap:</span><span class="regexp">/var/</span>lib/ldap \</span><br><span class="line">       -v <span class="regexp">/var/</span>local<span class="regexp">/dcm4chee-arc/</span>slapd.<span class="string">d:</span><span class="regexp">/etc/</span>ldap/slapd.d \</span><br><span class="line">       -d dcm4che/slapd-<span class="string">dcm4chee:</span><span class="number">2.4</span><span class="number">.44</span><span class="number">-13.2</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Start PostgreSQL:   </p>
- <figure class="highlight crystal"><table><tr><td class="code"><pre><span class="line">docker run --network=dcm4chee_default --name db \</span><br><span class="line">       -p <span class="number">5432</span>:<span class="number">5432</span> \</span><br><span class="line">       -e POSTGRES_DB=pacsdb \</span><br><span class="line">       -e POSTGRES_USER=pacs \</span><br><span class="line">       -e POSTGRES_PASSWORD=pacs \</span><br><span class="line">       -v /etc/<span class="symbol">localtime:</span>/etc/<span class="symbol">localtime:</span>ro \</span><br><span class="line">       -v /var/local/dcm4chee-arc/<span class="symbol">db:</span>/var/<span class="class"><span class="keyword">lib</span>/<span class="title">postgresql</span>/<span class="title">data</span> \</span></span><br><span class="line">       -d dcm4che/postgres-<span class="symbol">dcm4chee:</span><span class="number">10.0</span>-<span class="number">13</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Start Wildfly With DCM4CHEE Archive 5:  </p>
- <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">docker run --network=dcm4chee_default --name arc <span class="string">\</span></span><br><span class="line">       -p <span class="number">8080</span>:<span class="number">8080</span> <span class="string">\</span></span><br><span class="line">       -p <span class="number">8443</span>:<span class="number">8443</span> <span class="string">\</span></span><br><span class="line">       -p <span class="number">9990</span>:<span class="number">9990</span> <span class="string">\</span></span><br><span class="line">       -p <span class="number">11112</span>:<span class="number">11112</span> <span class="string">\</span></span><br><span class="line">       -p <span class="number">2575</span>:<span class="number">2575</span> <span class="string">\</span></span><br><span class="line">       -e POSTGRES_DB=pacsdb <span class="string">\</span></span><br><span class="line">       -e POSTGRES_USER=pacs <span class="string">\</span></span><br><span class="line">       -e POSTGRES_PASSWORD=pacs <span class="string">\</span></span><br><span class="line">       -e WILDFLY_WAIT_FOR=<span class="string">"ldap:389 db:5432"</span> <span class="string">\</span></span><br><span class="line">       -v /etc/localtime:/etc/localtime:ro <span class="string">\</span></span><br><span class="line">       -v /<span class="keyword">var</span>/local/dcm4chee-arc/wildfly:/opt/wildfly/standalone <span class="string">\</span></span><br><span class="line">       -d dcm4che/dcm4chee-arc-psql:<span class="number">5.13</span>.<span class="number">2</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Start the three applications use on command:  </p>
- <figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">docker <span class="literal">start</span> ldap db arc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Stop the three application:  </p>
- <figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">stop</span> ldap db arc</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="附加说明："><a href="#附加说明：" class="headerlink" title="附加说明："></a>附加说明：</h2><h3 id="Host-说明："><a href="#Host-说明：" class="headerlink" title="Host 说明："></a>Host 说明：</h3><pre><code>dcm4chee_docker: 11.11.11.209/dcm4chee-arc/ui2
-</code></pre><h3 id="github-project-DCM4CHEE-arc-light-Note"><a href="#github-project-DCM4CHEE-arc-light-Note" class="headerlink" title="github project DCM4CHEE-arc-light Note"></a>github project DCM4CHEE-arc-light Note</h3><ol>
-<li><a href="https://github.com/dcm4che/dcm4chee-arc-light/wiki/HL7-Related-Features" target="_blank" rel="noopener">HL7 Relative Features</a></li>
-<li><a href>Weasis Integration</a><a href="https://github.com/dcm4che/dcm4chee-arc-light/wiki/Weasis-Viewer-Integration" target="_blank" rel="noopener">https://github.com/dcm4che/dcm4chee-arc-light/wiki/Weasis-Viewer-Integration</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Healthcare-IT</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>荣耀8-刷LineageOS14.1简述</title>
     <url>/2018/07/08/Honor8InstallLineageOS/</url>
     <content><![CDATA[<p>荣耀8刷LineageOS 14.1 , 感谢XDA的大神们。用到的刷机包我转存了一份到微云，链接在末尾。  </p>
@@ -510,6 +515,21 @@ iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
       </tags>
   </entry>
   <entry>
+    <title>pyautogui自动脚本</title>
+    <url>/2019/05/17/Python-Script-ForGame/</url>
+    <content><![CDATA[<p>实在是肝不动了，自己写了个脚本帮我点点点。  </p>
+<a id="more"></a>
+<h1 id="pyautogui说明"><a href="#pyautogui说明" class="headerlink" title="pyautogui说明"></a>pyautogui说明</h1><p>pyautogui.position()  #  获取鼠标位置<br>pyautogui.locateOnScreen()  #  对屏幕截图，获取图片文件所对应的屏幕坐标<br>pyautogui.click()   #  模拟鼠标点击<br>pyautogui.doubleclick()  #  模拟鼠标双击<br>pyautogui.moveTo()  #  移动到屏幕坐标位置<br>pyautogui.moveRel()     #  移动固定的坐标距离<br>pyautogui.dragRel()     #  按住鼠标拖拽  </p>
+<h1 id="代码如下："><a href="#代码如下：" class="headerlink" title="代码如下："></a>代码如下：</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pyautogui</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MOTIONMOUSE</span><span class="params">(lines)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> lines &lt; <span class="number">9</span>:</span><br><span class="line">        <span class="comment"># 检测是否有书本或食物</span></span><br><span class="line">        results_food = pyautogui.locateOnScreen(<span class="string">'./food.png'</span>, grayscale=<span class="literal">True</span>)   <span class="comment"># 检测食物图片是否存在</span></span><br><span class="line">        print(<span class="string">'- 食物检测结果：'</span>, results_food)</span><br><span class="line">        results_book = pyautogui.locateOnScreen(<span class="string">'./book.png'</span>, grayscale=<span class="literal">True</span>)   <span class="comment"># 检测书籍图片是否存在</span></span><br><span class="line">        print(<span class="string">'- 书本检测结果：'</span>, results_book)</span><br><span class="line">        pyautogui.click(<span class="number">1900</span>, <span class="number">60</span>, duration=<span class="number">0.1</span>) <span class="comment"># 点击换线</span></span><br><span class="line">        <span class="keyword">if</span> results_book <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:    </span><br><span class="line">            pyautogui.click(<span class="number">1700</span>, <span class="number">325</span>) <span class="comment"># 点击学习</span></span><br><span class="line">            pyautogui.click(<span class="number">1600</span>, <span class="number">645</span>) <span class="comment"># 点击确定</span></span><br><span class="line">        <span class="keyword">elif</span> results_food <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            pyautogui.click(<span class="number">1700</span>, <span class="number">325</span>)  <span class="comment"># 点击食用</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        pyautogui.moveTo(<span class="number">1700</span>, <span class="number">60</span>, duration=<span class="number">0.1</span>)    <span class="comment"># 移动到对应一线的位置</span></span><br><span class="line">        pyautogui.moveRel(<span class="number">0</span>, <span class="number">65</span> * lines, duration=<span class="number">0.1</span>)  <span class="comment"># 移动到对应的线路位置</span></span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        pyautogui.click()   <span class="comment"># 触发一次点击</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pyautogui.click(<span class="number">1900</span>, <span class="number">60</span>, duration=<span class="number">0.3</span>) <span class="comment">#  </span></span><br><span class="line">        <span class="comment"># 检测是否有书本或食物</span></span><br><span class="line">        results_food = pyautogui.locateOnScreen(<span class="string">'./food.png'</span>, grayscale=<span class="literal">True</span>)</span><br><span class="line">        print(<span class="string">'- 食物检测结果：'</span>, results_food)</span><br><span class="line">        results_book = pyautogui.locateOnScreen(<span class="string">'./book.png'</span>, grayscale=<span class="literal">True</span>)</span><br><span class="line">        print(<span class="string">'- 书本检测结果：'</span>, results_book)</span><br><span class="line">        <span class="keyword">if</span> results_book <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            pyautogui.click(<span class="number">1700</span>, <span class="number">325</span>)</span><br><span class="line">            pyautogui.click(<span class="number">1600</span>, <span class="number">645</span>)</span><br><span class="line">        <span class="keyword">elif</span> results_food <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            pyautogui.click(<span class="number">1700</span>, <span class="number">325</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">0</span>, lines<span class="number">-8</span>):</span><br><span class="line">            pyautogui.moveTo(<span class="number">1700</span>, <span class="number">90</span>, duration=<span class="number">0.1</span>)</span><br><span class="line">            pyautogui.dragRel(<span class="number">0</span>, <span class="number">-65</span>, duration=<span class="number">0.3</span>)</span><br><span class="line">        <span class="keyword">if</span> t &lt; <span class="number">14</span>:</span><br><span class="line">            time.sleep(<span class="number">3</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        pyautogui.click(<span class="number">1700</span>, <span class="number">480</span>, duration=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># starting .....</span></span><br><span class="line"></span><br><span class="line">Count = <span class="number">0</span></span><br><span class="line">replace_times = <span class="number">0</span></span><br><span class="line">Energy = input(<span class="string">'please input value of energy: '</span>)        <span class="comment"># 输入体力</span></span><br><span class="line">All_lines = input(<span class="string">'please input the number of lines: '</span>) <span class="comment"># 输入所有线路的数字</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> turns <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">999</span>):</span><br><span class="line">    print(<span class="string">'** 这是第 '</span> + str(turns) + <span class="string">' 轮采集。'</span>)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> range (<span class="number">1</span>, int(All_lines) + <span class="number">1</span>):</span><br><span class="line">        print(<span class="string">'* 这是第 '</span> + str(line) + <span class="string">' 条线路。'</span>)</span><br><span class="line">        clock = time.strftime(<span class="string">'%H:%M:%S'</span>, time.localtime(time.time()))</span><br><span class="line">        print(<span class="string">'* 开始时间 = '</span> + clock + <span class="string">' '</span>)</span><br><span class="line">        MOTIONMOUSE(int(line))</span><br><span class="line">        time.sleep(<span class="number">2</span>)</span><br><span class="line">        pyautogui.click(<span class="number">1600</span>, <span class="number">770</span>, duration=<span class="number">1.5</span>)</span><br><span class="line">        pyautogui.moveTo(<span class="number">1310</span>, <span class="number">800</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#检测是否有树木</span></span><br><span class="line">        results_click = pyautogui.locateOnScreen(<span class="string">'./level4_usable.png'</span>, grayscale=<span class="literal">True</span>)  <span class="comment"># 计算斧子在不在</span></span><br><span class="line">        print(<span class="string">'- 斧子检测结果：'</span>, results_click)</span><br><span class="line">        results_replace = pyautogui.locateOnScreen(<span class="string">'./level4_replace.png'</span>, grayscale=<span class="literal">True</span>)  <span class="comment"># 计算可替换的斧子在不在</span></span><br><span class="line">        print(<span class="string">'- 更换检测结果：'</span>, results_replace)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 判断是否有物品</span></span><br><span class="line">        <span class="keyword">if</span> results_click <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:  <span class="comment"># 判断是否有按键，有等待，没有按键换线；</span></span><br><span class="line">            print(<span class="string">'* 第 '</span> + str(Count) + <span class="string">' 次采集。'</span>)</span><br><span class="line">            Count = Count +<span class="number">1</span></span><br><span class="line">            energy = int(Energy) - <span class="number">15</span></span><br><span class="line">        <span class="keyword">elif</span> results_replace <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:   <span class="comment"># 判断是否有可更换的斧子 </span></span><br><span class="line">            pyautogui.click(<span class="number">1510</span>, <span class="number">720</span>, duration=<span class="number">0.2</span>)</span><br><span class="line">            pyautogui.click(<span class="number">1310</span>, <span class="number">880</span>, duration=<span class="number">0.2</span>)</span><br><span class="line">            Count = Count + <span class="number">1</span></span><br><span class="line">            replace_times = replace_times + <span class="number">1</span></span><br><span class="line">            print(<span class="string">'这是第 '</span> + str(Count) + <span class="string">' 次采集。'</span>) </span><br><span class="line">            print(<span class="string">'这是第 '</span> + str(replace_times) + <span class="string">' 次换斧子。'</span>)</span><br><span class="line">            energy = int(Energy) - <span class="number">15</span></span><br><span class="line">            time.sleep(<span class="number">4</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'-- 采集物或斧子未存在，跳过。'</span>) </span><br><span class="line">            <span class="keyword">pass</span>            <span class="comment"># 啥也没有，跳过</span></span><br><span class="line">    print(<span class="string">'Starting Waiting for Refresh:'</span>)</span><br><span class="line">    time.sleep(<span class="number">200</span>)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PPT转换WORD</title>
     <url>/2018/01/15/PPTConvertTOWORD/</url>
     <content><![CDATA[<p>前一段时间赶上期末考试，老师放出了一个学期的PPT，于是大家开始疯狂的复制讲义，把关键的知识进行提炼，方便考试。但是老师放出来的PPT，文字量实在是太大了，如果手动复制就会很麻烦，最后自己都快崩溃了</p>
@@ -537,21 +557,6 @@ iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
       </categories>
       <tags>
         <tag>Office</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pyautogui自动脚本</title>
-    <url>/2019/05/17/Python-Script-ForGame/</url>
-    <content><![CDATA[<p>实在是肝不动了，自己写了个脚本帮我点点点。  </p>
-<a id="more"></a>
-<h1 id="pyautogui说明"><a href="#pyautogui说明" class="headerlink" title="pyautogui说明"></a>pyautogui说明</h1><p>pyautogui.position()  #  获取鼠标位置<br>pyautogui.locateOnScreen()  #  对屏幕截图，获取图片文件所对应的屏幕坐标<br>pyautogui.click()   #  模拟鼠标点击<br>pyautogui.doubleclick()  #  模拟鼠标双击<br>pyautogui.moveTo()  #  移动到屏幕坐标位置<br>pyautogui.moveRel()     #  移动固定的坐标距离<br>pyautogui.dragRel()     #  按住鼠标拖拽  </p>
-<h1 id="代码如下："><a href="#代码如下：" class="headerlink" title="代码如下："></a>代码如下：</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pyautogui</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MOTIONMOUSE</span><span class="params">(lines)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> lines &lt; <span class="number">9</span>:</span><br><span class="line">        <span class="comment"># 检测是否有书本或食物</span></span><br><span class="line">        results_food = pyautogui.locateOnScreen(<span class="string">'./food.png'</span>, grayscale=<span class="literal">True</span>)   <span class="comment"># 检测食物图片是否存在</span></span><br><span class="line">        print(<span class="string">'- 食物检测结果：'</span>, results_food)</span><br><span class="line">        results_book = pyautogui.locateOnScreen(<span class="string">'./book.png'</span>, grayscale=<span class="literal">True</span>)   <span class="comment"># 检测书籍图片是否存在</span></span><br><span class="line">        print(<span class="string">'- 书本检测结果：'</span>, results_book)</span><br><span class="line">        pyautogui.click(<span class="number">1900</span>, <span class="number">60</span>, duration=<span class="number">0.1</span>) <span class="comment"># 点击换线</span></span><br><span class="line">        <span class="keyword">if</span> results_book <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:    </span><br><span class="line">            pyautogui.click(<span class="number">1700</span>, <span class="number">325</span>) <span class="comment"># 点击学习</span></span><br><span class="line">            pyautogui.click(<span class="number">1600</span>, <span class="number">645</span>) <span class="comment"># 点击确定</span></span><br><span class="line">        <span class="keyword">elif</span> results_food <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            pyautogui.click(<span class="number">1700</span>, <span class="number">325</span>)  <span class="comment"># 点击食用</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        pyautogui.moveTo(<span class="number">1700</span>, <span class="number">60</span>, duration=<span class="number">0.1</span>)    <span class="comment"># 移动到对应一线的位置</span></span><br><span class="line">        pyautogui.moveRel(<span class="number">0</span>, <span class="number">65</span> * lines, duration=<span class="number">0.1</span>)  <span class="comment"># 移动到对应的线路位置</span></span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        pyautogui.click()   <span class="comment"># 触发一次点击</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pyautogui.click(<span class="number">1900</span>, <span class="number">60</span>, duration=<span class="number">0.3</span>) <span class="comment">#  </span></span><br><span class="line">        <span class="comment"># 检测是否有书本或食物</span></span><br><span class="line">        results_food = pyautogui.locateOnScreen(<span class="string">'./food.png'</span>, grayscale=<span class="literal">True</span>)</span><br><span class="line">        print(<span class="string">'- 食物检测结果：'</span>, results_food)</span><br><span class="line">        results_book = pyautogui.locateOnScreen(<span class="string">'./book.png'</span>, grayscale=<span class="literal">True</span>)</span><br><span class="line">        print(<span class="string">'- 书本检测结果：'</span>, results_book)</span><br><span class="line">        <span class="keyword">if</span> results_book <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            pyautogui.click(<span class="number">1700</span>, <span class="number">325</span>)</span><br><span class="line">            pyautogui.click(<span class="number">1600</span>, <span class="number">645</span>)</span><br><span class="line">        <span class="keyword">elif</span> results_food <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            pyautogui.click(<span class="number">1700</span>, <span class="number">325</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">0</span>, lines<span class="number">-8</span>):</span><br><span class="line">            pyautogui.moveTo(<span class="number">1700</span>, <span class="number">90</span>, duration=<span class="number">0.1</span>)</span><br><span class="line">            pyautogui.dragRel(<span class="number">0</span>, <span class="number">-65</span>, duration=<span class="number">0.3</span>)</span><br><span class="line">        <span class="keyword">if</span> t &lt; <span class="number">14</span>:</span><br><span class="line">            time.sleep(<span class="number">3</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        pyautogui.click(<span class="number">1700</span>, <span class="number">480</span>, duration=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># starting .....</span></span><br><span class="line"></span><br><span class="line">Count = <span class="number">0</span></span><br><span class="line">replace_times = <span class="number">0</span></span><br><span class="line">Energy = input(<span class="string">'please input value of energy: '</span>)        <span class="comment"># 输入体力</span></span><br><span class="line">All_lines = input(<span class="string">'please input the number of lines: '</span>) <span class="comment"># 输入所有线路的数字</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> turns <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">999</span>):</span><br><span class="line">    print(<span class="string">'** 这是第 '</span> + str(turns) + <span class="string">' 轮采集。'</span>)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> range (<span class="number">1</span>, int(All_lines) + <span class="number">1</span>):</span><br><span class="line">        print(<span class="string">'* 这是第 '</span> + str(line) + <span class="string">' 条线路。'</span>)</span><br><span class="line">        clock = time.strftime(<span class="string">'%H:%M:%S'</span>, time.localtime(time.time()))</span><br><span class="line">        print(<span class="string">'* 开始时间 = '</span> + clock + <span class="string">' '</span>)</span><br><span class="line">        MOTIONMOUSE(int(line))</span><br><span class="line">        time.sleep(<span class="number">2</span>)</span><br><span class="line">        pyautogui.click(<span class="number">1600</span>, <span class="number">770</span>, duration=<span class="number">1.5</span>)</span><br><span class="line">        pyautogui.moveTo(<span class="number">1310</span>, <span class="number">800</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#检测是否有树木</span></span><br><span class="line">        results_click = pyautogui.locateOnScreen(<span class="string">'./level4_usable.png'</span>, grayscale=<span class="literal">True</span>)  <span class="comment"># 计算斧子在不在</span></span><br><span class="line">        print(<span class="string">'- 斧子检测结果：'</span>, results_click)</span><br><span class="line">        results_replace = pyautogui.locateOnScreen(<span class="string">'./level4_replace.png'</span>, grayscale=<span class="literal">True</span>)  <span class="comment"># 计算可替换的斧子在不在</span></span><br><span class="line">        print(<span class="string">'- 更换检测结果：'</span>, results_replace)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 判断是否有物品</span></span><br><span class="line">        <span class="keyword">if</span> results_click <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:  <span class="comment"># 判断是否有按键，有等待，没有按键换线；</span></span><br><span class="line">            print(<span class="string">'* 第 '</span> + str(Count) + <span class="string">' 次采集。'</span>)</span><br><span class="line">            Count = Count +<span class="number">1</span></span><br><span class="line">            energy = int(Energy) - <span class="number">15</span></span><br><span class="line">        <span class="keyword">elif</span> results_replace <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:   <span class="comment"># 判断是否有可更换的斧子 </span></span><br><span class="line">            pyautogui.click(<span class="number">1510</span>, <span class="number">720</span>, duration=<span class="number">0.2</span>)</span><br><span class="line">            pyautogui.click(<span class="number">1310</span>, <span class="number">880</span>, duration=<span class="number">0.2</span>)</span><br><span class="line">            Count = Count + <span class="number">1</span></span><br><span class="line">            replace_times = replace_times + <span class="number">1</span></span><br><span class="line">            print(<span class="string">'这是第 '</span> + str(Count) + <span class="string">' 次采集。'</span>) </span><br><span class="line">            print(<span class="string">'这是第 '</span> + str(replace_times) + <span class="string">' 次换斧子。'</span>)</span><br><span class="line">            energy = int(Energy) - <span class="number">15</span></span><br><span class="line">            time.sleep(<span class="number">4</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'-- 采集物或斧子未存在，跳过。'</span>) </span><br><span class="line">            <span class="keyword">pass</span>            <span class="comment"># 啥也没有，跳过</span></span><br><span class="line">    print(<span class="string">'Starting Waiting for Refresh:'</span>)</span><br><span class="line">    time.sleep(<span class="number">200</span>)</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -766,9 +771,9 @@ iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>正见——佛陀的证悟（一）诸行无常    选摘</title>
     <url>/2020/04/10/%E6%AD%A3%E8%A7%81-%E4%BD%9B%E9%99%80%E7%9A%84%E8%AF%81%E6%82%9F-%E8%8A%82%E9%80%89/</url>
-    <content><![CDATA[<h2 id="正见——佛陀的证悟（一）诸行无常-选摘"><a href="#正见——佛陀的证悟（一）诸行无常-选摘" class="headerlink" title="正见——佛陀的证悟（一）诸行无常    选摘"></a>正见——佛陀的证悟（一）诸行无常    选摘</h2><p>​        <strong>只是对老与死的厌恶，并不足以让太子离开王宫而踏入未知的世界</strong>；悉达多会采取这么激烈的行动，是因为<strong>他实在无法合理地解释所有已生和将出生的一切众生命运就是如此而已。</strong>如果所有生者都必须衰朽死亡，那么花园中的孔雀、珍宝、华盖、熏香、音乐，放拖鞋的金质拖盘、进口的玻璃水瓶、他与耶输陀罗和罗睺罗的感情、家庭、国家，都变得毫无意义。<strong>这一切的目的到底是什么？</strong></p>
+    <content><![CDATA[<p>​        <strong>只是对老与死的厌恶，并不足以让太子离开王宫而踏入未知的世界</strong>；悉达多会采取这么激烈的行动，是因为<strong>他实在无法合理地解释所有已生和将出生的一切众生命运就是如此而已。</strong>如果所有生者都必须衰朽死亡，那么花园中的孔雀、珍宝、华盖、熏香、音乐，放拖鞋的金质拖盘、进口的玻璃水瓶、他与耶输陀罗和罗睺罗的感情、家庭、国家，都变得毫无意义。<strong>这一切的目的到底是什么？</strong></p>
 <p>​        完全不凭借任何科学工具，悉达多太子以吉祥草为垫，坐在一棵菩提树下，探索人类的本性。经过了长时间的思维，他终于了悟到<strong>一切万有，包括我们的血肉、我们所有的情绪和我们所有的觉受，都是由两个以上的元素组合而成。</strong>当两种或多种元素和合在一起，新的现象就会产生；钉子和木头产生了桌子；水和叶子产生了茶；而恐惧、虔诚和救世主，就产生了神。这些最终的产物，并没有独立于其各别元素的存在。相信它真实独立存在，是最大的骗局。而在和合的同时，各个元素也起了变化。只因接触和合，它们的性质也随之改变了。     </p>
 <p>​        <strong>一切万有，没有一样是以独立、恒常、纯粹的状态存在。</strong>你手上的书不是，原子不是，甚至神祇也不是。   </p>
 <p>​        因此悉达多发现，无常并不像一般人以为的就是意味死亡，而是意味变化。任何事物和另一个事物之间的位置或关系转变了，即使是非常细微的变动，都要依循无常的法则。     </p>
@@ -790,6 +795,12 @@ iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
 <p>​        <strong>但我们常常忘记自己的来日一直都是有限的。即使理智上知道有生必有死，一切和合终将分散，我们的情绪状态还是常常会回到相信恒常的模式，完全忘记相互依存性。这种习气会造成各种负面的情况，像是偏执、寂寞、罪恶感等等。我们会觉得被欺骗、被威胁、被虐待、被冷落，仿佛这个世界只对我们不公平。</strong>                   </p>
 <p>​        佛陀不是一个悲观者、也不是末日论者，他是重视实际者，而我们却多是逃避现实者。当他说一切和合皆是无常，他并不认为那是坏消息，而是简单、科学的事实。我们能认清因缘的不稳定，就会了解自己有力量转化障碍，并且完成不可能的任务。生活中的各个层面都是如此。如果你现在没有一台法拉利，你完全有可能创造出因缘而拥有一台。只要世上有法拉利，你就有机会去拥有它。同样的，如果你想活久一点，可以选择不抽烟和多运动。合理的希望是存在的。而绝望，和它的反面—模一样，都是相信恒常的结果。                                                                                                                                                                                                       </p>
 ]]></content>
+      <categories>
+        <category>Books</category>
+      </categories>
+      <tags>
+        <tag>书</tag>
+      </tags>
   </entry>
   <entry>
     <title>诗词收集</title>
@@ -1228,137 +1239,6 @@ iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
       </tags>
   </entry>
   <entry>
-    <title>Cacti的安装教程</title>
-    <url>/2018/04/01/Linux/Linux_Cacti-installation/</url>
-    <content><![CDATA[<p>这次的内容是Cacti的安装。</p>
-<a id="more"></a>
-<h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><p>OS : CentOS 7 Server Everything – Minimal Version<br>Required Packages : LAMP, RRDTool</p>
-<h2 id="部署基础组件"><a href="#部署基础组件" class="headerlink" title="部署基础组件"></a>部署基础组件</h2><ol>
-<li>安装Apache<br>命令如下：<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y httpd httpd-devel  </span><br><span class="line">dnf <span class="keyword">install</span> -y httpd httpd-devel</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>安装完毕。  </p>
-<ol start="2">
-<li>安装MySQL<br>命令如下：<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y mysql mysql-<span class="keyword">server</span>   </span><br><span class="line">dnf <span class="keyword">install</span> -y mysql mysql-<span class="keyword">server</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>OR  </p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y Mariadb-<span class="keyword">server</span>  </span><br><span class="line">dnf <span class="keyword">install</span> -y Mariadb-<span class="keyword">server</span></span><br></pre></td></tr></table></figure>
-<p>安装完毕。  </p>
-<ol start="3">
-<li>安装PHP<br>命令如下：  <figure class="highlight x86asm"><table><tr><td class="code"><pre><span class="line">yum install -y php-mysql php-pear php-<span class="meta">common</span> php-gd php-devel php php-mbstring php-<span class="keyword">cli</span>  </span><br><span class="line">dnf install -y php-mysql php-pear php-<span class="meta">common</span> php-gd php-devel php php-mbstring php-<span class="keyword">cli</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>安装完毕。  </p>
-<ol start="4">
-<li>安装PHP-SNMP<br>命令如下：<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y php-snmp  </span><br><span class="line">dnf <span class="keyword">install</span> -y php-snmp</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>安装完毕。  </p>
-<ol start="5">
-<li>安装NET-SNMP<br>命令如下：<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">yum install -y <span class="built_in">net</span>-snmp-utils <span class="built_in">net</span>-snmp-libs <span class="built_in">net</span>-snmp   </span><br><span class="line">dnf install -y <span class="built_in">net</span>-snmp-utils <span class="built_in">net</span>-snmp-libs <span class="built_in">net</span>-snmp</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>如果需要安装Spine，需要安装net-snmp-devel<br><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y net-snmp-devel</span><br><span class="line">dnf <span class="keyword">install</span> -y net-snmp-devel</span><br></pre></td></tr></table></figure></p>
-<p>安装完毕。</p>
-<ol start="6">
-<li>安装RRDTool<br>命令如下：<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y rrdtool  </span><br><span class="line">dnf <span class="keyword">install</span> -y rrdtool</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>安装完毕。  </p>
-<ol start="7">
-<li>开始所有的服务：<br>命令如下：<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">service httpd start  </span><br><span class="line">service mysqld start <span class="keyword">OR</span><span class="built_in"> service </span>mariadb start</span><br><span class="line">service snmpd start</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>OR<br><figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> httpd.service</span><br><span class="line">systemctl <span class="literal">start</span> mariadb.service</span><br><span class="line">systemctl <span class="literal">start</span> snmpd.service</span><br></pre></td></tr></table></figure></p>
-<p>安装完毕。  </p>
-<ol start="8">
-<li>调整服务开机启动：<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">chkconfig httpd <span class="keyword">on</span>  </span><br><span class="line">chkconfig mysqld <span class="keyword">on</span></span><br><span class="line">chkconfig snmpd <span class="keyword">on</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>OR<br><figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">systemctl <span class="builtin-name">enable</span> httpd.service</span><br><span class="line">systemctl <span class="builtin-name">enable</span> mariadb.service</span><br><span class="line">systemctl <span class="builtin-name">enable</span> snmpd.service</span><br></pre></td></tr></table></figure></p>
-<p>安装完毕。</p>
-<ol start="9">
-<li>开启EPEL REPO &amp; 安装Cacti<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">wget</span> <span class="string">http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm  </span></span><br><span class="line"><span class="attr">rpm</span> <span class="string">-ivh epel-release-latest-7.noarch.rpm</span></span><br><span class="line"><span class="attr">yum</span> <span class="string">makecache</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>安装完毕。<br><strong>所有的安装内容已经部署完毕。</strong></p>
-<h2 id="进行配置"><a href="#进行配置" class="headerlink" title="进行配置"></a>进行配置</h2><ol>
-<li><p>配置MySQL的root密码  </p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">mysqladmin -u root password YOURSELF_PASSWORD</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建Cacti的数据库  </p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">mysql -u root -p</span><br><span class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">database</span> cacti;</span><br><span class="line">mysql&gt; <span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> cacti.* <span class="keyword">TO</span> cacti@localhost IDENTITFIED <span class="keyword">BY</span> <span class="string">'YOURSELF_PASSWORD'</span>;</span><br><span class="line">mysql&gt; FLUSH <span class="keyword">PRIVILEGES</span>;</span><br><span class="line">mysql&gt; quit;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>安装完毕。</p>
-<ol start="3">
-<li>MySQL-数据库初始化  <figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">rpm -ql cacti | <span class="keyword">grep</span> cacti.sql</span><br><span class="line">mysql -u cacti -p cacti &lt; <span class="regexp">/usr/</span>share<span class="regexp">/doc/</span>cacti<span class="regexp">/cacti.sql</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>命令发起后需要进行密码的输入</p>
-<ol start="4">
-<li>Cacti-读取数据库配置<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>cacti<span class="regexp">/db.php</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>需要编辑的内容如下：<br><figure class="highlight arcade"><table><tr><td class="code"><pre><span class="line"><span class="symbol">$data</span>base_type = <span class="string">"mysql"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_default = <span class="string">"cacti"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_hostname = <span class="string">"localhost"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_username = <span class="string">"cacti"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_password = <span class="string">"YOURSELF_PASSWORD"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_port = <span class="string">"3306"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_ssl = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure></p>
-<ol start="5">
-<li>Firewall-配置放行防火墙<figure class="highlight pf"><table><tr><td class="code"><pre><span class="line">iptables -A INPUT -p udp -m <span class="keyword">state</span> --state NEW --dport <span class="number">80</span> -j ACCEPT</span><br><span class="line">iptables -A INPUT -p tcp -m <span class="keyword">state</span> --state NEW --dport <span class="number">80</span> -j ACCEPT</span><br><span class="line">iptables save</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>OR<br><figure class="highlight brainfuck"><table><tr><td class="code"><pre><span class="line"><span class="comment">firewall</span><span class="literal">-</span><span class="comment">cmd</span> --<span class="comment">permanent</span> --<span class="comment">zone=public</span> --<span class="comment">add</span><span class="literal">-</span><span class="comment">service=http</span></span><br><span class="line"><span class="comment">firewall</span><span class="literal">-</span><span class="comment">cmd</span> --<span class="comment">reload</span></span><br></pre></td></tr></table></figure></p>
-<ol start="6">
-<li>Apache- 配置Cacti根目录<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"><span class="keyword">vim</span> /etc/httpd/<span class="keyword">conf</span>.d/cacti.<span class="keyword">conf</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>配置文件内的内容修改如下：<br><figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="section">&lt;Directory /usr/share/cacti/&gt;</span></span><br><span class="line"><span class="attribute"><span class="nomarkup">Order</span></span> Deny,Allow</span><br><span class="line"><span class="attribute"><span class="nomarkup">Deny</span></span> from <span class="literal">all</span></span><br><span class="line"><span class="attribute"><span class="nomarkup">Allow</span></span> from <span class="literal">all</span></span><br><span class="line"><span class="section">&lt;/Directory&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>重启服务：<br><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">service httpd restart</span></span><br></pre></td></tr></table></figure></p>
-<p>OR<br><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">restart</span> <span class="selector-tag">httpd</span><span class="selector-class">.service</span></span><br></pre></td></tr></table></figure></p>
-<ol start="7">
-<li><p>Crond-配置Poller的计划任务  </p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>cron.d/cacti</span><br><span class="line">*<span class="regexp">/5 * * * *    cacti   /</span>usr<span class="regexp">/bin/</span>php <span class="regexp">/usr/</span>share<span class="regexp">/cacti/</span>poller.php &gt; <span class="regexp">/dev/</span><span class="literal">null</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span>      \\ 去掉注释</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动Broswer，进入Cacti安装界面，<a href="http://IPADDRESS/Cacti" target="_blank" rel="noopener">http://IPADDRESS/Cacti</a>, 之后按照说明继续即可。  </p>
-</li>
-</ol>
-<p>Default Username : <strong>admin</strong><br>Default Password : <strong>admin</strong></p>
-<h2 id="补充安装SPINE过程"><a href="#补充安装SPINE过程" class="headerlink" title="补充安装SPINE过程"></a>补充安装SPINE过程</h2><ol>
-<li>下载源文件，安装程序。   </li>
-<li>安装CentOS,Development Tool，yum group install。   </li>
-<li>在Spine的目录下，执行./configure &amp;&amp; make &amp;&amp; make install。<br><strong>NOTE：</strong> 这里出现了的问题，提示找不到net-snmp header file—&gt;没有安装net-snmp-devel</li>
-<li>进入控制台进行Spine是否安装成功。   </li>
-</ol>
-<h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2>]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Cacti</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux_Cobbler搭建本地YUM源同步k8s阿里云</title>
-    <url>/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</url>
-    <content><![CDATA[<p>昨天晚上尝试使用阿里云的时候出现问题 ，阿里云的k8s源安装的时候报错，无法正常通过yum安装。内网正好放了一台Cobbler，所以直接从Cobbler同步阿里的repo过来放到内网，防止这个事情再次发生。</p>
-<a id="more"></a>
-<h1 id="Cobbler是什么"><a href="#Cobbler是什么" class="headerlink" title="Cobbler是什么"></a>Cobbler是什么</h1><blockquote>
-<p>Cobbler是一个免费开源系统安装部署软件，用于自动化网络安装操作系统。 Cobbler 集成了 DNS, DHCP,[1][2]软件包更新， 带外管理以及配置管理， 方便操作系统安装自动化。Cobbler 可以支持PXE启动, 操作系统重新安装, 以及虚拟化客户机创建，包括Xen, KVM or VMware. Cobbler透过koan程序以支持虚拟化客户机安装。Cobbler 可以支持管理复杂网路环境，如创建在链路聚合以太网的桥接环境。 <a href="https://en.wikipedia.org/wiki/Cobbler_(software" target="_blank" rel="noopener">FROM Wikipedia</a>)</p>
-</blockquote>
-<h1 id="Cobbler-repo的建立"><a href="#Cobbler-repo的建立" class="headerlink" title="Cobbler repo的建立"></a>Cobbler repo的建立</h1><p>k8s的源，Cobbler直接建立的同步不可以是因为k8s的目录结构和一般软件源的结构不同。（开始以为阿里云会一直保持带有Pool文件夹的那个结构， 今天早上看到结构已经和普通的yumrepo一样了，记录一下出现这种问题怎么办好了。）其实解决的方案就是手动同步，使用Cobbler进行源的发布。其实也就是httpd发布出去。</p>
-<hr>
-<h2 id="建立阿里云的源"><a href="#建立阿里云的源" class="headerlink" title="建立阿里云的源"></a>建立阿里云的源</h2><figure class="highlight crystal"><table><tr><td class="code"><pre><span class="line">[root@cobbler /]<span class="comment"># cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo</span></span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=<span class="symbol">https:</span>/<span class="regexp">/mirrors.aliyun.com/kubernetes</span><span class="regexp">/yum/repos</span><span class="regexp">/kubernetes-el7-x86_64/</span></span><br><span class="line">enabled=<span class="number">1</span></span><br><span class="line">gpgcheck=<span class="number">1</span></span><br><span class="line">repo_gpgcheck=<span class="number">1</span></span><br><span class="line">gpgkey=<span class="symbol">https:</span>/<span class="regexp">/mirrors.aliyun.com/kubernetes</span><span class="regexp">/yum/doc</span><span class="regexp">/yum-key.gpg https:/</span><span class="regexp">/mirrors.aliyun.com/kubernetes</span><span class="regexp">/yum/doc</span><span class="regexp">/rpm-package-key.gpg</span></span><br><span class="line"><span class="regexp">EOF</span></span><br><span class="line"><span class="regexp">[root@cobbler /</span>]<span class="comment"># mv kubernetes.repo /etc/yum.repos.d/kubernetes.repo</span></span><br><span class="line">[root@cobbler /]<span class="comment"># yum clean all</span></span><br><span class="line">[root@cobbler /]<span class="comment"># yum makecache</span></span><br><span class="line">[root@cobbler /]<span class="comment"># yum repolist</span></span><br><span class="line"><span class="comment"># 在repolist中记录repoid</span></span><br></pre></td></tr></table></figure>
-<h2 id="手动同步源"><a href="#手动同步源" class="headerlink" title="手动同步源"></a>手动同步源</h2><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">[root<span class="meta">@cobbler</span> <span class="regexp">/]# reposync -n --repoid=kubernetes -p /</span>var<span class="regexp">/www/</span>cobbler<span class="regexp">/repo_mirror/</span> --allow-path-traversal</span><br></pre></td></tr></table></figure>
-<h2 id="手动将已经同步好的目录创建为repo"><a href="#手动将已经同步好的目录创建为repo" class="headerlink" title="手动将已经同步好的目录创建为repo"></a>手动将已经同步好的目录创建为repo</h2><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">[root<span class="meta">@cobbler</span> <span class="regexp">/]# createrepo /</span>var<span class="regexp">/www/</span>cobbler<span class="regexp">/repo_mirror/</span>kubernetes/</span><br></pre></td></tr></table></figure>
-<p>最后编辑一下自己的kubernetes.repo源文件，只指向本地的源就可以了。</p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Cobbler</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>i3wm的简单配置</title>
     <url>/2019/10/22/Linux/Linux_ChangeGnometoi3wm/</url>
     <content><![CDATA[<p>将自己的桌面环境迁移到了i3。Gnome好用是好用的，但是体量还是有点儿大了，吃资源有点多。</p>
@@ -1445,6 +1325,55 @@ iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>虚拟机制作模板的步骤及设置</title>
+    <url>/2019/09/18/Linux/Linux_CentOS7-VM-Template/</url>
+    <content><![CDATA[<p>换了工作之后接管了这边旧的ESXi和上面的虚拟机，之前的模板不是特别的合适，自己开始动手做模板。最终期望的目标是：1. 修改IP地址；2.yum install 收工。  </p>
+<a id="more"></a>
+<h2 id="CentOS虚拟机模板的制作"><a href="#CentOS虚拟机模板的制作" class="headerlink" title="CentOS虚拟机模板的制作"></a>CentOS虚拟机模板的制作</h2><h3 id="系统的硬件配置"><a href="#系统的硬件配置" class="headerlink" title="系统的硬件配置"></a>系统的硬件配置</h3><p>系统的硬件规格 – 4cpu; 8G-RAM</p>
+<h3 id="OS的版本"><a href="#OS的版本" class="headerlink" title="OS的版本"></a>OS的版本</h3><p>系统的版本 – CentOS 7.6 1810 x64 </p>
+<h3 id="安装VMwareTools"><a href="#安装VMwareTools" class="headerlink" title="安装VMwareTools"></a>安装VMwareTools</h3><figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">yum install -<span class="keyword">y</span> epel <span class="keyword">vim</span> wget curl net-tools <span class="keyword">open</span>-<span class="keyword">vm</span>-tools htop iotop iftop tree</span><br></pre></td></tr></table></figure>
+<h3 id="安装Zabbix-agent"><a href="#安装Zabbix-agent" class="headerlink" title="安装Zabbix-agent"></a>安装Zabbix-agent</h3><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">rpm</span> -ivh zabbix-agent-<span class="variable">$version</span>.rpm</span><br></pre></td></tr></table></figure>
+<h3 id="关闭SELinux"><a href="#关闭SELinux" class="headerlink" title="关闭SELinux"></a>关闭SELinux</h3><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sed</span> -i <span class="string">'s<span class="variable">@SELINUX</span>=enforcing<span class="variable">@SELINUX</span>=disabled<span class="variable">@g</span>'</span> /etc/selinux/config</span><br></pre></td></tr></table></figure>
+<h3 id="更改hostname"><a href="#更改hostname" class="headerlink" title="更改hostname"></a>更改hostname</h3><p>hostname有一些有趣的问题，CentOS6.8 中的hostname可以定义在<code>/etc/sysconfig/network</code>文件中，系统启动的时候先读取<code>/etc/sysconfig/network</code>文件中的定义，如果没有的话读取<code>/etc/hosts</code>文件中的定义；和我自己的之前的记忆不一样。<br>我之前一直都是之间编辑<code>/etc/hostname</code>，直接将主机名echo到这个文件中就可以了，不过向来这些区别都不大，先这样吧。</p>
+<h3 id="清除硬件及网卡的信息"><a href="#清除硬件及网卡的信息" class="headerlink" title="清除硬件及网卡的信息"></a>清除硬件及网卡的信息</h3><p>将网卡配置文件中的UUID和 HWADDR直接删除或者是注释掉，IPADDR留空。<br><code>/etc/sysconfig/network-scripts/ifcfg-eth0</code></p>
+<h3 id="删除udev"><a href="#删除udev" class="headerlink" title="删除udev"></a>删除udev</h3><p><code>rm -rf /etc/udev/rules.d/70-*</code><br>NOTE：命令的效果貌似和sys-unconfig 的效果是一样的。</p>
+<h3 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h3><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">systemctl</span> <span class="string">disable firewalld</span></span><br><span class="line"><span class="attr">iptables</span> <span class="string">-F</span></span><br><span class="line"><span class="attr">iptables</span> <span class="string">-X</span></span><br><span class="line"><span class="attr">iptables</span> <span class="string">-Z</span></span><br></pre></td></tr></table></figure>
+<h3 id="更改Grub的等待时间"><a href="#更改Grub的等待时间" class="headerlink" title="更改Grub的等待时间"></a>更改Grub的等待时间</h3><p>虚拟机中的模板大部分是不需要等待grub给出的操作选单时间的，等待操作的时间是5秒，我们给出1秒就够了。<br><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span><span class="keyword">default</span>/grub</span><br><span class="line">GRUB_TIMEOUT=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="清理工作"><a href="#清理工作" class="headerlink" title="清理工作"></a>清理工作</h3><figure class="highlight q"><table><tr><td class="code"><pre><span class="line">rm -rf /etc/ssh/*<span class="built_in">key</span>*.</span><br><span class="line">rm -rf /root/.ssh/</span><br><span class="line">systemctl stop rsyslog</span><br><span class="line">systemctl stop auditd</span><br><span class="line">/usr/bin/yum clean <span class="built_in">all</span></span><br><span class="line">logrotate -f /etc/logrotate.conf </span><br><span class="line">rm -f /<span class="built_in">var</span>/log/dmesg.old </span><br><span class="line">rm -rf /<span class="built_in">var</span>/log/anaconda*</span><br><span class="line">cat /<span class="built_in">dev</span>/<span class="built_in">null</span> &gt; /<span class="built_in">var</span>/log/audit/audit.log </span><br><span class="line">cat /<span class="built_in">dev</span>/<span class="built_in">null</span> &gt; /<span class="built_in">var</span>/log/wtmp </span><br><span class="line">cat /<span class="built_in">dev</span>/<span class="built_in">null</span> &gt; /<span class="built_in">var</span>/log/lastlog </span><br><span class="line">cat /<span class="built_in">dev</span>/<span class="built_in">null</span> &gt; /<span class="built_in">var</span>/log/grubby</span><br></pre></td></tr></table></figure>
+<h3 id="清除系统的唯一ID"><a href="#清除系统的唯一ID" class="headerlink" title="清除系统的唯一ID"></a>清除系统的唯一ID</h3><figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">&gt; /etc/machine-<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+<h3 id="清除系统命令历史记录"><a href="#清除系统命令历史记录" class="headerlink" title="清除系统命令历史记录"></a>清除系统命令历史记录</h3><figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unset</span> HISTFILE</span><br><span class="line"><span class="keyword">history</span> -c &amp;&amp; rm -rf <span class="string">/root/.bash_histroy</span></span><br></pre></td></tr></table></figure>
+<h3 id="sys-unconfig关机"><a href="#sys-unconfig关机" class="headerlink" title="sys-unconfig关机"></a>sys-unconfig关机</h3><p>执行<code>sys-unconfig</code>等待关机，然后转换为模板。</p>
+]]></content>
+      <categories>
+        <category>ESXi</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux_Cobbler搭建本地YUM源同步k8s阿里云</title>
+    <url>/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</url>
+    <content><![CDATA[<p>昨天晚上尝试使用阿里云的时候出现问题 ，阿里云的k8s源安装的时候报错，无法正常通过yum安装。内网正好放了一台Cobbler，所以直接从Cobbler同步阿里的repo过来放到内网，防止这个事情再次发生。</p>
+<a id="more"></a>
+<h1 id="Cobbler是什么"><a href="#Cobbler是什么" class="headerlink" title="Cobbler是什么"></a>Cobbler是什么</h1><blockquote>
+<p>Cobbler是一个免费开源系统安装部署软件，用于自动化网络安装操作系统。 Cobbler 集成了 DNS, DHCP,[1][2]软件包更新， 带外管理以及配置管理， 方便操作系统安装自动化。Cobbler 可以支持PXE启动, 操作系统重新安装, 以及虚拟化客户机创建，包括Xen, KVM or VMware. Cobbler透过koan程序以支持虚拟化客户机安装。Cobbler 可以支持管理复杂网路环境，如创建在链路聚合以太网的桥接环境。 <a href="https://en.wikipedia.org/wiki/Cobbler_(software" target="_blank" rel="noopener">FROM Wikipedia</a>)</p>
+</blockquote>
+<h1 id="Cobbler-repo的建立"><a href="#Cobbler-repo的建立" class="headerlink" title="Cobbler repo的建立"></a>Cobbler repo的建立</h1><p>k8s的源，Cobbler直接建立的同步不可以是因为k8s的目录结构和一般软件源的结构不同。（开始以为阿里云会一直保持带有Pool文件夹的那个结构， 今天早上看到结构已经和普通的yumrepo一样了，记录一下出现这种问题怎么办好了。）其实解决的方案就是手动同步，使用Cobbler进行源的发布。其实也就是httpd发布出去。</p>
+<hr>
+<h2 id="建立阿里云的源"><a href="#建立阿里云的源" class="headerlink" title="建立阿里云的源"></a>建立阿里云的源</h2><figure class="highlight crystal"><table><tr><td class="code"><pre><span class="line">[root@cobbler /]<span class="comment"># cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo</span></span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=<span class="symbol">https:</span>/<span class="regexp">/mirrors.aliyun.com/kubernetes</span><span class="regexp">/yum/repos</span><span class="regexp">/kubernetes-el7-x86_64/</span></span><br><span class="line">enabled=<span class="number">1</span></span><br><span class="line">gpgcheck=<span class="number">1</span></span><br><span class="line">repo_gpgcheck=<span class="number">1</span></span><br><span class="line">gpgkey=<span class="symbol">https:</span>/<span class="regexp">/mirrors.aliyun.com/kubernetes</span><span class="regexp">/yum/doc</span><span class="regexp">/yum-key.gpg https:/</span><span class="regexp">/mirrors.aliyun.com/kubernetes</span><span class="regexp">/yum/doc</span><span class="regexp">/rpm-package-key.gpg</span></span><br><span class="line"><span class="regexp">EOF</span></span><br><span class="line"><span class="regexp">[root@cobbler /</span>]<span class="comment"># mv kubernetes.repo /etc/yum.repos.d/kubernetes.repo</span></span><br><span class="line">[root@cobbler /]<span class="comment"># yum clean all</span></span><br><span class="line">[root@cobbler /]<span class="comment"># yum makecache</span></span><br><span class="line">[root@cobbler /]<span class="comment"># yum repolist</span></span><br><span class="line"><span class="comment"># 在repolist中记录repoid</span></span><br></pre></td></tr></table></figure>
+<h2 id="手动同步源"><a href="#手动同步源" class="headerlink" title="手动同步源"></a>手动同步源</h2><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">[root<span class="meta">@cobbler</span> <span class="regexp">/]# reposync -n --repoid=kubernetes -p /</span>var<span class="regexp">/www/</span>cobbler<span class="regexp">/repo_mirror/</span> --allow-path-traversal</span><br></pre></td></tr></table></figure>
+<h2 id="手动将已经同步好的目录创建为repo"><a href="#手动将已经同步好的目录创建为repo" class="headerlink" title="手动将已经同步好的目录创建为repo"></a>手动将已经同步好的目录创建为repo</h2><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">[root<span class="meta">@cobbler</span> <span class="regexp">/]# createrepo /</span>var<span class="regexp">/www/</span>cobbler<span class="regexp">/repo_mirror/</span>kubernetes/</span><br></pre></td></tr></table></figure>
+<p>最后编辑一下自己的kubernetes.repo源文件，只指向本地的源就可以了。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Cobbler</tag>
       </tags>
   </entry>
   <entry>
@@ -2904,33 +2833,6 @@ status 1   ---   forward is active
       </tags>
   </entry>
   <entry>
-    <title>虚拟机制作模板的步骤及设置</title>
-    <url>/2019/09/18/Linux/Linux_CentOS7-VM-Template/</url>
-    <content><![CDATA[<p>换了工作之后接管了这边旧的ESXi和上面的虚拟机，之前的模板不是特别的合适，自己开始动手做模板。最终期望的目标是：1. 修改IP地址；2.yum install 收工。  </p>
-<a id="more"></a>
-<h2 id="CentOS虚拟机模板的制作"><a href="#CentOS虚拟机模板的制作" class="headerlink" title="CentOS虚拟机模板的制作"></a>CentOS虚拟机模板的制作</h2><h3 id="系统的硬件配置"><a href="#系统的硬件配置" class="headerlink" title="系统的硬件配置"></a>系统的硬件配置</h3><p>系统的硬件规格 – 4cpu; 8G-RAM</p>
-<h3 id="OS的版本"><a href="#OS的版本" class="headerlink" title="OS的版本"></a>OS的版本</h3><p>系统的版本 – CentOS 7.6 1810 x64 </p>
-<h3 id="安装VMwareTools"><a href="#安装VMwareTools" class="headerlink" title="安装VMwareTools"></a>安装VMwareTools</h3><figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">yum install -<span class="keyword">y</span> epel <span class="keyword">vim</span> wget curl net-tools <span class="keyword">open</span>-<span class="keyword">vm</span>-tools htop iotop iftop tree</span><br></pre></td></tr></table></figure>
-<h3 id="安装Zabbix-agent"><a href="#安装Zabbix-agent" class="headerlink" title="安装Zabbix-agent"></a>安装Zabbix-agent</h3><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">rpm</span> -ivh zabbix-agent-<span class="variable">$version</span>.rpm</span><br></pre></td></tr></table></figure>
-<h3 id="关闭SELinux"><a href="#关闭SELinux" class="headerlink" title="关闭SELinux"></a>关闭SELinux</h3><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sed</span> -i <span class="string">'s<span class="variable">@SELINUX</span>=enforcing<span class="variable">@SELINUX</span>=disabled<span class="variable">@g</span>'</span> /etc/selinux/config</span><br></pre></td></tr></table></figure>
-<h3 id="更改hostname"><a href="#更改hostname" class="headerlink" title="更改hostname"></a>更改hostname</h3><p>hostname有一些有趣的问题，CentOS6.8 中的hostname可以定义在<code>/etc/sysconfig/network</code>文件中，系统启动的时候先读取<code>/etc/sysconfig/network</code>文件中的定义，如果没有的话读取<code>/etc/hosts</code>文件中的定义；和我自己的之前的记忆不一样。<br>我之前一直都是之间编辑<code>/etc/hostname</code>，直接将主机名echo到这个文件中就可以了，不过向来这些区别都不大，先这样吧。</p>
-<h3 id="清除硬件及网卡的信息"><a href="#清除硬件及网卡的信息" class="headerlink" title="清除硬件及网卡的信息"></a>清除硬件及网卡的信息</h3><p>将网卡配置文件中的UUID和 HWADDR直接删除或者是注释掉，IPADDR留空。<br><code>/etc/sysconfig/network-scripts/ifcfg-eth0</code></p>
-<h3 id="删除udev"><a href="#删除udev" class="headerlink" title="删除udev"></a>删除udev</h3><p><code>rm -rf /etc/udev/rules.d/70-*</code><br>NOTE：命令的效果貌似和sys-unconfig 的效果是一样的。</p>
-<h3 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h3><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">systemctl</span> <span class="string">disable firewalld</span></span><br><span class="line"><span class="attr">iptables</span> <span class="string">-F</span></span><br><span class="line"><span class="attr">iptables</span> <span class="string">-X</span></span><br><span class="line"><span class="attr">iptables</span> <span class="string">-Z</span></span><br></pre></td></tr></table></figure>
-<h3 id="更改Grub的等待时间"><a href="#更改Grub的等待时间" class="headerlink" title="更改Grub的等待时间"></a>更改Grub的等待时间</h3><p>虚拟机中的模板大部分是不需要等待grub给出的操作选单时间的，等待操作的时间是5秒，我们给出1秒就够了。<br><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span><span class="keyword">default</span>/grub</span><br><span class="line">GRUB_TIMEOUT=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="清理工作"><a href="#清理工作" class="headerlink" title="清理工作"></a>清理工作</h3><figure class="highlight q"><table><tr><td class="code"><pre><span class="line">rm -rf /etc/ssh/*<span class="built_in">key</span>*.</span><br><span class="line">rm -rf /root/.ssh/</span><br><span class="line">systemctl stop rsyslog</span><br><span class="line">systemctl stop auditd</span><br><span class="line">/usr/bin/yum clean <span class="built_in">all</span></span><br><span class="line">logrotate -f /etc/logrotate.conf </span><br><span class="line">rm -f /<span class="built_in">var</span>/log/dmesg.old </span><br><span class="line">rm -rf /<span class="built_in">var</span>/log/anaconda*</span><br><span class="line">cat /<span class="built_in">dev</span>/<span class="built_in">null</span> &gt; /<span class="built_in">var</span>/log/audit/audit.log </span><br><span class="line">cat /<span class="built_in">dev</span>/<span class="built_in">null</span> &gt; /<span class="built_in">var</span>/log/wtmp </span><br><span class="line">cat /<span class="built_in">dev</span>/<span class="built_in">null</span> &gt; /<span class="built_in">var</span>/log/lastlog </span><br><span class="line">cat /<span class="built_in">dev</span>/<span class="built_in">null</span> &gt; /<span class="built_in">var</span>/log/grubby</span><br></pre></td></tr></table></figure>
-<h3 id="清除系统的唯一ID"><a href="#清除系统的唯一ID" class="headerlink" title="清除系统的唯一ID"></a>清除系统的唯一ID</h3><figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">&gt; /etc/machine-<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
-<h3 id="清除系统命令历史记录"><a href="#清除系统命令历史记录" class="headerlink" title="清除系统命令历史记录"></a>清除系统命令历史记录</h3><figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unset</span> HISTFILE</span><br><span class="line"><span class="keyword">history</span> -c &amp;&amp; rm -rf <span class="string">/root/.bash_histroy</span></span><br></pre></td></tr></table></figure>
-<h3 id="sys-unconfig关机"><a href="#sys-unconfig关机" class="headerlink" title="sys-unconfig关机"></a>sys-unconfig关机</h3><p>执行<code>sys-unconfig</code>等待关机，然后转换为模板。</p>
-]]></content>
-      <categories>
-        <category>ESXi</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux-内核参数笔记</title>
     <url>/2018/01/22/Linux/Linux_%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<p>记录几个内核参数的意思和调整的效果。</p>
@@ -3215,6 +3117,115 @@ k：  杀死某个进程
       </categories>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cacti的安装教程</title>
+    <url>/2018/04/01/Linux/Linux_Cacti-installation/</url>
+    <content><![CDATA[<p>这次的内容是Cacti的安装。</p>
+<a id="more"></a>
+<h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><p>OS : CentOS 7 Server Everything – Minimal Version<br>Required Packages : LAMP, RRDTool</p>
+<h2 id="部署基础组件"><a href="#部署基础组件" class="headerlink" title="部署基础组件"></a>部署基础组件</h2><ol>
+<li>安装Apache<br>命令如下：<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y httpd httpd-devel  </span><br><span class="line">dnf <span class="keyword">install</span> -y httpd httpd-devel</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装完毕。  </p>
+<ol start="2">
+<li>安装MySQL<br>命令如下：<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y mysql mysql-<span class="keyword">server</span>   </span><br><span class="line">dnf <span class="keyword">install</span> -y mysql mysql-<span class="keyword">server</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>OR  </p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y Mariadb-<span class="keyword">server</span>  </span><br><span class="line">dnf <span class="keyword">install</span> -y Mariadb-<span class="keyword">server</span></span><br></pre></td></tr></table></figure>
+<p>安装完毕。  </p>
+<ol start="3">
+<li>安装PHP<br>命令如下：  <figure class="highlight x86asm"><table><tr><td class="code"><pre><span class="line">yum install -y php-mysql php-pear php-<span class="meta">common</span> php-gd php-devel php php-mbstring php-<span class="keyword">cli</span>  </span><br><span class="line">dnf install -y php-mysql php-pear php-<span class="meta">common</span> php-gd php-devel php php-mbstring php-<span class="keyword">cli</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装完毕。  </p>
+<ol start="4">
+<li>安装PHP-SNMP<br>命令如下：<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y php-snmp  </span><br><span class="line">dnf <span class="keyword">install</span> -y php-snmp</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装完毕。  </p>
+<ol start="5">
+<li>安装NET-SNMP<br>命令如下：<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">yum install -y <span class="built_in">net</span>-snmp-utils <span class="built_in">net</span>-snmp-libs <span class="built_in">net</span>-snmp   </span><br><span class="line">dnf install -y <span class="built_in">net</span>-snmp-utils <span class="built_in">net</span>-snmp-libs <span class="built_in">net</span>-snmp</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果需要安装Spine，需要安装net-snmp-devel<br><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y net-snmp-devel</span><br><span class="line">dnf <span class="keyword">install</span> -y net-snmp-devel</span><br></pre></td></tr></table></figure></p>
+<p>安装完毕。</p>
+<ol start="6">
+<li>安装RRDTool<br>命令如下：<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> -y rrdtool  </span><br><span class="line">dnf <span class="keyword">install</span> -y rrdtool</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装完毕。  </p>
+<ol start="7">
+<li>开始所有的服务：<br>命令如下：<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">service httpd start  </span><br><span class="line">service mysqld start <span class="keyword">OR</span><span class="built_in"> service </span>mariadb start</span><br><span class="line">service snmpd start</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>OR<br><figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> httpd.service</span><br><span class="line">systemctl <span class="literal">start</span> mariadb.service</span><br><span class="line">systemctl <span class="literal">start</span> snmpd.service</span><br></pre></td></tr></table></figure></p>
+<p>安装完毕。  </p>
+<ol start="8">
+<li>调整服务开机启动：<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">chkconfig httpd <span class="keyword">on</span>  </span><br><span class="line">chkconfig mysqld <span class="keyword">on</span></span><br><span class="line">chkconfig snmpd <span class="keyword">on</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>OR<br><figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">systemctl <span class="builtin-name">enable</span> httpd.service</span><br><span class="line">systemctl <span class="builtin-name">enable</span> mariadb.service</span><br><span class="line">systemctl <span class="builtin-name">enable</span> snmpd.service</span><br></pre></td></tr></table></figure></p>
+<p>安装完毕。</p>
+<ol start="9">
+<li>开启EPEL REPO &amp; 安装Cacti<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">wget</span> <span class="string">http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm  </span></span><br><span class="line"><span class="attr">rpm</span> <span class="string">-ivh epel-release-latest-7.noarch.rpm</span></span><br><span class="line"><span class="attr">yum</span> <span class="string">makecache</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装完毕。<br><strong>所有的安装内容已经部署完毕。</strong></p>
+<h2 id="进行配置"><a href="#进行配置" class="headerlink" title="进行配置"></a>进行配置</h2><ol>
+<li><p>配置MySQL的root密码  </p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">mysqladmin -u root password YOURSELF_PASSWORD</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建Cacti的数据库  </p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">mysql -u root -p</span><br><span class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">database</span> cacti;</span><br><span class="line">mysql&gt; <span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> cacti.* <span class="keyword">TO</span> cacti@localhost IDENTITFIED <span class="keyword">BY</span> <span class="string">'YOURSELF_PASSWORD'</span>;</span><br><span class="line">mysql&gt; FLUSH <span class="keyword">PRIVILEGES</span>;</span><br><span class="line">mysql&gt; quit;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装完毕。</p>
+<ol start="3">
+<li>MySQL-数据库初始化  <figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">rpm -ql cacti | <span class="keyword">grep</span> cacti.sql</span><br><span class="line">mysql -u cacti -p cacti &lt; <span class="regexp">/usr/</span>share<span class="regexp">/doc/</span>cacti<span class="regexp">/cacti.sql</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>命令发起后需要进行密码的输入</p>
+<ol start="4">
+<li>Cacti-读取数据库配置<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>cacti<span class="regexp">/db.php</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>需要编辑的内容如下：<br><figure class="highlight arcade"><table><tr><td class="code"><pre><span class="line"><span class="symbol">$data</span>base_type = <span class="string">"mysql"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_default = <span class="string">"cacti"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_hostname = <span class="string">"localhost"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_username = <span class="string">"cacti"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_password = <span class="string">"YOURSELF_PASSWORD"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_port = <span class="string">"3306"</span>;</span><br><span class="line"><span class="symbol">$data</span>base_ssl = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure></p>
+<ol start="5">
+<li>Firewall-配置放行防火墙<figure class="highlight pf"><table><tr><td class="code"><pre><span class="line">iptables -A INPUT -p udp -m <span class="keyword">state</span> --state NEW --dport <span class="number">80</span> -j ACCEPT</span><br><span class="line">iptables -A INPUT -p tcp -m <span class="keyword">state</span> --state NEW --dport <span class="number">80</span> -j ACCEPT</span><br><span class="line">iptables save</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>OR<br><figure class="highlight brainfuck"><table><tr><td class="code"><pre><span class="line"><span class="comment">firewall</span><span class="literal">-</span><span class="comment">cmd</span> --<span class="comment">permanent</span> --<span class="comment">zone=public</span> --<span class="comment">add</span><span class="literal">-</span><span class="comment">service=http</span></span><br><span class="line"><span class="comment">firewall</span><span class="literal">-</span><span class="comment">cmd</span> --<span class="comment">reload</span></span><br></pre></td></tr></table></figure></p>
+<ol start="6">
+<li>Apache- 配置Cacti根目录<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"><span class="keyword">vim</span> /etc/httpd/<span class="keyword">conf</span>.d/cacti.<span class="keyword">conf</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>配置文件内的内容修改如下：<br><figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="section">&lt;Directory /usr/share/cacti/&gt;</span></span><br><span class="line"><span class="attribute"><span class="nomarkup">Order</span></span> Deny,Allow</span><br><span class="line"><span class="attribute"><span class="nomarkup">Deny</span></span> from <span class="literal">all</span></span><br><span class="line"><span class="attribute"><span class="nomarkup">Allow</span></span> from <span class="literal">all</span></span><br><span class="line"><span class="section">&lt;/Directory&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>重启服务：<br><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">service httpd restart</span></span><br></pre></td></tr></table></figure></p>
+<p>OR<br><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">restart</span> <span class="selector-tag">httpd</span><span class="selector-class">.service</span></span><br></pre></td></tr></table></figure></p>
+<ol start="7">
+<li><p>Crond-配置Poller的计划任务  </p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>cron.d/cacti</span><br><span class="line">*<span class="regexp">/5 * * * *    cacti   /</span>usr<span class="regexp">/bin/</span>php <span class="regexp">/usr/</span>share<span class="regexp">/cacti/</span>poller.php &gt; <span class="regexp">/dev/</span><span class="literal">null</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span>      \\ 去掉注释</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动Broswer，进入Cacti安装界面，<a href="http://IPADDRESS/Cacti" target="_blank" rel="noopener">http://IPADDRESS/Cacti</a>, 之后按照说明继续即可。  </p>
+</li>
+</ol>
+<p>Default Username : <strong>admin</strong><br>Default Password : <strong>admin</strong></p>
+<h2 id="补充安装SPINE过程"><a href="#补充安装SPINE过程" class="headerlink" title="补充安装SPINE过程"></a>补充安装SPINE过程</h2><ol>
+<li>下载源文件，安装程序。   </li>
+<li>安装CentOS,Development Tool，yum group install。   </li>
+<li>在Spine的目录下，执行./configure &amp;&amp; make &amp;&amp; make install。<br><strong>NOTE：</strong> 这里出现了的问题，提示找不到net-snmp header file—&gt;没有安装net-snmp-devel</li>
+<li>进入控制台进行Spine是否安装成功。   </li>
+</ol>
+<h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2>]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Cacti</tag>
       </tags>
   </entry>
   <entry>
