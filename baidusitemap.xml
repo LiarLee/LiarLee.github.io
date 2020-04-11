@@ -16,10 +16,10 @@
     <loc>http://liarlee.site/2019/01/09/2018-2019/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/09/19/All%20this%20I%20did%20without%20you/</loc>
+    <loc>http://liarlee.site/2018/07/02/DCM4CHEE_RunDocker/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2018/07/02/DCM4CHEE_RunDocker/</loc>
+    <loc>http://liarlee.site/2019/09/19/All%20this%20I%20did%20without%20you/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2017/12/27/Hexo-Install/</loc>
@@ -71,6 +71,9 @@
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/04/01/Linux/Linux_Cacti-installation/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/10/22/Linux/Linux_ChangeGnometoi3wm/</loc>
@@ -130,31 +133,31 @@
     <loc>http://liarlee.site/2019/01/08/Linux/Linux_VMwareTools%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E6%96%B9%E6%A1%88/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2018/06/23/Linux/Linux_ip-forward-active/</loc>
+    <loc>http://liarlee.site/2019/07/23/Linux/Linux_k8s-basic-2/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/07/21/Linux/Linux_k8s-basic-1/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/07/23/Linux/Linux_k8s-basic-2/</loc>
+    <loc>http://liarlee.site/2019/10/14/Linux/Linux_k8s-basic-4/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/09/24/Linux/Linux_k8s-basic-3/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/10/14/Linux/Linux_k8s-basic-4/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
     <loc>http://liarlee.site/2019/10/18/Linux/Linux_k8s-basic-5/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/11/06/Linux/Linux_k8s-basic-6/</loc>
+    <loc>http://liarlee.site/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/11/06/Linux/Linux_k8s-basic-7/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/</loc>
+    <loc>http://liarlee.site/2019/11/06/Linux/Linux_k8s-basic-6/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2018/06/23/Linux/Linux_ip-forward-active/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/10/09/Linux/Linux_k8s-namespace-delete-terminating/</loc>
@@ -181,19 +184,16 @@
     <loc>http://liarlee.site/2018/01/09/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-1/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
     <loc>http://liarlee.site/2018/01/10/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-2/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2018/01/08/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/09/%E4%BC%A0%E4%B9%A0%E5%BD%95/%E4%BC%A0%E4%B9%A0%E5%BD%95-1/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/10/%E4%BC%A0%E4%B9%A0%E5%BD%95/%E4%BC%A0%E4%B9%A0%E5%BD%95-2/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2018/01/08/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/10/%E4%BC%A0%E4%B9%A0%E5%BD%95/%E4%BC%A0%E4%B9%A0%E5%BD%95-3/</loc>
