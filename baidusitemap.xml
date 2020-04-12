@@ -58,16 +58,22 @@
     <loc>http://liarlee.site/2019/06/26/Linux/Linux_Ansible-Note-1/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/07/07/Linux/Linux_Ansible-Note-2/</loc>
+    <loc>http://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/</loc>
+    <loc>http://liarlee.site/2019/07/07/Linux/Linux_Ansible-Note-2/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/07/13/Linux/Linux_Boot-sequence/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/07/03/Linux/Linux_BuildRPMs/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/10/22/Linux/Linux_ChangeGnometoi3wm/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/04/01/Linux/Linux_Cacti-installation/</loc>
@@ -79,16 +85,10 @@
     <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/10/22/Linux/Linux_ChangeGnometoi3wm/</loc>
+    <loc>http://liarlee.site/2019/07/24/Linux/Linux_FileManagement/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/01/13/Linux/Linux_Fedora-bootspeedup/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/07/24/Linux/Linux_FileManagement/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/09/11/Linux/Linux_FirstMeet-With-ElasticSeach-1/</loc>
@@ -100,10 +100,10 @@
     <loc>http://liarlee.site/2018/01/09/Linux/Linux_Grub2repair/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2018/06/25/Linux/Linux_Install-Maven-Guide/</loc>
+    <loc>http://liarlee.site/2019/06/25/Linux/Linux_IO-Redirect/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/06/25/Linux/Linux_IO-Redirect/</loc>
+    <loc>http://liarlee.site/2018/06/25/Linux/Linux_Install-Maven-Guide/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/22/Linux/Linux_Nginx-InstalltionNote/</loc>
