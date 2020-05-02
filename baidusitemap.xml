@@ -61,40 +61,37 @@
     <loc>http://liarlee.site/2018/02/25/Linux/Fw-Fedora%E5%AE%89%E8%A3%85Lantern/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/07/07/Linux/Linux_Ansible-Note-2/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
     <loc>http://liarlee.site/2019/06/26/Linux/Linux_Ansible-Note-1/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/07/13/Linux/Linux_Boot-sequence/</loc>
+    <loc>http://liarlee.site/2019/07/07/Linux/Linux_Ansible-Note-2/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2018/04/01/Linux/Linux_Cacti-installation/</loc>
+    <loc>http://liarlee.site/2019/07/13/Linux/Linux_Boot-sequence/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/07/03/Linux/Linux_BuildRPMs/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
+    <loc>http://liarlee.site/2018/04/01/Linux/Linux_Cacti-installation/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
     <loc>http://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/07/24/Linux/Linux_FileManagement/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/01/13/Linux/Linux_Fedora-bootspeedup/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
+    <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/01/13/Linux/Linux_Fedora-bootspeedup/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/07/24/Linux/Linux_FileManagement/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/09/11/Linux/Linux_FirstMeet-With-ElasticSeach-1/</loc>
@@ -112,19 +109,19 @@
     <loc>http://liarlee.site/2018/06/25/Linux/Linux_Install-Maven-Guide/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
+    <loc>http://liarlee.site/2018/01/22/Linux/Linux_Nginx-InstalltionNote/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
     <loc>http://liarlee.site/2019/07/13/Linux/Linux_Nginx-Proxy/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2018/01/22/Linux/Linux_Nginx-InstalltionNote/</loc>
+    <loc>http://liarlee.site/2019/09/19/Linux/Linux_Nginx-if-try-files-Notwork/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/04/25/Linux/Linux_Orthanc_InstallationNote/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/09/23/Linux/Linux_RabbitMQ-Problems/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/09/19/Linux/Linux_Nginx-if-try-files-Notwork/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/09/17/Linux/Linux_Systemctl-ManageService/</loc>
@@ -139,6 +136,9 @@
     <loc>http://liarlee.site/2018/06/23/Linux/Linux_ip-forward-active/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
+    <loc>http://liarlee.site/2019/07/21/Linux/Linux_k8s-basic-1/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
     <loc>http://liarlee.site/2019/07/23/Linux/Linux_k8s-basic-2/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
@@ -146,9 +146,6 @@
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/10/14/Linux/Linux_k8s-basic-4/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/07/21/Linux/Linux_k8s-basic-1/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/10/18/Linux/Linux_k8s-basic-5/</loc>
@@ -173,6 +170,9 @@
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/05/11/Linux/Linux_%E5%85%B3%E9%97%ADFedora%E9%98%B2%E7%81%AB%E5%A2%99/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/22/Linux/Linux_%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0%E7%AC%94%E8%AE%B0/</loc>
