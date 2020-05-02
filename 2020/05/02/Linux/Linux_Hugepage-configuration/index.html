@@ -15,18 +15,18 @@
 
 
 
-<meta name="description" content="Gnome桌面环境的快捷键。">
+<meta name="description" content="Huge Pages是从Linux Kernel 2.6后被引入的。目的是使用更大的内存页面（memory page size） 以适应越来越大的系统内存，让操作系统可以支持现代硬件架构的大页面容量功能。透明大页（Transparent Huge Pages）缩写为THP，这个是RHEL 6（其它分支版本SUSE Linux Enterprise Server 11, and Oracle Lin">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Gnome快捷键">
-<meta property="og:url" content="http://liarlee.site/2019/09/19/Linux/Linux_Gnome-Tricks/index.html">
+<meta property="og:title" content="为虚拟机开启内存大页">
+<meta property="og:url" content="http://liarlee.site/2020/05/02/Linux/Linux_Hugepage-configuration/index.html">
 <meta property="og:site_name" content="LiarLee&#39;s Notebook">
-<meta property="og:description" content="Gnome桌面环境的快捷键。">
+<meta property="og:description" content="Huge Pages是从Linux Kernel 2.6后被引入的。目的是使用更大的内存页面（memory page size） 以适应越来越大的系统内存，让操作系统可以支持现代硬件架构的大页面容量功能。透明大页（Transparent Huge Pages）缩写为THP，这个是RHEL 6（其它分支版本SUSE Linux Enterprise Server 11, and Oracle Lin">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-06T10:07:09.000Z">
+<meta property="og:updated_time" content="2020-05-02T07:20:56.762Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gnome快捷键">
-<meta name="twitter:description" content="Gnome桌面环境的快捷键。">
+<meta name="twitter:title" content="为虚拟机开启内存大页">
+<meta name="twitter:description" content="Huge Pages是从Linux Kernel 2.6后被引入的。目的是使用更大的内存页面（memory page size） 以适应越来越大的系统内存，让操作系统可以支持现代硬件架构的大页面容量功能。透明大页（Transparent Huge Pages）缩写为THP，这个是RHEL 6（其它分支版本SUSE Linux Enterprise Server 11, and Oracle Lin">
 
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
@@ -58,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Gnome快捷键 | LiarLee&#39;s Notebook</title>
+<title>为虚拟机开启内存大页 | LiarLee&#39;s Notebook</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -295,11 +295,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Linux/Linux_Gnome-Tricks" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Linux/Linux_Hugepage-configuration" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2019/09/19/Linux/Linux_Gnome-Tricks/" class="article-date">
-      <time datetime="2019-09-19T08:02:35.000Z" itemprop="datePublished">2019-09-19</time>
+      <a href="/2020/05/02/Linux/Linux_Hugepage-configuration/" class="article-date">
+      <time datetime="2020-05-02T07:09:50.000Z" itemprop="datePublished">2020-05-02</time>
 </a>
 
 
@@ -314,7 +314,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Gnome快捷键
+      为虚拟机开启内存大页
     </h1>
   
 
@@ -339,47 +339,37 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>Gnome桌面环境的快捷键。</p>
+        <p>Huge Pages是从Linux Kernel 2.6后被引入的。目的是使用更大的内存页面（memory page size） 以适应越来越大的系统内存，让操作系统可以支持现代硬件架构的大页面容量功能。透明大页（Transparent Huge Pages）缩写为THP，这个是RHEL 6（其它分支版本SUSE Linux Enterprise Server 11, and Oracle Linux 6 with earlier releases of Oracle Linux Unbreakable Enterprise Kernel 2 (UEK2)）开始引入的一个功能。具体可以参考官方文档。</p>
 <a id="more"></a>
-<h2 id="快速启动一个应用"><a href="#快速启动一个应用" class="headerlink" title="快速启动一个应用"></a>快速启动一个应用</h2><ul>
-<li>Super </li>
-<li>Hot Corner<br>这两个我都用，HotCorner不是一个按键，而是一个动作，是指屏幕的右上角，鼠标指针用力撞过去，撞开所有的应用窗口。在Gnome的环境中，Super是一个超方便的键，当我需要打开vscode的时候，可以在任意时候通过super+code+Enter直接打开vscode应用。当按下Super的时候会自动触发一个全局的搜索，可以通过Super快速查看自己的需要的文件或者应用，这个功能是我最喜欢Gnome的地方。</li>
+<p>这两者有啥区别呢？</p>
+<ul>
+<li>这两者的区别在于大页的分配机制，标准大页管理是<strong>预分配的方式</strong>，而透明大页管理则是<strong>动态分配</strong>的方式。  </li>
 </ul>
-<h2 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h2><ul>
-<li>Alt+F2<br>最常用的就是重启Gnome环境，通过Alt+F2 调出的命令窗口，使用r命令重启Gnome。</li>
+<p>使用大页的目的：</p>
+<ul>
+<li>增加内存寻址的命中率，如果使用旧的内存分页方式，操作系统需要管理很多很多的小的内存页面，查找和命中的效率比较低。</li>
+<li>想象一下， 你有一本1000页的书，你需要找到其中的第782页的第20行中的一个“我”字，那么计算机会从第一页开始翻动一页一页的看是否符合要求；现在我将书藉的每100页合成1页，那我们只需要顺序查看10次就可以找到这个字符所在的范围了，之后再去查看这个字符所在的具体位置，速度就会比之前一页一页找快得多。</li>
 </ul>
-<h2 id="应用的切换"><a href="#应用的切换" class="headerlink" title="应用的切换"></a>应用的切换</h2><ul>
-<li>Super+TAB<br>使用Super+TAB可以在应用之间快速切换。如果Cover-alt-tab的插件，还有三维动画。</li>
-<li>Super+`<br>这个组合键是切换应用内窗口的，我自己用的不多。</li>
-</ul>
-<h2 id="快速显示主屏幕应用菜单"><a href="#快速显示主屏幕应用菜单" class="headerlink" title="快速显示主屏幕应用菜单"></a>快速显示主屏幕应用菜单</h2><ul>
-<li>Super+a<br>快速显示主屏幕的所有应用程序页。</li>
-</ul>
-<h2 id="切换工作区"><a href="#切换工作区" class="headerlink" title="切换工作区"></a>切换工作区</h2><ul>
-<li>Super+PageUP or PageDown</li>
-<li>Ctrl+Alt+UP or DOWN<br>可以在多个工作区之间快速切换，但是我自己常用的是第二种。键位上舒服一些。</li>
-</ul>
-<h2 id="移动窗口到其他工作区"><a href="#移动窗口到其他工作区" class="headerlink" title="移动窗口到其他工作区"></a>移动窗口到其他工作区</h2><ul>
-<li>Ctrl+Alt+Shift+UP or Down</li>
-<li>Super+Shift+PageUP or PageDown<br>将当前的焦点窗口移动到前后的工作区，并保持当前窗口的焦点不变。这个也是特别好用的快捷键。</li>
-</ul>
-<h2 id="呼出通知中心和日历"><a href="#呼出通知中心和日历" class="headerlink" title="呼出通知中心和日历"></a>呼出通知中心和日历</h2><ul>
-<li>Super+m<br>这个快捷键最早的Gnome上是通知栏，现在用的比较少了，毕竟Gnome已经不是下方的通知栏了，是上面的日历加上通知中心的方式了。我自己的用的时候大部分是看时间和日历。</li>
-</ul>
-<h2 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h2><ul>
-<li>PrintScreen<br>截取所有屏幕内容，保存到文件。</li>
-<li>Alt+PrintScreen<br>截取当前窗口的内容，保存到文件。</li>
-<li>Shift+PrintScreen<br>截取选择的区域，保存到文件。</li>
-</ul>
-<p><strong>NOTE： 最方便的就是，使用Ctrl+Shift PrintScreen和Ctrl+PrintScreen 可以直接选取的区域截图，将截图保存在剪贴板，截图完成直接粘贴即可。</strong></p>
-<h2 id="最大化最小化和分屏"><a href="#最大化最小化和分屏" class="headerlink" title="最大化最小化和分屏"></a>最大化最小化和分屏</h2><ul>
-<li>Super+UP<br>最大化到铺满屏幕</li>
-<li>Super+LEFT<br>靠左占据一般屏幕</li>
-<li>Super+RIGHT<br>靠右占据一般屏幕</li>
-<li>Super+H<br>最小化，隐藏</li>
-</ul>
-<p>这些基本上就是我觉得常用而且好用的快捷键啦，但是还是可以自定义的，在设置里面，也可以随便设置，但是那样的话就不是拿来直接可以用的啦。</p>
-
+<hr>
+<p>如何启用Hugepage：</p>
+<ol>
+<li><p>设置操作系统可用的最大内存值</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/security/limits.<span class="keyword">conf</span></span><br><span class="line"><span class="comment">* soft memlock 8192</span></span><br><span class="line"><span class="comment">* hard memlock 8192</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置sysctl.conf</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vim /etc/sysctl.conf</span></span><br><span class="line"><span class="attr">vm.nr_hugepages</span> = <span class="number">72708</span></span><br><span class="line"><span class="comment"># sysctl -p</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>根据我的测试 ，需要重启才会生效，Hugepage部分的内存会一直属于使用中的内存，并且一直被占用。我的配置用了16G内存之中的8G，所以开机之后，我的8G内存是一直使用中的状态， 无论你的应用是否真正的开始使用了这部分Hugepage.</p>
+</li>
+</ol>
+<hr>
+<p>下面举例了如何查看Hugepages的信息：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">$</span> <span class="string">cat</span> <span class="string">/proc/meminfo</span> <span class="string">|</span> <span class="string">grep</span> <span class="string">Huge</span></span><br><span class="line"><span class="attr">AnonHugePages:</span>         <span class="number">0</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">ShmemHugePages:</span>        <span class="number">0</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">FileHugePages:</span>         <span class="number">0</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">HugePages_Total:</span>    <span class="number">4096</span></span><br><span class="line"><span class="attr">HugePages_Free:</span>     <span class="number">4096</span></span><br><span class="line"><span class="attr">HugePages_Rsvd:</span>        <span class="number">0</span></span><br><span class="line"><span class="attr">HugePages_Surp:</span>        <span class="number">0</span></span><br><span class="line"><span class="attr">Hugepagesize:</span>       <span class="number">2048</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">Hugetlb:</span>         <span class="number">8388608</span> <span class="string">kB</span></span><br></pre></td></tr></table></figure>
+<p>我的需求试使用Hugepage来分配给KVM中的虚拟机， 加速虚拟机的内存使用效率，所以当然是在虚拟机的配置文件中配置，编辑虚拟机/etc/libvirt/qemu/HaydenGentoo.xml, 改成如下的样子：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">memory</span> <span class="attr">unit</span>=<span class="string">'KiB'</span>&gt;</span>4194304<span class="tag">&lt;/<span class="name">memory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">currentMemory</span> <span class="attr">unit</span>=<span class="string">'KiB'</span>&gt;</span>4194304<span class="tag">&lt;/<span class="name">currentMemory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">memoryBacking</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hugepages</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">memoryBacking</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>之后重启虚拟机即可。</p>
+<p>可以观察到如下改变说明已经在使用了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">$</span> <span class="string">cat</span> <span class="string">/proc/meminfo</span> <span class="string">|</span> <span class="string">grep</span> <span class="string">Huge</span>    </span><br><span class="line"><span class="attr">AnonHugePages:</span>         <span class="number">0</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">ShmemHugePages:</span>        <span class="number">0</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">FileHugePages:</span>         <span class="number">0</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">HugePages_Total:</span>    <span class="number">4096</span></span><br><span class="line"><span class="attr">HugePages_Free:</span>     <span class="number">2048</span></span><br><span class="line"><span class="attr">HugePages_Rsvd:</span>        <span class="number">0</span></span><br><span class="line"><span class="attr">HugePages_Surp:</span>        <span class="number">0</span></span><br><span class="line"><span class="attr">Hugepagesize:</span>       <span class="number">2048</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">Hugetlb:</span>         <span class="number">8388608</span> <span class="string">kB</span></span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -387,13 +377,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2019/09/19/Linux/Linux_Gnome-Tricks/">Gnome快捷键</a></p>
+        <p><span>本文标题:</span><a href="/2020/05/02/Linux/Linux_Hugepage-configuration/">为虚拟机开启内存大页</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">LiarLee</a></p>
-        <p><span>发布时间:</span>2019-09-19, 16:02:35</p>
-        <p><span>最后更新:</span>2019-11-06, 18:07:09</p>
+        <p><span>发布时间:</span>2020-05-02, 15:09:50</p>
+        <p><span>最后更新:</span>2020-05-02, 15:20:56</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2019/09/19/Linux/Linux_Gnome-Tricks/" title="Gnome快捷键">http://liarlee.site/2019/09/19/Linux/Linux_Gnome-Tricks/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://liarlee.site/2019/09/19/Linux/Linux_Gnome-Tricks/　　作者: LiarLee" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2020/05/02/Linux/Linux_Hugepage-configuration/" title="为虚拟机开启内存大页">http://liarlee.site/2020/05/02/Linux/Linux_Hugepage-configuration/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://liarlee.site/2020/05/02/Linux/Linux_Hugepage-configuration/　　作者: LiarLee" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -405,16 +395,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2019/09/19/All this I did without you/">
-                    All this I did without you
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2019/09/19/Linux/Linux_Nginx-if-try-files-Notwork/">
-                    Nginx配置文件中if判断与try_files
+                <a href="/2020/04/10/正见-佛陀的证悟-节选/">
+                    正见——佛陀的证悟（一）诸行无常(选摘)
                 </a>
             </div>
         
@@ -426,7 +410,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#快速启动一个应用"><span class="toc-number">1.</span> <span class="toc-text">快速启动一个应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行命令"><span class="toc-number">2.</span> <span class="toc-text">执行命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用的切换"><span class="toc-number">3.</span> <span class="toc-text">应用的切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#快速显示主屏幕应用菜单"><span class="toc-number">4.</span> <span class="toc-text">快速显示主屏幕应用菜单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#切换工作区"><span class="toc-number">5.</span> <span class="toc-text">切换工作区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#移动窗口到其他工作区"><span class="toc-number">6.</span> <span class="toc-text">移动窗口到其他工作区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#呼出通知中心和日历"><span class="toc-number">7.</span> <span class="toc-text">呼出通知中心和日历</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#截图"><span class="toc-number">8.</span> <span class="toc-text">截图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大化最小化和分屏"><span class="toc-number">9.</span> <span class="toc-text">最大化最小化和分屏</span></a></li></ol>
+            
         
     </div>
     <style>
@@ -462,7 +446,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Gnome快捷键　| LiarLee's Notebook　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"为虚拟机开启内存大页　| LiarLee's Notebook　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -482,15 +466,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2019/09/19/All this I did without you/" title="上一篇: All this I did without you">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2019/09/19/Linux/Linux_Nginx-if-try-files-Notwork/" title="下一篇: Nginx配置文件中if判断与try_files">
+            <a href="/2020/04/10/正见-佛陀的证悟-节选/" title="下一篇: 正见——佛陀的证悟（一）诸行无常(选摘)">
                 <i class="fa fa-angle-right"></i>
             </a>
         
