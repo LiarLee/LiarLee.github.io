@@ -15,18 +15,18 @@
 
 
 
-<meta name="description" content="记录几个内核参数的意思和调整的效果。  开始 net.ipv4.tcp_max_tw_buckets对于tcp连接，服务端和客户端通信完后状态变为timewait，假如某台服务器非常忙，连接数特别多的话，那么这个timewait数量就会越来越大。毕竟它也是会占用一定的资源，所以应该有一个最大值，当超过这个值，系统就会删除最早的连接，这样始终保持在一个数量级。这个数值就是由net.ipv4.tcp_">
-<meta name="keywords" content="Linux">
+<meta name="description" content="2020已经走到了5月了，回头看看自己的路程，再往前看看自己的还想做的事情。">
+<meta name="keywords" content="Personal">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux-内核参数笔记">
-<meta property="og:url" content="http://liarlee.site/2018/01/22/Linux/Linux_内核参数笔记/index.html">
+<meta property="og:title" content="2018-2019 Review">
+<meta property="og:url" content="http://liarlee.site/2020/05/06/2019-2020/index.html">
 <meta property="og:site_name" content="LiarLee&#39;s Notebook">
-<meta property="og:description" content="记录几个内核参数的意思和调整的效果。  开始 net.ipv4.tcp_max_tw_buckets对于tcp连接，服务端和客户端通信完后状态变为timewait，假如某台服务器非常忙，连接数特别多的话，那么这个timewait数量就会越来越大。毕竟它也是会占用一定的资源，所以应该有一个最大值，当超过这个值，系统就会删除最早的连接，这样始终保持在一个数量级。这个数值就是由net.ipv4.tcp_">
+<meta property="og:description" content="2020已经走到了5月了，回头看看自己的路程，再往前看看自己的还想做的事情。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-06T10:07:09.000Z">
+<meta property="og:updated_time" content="2020-05-06T10:13:29.532Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux-内核参数笔记">
-<meta name="twitter:description" content="记录几个内核参数的意思和调整的效果。  开始 net.ipv4.tcp_max_tw_buckets对于tcp连接，服务端和客户端通信完后状态变为timewait，假如某台服务器非常忙，连接数特别多的话，那么这个timewait数量就会越来越大。毕竟它也是会占用一定的资源，所以应该有一个最大值，当超过这个值，系统就会删除最早的连接，这样始终保持在一个数量级。这个数值就是由net.ipv4.tcp_">
+<meta name="twitter:title" content="2018-2019 Review">
+<meta name="twitter:description" content="2020已经走到了5月了，回头看看自己的路程，再往前看看自己的还想做的事情。">
 
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
@@ -58,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Linux-内核参数笔记 | LiarLee&#39;s Notebook</title>
+<title>2018-2019 Review | LiarLee&#39;s Notebook</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -295,11 +295,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Linux/Linux_内核参数笔记" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-2019-2020" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/01/22/Linux/Linux_内核参数笔记/" class="article-date">
-      <time datetime="2018-01-22T08:05:47.000Z" itemprop="datePublished">2018-01-22</time>
+      <a href="/2020/05/06/2019-2020/" class="article-date">
+      <time datetime="2020-05-06T09:19:47.000Z" itemprop="datePublished">2020-05-06</time>
 </a>
 
 
@@ -314,7 +314,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Linux-内核参数笔记
+      2018-2019 Review
     </h1>
   
 
@@ -322,14 +322,10 @@
       
       <div class="article-info article-info-post">
         
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a>
-    </div>
-
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Personal/">Personal</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -339,23 +335,43 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>记录几个内核参数的意思和调整的效果。</p>
+        <p>2020已经走到了5月了，回头看看自己的路程，再往前看看自己的还想做的事情。</p>
+<a id="more"></a>
+<p>2019年基本上是我觉得过得最快的一年了吧，我的天，刚进入2020年就来了疫情（COVID-19），然后就是没完没了的不能出门和带口罩，感觉真的是被封印了。</p>
+<p>现在已经是五月份了，半年又过去了，本来这个总结应该是写在去年的年底或者今年的年初的，结果疫情导致的自己现在才有兴致写写东西。</p>
 <hr>
-<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><ol>
-<li><strong>net.ipv4.tcp_max_tw_buckets</strong><br>对于tcp连接，服务端和客户端通信完后状态变为timewait，假如某台服务器非常忙，连接数特别多的话，那么这个timewait数量就会越来越大。毕竟它也是会占用一定的资源，所以应该有一个最大值，当超过这个值，系统就会删除最早的连接，这样始终保持在一个数量级。<br>这个数值就是由net.ipv4.tcp_max_tw_buckets这个参数来决定的。CentOS7系统，你可以使用sysctl -a |grep tw_buckets来查看它的值，默认为32768，你可以适当把它调低，比如调整到8000，毕竟这个状态的连接太多也是会消耗资源的。  <a id="more"></a>
-但你不要把它调到几十、几百这样，因为这种状态的tcp连接也是有用的，如果同样的客户端再次和服务端通信，就不用再次建立新的连接了，用这个旧的通道，省时省力。  </li>
-<li><strong>net.ipv4.tcp_tw_recycle = 1</strong><br>该参数的作用是快速回收timewait状态的连接。上面虽然提到系统会自动删除掉timewait状态的连接，但如果把这样的连接重新利用起来岂不是更好。所以该参数设置为1就可以让timewait状态的连接快速回收，它需要和下面的参数配合一起使用。  </li>
-<li><strong>net.ipv4.tcp_tw_reuse = 1</strong><br>该参数设置为1，将timewait状态的连接重新用于新的TCP连接，要结合上面的参数一起使用。  </li>
-<li><strong>net.ipv4.tcp_syncookies = 1</strong><br>tcp三次握手中，客户端向服务端发起syn请求，服务端收到后，也会向客户端发起syn请求同时连带ack确认，假如客户端发送请求后直接断开和服务端的连接，不接收服务端发起的这个请求，服务端会重试多次。<br>这个重试的过程会持续一段时间，当这种状态的连接数量非常大时，服务器会消耗很大的资源，从而造成瘫痪，正常的连接进不来，这种恶意的半连接行为其实叫做syn flood攻击。<br>设置为1，是开启SYN Cookies，开启后可以避免发生上述的syn flood攻击。开启该参数后，服务端接收客户端的ack后，再向客户端发送ack+syn之前会要求client在短时间内回应一个序号，如果客户端不能提供序号或者提供的序号不对则认为该客户端不合法，于是不会发ack+syn给客户端，更涉及不到重试。  </li>
-<li><strong>net.ipv4.tcp_max_syn_backlog</strong><br>该参数定义系统能接受的最大半连接状态的tcp连接数。客户端向服务端发送了syn包，服务端收到后，会记录一下，该参数决定最多能记录几个这样的连接。我的CentOS7系统，默认是256，当有syn flood攻击时，这个数值太小则很容易导致服务器瘫痪，实际上此时服务器并没有消耗太多资源（cpu、内存等），所以可以适当调大它，比如调整到30000。  </li>
-<li><strong>net.ipv4.tcp_syn_retries</strong><br>该参数适用于客户端，它定义发起syn的最大重试次数，默认为5，建议改为2。  </li>
-<li><strong>net.ipv4.tcp_synack_retries</strong><br>该参数适用于服务端，它定义发起syn+ack的最大重试次数，默认为5，建议改为2，可以适当预防syn flood攻击。  </li>
-<li><strong>net.ipv4.ip_local_port_range</strong><br>该参数定义端口范围，系统默认保留端口为1024及以下，以上部分为自定义端口。这个参数适用于客户端，当客户端和服务端建立连接时，比如说访问服务端的80端口，客户端随机开启了一个端口和服务端发起连接，这个参数定义随机端口的范围。默认为32768    61000，建议调整为1025 61000。  </li>
-<li><strong>net.ipv4.tcp_fin_timeout</strong><br>tcp连接的状态中，客户端上有一个是FIN-WAIT-2状态，它是状态变迁为timewait前一个状态。该参数定义不属于任何进程的该连接状态的超时时间，默认值为60，建议调整为6。  </li>
-<li><strong>net.ipv4.tcp_keepalive_time</strong><br>tcp连接状态里，有一个是keepalived状态，只有在这个状态下，客户端和服务端才能通信。正常情况下，当通信完毕，客户端或服务端会告诉对方要关闭连接，此时状态就会变为timewait，如果客户端没有告诉服务端，并且服务端也没有告诉客户端关闭的话（例如，客户端那边断网了），此时需要该参数来判定。<br>比如客户端已经断网了，但服务端上本次连接的状态依然是keepalived，服务端为了确认客户端是否断网，就需要每隔一段时间去发一个探测包去确认一下看看对方是否在线。这个时间就由该参数决定。它的默认值为7200（单位为秒），建议设置为30。</li>
-<li><strong>net.ipv4.tcp_keepalive_intvl</strong><br>该参数和上面的参数是一起的，服务端在规定时间内发起了探测，查看客户端是否在线，如果客户端并没有确认，此时服务端还不能认定为对方不在线，而是要尝试多次。该参数定义重新发送探测的时间，即第一次发现对方有问题后，过多久再次发起探测。<br>默认值为75秒（单位为秒），可以改为3。</li>
-<li><strong>net.ipv4.tcp_keepalive_probes</strong><br>第10和第11个参数规定了何时发起探测和探测失败后再过多久再发起探测，但并没有定义一共探测几次才算结束。该参数定义发起探测的包的数量。默认为9，建议设置2。</li>
+<p><strong>For 2019：</strong></p>
+<p>2019的最大收获其实是换了工作，得到了认可， 学到了新的知识，但是还是缺少实践，和我想象中的工作和锻炼还是有差距，但是暂时疫情的原因还是不继续换工作了，老天爷可能觉得我需要在这边停一停。对于我来说最大的成果就是 Kubernetes玩儿的不错，感觉自己还挺棒棒的。同时呢，Linux的学习基本上可以放放了，在没有工作的两个月里面，Archlinux已经可以独立安装了，现在回想起来觉得还挺简单的，信心爆棚~ 然后不知好歹的去挑战了Gentoo，在挣扎了两天之后能看见TTY了， 对操作系统的了解现在已经很深刻了。</p>
+<p>2019最大的惊吓其实是肝炎，这个事情我是真的没有想到，问题不大，不是什么特别要命的毛病，我还可以挺挺，现在已经吃药一个月了，感觉不错，期待我的复查的结果。</p>
+<hr>
+<p><strong>For 2020：</strong></p>
+<p>2020年的好消息是没失业，真的是Flag…..去年写Review的时候说自己可千万不要失业啊，然后就真的应验了， 2019 失业了三个月，好在2020的开头幸亏我准备不错，及时的入职了新的工作，新的环境和之前的环境差不多，外企的风格，换到新的公司之后还是比较适应的，我觉得可以待一年左右，学习一下，这边的岗位还是适合学习的，可以进一步搞起来。</p>
+<p>2020年最惊喜的地方就是收入的增加，确实 我觉得收入的增加确实提高了我的满意度。我觉得对自己现在的收入还是满意的，和大家一样了，没有拖后腿，哈哈哈哈。至于会不会更高我估计我的学历可能也是没戏了，希望自己可以去拿更多的证书获取更多到筹码。</p>
+<hr>
+<p>Flag还是要立的：</p>
+<ol>
+<li>期待今年里可以将PMP拿下来，这个证书其实我觉得还是可以拿的，听起来也是比较简单点的，拿了每坏处。</li>
+<li>期待收入可以二级跳~我相信自己的实力应该可以的。</li>
+<li>期待今年可以让自己的积蓄开始回正。</li>
+<li>期待今年年底之前可以把结婚的事情定下来。</li>
+<li>长远的考虑觉得自己在30岁之前还是要尽可能的取得一些东西才行，会让我后面的路程更加好走。</li>
+<li>今年还有数据分析的课程是需要学习的，8000多块钱已经交出去了，真的需要咬咬牙才能坚持。</li>
 </ol>
+<hr>
+<p>不知道今年写这个该配什么诗词了，摇个六爻吧，火风鼎变天风姤，就把鼎卦的翼放在这儿吧。</p>
+<blockquote>
+<p>木上有火，鼎；君子以正位凝命。</p>
+</blockquote>
+<p>自己试试解解得了</p>
+<blockquote>
+<p><strong>干支：</strong>庚子年　辛巳月　己酉日　癸酉时　　（日空：寅卯）<br><strong>神煞：</strong>驿马－亥　桃花－午　日禄－午　贵人－子，申</p>
+<p>　　 　　　　　　　离宫：火风鼎  　　　 　 　　乾宫：天风姤  　　　<br><strong>六神　　伏神　　　本　 　　卦　　 　 　　　　变　 　　卦</strong><br>勾陈 　　　　　 兄弟己巳火 ▅▅▅▅▅ 　 　　 子孙壬戌土 ▅▅▅▅▅ 　<br>朱雀 　　　　　 子孙己未土 ▅▅　▅▅ 应 ╳→ 妻财壬申金 ▅▅▅▅▅ 　<br>青龙 　　　　　 妻财己酉金 ▅▅▅▅▅ 　 　　 兄弟壬午火 ▅▅▅▅▅ 应<br>玄武 　　　　　 妻财辛酉金 ▅▅▅▅▅ 　 　　 妻财辛酉金 ▅▅▅▅▅ 　<br>白虎 　　　　　 官鬼辛亥水 ▅▅▅▅▅ 世 　　 官鬼辛亥水 ▅▅▅▅▅ 　<br>螣蛇 父母己卯木 子孙辛丑土 ▅▅　▅▅ 　 　　 子孙辛丑土 ▅▅　▅▅ 世</p>
+</blockquote>
+<p>官鬼持世，月建巳火，自己这边应该是没什么太大的问题，兄弟爻持月建，亥水有点儿不太相容。看起来金多，没什么太大的问题。</p>
+<p>动爻子孙生妻财，这应该是进财的象，这里面还有妻财出现了四次，三个酉金。</p>
+<p>父母伏神，卯木旬空。</p>
+<p>从卦象上来看，我应该是今年有进财的可能，估计可能是因为涨工资什么的，或者是房子下来了？ </p>
+<p>就这样吧，已经开始胡说了。放弃了。有那句 <strong>君子以正位凝命</strong> 就够了！明年见~</p>
 
       
     </div>
@@ -364,13 +380,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/01/22/Linux/Linux_内核参数笔记/">Linux-内核参数笔记</a></p>
+        <p><span>本文标题:</span><a href="/2020/05/06/2019-2020/">2018-2019 Review</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">LiarLee</a></p>
-        <p><span>发布时间:</span>2018-01-22, 16:05:47</p>
-        <p><span>最后更新:</span>2019-11-06, 18:07:09</p>
+        <p><span>发布时间:</span>2020-05-06, 17:19:47</p>
+        <p><span>最后更新:</span>2020-05-06, 18:13:29</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/01/22/Linux/Linux_内核参数笔记/" title="Linux-内核参数笔记">http://liarlee.site/2018/01/22/Linux/Linux_内核参数笔记/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://liarlee.site/2018/01/22/Linux/Linux_内核参数笔记/　　作者: LiarLee" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2020/05/06/2019-2020/" title="2018-2019 Review">http://liarlee.site/2020/05/06/2019-2020/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://liarlee.site/2020/05/06/2019-2020/　　作者: LiarLee" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -382,16 +398,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/01/22/Linux/Linux_Nginx-InstalltionNote/">
-                    Nginx编译安装
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/01/22/本地方式安装-Net3-5教程/">
-                    本地方式安装.Net3.5笔记
+                <a href="/2020/05/02/Linux/Linux_Hugepage-configuration/">
+                    为虚拟机开启内存大页
                 </a>
             </div>
         
@@ -403,7 +413,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#开始"><span class="toc-number">1.</span> <span class="toc-text">开始</span></a></li></ol>
+            
         
     </div>
     <style>
@@ -439,7 +449,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Linux-内核参数笔记　| LiarLee's Notebook　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"2018-2019 Review　| LiarLee's Notebook　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -459,15 +469,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/01/22/Linux/Linux_Nginx-InstalltionNote/" title="上一篇: Nginx编译安装">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/01/22/本地方式安装-Net3-5教程/" title="下一篇: 本地方式安装.Net3.5笔记">
+            <a href="/2020/05/02/Linux/Linux_Hugepage-configuration/" title="下一篇: 为虚拟机开启内存大页">
                 <i class="fa fa-angle-right"></i>
             </a>
         

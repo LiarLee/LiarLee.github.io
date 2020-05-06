@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://liarlee.site/2020/05/06/2019-2020/</loc>
+    
+    <lastmod>2020-05-06T10:13:29.532Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://liarlee.site/2020/05/02/Linux/Linux_Hugepage-configuration/</loc>
     
     <lastmod>2020-05-02T07:20:56.762Z</lastmod>
@@ -58,21 +65,7 @@
   </url>
   
   <url>
-    <loc>http://liarlee.site/2018/07/02/DCM4CHEE_RunDocker/</loc>
-    
-    <lastmod>2019-11-06T10:07:09.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://liarlee.site/2017/12/27/Hexo-Install/</loc>
-    
-    <lastmod>2019-11-06T10:07:09.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://liarlee.site/2018/07/08/Honor8InstallLineageOS/</loc>
     
     <lastmod>2019-11-06T10:07:09.000Z</lastmod>
     
@@ -87,6 +80,20 @@
   
   <url>
     <loc>http://liarlee.site/2018/01/15/PPTConvertTOWORD/</loc>
+    
+    <lastmod>2019-11-06T10:07:09.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://liarlee.site/2018/07/08/Honor8InstallLineageOS/</loc>
+    
+    <lastmod>2019-11-06T10:07:09.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://liarlee.site/2018/07/02/DCM4CHEE_RunDocker/</loc>
     
     <lastmod>2019-11-06T10:07:09.000Z</lastmod>
     
@@ -156,14 +163,7 @@
   </url>
   
   <url>
-    <loc>http://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/</loc>
-    
-    <lastmod>2019-11-06T10:07:09.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://liarlee.site/2019/07/13/Linux/Linux_Boot-sequence/</loc>
+    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
     
     <lastmod>2019-11-06T10:07:09.000Z</lastmod>
     
@@ -171,6 +171,13 @@
   
   <url>
     <loc>http://liarlee.site/2018/07/03/Linux/Linux_BuildRPMs/</loc>
+    
+    <lastmod>2019-11-06T10:07:09.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://liarlee.site/2019/07/13/Linux/Linux_Boot-sequence/</loc>
     
     <lastmod>2019-11-06T10:07:09.000Z</lastmod>
     
@@ -191,6 +198,13 @@
   </url>
   
   <url>
+    <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2019-11-06T10:07:09.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
     
     <lastmod>2019-11-06T10:07:09.000Z</lastmod>
@@ -198,7 +212,7 @@
   </url>
   
   <url>
-    <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
+    <loc>http://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/</loc>
     
     <lastmod>2019-11-06T10:07:09.000Z</lastmod>
     
@@ -395,13 +409,6 @@
   
   <url>
     <loc>http://liarlee.site/2018/05/11/Linux/Linux_%E5%85%B3%E9%97%ADFedora%E9%98%B2%E7%81%AB%E5%A2%99/</loc>
-    
-    <lastmod>2019-11-06T10:07:09.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
     
     <lastmod>2019-11-06T10:07:09.000Z</lastmod>
     

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://liarlee.site/2020/05/06/2019-2020/</loc>
+    <lastmod>2020-05-06</lastmod>
+  </url>  <url>
     <loc>http://liarlee.site/2020/05/02/Linux/Linux_Hugepage-configuration/</loc>
     <lastmod>2020-05-02</lastmod>
   </url>  <url>
@@ -25,19 +28,19 @@
     <loc>http://liarlee.site/2019/09/19/All%20this%20I%20did%20without%20you/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2018/07/02/DCM4CHEE_RunDocker/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
     <loc>http://liarlee.site/2017/12/27/Hexo-Install/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2018/07/08/Honor8InstallLineageOS/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/07/18/Other_Interview-testing/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/15/PPTConvertTOWORD/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2018/07/08/Honor8InstallLineageOS/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2018/07/02/DCM4CHEE_RunDocker/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/05/17/Python-Script-ForGame/</loc>
@@ -67,13 +70,13 @@
     <loc>http://liarlee.site/2019/07/07/Linux/Linux_Ansible-Note-2/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/07/13/Linux/Linux_Boot-sequence/</loc>
+    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/07/03/Linux/Linux_BuildRPMs/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
+    <loc>http://liarlee.site/2019/07/13/Linux/Linux_Boot-sequence/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/04/01/Linux/Linux_Cacti-installation/</loc>
@@ -82,10 +85,13 @@
     <loc>http://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
+    <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2019-11-06</lastmod>
+  </url>  <url>
     <loc>http://liarlee.site/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
-    <loc>http://liarlee.site/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/</loc>
+    <loc>http://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2019/01/13/Linux/Linux_Fedora-bootspeedup/</loc>
@@ -170,9 +176,6 @@
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/05/11/Linux/Linux_%E5%85%B3%E9%97%ADFedora%E9%98%B2%E7%81%AB%E5%A2%99/</loc>
-    <lastmod>2019-11-06</lastmod>
-  </url>  <url>
-    <loc>http://liarlee.site/2019/09/18/Linux/Linux_CentOS7-VM-Template/</loc>
     <lastmod>2019-11-06</lastmod>
   </url>  <url>
     <loc>http://liarlee.site/2018/01/22/Linux/Linux_%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0%E7%AC%94%E8%AE%B0/</loc>
