@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="LiarLee" />
+
+
+
+<meta name="description" content="关于制作RPM包的笔记～">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RPM制作的笔记">
+<meta property="og:url" content="http://liarlee.site/2018/07/03/Linux/Linux_BuildRPMs/index.html">
+<meta property="og:site_name" content="LiarLee&#39;s Notebook">
+<meta property="og:description" content="关于制作RPM包的笔记～">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg">
+<meta property="article:published_time" content="2018-07-03T03:46:36.000Z">
+<meta property="article:modified_time" content="2019-11-06T10:07:09.000Z">
+<meta property="article:author" content="LiarLee">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="LiarLee&#39;s Notebook" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/yellow/pace-theme-bounce.css" rel="stylesheet">
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>RPM制作的笔记 | LiarLee&#39;s Notebook</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?edd562dfbae3c6705d37b00034076bc8";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <link rel="stylesheet" href="/lib/gitalk/gitalk.css">
+    <script src="/lib/gitalk/gitalk.min.js"></script>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<head>
+	<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+	<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+	<script type="text/javascript" src="/js/firework.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">LiarLee</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:625610036@qq.com" title="Email"></a>
+                            
+                                <a class="fa QQ" href="http://wpa.qq.com/msgrd?v=3&uin=625610036&site=qq&menu=yes" target="_blank" rel="noopener" title="QQ"></a>
+                            
+                                <a class="fa 微信" href="/625610036" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/" rel="tag">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ArchLinux/" rel="tag">ArchLinux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cacti/" rel="tag">Cacti</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cobbler/" rel="tag">Cobbler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/" rel="tag">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/English/" rel="tag">English</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fedora/" rel="tag">Fedora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Firefox/" rel="tag">Firefox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KVM/" rel="tag">KVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lantern/" rel="tag">Lantern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Office/" rel="tag">Office</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Orthanc/" rel="tag">Orthanc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Personal/" rel="tag">Personal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/" rel="tag">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grub2/" rel="tag">grub2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%A6/" rel="tag">书</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BD%9B%E6%95%99/" rel="tag">佛教</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E5%AD%A6/" rel="tag">心学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%97/" rel="tag">诗</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io" target="_blank" rel="noopener">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://martinhan.site" target="_blank" rel="noopener">Martinhan</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">诸行无常，诸法无我。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=200 height=52 src="//music.163.com/outchain/player?type=2&id=28285910&auto=1&height=32"></iframe>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">LiarLee</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">LiarLee</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:625610036@qq.com" title="Email"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=625610036&site=qq&menu=yes" title="QQ"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/625610036" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Linux/Linux_BuildRPMs" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/03/Linux/Linux_BuildRPMs/" class="article-date">
+      <time datetime="2018-07-03T03:46:36.000Z" itemprop="datePublished">2018-07-03</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RPM制作的笔记
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>关于制作RPM包的笔记～</p>
+<a id="more"></a>
+<p><img src="https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg" alt="Artical_Cover.jpg"></p>
+<h1 id="一-制作RPM包教程"><a href="#一-制作RPM包教程" class="headerlink" title="一.制作RPM包教程"></a>一.制作RPM包教程</h1><p>源码包的制作教程基于RHEL 5 &amp; 6,当我写这个的时候还没有7版本,我会在后续更新新版本的路数.</p>
+<h2 id="1-rpm包的制作流程简述"><a href="#1-rpm包的制作流程简述" class="headerlink" title="1. rpm包的制作流程简述"></a>1. rpm包的制作流程简述</h2><ol>
+<li>放置源码进入SOURCES文件夹</li>
+<li>写好SPEC文件</li>
+<li>运行rpmbuild命令,自动执行安装和清理</li>
+<li>自动将所有的源码解压到BUILD目录</li>
+<li>自动安装所有的源码程序到BUILDROOT目录</li>
+<li>自动根据SPEC文件里面的file程序段打包到rpm包中</li>
+<li>自动进行后续的清理</li>
+<li>生成完整的RPM包</li>
+<li>手动进行安装测试</li>
+</ol>
+<h2 id="2-如何做准备"><a href="#2-如何做准备" class="headerlink" title="2. 如何做准备"></a>2. 如何做准备</h2><p>需要明确的几个问题：</p>
+<ol>
+<li>我们需要做一个什么样的RPM包，这个RPM包使用来做什么的，RPMs不一定包含的是二进制的内容，不一定需要编译。</li>
+<li>至少我们需要源码，注意原材料的收集。</li>
+<li>官方建议使用干净的源码，如果有补丁需要在制作的过程中打上补丁。</li>
+<li>同一个软件，不同版本的RPM，新版本是否可以支持升级旧版本。需不需要清理旧版本的文件。升级是否会造成冲突。</li>
+<li>依赖关系。</li>
+<li>每一个PRM包都提供一种功能，Capability，可以被其他的PRM包依赖。RPM包的名字和所安装的文件都可以给其他的软件提供依赖。</li>
+<li>自身名字的意义，提供的每一文件也可以被依赖，</li>
+<li>他的安装和运行需要依赖于其他的RPM包本身或者所具有的文件，叫做依赖关系。  </li>
+<li>两类依赖关系，编译依赖和安装依赖。</li>
+<li>规划依赖关系，写SPEC文件。</li>
+<li>制作RPMs。</li>
+<li>简单测试RPMs。</li>
+</ol>
+<h2 id="3-RPMs的规划"><a href="#3-RPMs的规划" class="headerlink" title="3. RPMs的规划"></a>3. RPMs的规划</h2><ol>
+<li>是否是应用程序，是否需要补丁，是否需要新的功能。</li>
+<li>是一个程序的库文件</li>
+<li>是一个系统配置文件集</li>
+<li>是一个文档文件包</li>
+<li>是否拆分完整的软件，例如：MySQL-5.5.22.tar.gz，在制作RPM包的时候被拆分为MySQL，mysql-server，mysql-devel，等等。</li>
+<li>是一个二进制还是源码，当时都有。例如:src.rpm,里面包括了 source.tar.gz 和 spec,需要使用者安装完成之后编译再安装。</li>
+</ol>
+<h2 id="4-制作过程"><a href="#4-制作过程" class="headerlink" title="4. 制作过程"></a>4. 制作过程</h2><h3 id="1-设计目录结构-set-up-the-directory-structure"><a href="#1-设计目录结构-set-up-the-directory-structure" class="headerlink" title="1. 设计目录结构(set up the directory structure)"></a>1. 设计目录结构(set up the directory structure)</h3><p><strong>制作RPM过程中千万不能用root用户</strong><br>每个版本对于目录的要求不同，五个不同的目录：  </p>
+<ol>
+<li><strong>BUILD</strong>：不需要放任何的内容，这个目录是真正工作的目录。用于解压编译源码。  </li>
+<li><strong>RPMS</strong>：制作完成的RPM包放在这个里面，里面的目录的名字和结构与特定平台架构有关，可以交叉平台编译。  </li>
+<li><strong>SOURCES</strong>:所有收集的源码都在这个目录里面。  </li>
+<li><strong>SPECS</strong>:放置SPEC文件，作为制作过程的指导说明。以软件包的名字命名，以.spec结尾。  </li>
+<li><strong>SRPMS</strong>:放置了SRC(source)格式的RPM包。<br>红帽提供了默认的制作目录，在/usr/src/redhat.<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[LiarLee<span class="meta">@localhost</span> ~] tree <span class="regexp">/usr/</span>src/redhat</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="2-放置文件到正确的指定的目录-Place-the-sources-in-the-right-dirctory-。"><a href="#2-放置文件到正确的指定的目录-Place-the-sources-in-the-right-dirctory-。" class="headerlink" title="2. 放置文件到正确的指定的目录(Place the sources in the right dirctory)。"></a>2. 放置文件到正确的指定的目录(Place the sources in the right dirctory)。</h3><p>  我们首先需要自己制定自己的制作源码目录，在不使用root用户的前提下进行制作,需要修改系统的宏，来制定新的工作目录。修改工作目录的过程如下：</p>
+<ol>
+<li>使用命令查看默认的宏：<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[LiarLee@localhost ~] rpmbuild --showrc   <span class="string">\\</span> 显示所有的相关宏定义</span><br><span class="line">_build——表示目录; __rm——表示命令</span><br></pre></td></tr></table></figure></li>
+<li>使用命令查看默认的配置文件：<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  [LiarLee@localhost ~] rpmbuild --showrc | grep macrofiles    <span class="string">\\</span> 显示配置文件的全局路径和文件名  </span><br><span class="line"><span class="string">\\</span> 权限由小到大，后一个文件的参数覆盖前面所有的定义  </span><br><span class="line"><span class="string">\\</span> 所以我们在家目录下创建隐藏文件.rpmmacros可以直接配置自定义的设置。</span><br></pre></td></tr></table></figure></li>
+<li>使用命令查看默认的工作目录定义：<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  [LiarLee@localhost ~] rpmbuild --showrc | grep _topdir   <span class="string">\\</span> 显示默认的工作目录宏定义  </span><br><span class="line"><span class="string">\\</span> 以相同的模式在.rpmmacros中直接覆盖配置，可以更改工作目录</span><br></pre></td></tr></table></figure></li>
+<li>更改topdir的宏，使用rpmbuilder的用户，创建.rpmmacros,添加内容配置宏:  <figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[LiarLee@localhost ~] vim .rpmmacros         <span class="string">\\</span> Create .rpmmacros file  </span><br><span class="line">    %_topdir    <span class="regexp">/home/rpmbuilder/rpmbild/</span>  </span><br><span class="line">[LiarLee@localhost ~] mkdir -pv rpmbuild/&#123;BUILD,RPMS,SOURCES,SPEC,SRPMS&#125;  </span><br><span class="line">[LiarLee@localhost ~] rpmbuild --showrc | grep _topdir      <span class="string">\\</span> Review the Result</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="3-创建一个spec文件-Create-a-spec-file-that-tells-the-rpmbuild-command-what-to-do-。"><a href="#3-创建一个spec文件-Create-a-spec-file-that-tells-the-rpmbuild-command-what-to-do-。" class="headerlink" title="3. 创建一个spec文件(Create a spec file that tells the rpmbuild command what to do)。"></a>3. 创建一个spec文件(Create a spec file that tells the rpmbuild command what to do)。</h3><ol>
+<li>spec文件使用软件的名字版本作为文件名；.spec作为扩展名。  </li>
+<li>rpm -qi mysql &amp; rpm -qpi mysql,命令查看rpm信息，信息从spec文件中定义，软件包信息说明段落定义。</li>
+<li>spec文件有如下几个段落：<ol>
+<li>The introduction section<br>设置软件包的基本信息<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Summary:</span>  \\ 简单描述</span><br><span class="line"><span class="symbol">Name:</span>     \\ 软件名字</span><br><span class="line"><span class="symbol">Version:</span>  \\ 版本号</span><br><span class="line"><span class="symbol">Release:</span>  \\ 发行号</span><br><span class="line"><span class="symbol">License:</span>  \\ 协议</span><br><span class="line"><span class="symbol">Group:</span>    \\ GROUP范围在这个文件中描述 <span class="meta-keyword">/usr/</span>share<span class="meta-keyword">/doc/</span>rpm-*/GROUPS</span><br><span class="line"><span class="symbol">URL:</span>      \\ 从何处获取的站点链接，下载路径</span><br><span class="line"><span class="symbol">Packager:</span>  \\ 制作者<span class="params">&lt;制作者邮箱&gt;</span></span><br><span class="line">Vendor：   \\ 制作者的公司或者本人名字      </span><br><span class="line"><span class="symbol">Source:</span>      \\ 源文件地址，一个链接地址</span><br><span class="line"><span class="symbol">BuildRoot:</span>   \\ 制作RPM包的时候的虚拟Root目录</span><br><span class="line"><span class="symbol">BuildRequires:</span>   \\ 制作过程依赖于哪些软件包的名字</span><br></pre></td></tr></table></figure></li>
+<li>The prep section<br>解压源码包到BUILD目录的段，cd到需要的目录，设置环境变量。<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">prep</span></span></span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span></span><br></pre></td></tr></table></figure></li>
+<li>The build section<br>这是源码包安装的make过程.<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%build</span></span><br><span class="line">./configure  OR   <span class="comment">%configure</span></span><br><span class="line">./make       OR   <span class="comment">%&#123;__make&#125;</span></span><br><span class="line">make <span class="comment">% &#123;?_smp_mflags&#125;    \\ 多对称处理器加速编译</span></span><br></pre></td></tr></table></figure></li>
+<li>The install section<br>这里是安装make install过程。系统中有install命令,install方式类似于COPY模式.<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">install</span></span></span><br><span class="line"><span class="tag">%&#123;__rm&#125;</span></span><br><span class="line"><span class="tag">%&#123;__make&#125;</span> install DESTDIR="%&#123;buildroot&#125;"</span><br><span class="line"><span class="tag">%<span class="selector-tag">find_lang</span></span> %&#123;name&#125;</span><br></pre></td></tr></table></figure></li>
+<li>The script section<br>这里是定义执行需要的脚本，用来配置环境。例如:添加Apache用户.<br>%pre        Note:安装前执行<br>%post       Note:安装后执行<br>%preun      Note:卸载前执行<br>%postun     Note:卸载后执行</li>
+<li>The clean section<br>清理之前所用到的BuildRoot目录的。<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">clean</span></span></span><br><span class="line"><span class="tag">%&#123;__rm&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>The files section<br>对安装的软件的程序进行规划,哪些文件安装到那个文件夹,<strong>BUILDROOT下的所有文件必须在这个段中存在</strong><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">files</span></span></span><br><span class="line"><span class="tag">%<span class="selector-tag">config</span>(noreplace)</span>  \\ 不替换旧的配置</span><br></pre></td></tr></table></figure></li>
+<li>The changelog section<br>记录版本迭代  <figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* Wed Apr <span class="number">11</span> <span class="number">2012</span> Liarlee.site &lt;<span class="symbol">Liarlee@</span>site.com&gt; - ReleaseNumber 更改时间</span><br><span class="line">- Comments</span><br><span class="line">- Comments</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="4-开始编译-Build-the-source-and-binary-RPMs"><a href="#4-开始编译-Build-the-source-and-binary-RPMs" class="headerlink" title="4. 开始编译(Build the source and binary RPMs)"></a>4. 开始编译(Build the source and binary RPMs)</h3><ol>
+<li>rpmbuild命令说明:  <figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rpmbuild -<span class="keyword">bp </span>       \\ 执行到prep section</span><br><span class="line">rpmbuild -<span class="keyword">bc </span>       \\ 执行到<span class="keyword">build </span>section</span><br><span class="line">rpmbuild -<span class="keyword">bi </span>       \\ 执行到<span class="keyword">install </span>section</span><br><span class="line"></span><br><span class="line">rpmbuild -<span class="keyword">bs </span>       \\ 制作源码格式的制作</span><br><span class="line">rpmbuild -<span class="keyword">bb </span>       \\ 制作二进制格式的rpm包</span><br><span class="line">rpmbuild -<span class="keyword">ba </span>       \\ 执行全部格式,<span class="keyword">BOTH二进制和源码</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword">rpmbuild </span>-<span class="keyword">bl </span>       \\ <span class="keyword">BUILDROOT存在但是没有在FILES段中为包含进去的文件的CHECK命令</span></span><br></pre></td></tr></table></figure></li>
+<li>关于安装错误的说明:<br>在执行过程中如果有报错我们只需要去按照提示修正错误即可,在执行结束之后会在RPMS目录下生成需要的<em>RPM包<em>和</em>RPM-DEBUG包</em>.我们只需要RPM包即可,使用rpm -ivh进行安装测试.<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[LiarLee@localhost ~]</span> <span class="selector-tag">rpmbuild</span> <span class="selector-tag">-ba</span> <span class="selector-tag">SoftwareName</span><span class="selector-class">.spec</span>   \\开始制作的命令</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="rpm2cpio命令的说明"><a href="#rpm2cpio命令的说明" class="headerlink" title="rpm2cpio命令的说明"></a>rpm2cpio命令的说明</h1><p>  src-rpm包只是将源码打包成RPM格式,当我们安装src.rpm格式的安装包的时候会把包含的文件,解压到用户默认的工作目录下,所以这种格式的RPM包我们不用安装,直接制作RPM包即可.进行rebuild OR recompile.<br>  <figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[LiarLee<span class="meta">@localhost</span> ~] rpm2cpio mysql.src.rpm &gt; mysql.cpio  </span><br><span class="line">[LiarLee<span class="meta">@localhost</span> ~] rpm2cpio mysql.src.rpm |<span class="string"> cpio -t</span></span><br></pre></td></tr></table></figure><br>  <strong>两个网站的推荐(搜索SRC-RPM包的站点):</strong><br>    rpmfind.net<br>    rpm.pbone.net  </p>
+<h1 id="二-从头开始写新的SPEC-files"><a href="#二-从头开始写新的SPEC-files" class="headerlink" title="二. 从头开始写新的SPEC files"></a>二. 从头开始写新的SPEC files</h1><p>制作RPM包的核心是写SPEC files，难以掌握的地方<br>介绍SPEC文件的基本语法和简单用法</p>
+<h2 id="1-Spec-files-overview"><a href="#1-Spec-files-overview" class="headerlink" title="1. Spec files overview"></a>1. Spec files overview</h2><p>SPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编译，做成不同的RPM包，依赖关系。  Macro是指的变量<br>大多数的字段由tag+value组成,tag是标签–Directives,不区分大小写;value是区分大小写的.    </p>
+<h3 id="1-1-宏的自定义"><a href="#1-1-宏的自定义" class="headerlink" title="1.1 宏的自定义"></a>1.1 宏的自定义</h3><p><strong>用户自定义宏</strong> : %define macro_name value<br><strong>引用方式</strong> : %{macro_name} OR %macro_name  </p>
+<h3 id="1-2-注释的方式"><a href="#1-2-注释的方式" class="headerlink" title="1.2 注释的方式"></a>1.2 注释的方式</h3><p>使用#来进行注释<br>%–不能在注释中使用,如果必须使用需要双写%%  </p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%prep  </span><br><span class="line">\#<span class="keyword">this</span> <span class="keyword">is</span> a comment <span class="keyword">for</span> %%prep</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Defining-package-infomation"><a href="#2-Defining-package-infomation" class="headerlink" title="2. Defining package infomation"></a>2. Defining package infomation</h2><p>如何定义SPEC文件内的字段  </p>
+<h3 id="2-1-软件包的信息"><a href="#2-1-软件包的信息" class="headerlink" title="2.1 软件包的信息"></a>2.1 软件包的信息</h3><ul>
+<li>Name - 软件包名称 - 不能有短横线  </li>
+<li>Version - 版本号 - 不能有短横线  </li>
+<li>Release - 发行版本号  </li>
+<li>Group - /usr/src/doc/rpm-version/GROUPS文件中有详细的描述说明有哪些组可以使用  </li>
+</ul>
+<h3 id="2-2-制作方信息"><a href="#2-2-制作方信息" class="headerlink" title="2.2 制作方信息"></a>2.2 制作方信息</h3><ul>
+<li>Vendor - 公司或者组织制作的RPM  </li>
+<li>URL - 一个主页链接  </li>
+<li>Packager - 名字&lt;邮箱地址&gt;  </li>
+<li>License - 许可,GPLv2,….etc.  </li>
+</ul>
+<h3 id="2-3-描述信息"><a href="#2-3-描述信息" class="headerlink" title="2.3 描述信息"></a>2.3 描述信息</h3><ul>
+<li>Summary - 不能超过50个字符,短描述  </li>
+<li>%description section - 全面描述,如果字符过多可以提前换行.  </li>
+</ul>
+<h3 id="2-4-定义依赖关系"><a href="#2-4-定义依赖关系" class="headerlink" title="2.4 定义依赖关系"></a>2.4 定义依赖关系</h3><ul>
+<li>Requires : Capability - 定义软件包的能力,如果未定义显示包名.  </li>
+<li>Provides : Capability - 定义对外提供的能力  </li>
+<li>BuildRequires : Capability - 可以出现多次,直接写出需要的软件包名  </li>
+</ul>
+<h3 id="2-5-设定Build目录"><a href="#2-5-设定Build目录" class="headerlink" title="2.5 设定Build目录"></a>2.5 设定Build目录</h3><ul>
+<li>build - 用于解压安装源码  </li>
+<li>buildroot : ${_tmppath}/%{name}-%{version}-root<br>使用$RPM_BUILD_ROOT 或者 %{buildroot}  </li>
+</ul>
+<h3 id="2-6-命名Source文件"><a href="#2-6-命名Source文件" class="headerlink" title="2.6 命名Source文件"></a>2.6 命名Source文件</h3><p>使用Sources字段 和 patch字段,指定源文件和补丁  </p>
+<ul>
+<li>Source0: https:// OR 相对路径, https不会下载, 自动本地寻址  </li>
+<li>Source1: sourcefiles_name  </li>
+<li>Source2: sourcefiles_name  </li>
+<li>Patch1: patchfiles_name  </li>
+<li>Patch2: patchfiles_name  </li>
+<li>Patch3: patchfiles_name<br>补丁定义后可以直接使用patch命令进行补丁的安装,所以使用patch字段  </li>
+</ul>
+<h2 id="3-Controlling-the-build"><a href="#3-Controlling-the-build" class="headerlink" title="3. Controlling the build"></a>3. Controlling the build</h2><p>如何控制编译</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">prep</span></span>                 \\ 把Source内的解压源码包到BUILD目录,cd到源码目录,配置环境  </span><br><span class="line"></span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span> -q             \\ 控制解压的流程  </span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span> -n name        \\ 目录名字  </span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span> -q             \\ 静默模式  </span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span> -a number      \\ AFTER,cd到目录之后解压缩     </span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span> -b number      \\ BEFORE,先解压之后cd到目录里  </span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span> -c             \\ 解压前创建目录  </span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span> -T             \\ 不展开 直接复制  </span><br><span class="line"></span><br><span class="line"><span class="tag">%<span class="selector-tag">patch1</span></span>               \\ 打补丁    </span><br><span class="line"><span class="tag">%<span class="selector-tag">patch2</span></span>               \\ 打第二个补丁        </span><br><span class="line"></span><br><span class="line"><span class="tag">%<span class="selector-tag">build</span></span>                \\ C类程序的configure &amp; make过程   </span><br><span class="line">./configure --prefix=/usr \  </span><br><span class="line">  -<span class="ruby">-sysconfdir=<span class="regexp">/etc/nginx</span>  </span></span><br><span class="line"><span class="ruby">make <span class="string">%&#123;?_smp_mflags&#125;</span>    </span></span><br><span class="line"></span><br><span class="line"><span class="ruby">%build                \\Perl的不同</span></span><br><span class="line"><span class="ruby">perl Mailfile PL  </span></span><br><span class="line"><span class="ruby">make  </span></span><br><span class="line"></span><br><span class="line"><span class="ruby">%install                            \\ make install 过程  </span></span><br><span class="line"><span class="ruby">rm -rf <span class="string">%&#123;buildroot&#125;</span>                 \\ Clean Stuff  </span></span><br><span class="line"><span class="ruby">make install DESTDIR=<span class="string">%&#123;buildroot&#125;</span>             \\ make install 命令编译安装  </span></span><br><span class="line"><span class="ruby"><span class="string">%&#123;__install&#125;</span> -p -D -m <span class="number">0644</span> <span class="string">%&#123;SOURCE5&#125;</span> \     </span></span><br><span class="line"><span class="ruby">  <span class="string">%&#123;buildroot&#125;</span><span class="string">%&#123;_sysconfdir&#125;</span>/sysconfig/<span class="string">%&#123;name&#125;</span>            \\ install命令直接安装文件到目录  </span></span><br><span class="line"><span class="ruby"><span class="string">%&#123;__install&#125;</span> -p -d -m <span class="number">0755</span> <span class="string">%&#123;buildroot&#125;</span>/var/log/nginx     \\ install命令直接安装文件到指定的文件路径  </span></span><br><span class="line"></span><br><span class="line"><span class="ruby">%clean              \\ 清理BUILD目录,清空为下次做准备; rpmbuild --clean mysql.spec  </span></span><br><span class="line"><span class="ruby">rm -rf <span class="string">%&#123;buildroot&#125;</span>     \\清理BUILD目录  </span></span><br><span class="line"></span><br><span class="line"><span class="ruby">%prep  </span></span><br><span class="line"><span class="ruby">%post  </span></span><br><span class="line"><span class="ruby">%prepun  </span></span><br><span class="line"><span class="ruby">%postun  </span></span><br><span class="line"><span class="ruby">使用IF可以对如下参数进行判断  </span></span><br><span class="line"><span class="ruby">$1            \\ 第一次安装  </span></span><br><span class="line"><span class="ruby">$2 OR $2+     \\ 升级  </span></span><br><span class="line"><span class="ruby">$0            \\ 卸载</span></span><br></pre></td></tr></table></figure>
+<h2 id="4-Filling-the-list-of-files"><a href="#4-Filling-the-list-of-files" class="headerlink" title="4. Filling the list of files"></a>4. Filling the list of files</h2><p>填充文件列表</p>
+<h2 id="5-adding-change-log-entries"><a href="#5-adding-change-log-entries" class="headerlink" title="5. adding change log entries"></a>5. adding change log entries</h2><p>添加更新日志</p>
+<h1 id="CentOS7打包Nginx过程记录"><a href="#CentOS7打包Nginx过程记录" class="headerlink" title="CentOS7打包Nginx过程记录"></a>CentOS7打包Nginx过程记录</h1><ol>
+<li>useradd rpmbuilder -p rpmbuilder</li>
+<li>yum install -y rpmdevtools rpmbuild</li>
+<li>cd /home/rpmbuilder/</li>
+<li>rpmdev-setuptree</li>
+<li>cd ./rpmbuilder</li>
+<li>tree ./</li>
+<li>mv nginx-1.16.1.tar.gz ./rpmbuild/SOURCES/</li>
+<li>vim ./rpmbuilder/SPECS/nginx.spec</li>
+<li>vim nginx.service</li>
+<li>mv nginx.service /rpmbuild/SOURCES/nginx.service<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">define</span></span> nginx_user nginx</span><br><span class="line"><span class="tag">%<span class="selector-tag">define</span></span> nginx_group nginx</span><br><span class="line"></span><br><span class="line">Name:		nginx	</span><br><span class="line">Version:	1.16.1</span><br><span class="line">Release:	1%&#123;?dist&#125;</span><br><span class="line">Summary:	make rpm for nginx, version 1.16.1</span><br><span class="line"></span><br><span class="line">Group:		System Environment/Daemons</span><br><span class="line">License:	GPLv2	</span><br><span class="line">URL:		http://liarlee.site</span><br><span class="line">Source0:	%&#123;name&#125;-%&#123;version&#125;.tar.gz</span><br><span class="line">Source1:	nginx.service	</span><br><span class="line">BuildRoot: 	$_topdir/BUILDROOT</span><br><span class="line"></span><br><span class="line">BuildRequires:	gcc</span><br><span class="line">BuildRequires:	gcc-c++</span><br><span class="line">BuildRequires:	openssl</span><br><span class="line">BuildRequires:  openssl-devel</span><br><span class="line">BuildRequires:	pcre</span><br><span class="line">BuildRequires:	pcre-devel</span><br><span class="line">BuildRequires:	systemd</span><br><span class="line">Requires:	openssl</span><br><span class="line">Requires:	openssl-devel</span><br><span class="line">Requires:	pcre</span><br><span class="line">Requires:	pcre-devel</span><br><span class="line">Requires:	systemd</span><br><span class="line"></span><br><span class="line"><span class="tag">%<span class="selector-tag">description</span></span></span><br><span class="line">For online Ean portal, make by Hayden Lee, and take some personal option.</span><br><span class="line"></span><br><span class="line"><span class="tag">%<span class="selector-tag">prep</span></span></span><br><span class="line"><span class="tag">%<span class="selector-tag">setup</span></span> -q</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">%<span class="selector-tag">build</span></span></span><br><span class="line">./configure \</span><br><span class="line">	-<span class="ruby">-prefix=<span class="regexp">/data/web</span>-server/nginx \</span></span><br><span class="line"><span class="ruby">	--user=<span class="string">%&#123;nginx_user&#125;</span> \</span></span><br><span class="line"><span class="ruby">	--group=<span class="string">%&#123;nginx_group&#125;</span> \</span></span><br><span class="line"><span class="ruby">	--with-threads \</span></span><br><span class="line"><span class="ruby">	--with-http_ssl_module \</span></span><br><span class="line"><span class="ruby">	--with-http_stub_status_module \</span></span><br><span class="line"><span class="ruby">	--with-http_realip_module \</span></span><br><span class="line"><span class="ruby">	--with-http_gzip_static_module</span></span><br><span class="line"><span class="ruby">make <span class="string">%&#123;?_smp_mflags&#125;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="ruby">%install</span></span><br><span class="line"><span class="ruby"><span class="string">%&#123;__rm&#125;</span> -rf <span class="string">%&#123;buildroot&#125;</span></span></span><br><span class="line"><span class="ruby">make install DESTDIR=<span class="string">%&#123;buildroot&#125;</span></span></span><br><span class="line"><span class="ruby"><span class="comment"># install systemd-specific files</span></span></span><br><span class="line"><span class="ruby"><span class="string">%&#123;__mkdir&#125;</span> -p $RPM_BUILD_ROOT<span class="string">%&#123;_unitdir&#125;</span></span></span><br><span class="line"><span class="ruby"><span class="string">%&#123;__install&#125;</span> -m644 %SOURCE1 \</span></span><br><span class="line"><span class="ruby">    $RPM_BUILD_ROOT<span class="string">%&#123;_unitdir&#125;</span>/nginx.service</span></span><br><span class="line"></span><br><span class="line"><span class="ruby">%files</span></span><br><span class="line"><span class="ruby">%defattr(-,root,root)</span></span><br><span class="line"><span class="ruby">/data/web-server/nginx/</span></span><br><span class="line"><span class="ruby">%config(noreplace) /data/web-server/nginx/conf/nginx.conf</span></span><br><span class="line"><span class="ruby">%config(noreplace) /usr/lib/systemd/system/nginx.service</span></span><br><span class="line"><span class="ruby">%attr(<span class="number">0644</span>,root,root) /data/web-server/nginx/conf/nginx.conf</span></span><br><span class="line"><span class="ruby">%pre</span></span><br><span class="line"><span class="ruby">    getent group <span class="string">%&#123;nginx_group&#125;</span> &gt;<span class="regexp">/dev/null</span> <span class="params">||</span> groupadd -r <span class="string">%&#123;nginx_group&#125;</span></span></span><br><span class="line"><span class="ruby">    getent passwd <span class="string">%&#123;nginx_user&#125;</span> &gt;<span class="regexp">/dev/null</span> <span class="params">||</span> \</span></span><br><span class="line"><span class="ruby">        useradd -r -g <span class="string">%&#123;nginx_group&#125;</span> -s /sbin/nologin \</span></span><br><span class="line"><span class="ruby">        -d <span class="string">%&#123;nginx_home&#125;</span> -c <span class="string">"nginx user"</span>  <span class="string">%&#123;nginx_user&#125;</span></span></span><br><span class="line"><span class="ruby">    exit <span class="number">0</span></span></span><br><span class="line"><span class="ruby">%post</span></span><br><span class="line"><span class="ruby">    /usr/bin/systemctl preset nginx.service &gt;<span class="regexp">/dev/null</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> <span class="params">||</span><span class="symbol">:</span></span></span><br><span class="line"><span class="ruby">    /usr/bin/systemctl preset nginx-debug.service &gt;<span class="regexp">/dev/null</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> <span class="params">||</span><span class="symbol">:</span></span></span><br><span class="line"><span class="ruby">    <span class="comment"># print site info</span></span></span><br><span class="line"><span class="ruby">    cat &lt;&lt;BANNER</span></span><br><span class="line"><span class="ruby">    ----------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="ruby">    Thanks <span class="keyword">for</span> using nginx!</span></span><br><span class="line"></span><br><span class="line"><span class="ruby">    Please find the official documentation <span class="keyword">for</span> nginx <span class="symbol">here:</span></span></span><br><span class="line"><span class="ruby">    * <span class="symbol">http:</span>/<span class="regexp">/nginx.org/en</span><span class="regexp">/docs/</span></span></span><br><span class="line"><span class="ruby">    </span></span><br><span class="line"><span class="ruby">    Commercial subscriptions <span class="keyword">for</span> nginx are available <span class="symbol">on:</span></span></span><br><span class="line"><span class="ruby">    * <span class="symbol">http:</span>/<span class="regexp">/nginx.com/products</span><span class="regexp">/</span></span></span><br><span class="line"><span class="ruby">    </span></span><br><span class="line"><span class="ruby">    ----------------------------------------------------------------------</span></span><br><span class="line"><span class="ruby">    BANNER</span></span><br><span class="line"><span class="ruby">%preun</span></span><br><span class="line"><span class="ruby">    /usr/bin/systemctl --no-reload disable nginx.service &gt;<span class="regexp">/dev/null</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> <span class="params">||</span><span class="symbol">:</span></span></span><br><span class="line"><span class="ruby">    /usr/bin/systemctl stop nginx.service &gt;<span class="regexp">/dev/null</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> <span class="params">||</span><span class="symbol">:</span></span></span><br><span class="line"></span><br><span class="line"><span class="ruby">%postun</span></span><br><span class="line"><span class="ruby">    /usr/bin/systemctl daemon-reload &gt;<span class="regexp">/dev/null</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> <span class="params">||</span><span class="symbol">:</span></span></span><br><span class="line"><span class="ruby">    <span class="string">%&#123;__rm&#125;</span> -rf /data/web-server/nginx</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/03/Linux/Linux_BuildRPMs/">RPM制作的笔记</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">LiarLee</a></p>
+        <p><span>发布时间:</span>2018-07-03, 11:46:36</p>
+        <p><span>最后更新:</span>2019-11-06, 18:07:09</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/03/Linux/Linux_BuildRPMs/" title="RPM制作的笔记">http://liarlee.site/2018/07/03/Linux/Linux_BuildRPMs/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://liarlee.site/2018/07/03/Linux/Linux_BuildRPMs/　　作者: LiarLee" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/07/03/Hexo-backup-restore/">
+                    Hexo备份和恢复
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/02/DCM4CHEE_RunDocker/">
+                    Docker中运行DCM4CHEE-arc-light
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一-制作RPM包教程"><span class="toc-number">1.</span> <span class="toc-text">一.制作RPM包教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-rpm包的制作流程简述"><span class="toc-number">1.1.</span> <span class="toc-text">1. rpm包的制作流程简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-如何做准备"><span class="toc-number">1.2.</span> <span class="toc-text">2. 如何做准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-RPMs的规划"><span class="toc-number">1.3.</span> <span class="toc-text">3. RPMs的规划</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-制作过程"><span class="toc-number">1.4.</span> <span class="toc-text">4. 制作过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-设计目录结构-set-up-the-directory-structure"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 设计目录结构(set up the directory structure)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-放置文件到正确的指定的目录-Place-the-sources-in-the-right-dirctory-。"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 放置文件到正确的指定的目录(Place the sources in the right dirctory)。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-创建一个spec文件-Create-a-spec-file-that-tells-the-rpmbuild-command-what-to-do-。"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. 创建一个spec文件(Create a spec file that tells the rpmbuild command what to do)。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-开始编译-Build-the-source-and-binary-RPMs"><span class="toc-number">1.4.4.</span> <span class="toc-text">4. 开始编译(Build the source and binary RPMs)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#rpm2cpio命令的说明"><span class="toc-number">2.</span> <span class="toc-text">rpm2cpio命令的说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-从头开始写新的SPEC-files"><span class="toc-number">3.</span> <span class="toc-text">二. 从头开始写新的SPEC files</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Spec-files-overview"><span class="toc-number">3.1.</span> <span class="toc-text">1. Spec files overview</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-宏的自定义"><span class="toc-number">3.1.1.</span> <span class="toc-text">1.1 宏的自定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-注释的方式"><span class="toc-number">3.1.2.</span> <span class="toc-text">1.2 注释的方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Defining-package-infomation"><span class="toc-number">3.2.</span> <span class="toc-text">2. Defining package infomation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-软件包的信息"><span class="toc-number">3.2.1.</span> <span class="toc-text">2.1 软件包的信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-制作方信息"><span class="toc-number">3.2.2.</span> <span class="toc-text">2.2 制作方信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-描述信息"><span class="toc-number">3.2.3.</span> <span class="toc-text">2.3 描述信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-定义依赖关系"><span class="toc-number">3.2.4.</span> <span class="toc-text">2.4 定义依赖关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-设定Build目录"><span class="toc-number">3.2.5.</span> <span class="toc-text">2.5 设定Build目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-命名Source文件"><span class="toc-number">3.2.6.</span> <span class="toc-text">2.6 命名Source文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Controlling-the-build"><span class="toc-number">3.3.</span> <span class="toc-text">3. Controlling the build</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Filling-the-list-of-files"><span class="toc-number">3.4.</span> <span class="toc-text">4. Filling the list of files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-adding-change-log-entries"><span class="toc-number">3.5.</span> <span class="toc-text">5. adding change log entries</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CentOS7打包Nginx过程记录"><span class="toc-number">4.</span> <span class="toc-text">CentOS7打包Nginx过程记录</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"true"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"RPM制作的笔记　| LiarLee's Notebook　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/07/03/Hexo-backup-restore/" title="上一篇: Hexo备份和恢复">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/02/DCM4CHEE_RunDocker/" title="下一篇: Docker中运行DCM4CHEE-arc-light">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/05/30/Linux/lvm2-member-mounterror/">记一次旧LVM硬盘挂载失败</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/06/2019-2020/">2018-2019 Review</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/02/Linux/Linux_Hugepage-configuration/">为虚拟机开启内存大页</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/10/%E6%AD%A3%E8%A7%81-%E4%BD%9B%E9%99%80%E7%9A%84%E8%AF%81%E6%82%9F-%E8%8A%82%E9%80%89/">正见——佛陀的证悟（一）诸行无常(选摘)</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/06/Linux/Linux_cat-and-less/">less命令占用内存过高</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/06/Linux/Linux_k8s-basic-7/">Kubernetes集群的学习笔记(7)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/06/Linux/Linux_k8s-basic-6/">Kubernetes集群的学习笔记(6)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/22/Linux/Linux_ChangeGnometoi3wm/">i3wm的简单配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/18/Linux/Linux_k8s-basic-5/">Kubernetes集群的学习笔记(5)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/14/Linux/Linux_k8s-basic-4/">Kubernetes集群的学习笔记(4)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/10/Linux/Linux_tricks/">Linux及vim的技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/09/Linux/Linux_k8s-namespace-delete-terminating/">k8s所有的NS删除的时候都进入Terminating状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/">Linux_Cobbler搭建本地YUM源同步k8s阿里云</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/24/Linux/Linux_k8s-basic-3/">Kubernetes集群的学习笔记(3)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/">K8S将loop-lvm改为direct-lvm说明</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/23/Linux/Linux_RabbitMQ-Problems/">RabbitMQ_SysV风格管理脚本模板</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/All%20this%20I%20did%20without%20you/">All this I did without you</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/Linux/Linux_Gnome-Tricks/">Gnome快捷键</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/Linux/Linux_Nginx-if-try-files-Notwork/">Nginx配置文件中if判断与try_files</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/18/Linux/Linux_CentOS7-VM-Template/">虚拟机制作模板的步骤及设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/17/Linux/Linux_Systemctl-ManageService/">通过systemd管理软件和服务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/Linux/Linux_FirstMeet-With-ElasticSeach-1/">ElasticSearch初探 - 1</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/24/Linux/Linux_FileManagement/">文件系统及文件管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/Linux/Linux_k8s-basic-2/">Kubernetes集群的学习笔记(2)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/21/Linux/Linux_k8s-basic-1/">Kubernetes集群的学习笔记(1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/18/Other_Interview-testing/">面试记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/13/Linux/Linux_Nginx-Proxy/">Nginx反向代理笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/13/Linux/Linux_Boot-sequence/">Linux启动流程简述</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/08/Linux/Linux_vim-note/">vim笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/07/Linux/Linux_Ansible-Note-2/">Ansible笔记-2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Linux/Linux_Ansible-Note-1/">Ansible笔记-1</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/25/Linux/Linux_VM-timer/">KVM中windows7虚拟机时间问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/25/Linux/Linux_IO-Redirect/">IO重定向笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/17/Python-Script-ForGame/">pyautogui自动脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/17/Linux/Linux_Archlinux-Installation/">Archlinux安装过程记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/Linux/Linux_DockerFile%E7%AC%94%E8%AE%B0/">DockerFile笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/13/Linux/Linux_Fedora-bootspeedup/">Fedora开机启动速度的优化</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/09/2018-2019/">2018-2019 Review</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/08/Linux/Linux_VMwareTools%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E6%96%B9%E6%A1%88/">VMwareTools共享文件夹方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/24/%E8%AF%97%E8%AF%8D%E6%94%B6%E9%9B%86/">诗词收集</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/08/Honor8InstallLineageOS/">荣耀8-刷LineageOS14.1简述</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/Hexo-backup-restore/">Hexo备份和恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/Linux/Linux_BuildRPMs/">RPM制作的笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/02/DCM4CHEE_RunDocker/">Docker中运行DCM4CHEE-arc-light</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/25/Linux/Linux_Install-Maven-Guide/">安装Maven教程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/23/Linux/Linux_ip-forward-active/">配置Ip-forward参数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/28/Linux/Linux_DockerCommands/">Docker基本命令说明</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/11/Linux/Linux_%E5%85%B3%E9%97%ADFedora%E9%98%B2%E7%81%AB%E5%A2%99/">Fedora防火墙关闭，如何开机运行脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/25/Linux/Linux_Orthanc_InstallationNote/">Orthanc的安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/19/Windows_DISM%E5%91%BD%E4%BB%A4/">DISM的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/01/Linux/Linux_Cacti-installation/">Cacti的安装教程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/25/Linux/Fw-Fedora%E5%AE%89%E8%A3%85Lantern/">Fw:Fedora使用Lantern</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/Linux/Linux_%E7%94%B5%E8%AF%9D%E9%9D%A2%E8%AF%95/">Linux-电话面试</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/Linux/Linux_%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B0/">Linux-进程管理笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/%E4%B9%A6%E6%91%98-%E6%AD%A3%E8%A7%81-%E8%AF%B8%E8%A1%8C%E6%97%A0%E5%B8%B8/">书摘-正见-诸行无常</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/Linux/Linux_Nginx-InstalltionNote/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/Linux/Linux_%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0%E7%AC%94%E8%AE%B0/">Linux-内核参数笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/%E6%9C%AC%E5%9C%B0%E6%96%B9%E5%BC%8F%E5%AE%89%E8%A3%85-Net3-5%E6%95%99%E7%A8%8B/">本地方式安装.Net3.5笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/15/PPTConvertTOWORD/">PPT转换WORD</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-2/">Python入门笔记 (三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/%E4%BC%A0%E4%B9%A0%E5%BD%95/%E4%BC%A0%E4%B9%A0%E5%BD%95-2/">传习录 (三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/%E4%BC%A0%E4%B9%A0%E5%BD%95/%E4%BC%A0%E4%B9%A0%E5%BD%95-3/">传习录 (四)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-1/">Python入门笔记 (二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/%E4%BC%A0%E4%B9%A0%E5%BD%95/%E4%BC%A0%E4%B9%A0%E5%BD%95-1/">传习录 (二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/09/Linux/Linux_Grub2repair/">grub2手动修复引导错误</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/">Python入门笔记 (一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/%E4%BC%A0%E4%B9%A0%E5%BD%95/%E4%BC%A0%E4%B9%A0%E5%BD%95/">传习录 (一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/02/%E5%A6%82%E4%BD%95%E7%BB%99%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%B5%E8%84%91%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F/">如何使用微软官方镜像重装系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Linux/Firefox-Openh264/">Firefox-Openh264的问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/Hexo-Install/">Hexo+Github建立个人博客记录</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+
+
+<div class="gitalk">
+	<div id="gitalk-container"></div>
+	<script src="/js/md5.min.js"></script>
+	<script type="text/javascript">
+		const gitalk = new Gitalk({
+			clientID: '90afaa397718112f845e',
+			clientSecret: '03c2c402d78a57f57aa0eec5ec216e1bb3411f1b',
+			repo: 'liarlee_gitalk',
+			owner: 'LiarLee',
+			admin: ['LiarLee'],
+			// id: (location.pathname).split("/").pop().substring(0, 49), // Ensure uniqueness and length less than 50
+			id: md5(location.pathname),
+			distractionFreeMode: true // Facebook-like distraction free mode
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+</div>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2020 LiarLee
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 2;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  </div>
+</body>
+</html>
+
