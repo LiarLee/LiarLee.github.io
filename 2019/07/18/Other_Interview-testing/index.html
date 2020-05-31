@@ -344,7 +344,7 @@
 <hr>
 <h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><ol>
 <li><p>有一个字符串s=“kjdfdsfevsdf”,使用python单独输出每个字符并在后面加上”th”.</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">"asdfaurhgauh"</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">	print(i+<span class="string">'th'</span>)</span><br></pre></td></tr></table></figure></li>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">"asdfaurhgauh"</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">trueprint(i+<span class="string">'th'</span>)</span><br></pre></td></tr></table></figure></li>
 <li><p>数据库问题，增删改查。基本上都没答上来。select语句对数据库内容Where做一个筛选。</p>
 </li>
 <li><p>提取b.txt中的所有域名，awk我写的grep。<br>grep -E -o “www.[[:alpha:]]*.com” ./b.txt | sort | uniq -c | sort -nr<br>awk -F / ‘{print $3}’ b.txt | sort | uniq -c | sort -nr<br>我写的这个唯一个不好的地方就是不能匹配数字的部分，如果域名有数字就提取不出了。其实中间如果全部用正则也可以，但是正则会特别的长。</p>
