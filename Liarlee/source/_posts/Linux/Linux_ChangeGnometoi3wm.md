@@ -25,7 +25,8 @@ pacman -S dmenu
 pacman -S rofi
 pacman -S feh 
 pacman -S variety
-pacman -S unzip-natspec #这个貌似是在archlinuxcn里面的，可以处理zip解压的时候乱码的问题，不用考虑手动指定解压的-O了。
+pacman -S unzip-natspec  
+#unzip-natspec貌似是在archlinuxcn里面的，可以处理zip解压的时候乱码的问题，不用考虑手动指定解压的-O了。
 ```
 
 # 配置i3
@@ -78,7 +79,7 @@ bindsym $mod+Return exec --no-startup-id alacritty
 
 alacritty 是一个使用GPU进行渲染的terminal模拟器，它有自己的配置文件，我的**配置文件路径**在:$HOME/.config/alacritty/alacritty.conf
 
-*NOTE： 这里目前还是有问题未解决*
+*NOTE： 关于Alacritty的问题目前已经解决的差不多了。 还有还有一个问题是关于ssh过去之后不能正确的识别终端类型的BUG，解决方案在后面。
 
 ### 默认打开Firefox
 
@@ -206,26 +207,41 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 
 Alacritty中无法输入中文的问题已经解决了！
 
-那么解决的方法如下：
+> 那么解决的方法如下：
+>
+> ​	在/etc/profile文件中（或者.zshrc中），添加如下的环境变量
+>
+> ```shell
+> export GTK_IM_MODULE=ibus
+> export XMODIFIERS=@im=ibus
+> export QT_IM_MODULES=ibus
+> ```
+>
+> 之后 ，
+>
+> ```shell
+> source /etc/profile
+> source ~/.zshrc 
+> ```
+>
+> 重新启动alacritty就可以使用了。
+>
+> 我想root cause是：我的alacritty启动的时候使用的是zshrc的变量，而没有读取系统的变量，不知道是不是这个原因，但是现在已经可以使用了，完美。
 
-​	在/etc/profile文件中（或者.zshrc中），添加如下的环境变量
+---
 
-```shell
-export GTK_IM_MODULE=ibus
-export XMODIFIERS=@im=ibus
-export QT_IM_MODULES=ibus
-```
+## SSH之后不能正确的识别Alacritty的终端类型
 
-之后 ，
+ssh登录其他机器的时候会报错： **Error opening terminal: alacritty.**
 
-```shell
-source /etc/profile
-source ~/.zshrc 
-```
-
-重新启动alacritty就可以使用了。
-
-我想root cause是：我的alacritty启动的时候使用的是zshrc的变量，而没有读取系统的变量，不知道是不是这个原因，但是现在已经可以使用了，完美。
+> 这个问题其实是因为Alacritty毕竟是小众的Terminal Emulator， 所以 大部分的机器里面并没有这个类型的终端的信息， SSH在登录之后会试图把登录用户的Terminal设置为Alacritty，这个问题其实配置文件中已经有了解决方法，直接注释配置文件的如下部分，就可以恢复SSH正常使用了。
+>
+> ```YAML
+> env:
+>     TERM: xterm-256color
+> ```
+>
+> 解决~
 
 # 放几张最后的结果图
 
