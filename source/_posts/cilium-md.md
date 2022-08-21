@@ -22,3 +22,6 @@ helm upgrade -i cilium cilium/cilium \
   --set hubble.relay.enabled=true \
   --set hubble.ui.enabled=true
 ```
+
+---
+更新测试的结果， 与flannel相比，Cilium当前的性能还是少少差一点点，但是跨越公网访问的稳定性更强，HTTP完全没有Failed请求。测试结果后续更新。
