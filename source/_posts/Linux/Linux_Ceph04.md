@@ -1,6 +1,6 @@
 ---
 title: Ceph Cluster 04 - CRUSH算法
-Date: 2021-09-01 22:29:26
+date: 2021-09-01 22:29:26
 tags: Ceph
 categories: Linux
 ---
