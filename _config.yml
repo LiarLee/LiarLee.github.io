@@ -102,4 +102,7 @@ theme: kaze
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: 'git'
+  repo: git@github.com:LiarLee/LiarLee.github.io.git
+  branch: master
+  message: "Hexo Auto Deploy."
