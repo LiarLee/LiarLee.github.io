@@ -7,7 +7,7 @@ tags:
 安装参数：
 如果是在KVM启动的虚拟机，可以通过这个安装参数来开启更多功能，但是受限于我的KVM虚拟网卡驱动不能attach xdp 程序， 所以。。。。xdp 加速无法启用但是其他的高级特性均可开启， 集群状态正常。
 
-```bash 
+```shell
 helm upgrade -i cilium cilium/cilium \
   --namespace kube-system \
   --set tunnel=disabled \
