@@ -3,7 +3,7 @@
 title: Liarlee's Notebook
 author: Liarlee
 # put the logo on the ${blog_path}/source/img/${picname}.png or use urls
-#logo_img: https://img.songhn.com/img/Y67gdd.png
+logo_img: /img/logo.png
 author_img: /img/avatar.jpg
 # author_description: designed by theme-kaze
 #------------------------
@@ -87,9 +87,9 @@ copyright:
   style: warning # the style uses note warning | danger | primary | info | success
 
 search:
-  enable: false
-  path: db.json
-  field: posts
+  enable: true
+  path: search.json
+  field: all
   searchContent: true
 
 og:
@@ -104,8 +104,8 @@ og:
 # we support eight highlight themes, you can go to prism website (https://prismjs.com) for more information
 # theme: default | coy | dark | funky | okaidia | solarizedlight | tomorrow | twilight
 prism:
-  theme: default
-  darkTheme: tomorrow
+  theme: okaidia
+  darkTheme: okaidia
 # show the number of words in posts
 wordcount:
   enable: true
@@ -139,8 +139,8 @@ color:
   code-background-color: "#e9eaf0"
 
 font:
-  font-size: 9px # global font-size
-  font-family: '-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif' # global font-family
+  font-size: 16px # global font-size
+  font-family: 'sans-serif,"PingFang SC",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue","Microsoft YaHei",sans-serif' # global font-family
 
 #------------------------
 # cdn config
