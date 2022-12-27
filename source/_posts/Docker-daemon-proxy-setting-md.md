@@ -10,14 +10,13 @@ tags:
 ```bash
 ]$ mkdir -pv /etc/systemd/system/docker.service.d
 ]$ touch /etc/systemd/system/docker.service.d/proxy.conf
-
 ```
 
 # 写入内容
 ```ini
 [Service]
-Environment="HTTP_PROXY=socks5://*.*.*.*:port/"
-Environment="HTTPS_PROXY=socks5://*.*.*.*port/"
+Environment="HTTP_PROXY=socks5://<-->:<-->/"
+Environment="HTTPS_PROXY=socks5://<-->:<-->/"
 Environment="NO_PROXY=localhost,127.0.0.1"
 ```
 

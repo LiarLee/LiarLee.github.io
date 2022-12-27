@@ -64,15 +64,16 @@ root@ip-172-31-11-235:/home/ec2-user|⇒  cat /proc/sys/vm/oom_kill_allocating_t
 ## 设置进程
 1. 对于需要保护的进程可以使用OOM_ADJ=-17 将这个进程从OOM Killer的列表中移除（已经在内核的2.6之后废弃，处于兼容性保留了这个文件接口
 2. 调整OOM_SCORE_ADJ, 范围是 -1000 < oom_score_adj < 1000
-```bash
-# 直接调整到-1000，会出现在计算分数列表的最后
-echo -1000 > /proc/31595/oom_score_adj
-```
 
-```bash
-# 手动触发一次OOM规则， Kill符合要求的进程
-echo f > /proc/sysrq-trigger
-```
+直接调整到-1000，会出现在计算分数列表的最后
+  ```bash
+  echo -1000 > /proc/31595/oom_score_adj
+  ```
+  
+  手动触发一次OOM规则， Kill符合要求的进程
+  ```bash
+  echo f > /proc/sysrq-trigger
+  ```
 
 ## 调整服务的OOM Score
 对于服务本身的保护方式， 可以采用使用Systemd Unit file里面进行 OOMADJSCORE=*** 的方式来指定，例如保护MySQL的进程不会在OOM Killer的列表中。
