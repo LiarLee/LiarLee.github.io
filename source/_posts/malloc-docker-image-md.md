@@ -13,26 +13,30 @@ tags: docker
  
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if ( argc != 2 )
     {
-        printf("Error input.");
+        printf("ERROR ELEMENT COUNTS.");
         return 1;
     }
+
+    // printf ("%ld\n", atol(argv[1]));
+
+    int *p;
+    long n = atol(argv[1]) * 1024 * 1024;
+
+    // printf ("%ld\n", n);
     
-    char *p;
-    int k = atoi(argv[1]);
-    k *= 1024 * 1024;
+    printf("Allocate Memory Size: %ld MB.\n", atol(argv[1]));
     
-    printf("Allocate Memory Size: %d MB.\n", k/1024/1024);
-    
-    p = (char *)malloc(k);
+    // Allocate Memory.
+    p = (int *)malloc(n);
     
     if (p != NULL)
-        printf("OK");
+        printf("SUCCESS.");
     else
-        printf("error");
-
-    memset(p,'$',k);
+        printf("FAILED.");
+    
+    memset(p, 0, n);
     
     getchar();
     free(p);
@@ -61,7 +65,7 @@ dive build -t liarlee-malloc:latest .
 OR
 docker build -t liarlee-malloc:latest .
 ```
-## DOCKER RUN.
+## Docker RUN.
 ```bash
 docker run --name malloc --rm -dt liarlee-malloc:latest 200
 # docker run --name malloc --rm -dt liarlee-malloc:latest [MemorySize(MB)]
