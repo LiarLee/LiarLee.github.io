@@ -1,14 +1,17 @@
 ---
-title: bpftrace_record.md
+title: bpftrace 使用以及理解
 category: Linux
 date: 2022-12-29 17:29:25
 tags:
 ---
 
-# bpftrace command
+# BPFtrace oneline program
 ```bash
 [root@localhost-live ~]# bpftrace -e 'tracepoint:syscalls:sys_enter_execve { printf("%s %s\n", comm, str(args->filename));}'
+```
 
+# Tracepoint如何获取可用参数的解释
+```bash
 [root@localhost-live sys_enter_execve]# pwd
 /sys/kernel/tracing/events/syscalls/sys_enter_execve
 [root@localhost-live sys_enter_execve]# grep -ri .
@@ -29,5 +32,5 @@ trigger:# traceon traceoff snapshot stacktrace enable_event disable_event enable
 filter:none
 id:742
 enable:0
-
 ```
+
