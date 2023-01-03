@@ -47,13 +47,13 @@ int main(int argc, char *argv[])
 
 # 写一个Dockerfile
 ```dockerfile
-FROM alphine
+FROM alpine
 RUN apk add build-base
 COPY mem.c .
 RUN gcc -o mem mem.c
 # or RUN gcc -static -o mem mem.c
 
-FROM alphine
+FROM alpine
 COPY --from=0 ./mem .
 ENTRYPOINT [ "/mem" ]
 ```
