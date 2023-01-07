@@ -26,15 +26,61 @@ about:
 #------------------------
 # Links
 #------------------------
+#  <-->:
+#    url: <-->
+#    avatar: <-->
+#------------------------
 links:
-  Martin:
+  MartinHan:
     url: http://martinhan.com
     avatar: http://martinhan.com/img/avatar_trans.png
     description: BigBrother
-  zhaojiew:
+  Zhaojiew:
     url: https://blog.csdn.net/sinat_41567654
     avatar: http://profile-avatar.csdnimg.cn/25364671b6e047f788c38b95e75011c5_sinat_41567654.jpg!1
     description: DEP 卷王
+  Plantegg:
+    url: https://plantegg.github.io/ 
+    avatar: https://twitter.com/plantegg/photo
+  Szp2016:
+    url: https://szp2016.github.io/
+    avatar: https://szp2016.github.io/images/hard.jpg
+  依云大佬:
+    url: https://blog.lilydjwg.me/
+    avatar: https://blog.lilydjwg.me/user_files/lilydjwg/config/avatar.png?1375032417
+  CodeRemixer:
+    url: https://coderemixer.com/
+    avatar: https://avatars.githubusercontent.com/u/39441409?s=200&v=4
+  Farseerfc的小窝:
+    url: https://farseerfc.me/zhs/
+    avatar: https://farseerfc.me/images/avatar.jpg
+  LukeSmith:
+    url: https://lukesmith.xyz/index
+    avatar: https://lukesmith.xyz/pix/tallulah-1882.jpg
+  Reimu:
+    url: https://blog.k8s.li/
+    avatar: https://blog.k8s.li/images/avatar.png
+  Riboseyim:
+    url: https://riboseyim.com/
+    avatar: https://avatars.githubusercontent.com/u/1736800?v=4
+  Brendangregg:
+    url: https://www.brendangregg.com/index.html
+    avatar: https://www.brendangregg.com/Images/brendan_rajasthan2011_thumb.jpg
+  CHEGVA:
+    url: https://chegva.com/
+    avatar: https://cdn.chegva.com/wp-content/uploads/2016/05/cropped-cropped-cropped-minecraft-che-guevara-1332496-192x192.jpg
+  Hanbaoying:
+    url: https://www.hanbaoying.com/
+    avatar: https://www.hanbaoying.com/public/img/yellowdeer.png
+  浅墨的部落格:
+    url: https://www.0xffffff.org/
+    avatar: https://www.0xffffff.org/img/logo.png
+  OSDev.org:
+    url: https://wiki.osdev.org/Expanded_Main_Page
+    avatar: https://wiki.osdev.org/skins/common/images/osdev.png
+  Huangyingsheng:
+    url: https://www.cnblogs.com/huangyingsheng/
+    avatar: https://pic.cnblogs.com/face/1854318/20191101101058.png
   #------------------------
   # tip: if you want to use QQ avatar without giving away your QQ number,
   # you can use this api to get an encrypted url:
