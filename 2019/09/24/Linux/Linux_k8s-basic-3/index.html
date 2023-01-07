@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Kubernetes集群的学习笔记(3)</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Kubernetes集群的学习笔记(3)">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2019/09/24/Linux/Linux_k8s-basic-3/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;k8s笔记YAML格式定义资源。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2019-09-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Kubernetes">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Kubernetes集群的学习笔记(3)
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-09-24T09:30:50.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2019-09-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>608 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Kubernetes/" 
+            class="post-meta-link">
+            Kubernetes
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>k8s笔记YAML格式定义资源。</p>
+<span id="more"></span>
+
+<h1 id="通过YAML定义Pods"><a href="#通过YAML定义Pods" class="headerlink" title="通过YAML定义Pods"></a>通过YAML定义Pods</h1><h2 id="apiVersion"><a href="#apiVersion" class="headerlink" title="apiVersion"></a>apiVersion</h2><p>kubectl api-versions<br>查看所有可用的组名<br>apiVersion:[Group&#x2F;Version]</p>
+<h2 id="kind-资源类别"><a href="#kind-资源类别" class="headerlink" title="kind 资源类别"></a>kind 资源类别</h2><h2 id="metadata-元数据"><a href="#metadata-元数据" class="headerlink" title="metadata 元数据"></a>metadata 元数据</h2><ol>
+<li>name: uniq Key</li>
+<li>namespace</li>
+<li>labels Key-Value<ol>
+<li>annotations </li>
+<li>SelfLink: 资源引用的链接API格式：&#x2F;api&#x2F;group&#x2F;verison&#x2F;namespaces&#x2F;namespace&#x2F;type&#x2F;name</li>
+</ol>
+</li>
+</ol>
+<h2 id="spec"><a href="#spec" class="headerlink" title="spec"></a>spec</h2><p><code>kubectl explain pods.spec</code><br>可使用命令查看：定义用户期望的目标状态。</p>
+<h2 id="status"><a href="#status" class="headerlink" title="status"></a>status</h2><p>自动维护即可 ，不需要更改。</p>
+<h1 id="简单的YAML实例"><a href="#简单的YAML实例" class="headerlink" title="简单的YAML实例"></a>简单的YAML实例</h1><pre class="line-numbers language-none"><code class="language-none">apiVersion: v1 
+kind: Pod
+metadata:
+    name: myapp-pod
+    labels:
+        app: myapp
+        version: v1
+spec: 
+    containers:
+    - name: app
+      image: nginx
+   - name: php-fpm
+      image: php-fpm<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="对Pods进行标签操作"><a href="#对Pods进行标签操作" class="headerlink" title="对Pods进行标签操作"></a>对Pods进行标签操作</h2><ol>
+<li><p>查看标签<br>kubectl get pods –show-labels<br>kubectl get pods -l LABEL_NAME –show-labels</p>
+</li>
+<li><p>增加标签<br>kubectl label pods pod-demo KEY VALUE</p>
+</li>
+<li><p>修改标签<br>kubectl label pods pod-demo KEY VALUE –overwirte</p>
+</li>
+<li><p>指定selector选择标签 - 等值关系， 集合关系的标签选择器。<br>kubectl get pods -l release&#x3D;stable<br>kubectl get pods -l release!&#x3D;stable<br>kubectl get pods -l “release in (v1, v2, v3)”<br>kubectl get pods -l “release notin (v1, v2, v3)”</p>
+<p>许多资源支持内嵌字段，matchLabels(直接给定键值) ， matchExporession(基于给出的表达式进行选择)。常用的操作符号，In ; Notin ； Exists；NotExists；</p>
+</li>
+</ol>
+<h2 id="Pod的生命周期"><a href="#Pod的生命周期" class="headerlink" title="Pod的生命周期"></a>Pod的生命周期</h2><ul>
+<li>初始化容器init c(初始化主容器的执行环境)，可以有多个，串行执行，直到最后一个init c执行结束。</li>
+<li>main c在所有的初始化完成之后开始启动，在容器的运行时间与main c的执行时间基本一致；main c刚刚启动之后，可以手动执行Poststart；结束之前可以进行Prestop；</li>
+<li>在Pod运行的过程中，提供Pod的Liveness probe； 提供Pod的Readiness probe。</li>
+</ul>
+<p>常见的Pod状态：</p>
+<ol>
+<li>Pending： 挂起，调度尚未完成；</li>
+<li>Running： 运行状态；</li>
+<li>Failed： 失败；</li>
+<li>Succeeded： 成功；</li>
+<li>Unknown: kubelet失去联络或者无法获取Pod信息时；</li>
+</ol>
+<p>创建Pod的阶段：</p>
+<ol>
+<li>创建提交请求给API server，目标状态保存到etcd;</li>
+<li>API Server 请求 Schduler 进行Pod的调度；</li>
+<li>API取得Pod的调度结果后，将信息记录到etcd；</li>
+<li>Node节点获取到API server上的Pod状态更新后，开始按照调度的信息进行Pod的建立。</li>
+</ol>
+<p>Pod生命周期中的重要行为：</p>
+<ol>
+<li>初始化容器： init container ; </li>
+<li>容器探测： liveness ,readiness;</li>
+</ol>
+<p>容器的重启策略： restartPolicy<br>Always, OnFailure, Never; 三种策略中默认的设置时Always.</p>
+<p>Pod的终止过程：</p>
+<ol>
+<li>发送term信号， 默认等待30s，如果30s还未终止就强制终止。</li>
+</ol>
+<h2 id="存活检测"><a href="#存活检测" class="headerlink" title="存活检测"></a>存活检测</h2><p>可通过三种类型进行探测： ExecAction, TCPSocketAction, HTTPGetAction;</p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2019/09/24/Linux/Linux_k8s-basic-3/">
+            https://liarlee.site/2019/09/24/Linux/Linux_k8s-basic-3/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2019/09/30/Linux/Linux_Cobbler-k8s-reposync/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Linux_Cobbler搭建本地YUM源同步k8s阿里云 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">K8S将loop-lvm改为direct-lvm说明 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E8%BF%87YAML%E5%AE%9A%E4%B9%89Pods"><span class="toc-text">通过YAML定义Pods</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#apiVersion"><span class="toc-text">apiVersion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kind-%E8%B5%84%E6%BA%90%E7%B1%BB%E5%88%AB"><span class="toc-text">kind 资源类别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#metadata-%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-text">metadata 元数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spec"><span class="toc-text">spec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#status"><span class="toc-text">status</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84YAML%E5%AE%9E%E4%BE%8B"><span class="toc-text">简单的YAML实例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9Pods%E8%BF%9B%E8%A1%8C%E6%A0%87%E7%AD%BE%E6%93%8D%E4%BD%9C"><span class="toc-text">对Pods进行标签操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">Pod的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E6%B4%BB%E6%A3%80%E6%B5%8B"><span class="toc-text">存活检测</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E8%BF%87YAML%E5%AE%9A%E4%B9%89Pods"><span class="toc-text">通过YAML定义Pods</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#apiVersion"><span class="toc-text">apiVersion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kind-%E8%B5%84%E6%BA%90%E7%B1%BB%E5%88%AB"><span class="toc-text">kind 资源类别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#metadata-%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-text">metadata 元数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spec"><span class="toc-text">spec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#status"><span class="toc-text">status</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84YAML%E5%AE%9E%E4%BE%8B"><span class="toc-text">简单的YAML实例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9Pods%E8%BF%9B%E8%A1%8C%E6%A0%87%E7%AD%BE%E6%93%8D%E4%BD%9C"><span class="toc-text">对Pods进行标签操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">Pod的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E6%B4%BB%E6%A3%80%E6%B5%8B"><span class="toc-text">存活检测</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E8%BF%87YAML%E5%AE%9A%E4%B9%89Pods"><span class="toc-text">通过YAML定义Pods</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#apiVersion"><span class="toc-text">apiVersion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kind-%E8%B5%84%E6%BA%90%E7%B1%BB%E5%88%AB"><span class="toc-text">kind 资源类别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#metadata-%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-text">metadata 元数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spec"><span class="toc-text">spec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#status"><span class="toc-text">status</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84YAML%E5%AE%9E%E4%BE%8B"><span class="toc-text">简单的YAML实例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9Pods%E8%BF%9B%E8%A1%8C%E6%A0%87%E7%AD%BE%E6%93%8D%E4%BD%9C"><span class="toc-text">对Pods进行标签操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">Pod的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E6%B4%BB%E6%A3%80%E6%B5%8B"><span class="toc-text">存活检测</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

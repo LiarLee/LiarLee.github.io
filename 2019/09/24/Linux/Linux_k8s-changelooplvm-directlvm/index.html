@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>K8S将loop-lvm改为direct-lvm说明</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="K8S将loop-lvm改为direct-lvm说明">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2019-09-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Kubernetes">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      K8S将loop-lvm改为direct-lvm说明
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-09-24T03:10:36.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2019-09-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.4k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Kubernetes/" 
+            class="post-meta-link">
+            Kubernetes
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。</p>
+<span id="more"></span>
+
+<h2 id="k8s的几种不同的存储驱动"><a href="#k8s的几种不同的存储驱动" class="headerlink" title="k8s的几种不同的存储驱动"></a>k8s的几种不同的存储驱动</h2><ol>
+<li>AUFS - 这是一个经过时间检验的存储驱动</li>
+<li>DeviceMapper - Redhat系默认的驱动，有loop和direct两种不同配置</li>
+<li>Btrfs - 我…. 这个文件系统的快照真的是贼好用，但是性能什么的….我倒觉得都一般</li>
+<li>ZFS - 还没用过</li>
+<li>VFS - 还没用过</li>
+<li>Overlay2 - 简单的接触了一下，docker目前推荐的存储驱动</li>
+</ol>
+<h2 id="关于存储驱动选择的相关博客及文章"><a href="#关于存储驱动选择的相关博客及文章" class="headerlink" title="关于存储驱动选择的相关博客及文章"></a>关于存储驱动选择的相关博客及文章</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6bf1bc011ade">Docker引擎 - 选择存储驱动</a><br><a target="_blank" rel="noopener" href="http://dockone.io/article/1513">Docker五种存储驱动原理及应用场景和性能测试对比</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Terry-Wu/p/7471476.html">Docker系统八：Docker的存储驱动</a> </p>
+</blockquote>
+<h2 id="loop-lvm"><a href="#loop-lvm" class="headerlink" title="loop-lvm"></a>loop-lvm</h2><p>这是docker默认安装之后的选择，因为这样可以out-of-box，但是据说稳定性不佳，我没遇到稳定性的问题，但是遇到了IO高导致的整个虚拟机运行缓慢。<br>Loop-LVM其实使用了linux中的使用loop设备<br>我之前安装的一套k8s默认是使用overlay2的存储，可能是内核的版本过低导致无法使用其他的存储驱动，所以我觉得默认使用了loop-lvm。</p>
+<blockquote>
+<p>loop-lvm的工作模式是，默认在&#x2F;var&#x2F;lib&#x2F;docker&#x2F;devicemapper&#x2F;devicemapper&#x2F;目录下生成data&amp;metadata两个<strong>稀疏文件</strong>（我目前还不知道什么叫做稀疏文件），并将两个文件挂载为loop设备做为块设备来使用。<br>按照这个说法的话确实如果直接对裸设备的想能和稳定性都应该更强。所以下面可以动手啦~</p>
+</blockquote>
+<h2 id="direct-lvm"><a href="#direct-lvm" class="headerlink" title="direct-lvm"></a>direct-lvm</h2><p>这里直接放一个官方文档的链接好了。<br><a target="_blank" rel="noopener" href="https://docs.docker.com/storage/storagedriver/device-mapper-driver/">Device-Mapper-driver</a></p>
+<h3 id="切换loop-lvm到direct-lvm"><a href="#切换loop-lvm到direct-lvm" class="headerlink" title="切换loop-lvm到direct-lvm"></a>切换loop-lvm到direct-lvm</h3><p>想要切换的原因其实是已经安装好的这个k8s的master节点在跑了很久之后，总是被zabbix监控到报警，硬盘负载高；cpu进程数高。cpu的进程数量高可以理解，毕竟监控了如此多的容器。硬盘负载高这个报警在系统中发现是&#x2F;dev&#x2F;loop2这个设备。对应去查找 docker info中的信息，发现这是k8s的存储所使用的。进而搜索到了关于loop-lvm&amp;direct-lvm的相关问题，发现使用loop设备的方式应该实在性能上有影响的，k8s不推荐生产环境使用，所以考虑切换过来，今后毕竟还是要长期使用的。<strong>值得注意的是</strong>：切换一定会导致之前的容器无法使用。而且目前来看关键的数据是不能恢复的，所以最好是在之前已经做好了计划。</p>
+<h4 id="自动托管配置"><a href="#自动托管配置" class="headerlink" title="自动托管配置"></a>自动托管配置</h4><p>自动托管的配置主要是两部分，首先是建立一个空的LVM，不需要挂载，只要系统识别到即可。之后是更改配置文件及重启docker服务。</p>
+<ol>
+<li>在虚拟机中加入一块新的硬盘，fdisk中识别为&#x2F;dev&#x2F;sdb；</li>
+<li>关闭docker。systemctl stop docker.</li>
+<li>在配置文件中加入如下的配置，注意格式不要错，不要丢下末尾的逗号：<pre class="line-numbers language-none"><code class="language-none">&#123;
+  &quot;storage-driver&quot;: &quot;devicemapper&quot;,   # 告诉docker应用使用的存储驱动
+  &quot;storage-opts&quot;: [
+    &quot;dm.directlvm_device&#x3D;&#x2F;dev&#x2F;sdb&quot;,	# 指定使用的块设备，不需要格式化，不需要分区。在这里指定了设备docker会自动完成创建LVM等等操作。
+    &quot;dm.thinp_percent&#x3D;95&quot;,	# 指定Thinpool占用的百分比
+    &quot;dm.thinp_metapercent&#x3D;1&quot;,	# 指定Thinpool Meta数据使用的百分比
+    &quot;dm.thinp_autoextend_threshold&#x3D;80&quot;,	# 指定自动扩容的阈值
+    &quot;dm.thinp_autoextend_percent&#x3D;20&quot;,	# 指定自动扩容的比例
+    &quot;dm.directlvm_device_force&#x3D;false&quot;	# 是否强制格式化设备，默认是false。如果使用dockerd启动的时候出现了提供需要强行格式化设备的提示，就改为True。
+  ]
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>重新启动docker服务。如果正常启动可通过docker info 查看是否已经切换过来。</li>
+<li>如果没有能成功启动，尝试重启虚拟机；尝试使用dockerd命令直接启动，根据dockerd的日志信息进行相应的修改。</li>
+<li>常见错误有：<pre class="line-numbers language-none"><code class="language-none">Sep 23 18:38:03 k8s-master dockerd: time&#x3D;&quot;2019-09-23T18:38:03.931876136+08:00&quot; level&#x3D;warning msg&#x3D;&quot;[graphdriver] WARNING: the devicemapper storage-driver is deprecated, and will be removed in a future release&quot;
+# 存储驱动将会在未来的版本被移除的警告。这不会导致docker无法运行。
+Sep 23 18:25:52 localhost dockerd: Error starting daemon: error initializing graphdriver: &#x2F;dev&#x2F;sdb is already part of a volume group &quot;docker&quot;: must remove this device from any volume group or provide a different device
+# 这个问题说明 docker 认为你的&#x2F;dev&#x2F;sdb上已经被创建了LVM，你需要手动指定，自动托管不会对这个设备进行操作。这会导致docker无法启动。
+# 首先你需要把&#x2F;dev&#x2F;sdb这个设备从LVM里面移除，lvdelete,pvdelete,vgdelete, 将设备还原为默认的状态，之后重启docker，将设备的所有操作控制都交给docker来做，就不会有这个错误了。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在更换之后目前性能稳定，IO的负载也下来了。总体来看还是不错的。不过随着kubernetes的发展，我觉得这种问题应该会越来越少。还是推荐在安装的时候直接调整，不然数据的随时确实带来了一些麻烦。</p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/">
+            https://liarlee.site/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2019/09/24/Linux/Linux_k8s-basic-3/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Kubernetes集群的学习笔记(3) </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2019/09/23/Linux/Linux_RabbitMQ-Problems/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">RabbitMQ_SysV风格管理脚本模板 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#k8s%E7%9A%84%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8"><span class="toc-text">k8s的几种不同的存储驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8%E9%80%89%E6%8B%A9%E7%9A%84%E7%9B%B8%E5%85%B3%E5%8D%9A%E5%AE%A2%E5%8F%8A%E6%96%87%E7%AB%A0"><span class="toc-text">关于存储驱动选择的相关博客及文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#loop-lvm"><span class="toc-text">loop-lvm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#direct-lvm"><span class="toc-text">direct-lvm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2loop-lvm%E5%88%B0direct-lvm"><span class="toc-text">切换loop-lvm到direct-lvm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E6%89%98%E7%AE%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">自动托管配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#k8s%E7%9A%84%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8"><span class="toc-text">k8s的几种不同的存储驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8%E9%80%89%E6%8B%A9%E7%9A%84%E7%9B%B8%E5%85%B3%E5%8D%9A%E5%AE%A2%E5%8F%8A%E6%96%87%E7%AB%A0"><span class="toc-text">关于存储驱动选择的相关博客及文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#loop-lvm"><span class="toc-text">loop-lvm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#direct-lvm"><span class="toc-text">direct-lvm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2loop-lvm%E5%88%B0direct-lvm"><span class="toc-text">切换loop-lvm到direct-lvm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E6%89%98%E7%AE%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">自动托管配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#k8s%E7%9A%84%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8"><span class="toc-text">k8s的几种不同的存储驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8%E9%80%89%E6%8B%A9%E7%9A%84%E7%9B%B8%E5%85%B3%E5%8D%9A%E5%AE%A2%E5%8F%8A%E6%96%87%E7%AB%A0"><span class="toc-text">关于存储驱动选择的相关博客及文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#loop-lvm"><span class="toc-text">loop-lvm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#direct-lvm"><span class="toc-text">direct-lvm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2loop-lvm%E5%88%B0direct-lvm"><span class="toc-text">切换loop-lvm到direct-lvm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E6%89%98%E7%AE%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">自动托管配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

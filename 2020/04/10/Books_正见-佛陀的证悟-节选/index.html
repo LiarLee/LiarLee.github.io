@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>正见——佛陀的证悟（一）诸行无常(选摘)</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="正见——佛陀的证悟（一）诸行无常(选摘)">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2020/04/10/Books_%E6%AD%A3%E8%A7%81-%E4%BD%9B%E9%99%80%E7%9A%84%E8%AF%81%E6%82%9F-%E8%8A%82%E9%80%89/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;这是从《正见-佛陀的证悟》这书中，摘出来的句子，我认为有意义，或者对四法印中的诸行无常有理解的部分， 一直放在QQ空间中， 前两天拿出来看了一下， 觉得还是有不少的体会，所以把它搬过来了， 后续的内容是不是会更新还是要看我懒不懒了。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2020-04-10">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="书">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      正见——佛陀的证悟（一）诸行无常(选摘)
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2020-04-10T10:59:51.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2020-04-10</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Books/" 
+          class="post-meta-link">
+          Books
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2.8k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E4%B9%A6/" 
+            class="post-meta-link">
+            书
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>这是从《正见-佛陀的证悟》这书中，摘出来的句子，我认为有意义，或者对四法印中的诸行无常有理解的部分， 一直放在QQ空间中， 前两天拿出来看了一下， 觉得还是有不少的体会，所以把它搬过来了， 后续的内容是不是会更新还是要看我懒不懒了。</p>
+<span id="more"></span>
+
+<p>​		<strong>只是对老与死的厌恶，并不足以让太子离开王宫而踏入未知的世界</strong>；悉达多会采取这么激烈的行动，是因为<strong>他实在无法合理地解释所有已生和将出生的一切众生命运就是如此而已。</strong>如果所有生者都必须衰朽死亡，那么花园中的孔雀、珍宝、华盖、熏香、音乐，放拖鞋的金质拖盘、进口的玻璃水瓶、他与耶输陀罗和罗睺罗的感情、家庭、国家，都变得毫无意义。<strong>这一切的目的到底是什么？</strong></p>
+<p>​		完全不凭借任何科学工具，悉达多太子以吉祥草为垫，坐在一棵菩提树下，探索人类的本性。经过了长时间的思维，他终于了悟到<strong>一切万有，包括我们的血肉、我们所有的情绪和我们所有的觉受，都是由两个以上的元素组合而成。</strong>当两种或多种元素和合在一起，新的现象就会产生；钉子和木头产生了桌子；水和叶子产生了茶；而恐惧、虔诚和救世主，就产生了神。这些最终的产物，并没有独立于其各别元素的存在。相信它真实独立存在，是最大的骗局。而在和合的同时，各个元素也起了变化。只因接触和合，它们的性质也随之改变了。</p>
+<p>​		<strong>一切万有，没有一样是以独立、恒常、纯粹的状态存在。</strong>你手上的书不是，原子不是，甚至神祇也不是。</p>
+<p>​		因此悉达多发现，无常并不像一般人以为的就是意味死亡，而是意味变化。任何事物和另一个事物之间的位置或关系转变了，即使是非常细微的变动，都要依循无常的法则。</p>
+<p>​		<strong>如果没有盲目的期待，就不会有失望。如果能了解一切都是无常，不会攀缘执著；如果不攀缘执著，就不会患得患失，也才能真正完完全全地活着。</strong></p>
+<p>​		悉达多从恒常的幻相中觉醒，因此我们称他为佛陀、觉者。到现在还是没有人可以长生不老，每个人终究会死，而且每天大概有二十五万人死亡。我们亲近的人不是已经死亡就是将会死亡。然而当亲人死去的时候，我们还是会震惊和悲伤；我们还是继续寻找青春之泉，或是长寿的秘方。</p>
+<p>​		悉达多太子不再需要或渴求长生不老药了。由于了悟到一切事物皆是和合而成，解构无止境，而且一切万有的各个成分，没有一项是以独立、恒常与纯粹的状态存在的，他因此获得解脱。一切和合之物(现在我们知道这是指一切事物)与其无常的本质是合而为一、不可分割的。</p>
+<p>​		当悉达多看到一个人走过，即使他很健康，悉达多所看到的是此人的生与灭同时发生。你也许会认为这样的人生观不太有趣，但在生命的旅程中能够同时看到一体的两面，可以是非常奇妙，而且可能会有很大的满足感。</p>
+<p>​		也就表示现在有个“假设者”，悉达多会同意，只要有[假设者]，就会有上帝存在；但如果没有假设者，就不会有上帝存在。如果没有纸，就不会有书。如果没有水，就不会有冰。如果没有开始，就不会有结束。一件事物的存在，亟需依赖其它事物的存在，因此没有什么是真正独立的。尽管我们以为可以控制变化，但事实上大多是不可能的，因为无法察觉的影响因素太多了。也因为这种相互依存性，一切事物不可避免地会从目前或原始状态中解体。每一个变化中都蕴藏着死亡的因素。今日就是昨日之死。</p>
+<p>​		大部分的人都接受一切生者终将死亡。然而我们对“一切”与“死亡”的定义或许不太一样。对悉达多来说，生指的是一切万有，不仅仅是花朵、蘑菇、人类，而是一切生成或和合的事物。而死亡指的是任何的解体或是解构。无常纯粹是一个简单实在的事实。不可能有一天，某个突发的和合事物会突然变得恒常，更难想象我们能证明这样的事。但是在今天，我们不是将佛陀奉为神明，就是想用科技证明自己比佛陀更高明。</p>
+<p>​		佛陀教导我们，至少我们心中要保持着无常的概念，不要故意去隐藏它。我们借着不断地觉察和合的现象，便会了知因缘相依。认识因缘相依，我们就会认识无常。而当我们知道一切事物皆无常，才不会被种种假设、僵化的信条(不论宗教的或世俗的)、价值体系和盲目信仰所奴役。我们的觉察力可以让我们免于受限于个人的、政治的和感情的戏码之中。我们还可以将这种觉察力导向大至想象之极，小至次原子层次。</p>
+<p>​		由于我们对自己的道德原则感到自豪，而且常强加于别人身上，因此道德观还是具有少许价值。然而，在整个人类历史当中，道德的定义也随着时代精神而一直在改变。美国人度量政治正确性或不正确性的仪表起伏不定，令人迷惑。不管如何称呼种族或文化群体，总是有人会被冒犯，游戏规则一直在改变。</p>
+<p>​		当悉达多提到“一切和合的事物”，他所指的不只是像DNA、你的狗、艾菲尔铁塔、卵子和精子等具体可认知的现象而已。心、时间、记忆和上帝，也是和合而成。而每一和合的成分，又依赖更多不同层次的和合而成。    当悉达多教导无常时，他也超越了一般“结束”的想法，像是那种认为死亡只发生一次就完了的概念。死亡从生、从创造的那一刻开始，就没有停过。每一个变化，都是死亡的一种形式，因此每一个生都包含了另一个事物的死亡。</p>
+<p>​		拿煮鸡蛋来做例子。如果没有不断的变化，蛋就煮不熟；煮好蛋的这个结果，需要某些基本的因缘。很显然的，你要有一颗蛋、一锅水，和一些加热的元素。另外有些非必要的因和缘，像是厨房、灯光、计时器，还有一只把蛋放进锅子的手。另外一个重要的条件，就是没有像是电力中断或是山羊跟进来打翻锅子之类的干扰。此外，每一个条件，例如母鸡，都需要有另一套具足的因缘条件。需要有另一只母鸡生下蛋才能孵出它，还要有安全的地方，有食物才能让它成长。鸡的食物也要有适合的地方生长，并且要能让它吃进去才行。我们可以将非必要和必要条件一直分析到小于原子的程度，而在这个分析的过程中，各种形态、形状、功能和标签也会不断地增加。</p>
+<p>​		当无数的因缘和合在一起，而且没有障碍与干扰，结果是必然的。许多人误以为这是注定的或是运气所致。然而，到了一个程度以后，即使我们祈求蛋不要煮熟，它还是会熟的。</p>
+<p>​		就像蛋一样，所有的现象是由无数的成分所组成，因此它们是可变的。这些无数的成分几乎都不是我们所能控制的，所以会让我们的期待落空。这种不可预料性，遍在于所有的物质、感受、想象、传统、爱情、信任、不信任、怀疑论，甚至上师和弟子以及人与神之间的关系。</p>
+<p>​		信仰，怀疑论以及所有和合的现象一样，都是无常的。</p>
+<p>​		有些人到现在还认为马克·查普曼(Mark Chapman)是谋杀约翰·蓝侬(John Lennon)唯一的罪犯。当我们能了解一个病态而饱受折磨的心是如何形成，并且知道它是在什么样的情况下运作，就比较能够理解并宽恕世界上众多的马克”查普曼。当条件成熟，就像蛋煮熟了一样，即使我们祈祷暗杀事件不要发生，它还是避免不了。超过了某个时间点，我们要改变条件的企图和行为就会徒劳无功了。</p>
+<p>​		恐惧和焦虑是人类心智中主要的心理状态。恐惧的背后是对确定性不断的渴求。我们对未知感到恐惧。人心对肯定的渴望，是根植于我们对无常的恐惧。</p>
+<p>​		<strong>但我们常常忘记自己的来日一直都是有限的。即使理智上知道有生必有死，一切和合终将分散，我们的情绪状态还是常常会回到相信恒常的模式，完全忘记相互依存性。这种习气会造成各种负面的情况，像是偏执、寂寞、罪恶感等等。我们会觉得被欺骗、被威胁、被虐待、被冷落，仿佛这个世界只对我们不公平。</strong></p>
+<p>​		佛陀不是一个悲观者、也不是末日论者，他是重视实际者，而我们却多是逃避现实者。当他说一切和合皆是无常，他并不认为那是坏消息，而是简单、科学的事实。我们能认清因缘的不稳定，就会了解自己有力量转化障碍，并且完成不可能的任务。生活中的各个层面都是如此。如果你现在没有一台法拉利，你完全有可能创造出因缘而拥有一台。只要世上有法拉利，你就有机会去拥有它。同样的，如果你想活久一点，可以选择不抽烟和多运动。合理的希望是存在的。而绝望，和它的反面—模一样，都是相信恒常的结果。</p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2020/04/10/Books_%E6%AD%A3%E8%A7%81-%E4%BD%9B%E9%99%80%E7%9A%84%E8%AF%81%E6%82%9F-%E8%8A%82%E9%80%89/">
+            https://liarlee.site/2020/04/10/Books_%E6%AD%A3%E8%A7%81-%E4%BD%9B%E9%99%80%E7%9A%84%E8%AF%81%E6%82%9F-%E8%8A%82%E9%80%89/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2020/05/02/Linux/Linux_Hugepage-configuration/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">为虚拟机开启内存大页 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2020/04/06/Linux/Linux_Cat-and-less/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">less命令占用内存过高 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

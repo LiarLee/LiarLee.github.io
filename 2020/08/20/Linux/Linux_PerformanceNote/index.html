@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Linux性能调优笔记</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Linux性能调优笔记">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2020/08/20/Linux/Linux_PerformanceNote/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;应该是一个性能调优的书的笔记， 记不清了， 存货了属于是。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2020-08-20">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Linux">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Linux性能调优笔记
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2020-08-20T09:50:39.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2020-08-20</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>6k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Linux/" 
+            class="post-meta-link">
+            Linux
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>应该是一个性能调优的书的笔记， 记不清了， 存货了属于是。</p>
+<span id="more"></span>
+
+<h1 id="Linux的性能调优"><a href="#Linux的性能调优" class="headerlink" title="Linux的性能调优"></a>Linux的性能调优</h1><h2 id="CPU性能释放"><a href="#CPU性能释放" class="headerlink" title="CPU性能释放"></a>CPU性能释放</h2><h3 id="Process生命周期"><a href="#Process生命周期" class="headerlink" title="Process生命周期"></a>Process生命周期</h3><ol>
+<li>建立一个新的进程, 表示为父进程， 父进程进入Wait状态。</li>
+<li>父进程Fork()系统调用出来的一个子进程。</li>
+<li>子进程调用exec()对操作进行执行。</li>
+<li>子进程执行结束退出exit()。</li>
+<li>子进程变为Zombie进程。</li>
+<li>等待父进程回收，更新父进程的运行状态。</li>
+</ol>
+<h3 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h3><p>线程是可以在同一个进程下并发执行的执行单位，他们共享相同的地址，数据和运行空间。线程也叫做（LWP） - 轻量的进程。两者的区别在于，进程在同一个CPU上不能并发执行，且两个进程间不是共享资源的方式进行数据处理的。其他的地方， 进程和线程并无太大的区别，Linux的内核将使用一直的Manner对进程和线程进行调度和处理。</p>
+<p>There are several thread implementations avaliable in linux operation system.</p>
+<ol>
+<li><p>Linux threads</p>
+<p>传统的Linux进程</p>
+</li>
+<li><p>Native POSIX thread library</p>
+<p>内核 2.6 以后由红帽开发的进程模型。</p>
+</li>
+<li><p>Next Generation POSIX Thread</p>
+<p>IBM开发的新的进程模型。</p>
+<p>Note：Linux系统中的<strong>环境变量 LD_ASSUME_KERNEL</strong> 。</p>
+</li>
+</ol>
+<h3 id="进程优先级"><a href="#进程优先级" class="headerlink" title="进程优先级"></a>进程优先级</h3><ol>
+<li>优先级(控制调度的先后顺序): 优先级的范围是： 0 - 139。</li>
+<li>Nice值(控制运行时间的长短): 每个进程的nice值，19 到 -20 ，nice值越大 分配的时间越长。19最低 ， -20最高。默认的nice值是0。</li>
+</ol>
+<h3 id="进程上下文切换"><a href="#进程上下文切换" class="headerlink" title="进程上下文切换"></a>进程上下文切换</h3><p>每一个进程有独立的数据存储，当多个进程在同一颗CPU切换时，内核会对进程需要的数据空间进行重定向，这个行为叫做上下文切换。Context Swtiching，负责进程的上下文切换以及调度。在多个进程切换的过程中， 每次切换都会<strong>触发一次上下文的切换</strong>，是导致性能下降的主要原因。</p>
+<h3 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h3><p>CPU的终端控制通常由 硬中断 和 软中断为主， 硬中断通常见于硬件设备，鼠标键盘网卡硬盘设备。软中断常见于TCP&#x2F;IP协议操作，SCSI协议操作。</p>
+<p><strong>Note：</strong> 中断的信息显示在： <code>/proc/interrepts</code>。</p>
+<p><strong>Note：</strong>在多个CPU的系统中，可以将<strong>中断集中绑定在某一颗物理的CPU上</strong>，可以有效的改善系统的性能。</p>
+<h3 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h3><ol>
+<li>RUNNING（正常的进程）</li>
+<li>STOPPED（已经停止的进程）</li>
+<li>UNINTERREPTIBLE（Disk I&#x2F;O）</li>
+<li>INTERREPTIBLE（Keyboard I&#x2F;O）</li>
+<li>ZOMBIE（只能通过结束或重启父进程来回收僵尸进程）</li>
+</ol>
+<h3 id="进程的内存空间"><a href="#进程的内存空间" class="headerlink" title="进程的内存空间"></a>进程的内存空间</h3><p>进程的内存地址空间：(由顶至低顺序为)Text Segment， Data Segment，Heap Segment， Stack Segment</p>
+<ol>
+<li>Text Segment ： 存储进程可执行代码的部分，只读模式。</li>
+<li>Data Segment： 包括三个部分<ul>
+<li>Data： 数据片段， 初始数据的存储，例如静态变量。</li>
+<li>BSS：填零数据的存储。数据初始化为0。</li>
+<li>Heap（堆内存）： malloc()按需分配的动态内存，堆内存向更高的地址发展。</li>
+</ul>
+</li>
+<li>Stack Segment： 栈内存。存储本地变量， 方法参数，方法返回地址。栈内存向更低的地址发展。</li>
+</ol>
+<p><strong>NOTE：</strong>可以使用命令<code>pmap</code>查看一个用户空间进程的地址分配情况。可以使用<code>ps</code>命令查看总的内存分配情况。</p>
+<h3 id="CPU的NUMA-Node"><a href="#CPU的NUMA-Node" class="headerlink" title="CPU的NUMA Node"></a>CPU的NUMA Node</h3><ol>
+<li><p>一颗物理CPU 8逻辑核，两个NUMA节点。</p>
+</li>
+<li><p>4CPU为一组， 在同一个NUMA节点中。</p>
+</li>
+<li><p>HT技术提供了一个物理两个逻辑CPU。</p>
+<ul>
+<li>在 1 情况下，一般不触发跨越NUMA节点的负载均衡，除非子节点过载。</li>
+<li>在 2 情况下，提供了调度器tick的 时间调度 和 时间片 调度。</li>
+<li>在 3 情况下， 提供调度器tick时间的负载均衡调度。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="内存性能"><a href="#内存性能" class="headerlink" title="内存性能"></a>内存性能</h2><p>Linux内存的结构</p>
+<h3 id="物理内存"><a href="#物理内存" class="headerlink" title="物理内存"></a>物理内存</h3><p>物理的内存的分配分别有32位和64位的不同，</p>
+<ul>
+<li>32位系统中只能Linux内核可以直接管理的内存空间只有第一个 1 GB（扣除预留的部分只有896M） ， 剩下的空间需要映射到前面的1GB空间中。这种映射会使性能下降，但是对于应用程序来说是透明且无感的。</li>
+<li>64位系统中将ZONE-NORMAL的区域扩展到了64GB - 128GB， 就不需要这种映射操作了。</li>
+</ul>
+<h3 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h3><p>虚拟内存的地址布局</p>
+<ul>
+<li>32位架构中，一个进程可以使用的虚拟内存的空间最大只能有4GB。内存被分为了 3GB的用户空间和1GB的内核空间。</li>
+<li>64位架构中完全没有这种限制，每个进程都可以使用全部的内存空间。</li>
+</ul>
+<h3 id="虚拟内存的管理"><a href="#虚拟内存的管理" class="headerlink" title="虚拟内存的管理"></a>虚拟内存的管理</h3><p>物理内存通常对于应用或者用户是不可见的，Linux<strong>内核</strong>会将<strong>任何内存自动映射到虚拟内存</strong>。</p>
+<p>应用<strong>不直接使用物理内存</strong>而是向内核申请一个<strong>确切空间的虚拟内存映射</strong>，并在虚拟内存中接收并处理内存的映射关系。</p>
+<p>并且，<strong>虚拟内存</strong>不是必须映射到物理内存，还可以映射到在硬盘子系统中的<strong>Swap文件</strong>。</p>
+<p>应用通常也不直接写入硬盘子系统，而是写入数据到Cache&#x2F;Buffer中。pdflush内核线程在合适的时间负责将Cache和Buffer中的数据刷写到硬盘。</p>
+<p>Linux虚拟内存管理器分配全部的未使用虚拟内存作为磁盘的cache，其他的操作系统只使用内存中的一部分。</p>
+<p>同样的，交换的空间的管理同样也是如此，事实上交换空间占用程度并不代表系统的瓶颈所在，相反证明了linux系统资源调度上的高效。</p>
+<h3 id="页帧的分配-内存分页"><a href="#页帧的分配-内存分页" class="headerlink" title="页帧的分配 - 内存分页"></a>页帧的分配 - 内存分页</h3><ol>
+<li>Page - 页是在物理内存（Page Frame） 或者 虚拟内存中的连续线性地址空间。</li>
+<li>Linux通过控制页单元来控制内存的分配，一页的大小是 4Kb。</li>
+<li>内核了解那些分页是可用的，以及他们的确切位置。</li>
+</ol>
+<h3 id="Buddy-System"><a href="#Buddy-System" class="headerlink" title="Buddy System"></a>Buddy System</h3><p>Linux使用这种机制来进行空闲页的管理和维护，并对申请进行分配，始终试图保持内存分页的连续性。当内存的分配失败的时候，会内存的页帧回收。</p>
+<h3 id="Page-Frame-Reclaiming"><a href="#Page-Frame-Reclaiming" class="headerlink" title="Page Frame Reclaiming"></a>Page Frame Reclaiming</h3><p>当所有的页已经处于不可用的状态（unavalible）,会触发内存的回收机制，将暂时不在使用中的，或者在使用中但是优先级低的内存重新分配，这种机制叫做内存回收。内核线程<code>pswapd</code>和内核函数try_to_free_page()负责执行这个动作。</p>
+<hr>
+<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><p>Linux可以支持多种多样的文件系统，这得益于内核的VFS技术，VFS是介于用户进程和文件系统之间的抽象层。由于VFS的存在，那么用户进程无需知道文件系统的类型，就可以直接进行文件系统的使用。</p>
+<p>用户进程调用文件系统的流程：</p>
+<p>User Process –&gt; System Call –&gt; VFS –&gt; Variety of supported file system</p>
+<p>日志：</p>
+<h3 id="Ext2"><a href="#Ext2" class="headerlink" title="Ext2"></a>Ext2</h3><p>简单的文件系统，无日志记录</p>
+<p>Ext2 文件系统（BlockGroup）结构：</p>
+<ul>
+<li><p>SuperBlock： 存储信息，在每一个BlockGroup的前面都有一个SuperBlock。</p>
+</li>
+<li><p>BlockGroupDesciptor： 存储BlockGroup的信息。</p>
+</li>
+<li><p>Data Block Bitmaps： 空闲的数据块管理。</p>
+</li>
+<li><p>i-node Bitmap： 空闲的Inode管理</p>
+</li>
+<li><p>i-node Tables： inode的table存储位置。记录了文件的基本信息，例如： uid，gid, atime, ctime, mtime, dtime,指向数据块的位置。</p>
+</li>
+<li><p>Data blocks: 实际用户数据的存储位置。</p>
+<p>文件系统查找文件的过程： 先在&#x2F;下查看inode信息，查看所找文件的信息，按照路径持续查找，直到找到了文件的inode信息，通过inode提供的信息去数据块读取数据。</p>
+</li>
+</ul>
+<h3 id="Ext3"><a href="#Ext3" class="headerlink" title="Ext3"></a>Ext3</h3><p>ext3文件系统是ext2 的升级版，主要的变更是支持了文件系统的日志，</p>
+<p>ext3支持的日志模式有三种：</p>
+<ol>
+<li>journal - 全量记录，数据也元数据都通过日志记录。</li>
+<li>Ordered - 只有元数据会记录日志。</li>
+<li>Writeback - 记录了元数据的操作，无法保证数据的一致性，突然终止会导致旧数据的出现。</li>
+</ol>
+<h3 id="xfs"><a href="#xfs" class="headerlink" title="xfs"></a>xfs</h3><p>xfs是新一代的日志文件系统，性能和稳定性都不错。其他资料待补全。</p>
+<hr>
+<h2 id="IO子系统"><a href="#IO子系统" class="headerlink" title="IO子系统"></a>IO子系统</h2><p>进程是如何使用IO子系统进行数据交换的？</p>
+<ul>
+<li>进程通过write()系统调用，请求一个文件的写入。</li>
+<li>内核更新Pagecache映射到文件。</li>
+<li>pdflush内核线程处理pagecache到硬盘。</li>
+<li>文件系统层将每个Blockbuffer组成一个Bio结构，提交和写入到块设备层。</li>
+<li>块设备层得到上层的请求，执行IO电梯算法操作将数据推入写入队列。</li>
+<li>存储驱动接管并执行写入。</li>
+<li>硬盘硬件设备执行写入到盘片。</li>
+</ul>
+<p>关于缓存(cache)?</p>
+<p>由于CPU和硬盘的速度差距太大，因此需要缓存来进行临时的数据存储。</p>
+<p>速度递减的结构是：</p>
+<p>CPU –&gt; cache –&gt; RAM –&gt; Disk</p>
+<h3 id="块层-Block-Layer"><a href="#块层-Block-Layer" class="headerlink" title="块层 Block Layer"></a>块层 Block Layer</h3><p>关键的数据结构就是bio结构，bio结构是一种接口，存在于 文件系统层 和 块层之间。</p>
+<p>bio就是将相邻的block buffer块整合到一起，发送bio到块层。</p>
+<h3 id="块大小"><a href="#块大小" class="headerlink" title="块大小"></a>块大小</h3><p>直接影响服务器性能的设置。如果需要存储的文件尺寸比较大，那么设置大的blocksize性能更好。</p>
+<h3 id="IO电梯算法"><a href="#IO电梯算法" class="headerlink" title="IO电梯算法"></a>IO电梯算法</h3><ul>
+<li>Anticipatory</li>
+<li>CFQ</li>
+<li>BFQ</li>
+<li>Deadline</li>
+<li>MQ-deadline</li>
+<li>NOOP</li>
+<li>NONE</li>
+</ul>
+<h3 id="存储驱动"><a href="#存储驱动" class="headerlink" title="存储驱动"></a>存储驱动</h3><ol>
+<li>SCSI</li>
+<li>RAID</li>
+</ol>
+<hr>
+<h2 id="网络子系统"><a href="#网络子系统" class="headerlink" title="网络子系统"></a>网络子系统</h2><pre class="line-numbers language-none"><code class="language-none">netstat -n | awk &#39;&#x2F;^tcp&#x2F; &#123;++S[$NF]&#125; END &#123;for (a in S) print a, S[a]&#125;&#39;
+# 查看所有的连接状态<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<p>当一个应用需要发送网络数据流程：</p>
+<ol>
+<li>应用打包自己的数据。</li>
+<li>应用通过套接字接口写入数据。</li>
+<li>socket buffer用于处理需要被发送的数据。缓冲区引用了数据，并贯穿所有的层。</li>
+<li>在每个层中，执行相应的操作，例如数据的封包，添加数据的报文首部。</li>
+<li>从网卡的物理接口发出。</li>
+<li>以太网帧抵达对端的网卡接口。</li>
+<li>如果MAC地址匹配对端网卡的地址，数据帧移动到物理网卡的Buffer。</li>
+<li>移动数据包到socket buffer中，同时发出一次CPU硬中断。</li>
+<li>数据包逐层解包，直到抵达可以解释的应用层。</li>
+</ol>
+<hr>
+<p>通过&#x2F;proc&#x2F;sys&#x2F;net目录可以进行网络子系统的调优。</p>
+<p>​	&#x2F;proc&#x2F;sys&#x2F;net&#x2F;core&#x2F;rmem_max<br>​	&#x2F;proc&#x2F;sys&#x2F;net&#x2F;core&#x2F;rmem_default<br>​	&#x2F;proc&#x2F;sys&#x2F;net&#x2F;core&#x2F;wmem_max<br>​	&#x2F;proc&#x2F;sys&#x2F;net&#x2F;core&#x2F;wmem_default<br>​	&#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;tcp_mem<br>​	&#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;tcp_rmem<br>​	&#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;tcp_wmem</p>
+<h3 id="Network-API-NAPI"><a href="#Network-API-NAPI" class="headerlink" title="Network API(NAPI)"></a>Network API(NAPI)</h3><p>NAPI是一种新的网络处理方式，每次对数据包的操作都会触发系统中断，新的方式使用的是poll的方式。</p>
+<p>NAPI 是 Linux 上采用的一种提高网络处理效率的技术，它的核心概念就是不采用中断的方式读取数据，而代之以首先采用中断唤醒数据接收的服务程序，然后 POLL 的方法来轮询数据，</p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/linux/l-napi/">https://www.ibm.com/developerworks/cn/linux/l-napi/</a></p>
+<h3 id="Netfilter"><a href="#Netfilter" class="headerlink" title="Netfilter"></a>Netfilter</h3><p>Linux有使用了内核的Netfilter模块，可以通过Iptables进行管理和控制。</p>
+<p>Netfilter提供了默认的集中功能：</p>
+<ol>
+<li>通过匹配规则，进行网络数据包的过滤。</li>
+<li>通过匹配规则，提供修改数据包地址信息。</li>
+</ol>
+<hr>
+<p>Netfilter可以使用的过滤属性有；</p>
+<ul>
+<li>􏰀  Network interface</li>
+<li>􏰀  IP address, IP address range, subnet</li>
+<li>􏰀  Protocol</li>
+<li>􏰀  ICMP Type</li>
+<li>􏰀  Port</li>
+<li>􏰀  TCP flag</li>
+<li>􏰀  State</li>
+</ul>
+<hr>
+<p>Prerouting – Routing – Forward – Postrouting</p>
+<p>​						  -                              -</p>
+<p>​           			 Input                     Output</p>
+<hr>
+<p>Netfilter可以使用执行的操作有：</p>
+<ul>
+<li>ACCEPT</li>
+<li>DROP</li>
+<li>REJECT</li>
+<li>LOG</li>
+<li>MASQUERADE, SNAT, DNAT, REDIRECT</li>
+</ul>
+<p>Netfilter可以检测的状态；</p>
+<ul>
+<li><p>NEW</p>
+</li>
+<li><p>ESTABLISHED</p>
+</li>
+<li><p>RELATED</p>
+</li>
+<li><p>INVALID</p>
+<p>还可以单独使用独立的模块用来进行分析和过滤相关的数据包。</p>
+</li>
+</ul>
+<h3 id="TCPIP"><a href="#TCPIP" class="headerlink" title="TCPIP"></a>TCPIP</h3><p>connection establishment - 连接维持，在应用的数据被传送之前，TCP一直属于维持的状态，创建连接的时候叫做三次握手。断开连接的时候进行四次挥手。</p>
+<p>三次握手：</p>
+<ol>
+<li>客户端发布SYN数据包，请求对端连接。</li>
+<li>服务端收到SYN，回复SYN+ACK</li>
+<li>客户端发布ACK，开始维持连接。</li>
+</ol>
+<p>四次挥手：</p>
+<ol>
+<li>客户端 发送 FIN</li>
+<li>服务端发送ACK</li>
+<li>服务端发送 FIN</li>
+<li>客户端发送 ACK</li>
+</ol>
+<hr>
+<p>TCPIP流量控制</p>
+<ol>
+<li>滑动窗口： 双方协商传输数据包大小。</li>
+</ol>
+<p>负载</p>
+<ol>
+<li><p>校验和offload</p>
+<p>用于校验数据的字段计算的负载。</p>
+</li>
+<li><p>TCP段Offload（TSO）</p>
+<p>用于计算大于MTU的数据包的消耗。</p>
+</li>
+</ol>
+<p>网卡聚合： Bonding module</p>
+<p>网卡的聚合可以将多个网卡绑定为一个物理网卡使用， Windows下叫做 Teaming。能够提供比较初级的负载均衡和容错。<strong>可以直接提高系统的性能表现。</strong></p>
+<h1 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h1><p>在调试系统之前，需要了解的是相关性能指标的含义，由于是开源的系统，所以可用的工具多种多样，但是监控的指标是一致的。</p>
+<h2 id="CPU性能指标"><a href="#CPU性能指标" class="headerlink" title="CPU性能指标"></a>CPU性能指标</h2><ul>
+<li><p>CPU使用率 - 每一颗处理器的利用率，直观的指标。</p>
+</li>
+<li><p>User Time： CPU运行在用户空间的时间，包括Nice Time，运行在用户空间的时间<strong>越长越好</strong>。</p>
+</li>
+<li><p>System Time： CPU用于处理内核级别操作的时间，包括IRQ和Softirq time。维持在较高的水平说明系统的瓶颈可能是网络或者驱动栈。通常情况下，内核时间<strong>越短越好</strong>。</p>
+</li>
+<li><p>Waiting： 等待IO的时间。类似<em>Blocked</em>的数值，等待的时间<strong>越短越好</strong>。如果太多时间花在等待IO，你需要排查IO子系统的性能。</p>
+</li>
+<li><p>Idle Time： 系统的等待任务的空闲时间，描述CPU空闲的<strong>百分比</strong>。</p>
+</li>
+<li><p>Nice Time： CPU<strong>百分比</strong>，重新分配进程Nice值所占的百分比。</p>
+</li>
+<li><p>Load Average： Rolling average of the sum of the followings: </p>
+<ol>
+<li>进程队列等待被执行的数量。</li>
+<li>不可中断任务等待被完成的数量。（IO操作的进程）</li>
+</ol>
+</li>
+<li><p>Runable Processes：描述准备执行的进程，在持续的时间中<strong>不应该超过物理CPU核心数量的10倍</strong>。超过就是CPU瓶颈。</p>
+</li>
+<li><p>Blocked： 等待IO完成的进程，直接指向IO瓶颈。</p>
+</li>
+<li><p>Context Switch： 表示大量的线程切换，数值过高且大量系统中断可能代表了<strong>信号驱动或应用问题</strong>。这个参数通常<strong>不期望过高</strong>，因为CPU的缓存应该可以处理进程间切换的数据，但是<strong>某些是必要的</strong>。</p>
+</li>
+<li><p>Interrupts： 中断的值包括硬中断和软中断，硬中断更不利于系统的性能释放，高中断值是<strong>软件瓶颈</strong>的迹象，同时也存在于<strong>内核 或 驱动</strong>。 要注意的是 CPU的中断值可能是包括CPUclock导致的。</p>
+</li>
+</ul>
+<h2 id="内存指标"><a href="#内存指标" class="headerlink" title="内存指标"></a>内存指标</h2><ul>
+<li><p>Free Memory： 和其他的操作系统来进行比较，Linux的内存使用量不是主要的关心指标，因为Linux内核采用的虚拟内存管理器，会将未使用的内存作为文件系统的cache，所以，减除Buffers和Cache才是真正未使用的内存量。 Free &#x3D; Used - Buffer - cache</p>
+</li>
+<li><p>Swap Usage： 交换空间的使用量，使用量不是主要的指标，相比较更应该查看<strong>Swap IN&#x2F;OUT</strong>，才可以看出是否为内存瓶颈。<strong>数值在200-300+ page&#x2F;s</strong> 并且<strong>状况持续</strong>才说明是内存的瓶颈。</p>
+</li>
+<li><p>Buffer and Cache:  Cache分配给文件系统和块设备缓存。？ 块设备被写入之前和成Bio结构的时候使用的buffer空间？</p>
+</li>
+<li><p>Slabs： 内核使用的内存空间。值得注意的是内核的Pages不能被Pageout到硬盘。</p>
+</li>
+<li><p>Active versus Inactive Memory： <strong>提供数据的内存空间</strong>叫做活动内存。未活动的内存类似于候选，<strong>等待被kswapd进程交换到硬盘</strong>。</p>
+</li>
+</ul>
+<h2 id="网络指标"><a href="#网络指标" class="headerlink" title="网络指标"></a>网络指标</h2><ul>
+<li>Packets Received and sent : 数据包的发送量和接收量。关于网络的状况。</li>
+<li>Bytes Received and sent： 数据字节数的发送量和接收量。</li>
+<li>Collisions per second： 数据包冲突的数量。一般来讲不是服务器的问题，是网络设备的问题，常见的是在Hub网络中。</li>
+<li>Packets Dropped： 内核丢弃的数据包，通常情况下和防火墙规则以及网络缓冲区溢出有关，默认较少。</li>
+<li>Overruns: 展示了缓冲区溢出的次数。 结合 Packets Dropped来分析可能的瓶颈，缓冲区 或者 网络数据队列长度。</li>
+<li>Errors： 数据包错误。网络数据无法完成校验或者网线的损坏。</li>
+</ul>
+<h2 id="块设备指标"><a href="#块设备指标" class="headerlink" title="块设备指标"></a>块设备指标</h2><ul>
+<li>IOwait ： IOwait表示CPU在等待IO操作的完成，<strong>持续的数值偏高说明是IO的瓶颈</strong>。</li>
+<li>Average queue length： 大量IO请求未完成，通常情况下<strong>在 2 - 3 之间是最佳的值</strong>。 如果高于说明是IO瓶颈。</li>
+<li>Average Wait： 从请求到得到服务的平均时间。包括队列等待的时间和请求执行的时间。</li>
+</ul>
+<hr>
+<h1 id="观察性能的工具"><a href="#观察性能的工具" class="headerlink" title="观察性能的工具"></a>观察性能的工具</h1><ol>
+<li><p>top</p>
+<p>通过top命令可以查看所有的进程， 观察使用CPU高的进程，可以kill命令停止它；或者观察TIME过低的进程，使用renice命令提高进程在CPU上的调度时间。</p>
+<p>常用的命令：</p>
+<p>t  – 显示Summary信息。关闭或者不同的风格</p>
+<p>m – 显示内存的信息。 关闭或者使用不同的风格。</p>
+<p>A – 显示多种不同的参数来观察进程。 Def ， Job ， Mem， Usr， 四个维度；默认， 任务，内存， 用户。</p>
+<p>f – 交互式配置界面。</p>
+<p>o – 交互式的选择排序方式。</p>
+<p>r – renice</p>
+<p>k – kill</p>
+</li>
+<li><p>vmstat</p>
+<p>vmstat 提供的信息是从硬件和物理参数的角度。<strong>vmstat 第一次的数据显示的是从上一次重启到现在的平均值，所以不应该使用。</strong></p>
+<p>显示的参数如下：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@izbp14rk86kli4eecj39swz ~<span class="token punctuation">]</span><span class="token comment"># vmstat 2</span>
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   <span class="token function">free</span>   buff  cache   si   so    bi    bo   <span class="token keyword">in</span>   cs us sy <span class="token function">id</span> wa st
+ <span class="token number">2</span>  <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">1074952</span> <span class="token number">125680</span> <span class="token number">544184</span>    <span class="token number">0</span>    <span class="token number">0</span>    <span class="token number">20</span>   <span class="token number">366</span>   <span class="token number">58</span>  <span class="token number">136</span>  <span class="token number">0</span>  <span class="token number">0</span> <span class="token number">99</span>  <span class="token number">0</span>  <span class="token number">0</span>
+ <span class="token number">0</span>  <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">1074952</span> <span class="token number">125680</span> <span class="token number">544224</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span>   <span class="token number">70</span>  <span class="token number">122</span>  <span class="token number">0</span>  <span class="token number">0</span> <span class="token number">100</span>  <span class="token number">0</span>  <span class="token number">0</span>
+ <span class="token number">0</span>  <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">1074936</span> <span class="token number">125680</span> <span class="token number">544228</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span>   <span class="token number">69</span>  <span class="token number">119</span>  <span class="token number">0</span>  <span class="token number">0</span> <span class="token number">99</span>  <span class="token number">0</span>  <span class="token number">0</span>
+ <span class="token number">0</span>  <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">1074952</span> <span class="token number">125688</span> <span class="token number">544224</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>    <span class="token number">10</span>   <span class="token number">78</span>  <span class="token number">128</span>  <span class="token number">0</span>  <span class="token number">0</span> <span class="token number">100</span>  <span class="token number">0</span>  <span class="token number">0</span>
+ <span class="token number">0</span>  <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">1074952</span> <span class="token number">125688</span> <span class="token number">544232</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span>  <span class="token number">105</span>  <span class="token number">209</span>  <span class="token number">1</span>  <span class="token number">1</span> <span class="token number">99</span>  <span class="token number">0</span>  <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上面的<strong>第一行</strong>就不在解释了， 分别是 <strong>进程 ， 内存， 交换 ， IO， 系统 ， 和 CPU</strong>。直观且易懂。</p>
+<p>详细参数如下：</p>
+<p>r - 等待运行的进程数量</p>
+<p>b - Uninterreptable Sleep的进程数量</p>
+<p>swpd： VirtualMemory的值 （KB）</p>
+<p>free： IdleMemory的值（KB）</p>
+<p>buff： 被buffer使用的内存量（KB）</p>
+<p>cache： 被cache使用的内存量（KB）</p>
+<p>si： Swapin 内存从硬盘换入的数据量 （KBps）</p>
+<p>so： Swapout 内存交换到硬盘的数据量 （KBps）</p>
+<p>bi： blockin， 发送到块设备的块数量（blocks&#x2F;s）</p>
+<p>bo： blockout ， 从块设备接收的块数量（blocks&#x2F;s）</p>
+<p>in： 包括时钟在内的那<strong>每秒中断数</strong></p>
+<p>cs： <strong>进程上下文每秒切换</strong>的次数</p>
+<p>us：非内核代码使用的CPU百分比， 包括<strong>用户时间和Nice时间</strong>。</p>
+<p>sy：<strong>内核代码</strong>使用的CPU时间。</p>
+<p>id： CPU的<strong>空闲时间</strong>。</p>
+<p>wa：<strong>等待IO操作</strong>花费的时间。</p>
+<p>st：<strong>虚拟化层</strong>操作花费的时间。</p>
+<p>其他可用的命令：</p>
+<p>Vmstat -m – 显示内核占用内存的分配情况。</p>
+<p>Vmstat -a – 将内存的使用量分为<strong>活动内存</strong>和<strong>非活动内存</strong>。</p>
+<p>vmstat -n 2 10 – 展示vmstat的结果10次， 每两秒一次。</p>
+</li>
+<li><p>uptime OR w</p>
+<p>观察系统的负载状况和当前登陆到系统的用户。 三个load average的值，1 5 15 分钟的系统负载情况， 主要是观察状况， 前面介绍了 ， 计算的方式是<strong>CPU任务队列长度</strong> 和 <strong>不可中断进程的数量（IO操作的影响）</strong>。</p>
+</li>
+<li><p>ps OR pstree</p>
+<p>观察系统进程的列表和系统进程列表树状图。</p>
+<p>在ps -elFL命令中，有几个不常用的列 ： </p>
+<ul>
+<li>WCHAN： 休眠中的进程使用的内核函数名称。 - 表示进程正在运行；* 表示进程有多线程或者ps无法详细显示。</li>
+<li>RSS ： 常驻内存集。进程使用的非交换物理内存。单位是： KB</li>
+<li>PSR： 进程运行所在的CPU编号。</li>
+</ul>
+</li>
+<li><p>free</p>
+<p>free命令是查看内存的详细信息使用。</p>
+<p>free的命令在最新的操作系统已经直观的显示内存的每个参数及细节。直接能看懂了， 老版本看 used下的Buffer&#x2F;Cache行数值，即使已经使用的内存；看free下的Mem行， 即使未使用的内存值。其余直接查看即可。</p>
+</li>
+<li></li>
+</ol>
+<p>CPU整合的不同架构：</p>
+<p>NUMA，SMP，MPP的概念：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yubo/archive/2010/04/23/1718810.html">https://www.cnblogs.com/yubo/archive/2010/04/23/1718810.html</a></p>
+<h1 id="调优方法"><a href="#调优方法" class="headerlink" title="调优方法"></a>调优方法</h1><h2 id="安装的考虑"><a href="#安装的考虑" class="headerlink" title="安装的考虑"></a>安装的考虑</h2><p>安装系统之前就应该考虑做什么使用， 采用什么样的配置，CPU（数量），内存（大小， 多通道），硬盘（容量，RAID），网络（带宽，是否聚合，是否需要Binding）等等问题。</p>
+<p>通过这些考虑可以避免很多后续的问题。</p>
+<ol>
+<li>收集配置<ul>
+<li>dmesg</li>
+<li>ulimit</li>
+<li>关闭不用的守护进程</li>
+<li>改变Runlevel</li>
+<li>是否需要SELinux</li>
+<li>是否需要编译内核</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="更改内核参数"><a href="#更改内核参数" class="headerlink" title="更改内核参数"></a>更改内核参数</h2><ol>
+<li><p>系统的内核参数在&#x2F;proc&#x2F;sys目录下，有如下的几个方面：</p>
+<ul>
+<li>vm</li>
+<li>net</li>
+<li>fs</li>
+<li>abi</li>
+<li>Kernel</li>
+</ul>
+<p>可以通过sysctl命令进行调节， 也可以写入配置文件&#x2F;etc&#x2F;sysctl.conf</p>
+</li>
+</ol>
+<h2 id="进程子系统"><a href="#进程子系统" class="headerlink" title="进程子系统"></a>进程子系统</h2><h3 id="SMT结构"><a href="#SMT结构" class="headerlink" title="SMT结构"></a>SMT结构</h3><ol>
+<li>更改进程的优先级renice，使业务进程更多的得到CPU cycle。</li>
+<li>变更系统的中断处理，一般有两种方式，一种是将中断绑定给一颗物理CPU集中处理。还有一种是让物理CPU自动控制中断。</li>
+</ol>
+<h3 id="NUMA结构"><a href="#NUMA结构" class="headerlink" title="NUMA结构"></a>NUMA结构</h3><ol>
+<li>使用numactl软件包中的numastat来查看NUMA节点的状态。</li>
+<li>如果numa_miss 的数值过高，考虑使用NUMA节点的亲和调节或者renice进程的数值。</li>
+<li></li>
+</ol>
+<h2 id="内存子系统"><a href="#内存子系统" class="headerlink" title="内存子系统"></a>内存子系统</h2><h3 id="内核行为"><a href="#内核行为" class="headerlink" title="内核行为"></a>内核行为</h3><ol>
+<li><p>vm.swappiness的调整</p>
+<p>内存交换的频度</p>
+<ul>
+<li>设置为0 ， 如果内存没有耗尽就不使用交换分区。</li>
+<li>设置为100，积极的使用交换分区。</li>
+</ul>
+</li>
+<li><p>vm.dirty_background_ratio</p>
+<p>脏数据回写到硬盘的比例，按照百分比设置，触发pdflush内核进程的回写。</p>
+</li>
+</ol>
+<h3 id="交换分区"><a href="#交换分区" class="headerlink" title="交换分区"></a>交换分区</h3><p>Linux推荐使用多个硬盘，每个硬盘上建立交换分区，Linux会自动调度不同的交换分区来合理的使用空间。可以在&#x2F;etc&#x2F;fstab文件中进行交换分区的配置，可以调整优先级，使系统优先使用某几个分区。 (32767 is the highest and 0 is the lowest).</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/dev/sda2	swap	swap sw 	<span class="token number">0</span> <span class="token number">0</span>
+/dev/sdb2	swap	swap sw 	<span class="token number">0</span> <span class="token number">0</span>
+
+/dev/sda2	swap	swap sw,pri<span class="token operator">=</span><span class="token number">1</span> 	<span class="token number">0</span> <span class="token number">0</span>
+/dev/sdb2	swap	swap sw,pri<span class="token operator">=</span><span class="token number">3</span> 	<span class="token number">0</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="hugeLTBfs"><a href="#hugeLTBfs" class="headerlink" title="hugeLTBfs"></a>hugeLTBfs</h3><p>该值对 虚拟机 和 数据库 这种需要使用大量的内存空间的应用 是非常有用的参数。</p>
+<p>&#x2F;proc&#x2F;sys&#x2F;vm&#x2F;nr_hugepages 设置HugePages的容量。</p>
+<p>cat &#x2F;proc&#x2F;meminfo | grep huge  查看相关的信息。</p>
+<p>如果应用需要使用Hugepage，可以使用文件系统挂载的方式。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mount</span> -t hugetlbfs none /mnt/hugepages<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="硬盘子系统"><a href="#硬盘子系统" class="headerlink" title="硬盘子系统"></a>硬盘子系统</h2><h3 id="安装的考量"><a href="#安装的考量" class="headerlink" title="安装的考量"></a>安装的考量</h3><ol>
+<li>是否需要Raid ，如何组建Raid， 硬件Raid或者软件Raid。</li>
+<li>硬盘的性能计算。IOs PerSecond * 4kB &#x3D; 800kB</li>
+</ol>
+<h3 id="分区的规划"><a href="#分区的规划" class="headerlink" title="分区的规划"></a>分区的规划</h3><p>分区的规划， 规则和细节见： FHS</p>
+<h3 id="内核调度算法"><a href="#内核调度算法" class="headerlink" title="内核调度算法"></a>内核调度算法</h3><p>常见的调度算法：</p>
+<ul>
+<li><p>Anticipatory</p>
+</li>
+<li><p>CFQ</p>
+</li>
+<li><p>BFQ</p>
+</li>
+<li><p>Deadline</p>
+</li>
+<li><p>MQ-deadline</p>
+</li>
+<li><p>NOOP</p>
+</li>
+<li><p>NONE</p>
+<p>硬盘的调度算法可以单独设置某个硬盘，也可以在系统启动的内核参数重设置。</p>
+<p>Cat &#x2F;proc&#x2F;block&#x2F;sda&#x2F;queue&#x2F;schedular 查看sda的调度算法。</p>
+<p>elevator&#x3D;noop 在Grub启动配置内核文件的行中添加。</p>
+</li>
+</ul>
+<h3 id="文件系统-1"><a href="#文件系统-1" class="headerlink" title="文件系统"></a>文件系统</h3><ol>
+<li><p>文件系统的日志记录模式</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/dev/sdb1 /testfs ext3 defaults,data<span class="token operator">=</span>writeback <span class="token number">0</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>文件系统的块大小</p>
+</li>
+</ol>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2020/08/20/Linux/Linux_PerformanceNote/">
+            https://liarlee.site/2020/08/20/Linux/Linux_PerformanceNote/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2020/11/16/Mongo_JavaException-MangoDB-ssl/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Java连接数据库报错No subject alternative names present </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2020/06/27/Linux/Linux_Elasticsearch-02/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">ElasticSearch 02 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E7%9A%84%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="toc-text">Linux的性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E6%80%A7%E8%83%BD%E9%87%8A%E6%94%BE"><span class="toc-text">CPU性能释放</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Process%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">Process生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-text">进程与线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">进程优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">进程上下文切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-text">中断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-text">进程的状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="toc-text">进程的内存空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E7%9A%84NUMA-Node"><span class="toc-text">CPU的NUMA Node</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%80%A7%E8%83%BD"><span class="toc-text">内存性能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98"><span class="toc-text">物理内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-text">虚拟内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E7%AE%A1%E7%90%86"><span class="toc-text">虚拟内存的管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E5%B8%A7%E7%9A%84%E5%88%86%E9%85%8D-%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-text">页帧的分配 - 内存分页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buddy-System"><span class="toc-text">Buddy System</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-Frame-Reclaiming"><span class="toc-text">Page Frame Reclaiming</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ext2"><span class="toc-text">Ext2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ext3"><span class="toc-text">Ext3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xfs"><span class="toc-text">xfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IO%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">IO子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%97%E5%B1%82-Block-Layer"><span class="toc-text">块层 Block Layer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%97%E5%A4%A7%E5%B0%8F"><span class="toc-text">块大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IO%E7%94%B5%E6%A2%AF%E7%AE%97%E6%B3%95"><span class="toc-text">IO电梯算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8"><span class="toc-text">存储驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">网络子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Network-API-NAPI"><span class="toc-text">Network API(NAPI)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Netfilter"><span class="toc-text">Netfilter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCPIP"><span class="toc-text">TCPIP</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">性能指标</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">CPU性能指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%8C%87%E6%A0%87"><span class="toc-text">内存指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87"><span class="toc-text">网络指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%97%E8%AE%BE%E5%A4%87%E6%8C%87%E6%A0%87"><span class="toc-text">块设备指标</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E6%80%A7%E8%83%BD%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="toc-text">观察性能的工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95"><span class="toc-text">调优方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%9A%84%E8%80%83%E8%99%91"><span class="toc-text">安装的考虑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0"><span class="toc-text">更改内核参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">进程子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMT%E7%BB%93%E6%9E%84"><span class="toc-text">SMT结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NUMA%E7%BB%93%E6%9E%84"><span class="toc-text">NUMA结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">内存子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%A1%8C%E4%B8%BA"><span class="toc-text">内核行为</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BA"><span class="toc-text">交换分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hugeLTBfs"><span class="toc-text">hugeLTBfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E7%9B%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">硬盘子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%9A%84%E8%80%83%E9%87%8F"><span class="toc-text">安装的考量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E7%9A%84%E8%A7%84%E5%88%92"><span class="toc-text">分区的规划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-text">内核调度算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F-1"><span class="toc-text">文件系统</span></a></li></ol></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E7%9A%84%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="toc-text">Linux的性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E6%80%A7%E8%83%BD%E9%87%8A%E6%94%BE"><span class="toc-text">CPU性能释放</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Process%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">Process生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-text">进程与线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">进程优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">进程上下文切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-text">中断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-text">进程的状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="toc-text">进程的内存空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E7%9A%84NUMA-Node"><span class="toc-text">CPU的NUMA Node</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%80%A7%E8%83%BD"><span class="toc-text">内存性能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98"><span class="toc-text">物理内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-text">虚拟内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E7%AE%A1%E7%90%86"><span class="toc-text">虚拟内存的管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E5%B8%A7%E7%9A%84%E5%88%86%E9%85%8D-%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-text">页帧的分配 - 内存分页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buddy-System"><span class="toc-text">Buddy System</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-Frame-Reclaiming"><span class="toc-text">Page Frame Reclaiming</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ext2"><span class="toc-text">Ext2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ext3"><span class="toc-text">Ext3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xfs"><span class="toc-text">xfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IO%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">IO子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%97%E5%B1%82-Block-Layer"><span class="toc-text">块层 Block Layer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%97%E5%A4%A7%E5%B0%8F"><span class="toc-text">块大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IO%E7%94%B5%E6%A2%AF%E7%AE%97%E6%B3%95"><span class="toc-text">IO电梯算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8"><span class="toc-text">存储驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">网络子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Network-API-NAPI"><span class="toc-text">Network API(NAPI)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Netfilter"><span class="toc-text">Netfilter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCPIP"><span class="toc-text">TCPIP</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">性能指标</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">CPU性能指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%8C%87%E6%A0%87"><span class="toc-text">内存指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87"><span class="toc-text">网络指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%97%E8%AE%BE%E5%A4%87%E6%8C%87%E6%A0%87"><span class="toc-text">块设备指标</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E6%80%A7%E8%83%BD%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="toc-text">观察性能的工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95"><span class="toc-text">调优方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%9A%84%E8%80%83%E8%99%91"><span class="toc-text">安装的考虑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0"><span class="toc-text">更改内核参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">进程子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMT%E7%BB%93%E6%9E%84"><span class="toc-text">SMT结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NUMA%E7%BB%93%E6%9E%84"><span class="toc-text">NUMA结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">内存子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%A1%8C%E4%B8%BA"><span class="toc-text">内核行为</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BA"><span class="toc-text">交换分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hugeLTBfs"><span class="toc-text">hugeLTBfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E7%9B%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">硬盘子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%9A%84%E8%80%83%E9%87%8F"><span class="toc-text">安装的考量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E7%9A%84%E8%A7%84%E5%88%92"><span class="toc-text">分区的规划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-text">内核调度算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F-1"><span class="toc-text">文件系统</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E7%9A%84%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="toc-text">Linux的性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E6%80%A7%E8%83%BD%E9%87%8A%E6%94%BE"><span class="toc-text">CPU性能释放</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Process%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">Process生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-text">进程与线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">进程优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">进程上下文切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-text">中断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-text">进程的状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="toc-text">进程的内存空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E7%9A%84NUMA-Node"><span class="toc-text">CPU的NUMA Node</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%80%A7%E8%83%BD"><span class="toc-text">内存性能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98"><span class="toc-text">物理内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-text">虚拟内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E7%AE%A1%E7%90%86"><span class="toc-text">虚拟内存的管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E5%B8%A7%E7%9A%84%E5%88%86%E9%85%8D-%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-text">页帧的分配 - 内存分页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buddy-System"><span class="toc-text">Buddy System</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-Frame-Reclaiming"><span class="toc-text">Page Frame Reclaiming</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ext2"><span class="toc-text">Ext2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ext3"><span class="toc-text">Ext3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xfs"><span class="toc-text">xfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IO%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">IO子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%97%E5%B1%82-Block-Layer"><span class="toc-text">块层 Block Layer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%97%E5%A4%A7%E5%B0%8F"><span class="toc-text">块大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IO%E7%94%B5%E6%A2%AF%E7%AE%97%E6%B3%95"><span class="toc-text">IO电梯算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8"><span class="toc-text">存储驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">网络子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Network-API-NAPI"><span class="toc-text">Network API(NAPI)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Netfilter"><span class="toc-text">Netfilter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCPIP"><span class="toc-text">TCPIP</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">性能指标</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">CPU性能指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%8C%87%E6%A0%87"><span class="toc-text">内存指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87"><span class="toc-text">网络指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%97%E8%AE%BE%E5%A4%87%E6%8C%87%E6%A0%87"><span class="toc-text">块设备指标</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E6%80%A7%E8%83%BD%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="toc-text">观察性能的工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95"><span class="toc-text">调优方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%9A%84%E8%80%83%E8%99%91"><span class="toc-text">安装的考虑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0"><span class="toc-text">更改内核参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">进程子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMT%E7%BB%93%E6%9E%84"><span class="toc-text">SMT结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NUMA%E7%BB%93%E6%9E%84"><span class="toc-text">NUMA结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">内存子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%A1%8C%E4%B8%BA"><span class="toc-text">内核行为</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BA"><span class="toc-text">交换分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hugeLTBfs"><span class="toc-text">hugeLTBfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E7%9B%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">硬盘子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%9A%84%E8%80%83%E9%87%8F"><span class="toc-text">安装的考量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E7%9A%84%E8%A7%84%E5%88%92"><span class="toc-text">分区的规划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-text">内核调度算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F-1"><span class="toc-text">文件系统</span></a></li></ol></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Docker基本命令说明</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Docker基本命令说明">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;docker基础命令的说明。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2018-05-28">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Docker">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Docker基本命令说明
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-05-28T04:38:06.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2018-05-28</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.6k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Docker/" 
+            class="post-meta-link">
+            Docker
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>docker基础命令的说明。</p>
+<span id="more"></span>
+
+<h2 id="Docker常用命令的说明"><a href="#Docker常用命令的说明" class="headerlink" title="Docker常用命令的说明"></a>Docker常用命令的说明</h2><h3 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h3><p>\ 下载一个Image  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker pull nginx:lastest  
+Using default tag: latest  
+Trying to pull repository docker.io&#x2F;library&#x2F;nginx ...   
+sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884: Pulling from docker.io&#x2F;library&#x2F;nginx
+Digest: sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884
+Status: Image is up to date for docker.io&#x2F;nginx:latest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="docker-push"><a href="#docker-push" class="headerlink" title="docker push"></a>docker push</h3><p>\ 上传一个Image  </p>
+<h3 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a>docker run</h3><p>\ 启动一个Container  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker run nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="docker-kill"><a href="#docker-kill" class="headerlink" title="docker kill"></a>docker kill</h3><p>\ 结束一个Container  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker kill flamboyant_thompson  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="docker-system-prune"><a href="#docker-system-prune" class="headerlink" title="docker system prune"></a>docker system prune</h3><p>\ 清理Docker的无用文件,包括未使用的容器和不具有Dangling的镜像(不具有启动能力的Image)  </p>
+<h3 id="docker-images"><a href="#docker-images" class="headerlink" title="docker images"></a>docker images</h3><p>\ 列出所有的docker images</p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker images
+ONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1cca834eb80c        nginx                      &quot;nginx -g &#39;daemon ...&quot;   57 seconds ago      Up 56 seconds       80&#x2F;tcp                   flamboyant_thompson
+769aefe85e29        achabill&#x2F;lh-toolkit        &quot;dockerize -wait t...&quot;   3 hours ago         Up 3 hours          0.0.0.0:8080-&gt;8080&#x2F;tcp   sad_payne
+93431e5f2f66        achabill&#x2F;lh-mysql:latest   &quot;docker-entrypoint...&quot;   3 hours ago         Up 3 hours          0.0.0.0:3308-&gt;3306&#x2F;tcp   brave_mcclintock<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="docker-search"><a href="#docker-search" class="headerlink" title="docker search"></a>docker search</h3><p>\ 搜索特定名称的image  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker search nginx
+INDEX        NAME                                                             DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+docker.io    docker.io&#x2F;nginx                                                  Official build of Nginx.                        8564      [OK]       
+docker.io    docker.io&#x2F;nginx                                                  Official build of Nginx.                        8564      [OK]       
+docker.io    docker.io&#x2F;jwilder&#x2F;nginx-proxy                                    Automated Nginx reverse proxy for docker c...   1334                 [OK]
+docker.io    docker.io&#x2F;jwilder&#x2F;nginx-proxy                                    Automated Nginx reverse proxy for docker c...   1334                 [OK]
+docker.io    docker.io&#x2F;richarvey&#x2F;nginx-php-fpm                                Container running Nginx + PHP-FPM capable ...   547                  [OK]
+docker.io    docker.io&#x2F;richarvey&#x2F;nginx-php-fpm                                Container running Nginx + PHP-FPM capable ...   547                  [OK]
+docker.io    docker.io&#x2F;jrcs&#x2F;letsencrypt-nginx-proxy-companion                 LetsEncrypt container to use with nginx as...   367                  [OK]
+docker.io    docker.io&#x2F;jrcs&#x2F;letsencrypt-nginx-proxy-companion                 LetsEncrypt container to use with nginx as...   367                  [OK]
+docker.io    docker.io&#x2F;kong                                                   Open-source Microservice &amp; API Management ...   187       [OK]       
+docker.io    docker.io&#x2F;kong                                                   Open-source Microservice &amp; API Management ...   187       [OK]       
+docker.io    docker.io&#x2F;webdevops&#x2F;php-nginx                                    Nginx with PHP-FPM                              103                  [OK]
+docker.io    docker.io&#x2F;webdevops&#x2F;php-nginx                                    Nginx with PHP-FPM                              103                  [OK]
+docker.io    docker.io&#x2F;kitematic&#x2F;hello-world-nginx                            A light-weight nginx container that demons...   98                   
+docker.io    docker.io&#x2F;kitematic&#x2F;hello-world-nginx                            A light-weight nginx container that demons...   98                   
+docker.io    docker.io&#x2F;bitnami&#x2F;nginx                                          Bitnami nginx Docker Image                      50                   [OK]
+docker.io    docker.io&#x2F;bitnami&#x2F;nginx                                          Bitnami nginx Docker Image                      50                   [OK]
+docker.io    docker.io&#x2F;zabbix&#x2F;zabbix-web-nginx-mysql                          Zabbix frontend based on Nginx web-server ...   50                   [OK]
+docker.io    docker.io&#x2F;zabbix&#x2F;zabbix-web-nginx-mysql                          Zabbix frontend based on Nginx web-server ...   50                   [OK]
+docker.io    docker.io&#x2F;1and1internet&#x2F;ubuntu-16-nginx-php-phpmyadmin-mysql-5   ubuntu-16-nginx-php-phpmyadmin-mysql-5          35                   [OK]
+docker.io    docker.io&#x2F;1and1internet&#x2F;ubuntu-16-nginx-php-phpmyadmin-mysql-5   ubuntu-16-nginx-php-phpmyadmin-mysql-5          35                   [OK]
+docker.io    docker.io&#x2F;linuxserver&#x2F;nginx                                      An Nginx container, brought to you by Linu...   35                   
+docker.io    docker.io&#x2F;linuxserver&#x2F;nginx                                      An Nginx container, brought to you by Linu...   35                   
+docker.io    docker.io&#x2F;tobi312&#x2F;rpi-nginx                                      NGINX on Raspberry Pi &#x2F; armhf                   19                   [OK]
+docker.io    docker.io&#x2F;tobi312&#x2F;rpi-nginx                                      NGINX on Raspberry Pi &#x2F; armhf                   19                   [OK]
+docker.io    docker.io&#x2F;nginxdemos&#x2F;nginx-ingress                               NGINX Ingress Controller for Kubernetes . ...   11                   
+docker.io    docker.io&#x2F;nginxdemos&#x2F;nginx-ingress                               NGINX Ingress Controller for Kubernetes . ...   11                   
+docker.io    docker.io&#x2F;blacklabelops&#x2F;nginx                                    Dockerized Nginx Reverse Proxy Server.          9                    [OK]
+docker.io    docker.io&#x2F;blacklabelops&#x2F;nginx                                    Dockerized Nginx Reverse Proxy Server.          9                    [OK]
+docker.io    docker.io&#x2F;wodby&#x2F;drupal-nginx                                     Nginx for Drupal container image                9                    [OK]
+docker.io    docker.io&#x2F;wodby&#x2F;drupal-nginx                                     Nginx for Drupal container image                9                    [OK]
+docker.io    docker.io&#x2F;webdevops&#x2F;nginx                                        Nginx container                                 8                    [OK]
+docker.io    docker.io&#x2F;webdevops&#x2F;nginx                                        Nginx container                                 8                    [OK]
+docker.io    docker.io&#x2F;centos&#x2F;nginx-18-centos7                                Platform for running nginx 1.8 or building...   6                    
+docker.io    docker.io&#x2F;centos&#x2F;nginx-18-centos7                                Platform for running nginx 1.8 or building...   6                    
+docker.io    docker.io&#x2F;nginxdemos&#x2F;hello                                       NGINX webserver that serves a simple page ...   6                    [OK]
+docker.io    docker.io&#x2F;nginxdemos&#x2F;hello                                       NGINX webserver that serves a simple page ...   6                    [OK]
+docker.io    docker.io&#x2F;1science&#x2F;nginx                                         Nginx Docker images that include Consul Te...   4                    [OK]
+docker.io    docker.io&#x2F;1science&#x2F;nginx                                         Nginx Docker images that include Consul Te...   4                    [OK]
+docker.io    docker.io&#x2F;centos&#x2F;nginx-112-centos7                               Platform for running nginx 1.12 or buildin...   3                    
+docker.io    docker.io&#x2F;behance&#x2F;docker-nginx                                   Provides base OS, patches and stable nginx...   2                    [OK]
+docker.io    docker.io&#x2F;behance&#x2F;docker-nginx                                   Provides base OS, patches and stable nginx...   2                    [OK]
+docker.io    docker.io&#x2F;pebbletech&#x2F;nginx-proxy                                 nginx-proxy sets up a container running ng...   2                    [OK]
+docker.io    docker.io&#x2F;pebbletech&#x2F;nginx-proxy                                 nginx-proxy sets up a container running ng...   2                    [OK]
+docker.io    docker.io&#x2F;toccoag&#x2F;openshift-nginx                                Nginx reverse proxy for Nice running on sa...   1                    [OK]
+docker.io    docker.io&#x2F;toccoag&#x2F;openshift-nginx                                Nginx reverse proxy for Nice running on sa...   1                    [OK]
+docker.io    docker.io&#x2F;travix&#x2F;nginx                                           NGinx reverse proxy                             1                    [OK]
+docker.io    docker.io&#x2F;travix&#x2F;nginx                                           NGinx reverse proxy                             1                    [OK]
+docker.io    docker.io&#x2F;ansibleplaybookbundle&#x2F;nginx-apb                        An APB to deploy NGINX                          0                    [OK]
+docker.io    docker.io&#x2F;mailu&#x2F;nginx                                            Mailu nginx frontend                            0                    [OK]
+docker.io    docker.io&#x2F;mailu&#x2F;nginx                                            Mailu nginx frontend                            0                    [OK]
+redhat.com   registry.access.redhat.com&#x2F;3scale-amp20-beta&#x2F;apicast-gateway     3scale&#39;s API gateway (APIcast) is an OpenR...   0                    
+redhat.com   registry.access.redhat.com&#x2F;3scale-amp20&#x2F;apicast-gateway          3scale&#39;s API gateway (APIcast) is an OpenR...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhamp10&#x2F;apicast-gateway               3scale&#39;s API gateway (APIcast) is an OpenR...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhmap43&#x2F;wildcard-proxy                RHMAP Docker image that provides mapping a...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhmap44&#x2F;wildcard-proxy                RHMAP Docker image that provides mapping a...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhmap45&#x2F;wildcard-proxy                RHMAP image that provides mapping and prox...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhmap46&#x2F;wildcard-proxy                RHMAP image that provides mapping and prox...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhscl&#x2F;nginx-110-rhel7                 Nginx container image that delivers an ngi...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhscl&#x2F;nginx-112-rhel7                 Nginx is a web server and a reverse proxy ...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhscl&#x2F;nginx-16-rhel7                  Nginx 1.6 server and a reverse proxy server     0                    
+redhat.com   registry.access.redhat.com&#x2F;rhscl&#x2F;nginx-18-rhel7                  Nginx 1.8 server and a reverse proxy server     0                    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a>docker ps</h3><p>\ 列出docker正在运行的Container  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker ps 
+CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1cca834eb80c        nginx                      &quot;nginx -g &#39;daemon ...&quot;   57 seconds ago      Up 56 seconds       80&#x2F;tcp                   flamboyant_thompson
+769aefe85e29        achabill&#x2F;lh-toolkit        &quot;dockerize -wait t...&quot;   3 hours ago         Up 3 hours          0.0.0.0:8080-&gt;8080&#x2F;tcp   sad_payne
+93431e5f2f66        achabill&#x2F;lh-mysql:latest   &quot;docker-entrypoint...&quot;   3 hours ago         Up 3 hours          0.0.0.0:3308-&gt;3306&#x2F;tcp   brave_mcclintock<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="docker-container-ls"><a href="#docker-container-ls" class="headerlink" title="docker container ls"></a>docker container ls</h3><p>\ 列出所有存在的Container,包括为运行的和未使用的  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker container ls
+CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1cca834eb80c        nginx                      &quot;nginx -g &#39;daemon ...&quot;   57 seconds ago      Up 56 seconds       80&#x2F;tcp                   flamboyant_thompson
+769aefe85e29        achabill&#x2F;lh-toolkit        &quot;dockerize -wait t...&quot;   3 hours ago         Up 3 hours          0.0.0.0:8080-&gt;8080&#x2F;tcp   sad_payne
+93431e5f2f66        achabill&#x2F;lh-mysql:latest   &quot;docker-entrypoint...&quot;   3 hours ago         Up 3 hours          0.0.0.0:3308-&gt;3306&#x2F;tcp   brave_mcclintock<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="docker-run-dt"><a href="#docker-run-dt" class="headerlink" title="docker run -dt"></a>docker run -dt</h3><p>\ 运行一个image,给予一个Terminal,放入后台,返回一个ContainerID  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker run -dt -p 80:80 nginx
+1cca834eb80cd8467dec6d103bf9072adfb55d8cfb2fdc257af548dc25917868<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="docker-run-it"><a href="#docker-run-it" class="headerlink" title="docker run -it"></a>docker run -it</h3><p>\ 运行一个image,给予一个Terminal,直接进入Container  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker run -it -p 80:80 nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="docker-run-1"><a href="#docker-run-1" class="headerlink" title="docker run"></a>docker run</h3><p>\ 运行一个image,如果本地没有自动到docker仓库检索  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker run nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="docker-run-p"><a href="#docker-run-p" class="headerlink" title="docker run -p"></a>docker run -p</h3><p>\ 运行一个image,指定port的映射关系  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker run -p 80:80 nginx <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="docker-attach"><a href="#docker-attach" class="headerlink" title="docker attach"></a>docker attach</h3><p>\ 进入到某一个Container内部,如果没有shell,无法操作, 输出一片空白  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost ~]# docker attach flamboyant_thompson
+[root@d4a75f165ce6 &#x2F;]#<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/">
+            https://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2018/06/23/Linux/Linux_IP-forward-active/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">配置Ip-forward参数 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2018/05/11/Linux/Linux_%E5%85%B3%E9%97%ADFedora%E9%98%B2%E7%81%AB%E5%A2%99/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Fedora防火墙关闭，如何开机运行脚本 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">Docker常用命令的说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-pull"><span class="toc-text">docker pull</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-push"><span class="toc-text">docker push</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run"><span class="toc-text">docker run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-kill"><span class="toc-text">docker kill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-system-prune"><span class="toc-text">docker system prune</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-images"><span class="toc-text">docker images</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-search"><span class="toc-text">docker search</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-ps"><span class="toc-text">docker ps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-container-ls"><span class="toc-text">docker container ls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-dt"><span class="toc-text">docker run -dt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-it"><span class="toc-text">docker run -it</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-1"><span class="toc-text">docker run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-p"><span class="toc-text">docker run -p</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-attach"><span class="toc-text">docker attach</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">Docker常用命令的说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-pull"><span class="toc-text">docker pull</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-push"><span class="toc-text">docker push</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run"><span class="toc-text">docker run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-kill"><span class="toc-text">docker kill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-system-prune"><span class="toc-text">docker system prune</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-images"><span class="toc-text">docker images</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-search"><span class="toc-text">docker search</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-ps"><span class="toc-text">docker ps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-container-ls"><span class="toc-text">docker container ls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-dt"><span class="toc-text">docker run -dt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-it"><span class="toc-text">docker run -it</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-1"><span class="toc-text">docker run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-p"><span class="toc-text">docker run -p</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-attach"><span class="toc-text">docker attach</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">Docker常用命令的说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-pull"><span class="toc-text">docker pull</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-push"><span class="toc-text">docker push</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run"><span class="toc-text">docker run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-kill"><span class="toc-text">docker kill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-system-prune"><span class="toc-text">docker system prune</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-images"><span class="toc-text">docker images</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-search"><span class="toc-text">docker search</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-ps"><span class="toc-text">docker ps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-container-ls"><span class="toc-text">docker container ls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-dt"><span class="toc-text">docker run -dt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-it"><span class="toc-text">docker run -it</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-1"><span class="toc-text">docker run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-run-p"><span class="toc-text">docker run -p</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-attach"><span class="toc-text">docker attach</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

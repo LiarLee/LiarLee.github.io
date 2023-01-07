@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Archlinux安装过程记录</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Archlinux安装过程记录">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;自己尝试安装了archlinux在虚拟机里，记录安装过程，不过现在archlinux的WIKI是描述清晰的，直接查看和参考即可。  &lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2019-05-17">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="ArchLinux">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Archlinux安装过程记录
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-05-17T06:03:08.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2019-05-17</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2.3k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/ArchLinux/" 
+            class="post-meta-link">
+            ArchLinux
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>自己尝试安装了archlinux在虚拟机里，记录安装过程，不过现在archlinux的WIKI是描述清晰的，直接查看和参考即可。  </p>
+<span id="more"></span>
+<p><img src="https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg" alt="Artical_Cover.jpg" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg" class="lozad post-image"></p>
+<h1 id="pacman常用命令"><a href="#pacman常用命令" class="headerlink" title="pacman常用命令"></a>pacman常用命令</h1><p>pacman命令的常用说明：  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee ~]# pacman -Sg gnome  查看gnome软件包组下面的所有软件包  
+[root@LiarLee ~]# pacman -Qe openssh  查询已经安装的软件包  
+[root@LiarLee ~]# pacman -Qs openssh  正则查询软件包
+[root@LiarLee ~]# pacman -Rs $(pacman -Qtdq) 递归删除孤立软件包
+[root@LiarLee ~]# pacman -Ss 关键字：在仓库中搜索含关键字的包
+[root@LiarLee ~]# pacman -Qs 关键字： 搜索已安装的包
+[root@LiarLee ~]# pacman -Qi 包名：查看有关包的详尽信息
+[root@LiarLee ~]# pacman -Ql 包名：列出该包的文件
+[root@LiarLee ~]# pacman -Syyu 下载已经更新本地的所有软件包<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="安装Archlinux"><a href="#安装Archlinux" class="headerlink" title="安装Archlinux"></a>安装Archlinux</h1><h2 id="1-获取Archlinux镜像"><a href="#1-获取Archlinux镜像" class="headerlink" title="1. 获取Archlinux镜像"></a>1. 获取Archlinux镜像</h2><p>从这个页面获取镜像： <a target="_blank" rel="noopener" href="https://www.archlinux.org/download/">LINK HERE</a></p>
+<h2 id="2-启动到Archlinux-Live环境"><a href="#2-启动到Archlinux-Live环境" class="headerlink" title="2. 启动到Archlinux Live环境"></a>2. 启动到Archlinux Live环境</h2><p>在VMware中使用镜像文件直接引导Archlinux Live环境。  </p>
+<h2 id="3-设置Archlinux的键盘布局"><a href="#3-设置Archlinux的键盘布局" class="headerlink" title="3. 设置Archlinux的键盘布局"></a>3. 设置Archlinux的键盘布局</h2><p>默认为US键盘布局，此处未作修改。    </p>
+<h2 id="4-连接到Internet"><a href="#4-连接到Internet" class="headerlink" title="4. 连接到Internet"></a>4. 连接到Internet</h2><p>使用ip link命令查看目前网卡的状态  </p>
+<pre class="line-numbers language-none"><code class="language-none">root@archiso ~ # ip link show
+  1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link&#x2F;loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+  2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; dmtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link&#x2F;ether 00:0c:29:5e:ea:d5 brd ff:ff:ff:ff:ff:ff
+  
+root@archiso ~ # ifconfig
+  ens33: flags&#x3D;4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+      inet 192.168.229.129  netmask 255.255.255.0  broadcast 192.168.229.255
+      inet6 fe80::9888:f57a:5c25:9cf9  prefixlen 64  scopeid 0x20&lt;link&gt;
+      inet6 fd15:4ba5:5a2b:1008:6e02:ff6:feeb:c250  prefixlen 64  scopeid 0x0&lt;global&gt;
+      ether 00:0c:29:5e:ea:d5  txqueuelen 1000  (Ethernet)
+      RX packets 199  bytes 18652 (18.2 KiB)
+      RX errors 0  dropped 0  overruns 0  frame 0
+      TX packets 186  bytes 23144 (22.6 KiB)
+      TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+  lo: flags&#x3D;73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536
+      inet 127.0.0.1  netmask 255.0.0.0
+      inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;
+      loop  txqueuelen 1000  (Local Loopback)
+      RX packets 0  bytes 0 (0.0 B)
+      RX errors 0  dropped 0  overruns 0  frame 0
+      TX packets 0  bytes 0 (0.0 B)
+      TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+    
+root@archiso ~ # ping baidu.com   
+  PING baidu.com (123.125.114.144) 56(84) bytes of data.
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;1 ttl&#x3D;128 time&#x3D;14.8 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;2 ttl&#x3D;128 time&#x3D;13.6 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;3 ttl&#x3D;128 time&#x3D;17.1 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;4 ttl&#x3D;128 time&#x3D;14.1 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;5 ttl&#x3D;128 time&#x3D;13.9 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;6 ttl&#x3D;128 time&#x3D;14.7 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;7 ttl&#x3D;128 time&#x3D;13.5 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;8 ttl&#x3D;128 time&#x3D;16.2 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;9 ttl&#x3D;128 time&#x3D;16.9 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;10 ttl&#x3D;128 time&#x3D;14.1 ms
+  ^C
+  --- baidu.com ping statistics ---
+  10 packets transmitted, 10 received, 0% packet loss, time 26ms
+  rtt min&#x2F;avg&#x2F;max&#x2F;mdev &#x3D; 13.543&#x2F;14.895&#x2F;17.105&#x2F;1.278 ms<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>网络连接到此为止无需配置，可以正常访问网络。</p>
+<h2 id="5-更新系统时间，硬件时间同步"><a href="#5-更新系统时间，硬件时间同步" class="headerlink" title="5. 更新系统时间，硬件时间同步"></a>5. 更新系统时间，硬件时间同步</h2><p>使用命令查看系统时间以及硬件时间，将同步的当前时间写入硬件：  </p>
+<pre class="line-numbers language-none"><code class="language-none">root@archiso ~ # timedatectl status
+      Local time: Wed 2019-04-24 08:55:39 UTC
+    Universal time: Wed 2019-04-24 08:55:39 UTC
+        RTC time: Wed 2019-04-24 08:55:40
+        Time zone: UTC (UTC, +0000)
+System clock synchronized: yes
+      NTP service: active
+    RTC in local TZ: no
+
+root@archiso ~ # timedatectl set-ntp true<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="6-建立系统的硬盘分区"><a href="#6-建立系统的硬盘分区" class="headerlink" title="6. 建立系统的硬盘分区"></a>6. 建立系统的硬盘分区</h2><p>建立硬盘分区，我建立了两个分区，一个根分区和一个交换分区。  </p>
+<pre class="line-numbers language-none"><code class="language-none">root@archiso ~ # fdisk -l 
+  Disk &#x2F;dev&#x2F;sda: 50 GiB, 53687091200 bytes, 104857600 sectors
+  Disk model: VMware Virtual S
+  Units: sectors of 1 * 512 &#x3D; 512 bytes
+  Sector size (logical&#x2F;physical): 512 bytes &#x2F; 512 bytes
+  I&#x2F;O size (minimum&#x2F;optimal): 512 bytes &#x2F; 512 bytes
+  Disklabel type: dos
+  Disk identifier: 0xba00941d
+
+  Device     Boot   Start       End   Sectors  Size Id Type
+  &#x2F;dev&#x2F;sda1          2048   1050623   1048576  512M 82 Linux swap &#x2F; Solaris
+  &#x2F;dev&#x2F;sda2       1050624 104857599 103806976 49.5G 83 Linux
+
+
+  Disk &#x2F;dev&#x2F;loop0: 491.2 MiB, 515084288 bytes, 1006024 sectors
+  Units: sectors of 1 * 512 &#x3D; 512 bytes
+  Sector size (logical&#x2F;physical): 512 bytes &#x2F; 512 bytes
+  I&#x2F;O size (minimum&#x2F;optimal): 512 bytes &#x2F; 512 bytes<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="7-已经建立分区的格式化"><a href="#7-已经建立分区的格式化" class="headerlink" title="7. 已经建立分区的格式化"></a>7. 已经建立分区的格式化</h2><ol>
+<li>格式化ext4分区<pre class="line-numbers language-none"><code class="language-none">root@archiso ~ # mkfs.ext4 &#x2F;dev&#x2F;sda2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>格式化swap分区<pre class="line-numbers language-none"><code class="language-none">root@archiso ~ # mkswap &#x2F;dev&#x2F;sda1  # 将&#x2F;dev&#x2F;sda1格式化为swap分区
+root@archiso ~ # swapon &#x2F;dev&#x2F;sda1  # 将&#x2F;dev&#x2F;sda1启用为swap分区<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ol>
+<h2 id="8-挂载分区"><a href="#8-挂载分区" class="headerlink" title="8. 挂载分区"></a>8. 挂载分区</h2><p>使用系统挂载点&#x2F;mnt，将&#x2F;dev&#x2F;sda2作为系统的根目录挂载到&#x2F;mnt上。 </p>
+<pre class="line-numbers language-none"><code class="language-none">root@archiso ~ # mount &#x2F;dev&#x2F;sda2 &#x2F;mnt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="9-定义安装所需的Mirrorlist"><a href="#9-定义安装所需的Mirrorlist" class="headerlink" title="9. 定义安装所需的Mirrorlist"></a>9. 定义安装所需的Mirrorlist</h2><h2 id="10-安装基础的Archlinux系统组件"><a href="#10-安装基础的Archlinux系统组件" class="headerlink" title="10. 安装基础的Archlinux系统组件"></a>10. 安装基础的Archlinux系统组件</h2><p>部署安装linux的文件系统，安装系统基础组建的软件包。  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# pacstrap &#x2F;mnt base<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="11-新系统的相关配置"><a href="#11-新系统的相关配置" class="headerlink" title="11. 新系统的相关配置"></a>11. 新系统的相关配置</h2><h3 id="1-fstab"><a href="#1-fstab" class="headerlink" title="1. fstab"></a>1. fstab</h3><p>根据自己建立的分区自动生成系统的分区表。<br>    <pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# genfstab -U &#x2F;mnt &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;fstab		# 生成新的fstab，写入安装硬盘的&#x2F;etc&#x2F;fstab  
+[root@LiarLee ~]# cat &#x2F;etc&#x2F;fstab		#  查看新的分区表
+  # Static information about the filesystems.
+  # See fstab(5) for details.
+
+  # &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+  # &#x2F;dev&#x2F;sda2
+  UUID&#x3D;3b61b364-b9eb-4e31-b65a-55fdcf09c614	&#x2F;         	ext4      	rw,relatime	0 1
+
+  # &#x2F;dev&#x2F;sda1
+  UUID&#x3D;91987ac9-fa6b-4ac5-a9c5-014169dcf058	none      	swap      	defaults  	0 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></p>
+<h3 id="2-chroot"><a href="#2-chroot" class="headerlink" title="2. chroot"></a>2. chroot</h3><p>使用chroot命令切换根文件系统。  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# arch-chroot &#x2F;mnt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="3-timezone"><a href="#3-timezone" class="headerlink" title="3. timezone"></a>3. timezone</h3><p>chroot命令相当于直接将当前的shell切换到了新安装的系统中。<br>设置新的系统的时间及同步硬件时间。  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# ln -sf &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;Asia&#x2F;Shanghai &#x2F;etc&#x2F;localtime
+[root@LiarLee &#x2F;]# hwclock --systohc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="4-本地设置"><a href="#4-本地设置" class="headerlink" title="4. 本地设置"></a>4. 本地设置</h3><h3 id="5-网络设置"><a href="#5-网络设置" class="headerlink" title="5. 网络设置"></a>5. 网络设置</h3><p>配置hostname以及本地解析hosts文件的解析条目。  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# vim &#x2F;etc&#x2F;hostname
+  YOUR_HOSTNAME.YOUR_DOMAIN
+
+[root@LiarLee &#x2F;]# vim &#x2F;etc&#x2F;hosts
+  127.0.0.1	localhost
+  ::1		localhost
+  IP_ADDRESS 	YOUR_HOSTNAME.YOUR_DOMAIN YOUR_HOSTNAME<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="6-生成initramfs"><a href="#6-生成initramfs" class="headerlink" title="6. 生成initramfs"></a>6. 生成initramfs</h3><p>为新的系统生成ramfs。<br>ramfs的作用是，利用ramfs的文件系统，快速驱动周边的系统设备。在ramfs的使命结束后，自动chroot到新系统的文件系统中。  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# mkinitcpio -p linux<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="7-设置root密码"><a href="#7-设置root密码" class="headerlink" title="7. 设置root密码"></a>7. 设置root密码</h3><p>修改root密码。  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# passwd <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="8-安装grub2"><a href="#8-安装grub2" class="headerlink" title="8. 安装grub2"></a>8. 安装grub2</h3><p>这里pacman命令已经可以使用了，因此直接在这个安装grub2，这样才可以在后面正确的重启到新安装好的系统。  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# pacman -S grub2 
+[root@LiarLee &#x2F;]# grub-mkconfig <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="12-重启引导新系统"><a href="#12-重启引导新系统" class="headerlink" title="12. 重启引导新系统"></a>12. 重启引导新系统</h2><p>将已经安装完成的那个根分区卸载，之后就可以重启了。  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# umount -R &#x2F;mnt  # umount 接触挂载新的根文件系统  
+[root@LiarLee &#x2F;]# fuser &#x2F;mnt		# fuser 查看占用文件系统的进程，如果确认的话可以直接-k结束所有占用的进程
+[root@LiarLee &#x2F;]# reboot 		# 重启<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="13-安装图形化界面"><a href="#13-安装图形化界面" class="headerlink" title="13. 安装图形化界面"></a>13. 安装图形化界面</h2><h3 id="1-安装Xorg"><a href="#1-安装Xorg" class="headerlink" title="1. 安装Xorg:"></a>1. 安装Xorg:</h3><p>安装如下的所有组件，重启就可以进入图形化环境了。<br>    1. 运行错误 xterm:command not found<br>        [root@LiarLee &#x2F;]# pacman -S xterm zlib<br>    1. 运行报错 twm:command not found<br>        [root@LiarLee &#x2F;]# pacman -S xorg-twm xorg-xclock<br>    1. 安装鼠标驱动<br>        [root@LiarLee &#x2F;]# pacman -S xf86-input-mouse<br>    1. 安装VMware图形驱动<br>        [root@LiarLee &#x2F;]# pacman -S xf86-video-vmware<br>    1. 安装Xorg服务本体<br>        [root@LiarLee &#x2F;]# pacman -S xorg-server xorg-xinit<br>    1. 安装Gnome桌面环境<br>        [root@LiarLee &#x2F;]# pacman -S gnome<br>    1. 安装GDM - Gnome桌面管理工具，也可用其他替换<br>        [root@LiarLee &#x2F;]# pacman -S gdm</p>
+<h3 id="2-安装图形化之后测试启动速度"><a href="#2-安装图形化之后测试启动速度" class="headerlink" title="2. 安装图形化之后测试启动速度"></a>2. 安装图形化之后测试启动速度</h3><p>systemd提供了命令检测启动的速度，包括内核启动速度以及用户空间的启动速度。</p>
+<ol>
+<li>systemd-analyze  </li>
+<li>systemd-analyze blame</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">[root@LiarLee ~]# systemd-analyze 
+Startup finished in 1.892s (kernel) + 1.182s (userspace) &#x3D; 3.075s 
+graphical.target reached after 1.182s in userspace<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="3-刷新国内的镜像源"><a href="#3-刷新国内的镜像源" class="headerlink" title="3. 刷新国内的镜像源"></a>3. 刷新国内的镜像源</h3><pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# cd &#x2F;etc&#x2F;pacman.d&#x2F;
+[root@LiarLee pacman.d]#  mv mirrorlist mirrorlist.bak
+[root@LiarLee pacman.d]#  wget -O &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist https:&#x2F;&#x2F;www.archlinux.org&#x2F;mirrorlist&#x2F;?country&#x3D;CN
+[root@LiarLee pacman.d]#  mv mirrorlist mirrorlist.rank 
+[root@LiarLee pacman.d]#  rankmirrors mirrorlist.rank &gt;&gt; mirrorlist
+[root@LiarLee pacman.d]# sed &#39;s&#x2F;^Server&#x2F;#Server&#x2F;g&#39; .&#x2F;mirrorlist &gt;&gt; .&#x2F;mirrorlist
+[root@LiarLee pacman.d]# s[root@LiarLee pacman.d]# spacman -Syyu<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="14-自行编译内核操作："><a href="#14-自行编译内核操作：" class="headerlink" title="14. 自行编译内核操作："></a>14. 自行编译内核操作：</h2><pre class="line-numbers language-none"><code class="language-none">[root@LiarLee &#x2F;]# pacman -S base-devel bc xmlto kmod inetutils
+[root@LiarLee &#x2F;]# useradd -d &#x2F;home&#x2F;admin -p admin admin  
+[root@LiarLee &#x2F;]# chown -R admin:admin &#x2F;home&#x2F;admin
+[root@LiarLee &#x2F;]# mkdir &#x2F;home&#x2F;admin&#x2F;mk-new-kernel&#x2F;
+[root@LiarLee &#x2F;]# su - admin 
+[root@LiarLee &#x2F;]# cd &#x2F;home&#x2F;admin&#x2F;mk-new-kernel&#x2F;
+[root@LiarLee &#x2F;]# wget https:&#x2F;&#x2F;cdn.kernel.org&#x2F;pub&#x2F;linux&#x2F;kernel&#x2F;v5.x&#x2F;linux-5.0.8.tar.xz
+[root@LiarLee &#x2F;]# tar xvf linux-5.0.8.tar.xz 
+[root@LiarLee &#x2F;]# cd linux-5.0.8&#x2F;
+[root@LiarLee &#x2F;]# make clean &amp;&amp; make mrproper
+[root@LiarLee &#x2F;]# make localmodconfig
+[root@LiarLee &#x2F;]# make nconfig
+[root@LiarLee &#x2F;]# make <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="15-一些问题"><a href="#15-一些问题" class="headerlink" title="15. 一些问题"></a>15. 一些问题</h2><ol>
+<li>重启之后没有DHCP获取IP地址的解决方法：</li>
+</ol>
+<pre><code>    [root@LiarLee /]# systemctl enable dhcpcd
+    [root@LiarLee /]# systemctl start dhcpcd 
+    [root@LiarLee /]# pacman -S net-tools 
+```	 
+    
+</code></pre>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/">
+            https://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2019/05/17/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python_Script-ForGame/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">pyautogui自动脚本 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2019/04/24/Linux/Linux_DockerFile-Note/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">DockerFile笔记 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#pacman%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">pacman常用命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Archlinux"><span class="toc-text">安装Archlinux</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96Archlinux%E9%95%9C%E5%83%8F"><span class="toc-text">1. 获取Archlinux镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8%E5%88%B0Archlinux-Live%E7%8E%AF%E5%A2%83"><span class="toc-text">2. 启动到Archlinux Live环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%AE%BE%E7%BD%AEArchlinux%E7%9A%84%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80"><span class="toc-text">3. 设置Archlinux的键盘布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%BF%9E%E6%8E%A5%E5%88%B0Internet"><span class="toc-text">4. 连接到Internet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4%EF%BC%8C%E7%A1%AC%E4%BB%B6%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5"><span class="toc-text">5. 更新系统时间，硬件时间同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%BB%BA%E7%AB%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA"><span class="toc-text">6. 建立系统的硬盘分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%B7%B2%E7%BB%8F%E5%BB%BA%E7%AB%8B%E5%88%86%E5%8C%BA%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">7. 已经建立分区的格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%8C%82%E8%BD%BD%E5%88%86%E5%8C%BA"><span class="toc-text">8. 挂载分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85%E6%89%80%E9%9C%80%E7%9A%84Mirrorlist"><span class="toc-text">9. 定义安装所需的Mirrorlist</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%AE%89%E8%A3%85%E5%9F%BA%E7%A1%80%E7%9A%84Archlinux%E7%B3%BB%E7%BB%9F%E7%BB%84%E4%BB%B6"><span class="toc-text">10. 安装基础的Archlinux系统组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E6%96%B0%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="toc-text">11. 新系统的相关配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-fstab"><span class="toc-text">1. fstab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-chroot"><span class="toc-text">2. chroot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-timezone"><span class="toc-text">3. timezone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9C%AC%E5%9C%B0%E8%AE%BE%E7%BD%AE"><span class="toc-text">4. 本地设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%BD%91%E7%BB%9C%E8%AE%BE%E7%BD%AE"><span class="toc-text">5. 网络设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%94%9F%E6%88%90initramfs"><span class="toc-text">6. 生成initramfs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E8%AE%BE%E7%BD%AEroot%E5%AF%86%E7%A0%81"><span class="toc-text">7. 设置root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%AE%89%E8%A3%85grub2"><span class="toc-text">8. 安装grub2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E9%87%8D%E5%90%AF%E5%BC%95%E5%AF%BC%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="toc-text">12. 重启引导新系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2"><span class="toc-text">13. 安装图形化界面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85Xorg"><span class="toc-text">1. 安装Xorg:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96%E4%B9%8B%E5%90%8E%E6%B5%8B%E8%AF%95%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6"><span class="toc-text">2. 安装图形化之后测试启动速度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%B7%E6%96%B0%E5%9B%BD%E5%86%85%E7%9A%84%E9%95%9C%E5%83%8F%E6%BA%90"><span class="toc-text">3. 刷新国内的镜像源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-%E8%87%AA%E8%A1%8C%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E6%93%8D%E4%BD%9C%EF%BC%9A"><span class="toc-text">14. 自行编译内核操作：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-text">15. 一些问题</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#pacman%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">pacman常用命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Archlinux"><span class="toc-text">安装Archlinux</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96Archlinux%E9%95%9C%E5%83%8F"><span class="toc-text">1. 获取Archlinux镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8%E5%88%B0Archlinux-Live%E7%8E%AF%E5%A2%83"><span class="toc-text">2. 启动到Archlinux Live环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%AE%BE%E7%BD%AEArchlinux%E7%9A%84%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80"><span class="toc-text">3. 设置Archlinux的键盘布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%BF%9E%E6%8E%A5%E5%88%B0Internet"><span class="toc-text">4. 连接到Internet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4%EF%BC%8C%E7%A1%AC%E4%BB%B6%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5"><span class="toc-text">5. 更新系统时间，硬件时间同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%BB%BA%E7%AB%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA"><span class="toc-text">6. 建立系统的硬盘分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%B7%B2%E7%BB%8F%E5%BB%BA%E7%AB%8B%E5%88%86%E5%8C%BA%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">7. 已经建立分区的格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%8C%82%E8%BD%BD%E5%88%86%E5%8C%BA"><span class="toc-text">8. 挂载分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85%E6%89%80%E9%9C%80%E7%9A%84Mirrorlist"><span class="toc-text">9. 定义安装所需的Mirrorlist</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%AE%89%E8%A3%85%E5%9F%BA%E7%A1%80%E7%9A%84Archlinux%E7%B3%BB%E7%BB%9F%E7%BB%84%E4%BB%B6"><span class="toc-text">10. 安装基础的Archlinux系统组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E6%96%B0%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="toc-text">11. 新系统的相关配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-fstab"><span class="toc-text">1. fstab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-chroot"><span class="toc-text">2. chroot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-timezone"><span class="toc-text">3. timezone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9C%AC%E5%9C%B0%E8%AE%BE%E7%BD%AE"><span class="toc-text">4. 本地设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%BD%91%E7%BB%9C%E8%AE%BE%E7%BD%AE"><span class="toc-text">5. 网络设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%94%9F%E6%88%90initramfs"><span class="toc-text">6. 生成initramfs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E8%AE%BE%E7%BD%AEroot%E5%AF%86%E7%A0%81"><span class="toc-text">7. 设置root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%AE%89%E8%A3%85grub2"><span class="toc-text">8. 安装grub2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E9%87%8D%E5%90%AF%E5%BC%95%E5%AF%BC%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="toc-text">12. 重启引导新系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2"><span class="toc-text">13. 安装图形化界面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85Xorg"><span class="toc-text">1. 安装Xorg:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96%E4%B9%8B%E5%90%8E%E6%B5%8B%E8%AF%95%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6"><span class="toc-text">2. 安装图形化之后测试启动速度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%B7%E6%96%B0%E5%9B%BD%E5%86%85%E7%9A%84%E9%95%9C%E5%83%8F%E6%BA%90"><span class="toc-text">3. 刷新国内的镜像源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-%E8%87%AA%E8%A1%8C%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E6%93%8D%E4%BD%9C%EF%BC%9A"><span class="toc-text">14. 自行编译内核操作：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-text">15. 一些问题</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#pacman%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">pacman常用命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Archlinux"><span class="toc-text">安装Archlinux</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96Archlinux%E9%95%9C%E5%83%8F"><span class="toc-text">1. 获取Archlinux镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8%E5%88%B0Archlinux-Live%E7%8E%AF%E5%A2%83"><span class="toc-text">2. 启动到Archlinux Live环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%AE%BE%E7%BD%AEArchlinux%E7%9A%84%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80"><span class="toc-text">3. 设置Archlinux的键盘布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%BF%9E%E6%8E%A5%E5%88%B0Internet"><span class="toc-text">4. 连接到Internet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4%EF%BC%8C%E7%A1%AC%E4%BB%B6%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5"><span class="toc-text">5. 更新系统时间，硬件时间同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%BB%BA%E7%AB%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA"><span class="toc-text">6. 建立系统的硬盘分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%B7%B2%E7%BB%8F%E5%BB%BA%E7%AB%8B%E5%88%86%E5%8C%BA%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">7. 已经建立分区的格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%8C%82%E8%BD%BD%E5%88%86%E5%8C%BA"><span class="toc-text">8. 挂载分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85%E6%89%80%E9%9C%80%E7%9A%84Mirrorlist"><span class="toc-text">9. 定义安装所需的Mirrorlist</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%AE%89%E8%A3%85%E5%9F%BA%E7%A1%80%E7%9A%84Archlinux%E7%B3%BB%E7%BB%9F%E7%BB%84%E4%BB%B6"><span class="toc-text">10. 安装基础的Archlinux系统组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E6%96%B0%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="toc-text">11. 新系统的相关配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-fstab"><span class="toc-text">1. fstab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-chroot"><span class="toc-text">2. chroot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-timezone"><span class="toc-text">3. timezone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9C%AC%E5%9C%B0%E8%AE%BE%E7%BD%AE"><span class="toc-text">4. 本地设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%BD%91%E7%BB%9C%E8%AE%BE%E7%BD%AE"><span class="toc-text">5. 网络设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%94%9F%E6%88%90initramfs"><span class="toc-text">6. 生成initramfs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E8%AE%BE%E7%BD%AEroot%E5%AF%86%E7%A0%81"><span class="toc-text">7. 设置root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%AE%89%E8%A3%85grub2"><span class="toc-text">8. 安装grub2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E9%87%8D%E5%90%AF%E5%BC%95%E5%AF%BC%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="toc-text">12. 重启引导新系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2"><span class="toc-text">13. 安装图形化界面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85Xorg"><span class="toc-text">1. 安装Xorg:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96%E4%B9%8B%E5%90%8E%E6%B5%8B%E8%AF%95%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6"><span class="toc-text">2. 安装图形化之后测试启动速度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%B7%E6%96%B0%E5%9B%BD%E5%86%85%E7%9A%84%E9%95%9C%E5%83%8F%E6%BA%90"><span class="toc-text">3. 刷新国内的镜像源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-%E8%87%AA%E8%A1%8C%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E6%93%8D%E4%BD%9C%EF%BC%9A"><span class="toc-text">14. 自行编译内核操作：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-text">15. 一些问题</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

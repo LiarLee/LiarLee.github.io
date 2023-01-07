@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Nginx性能调整（不一定对</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Nginx性能调整（不一定对">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2022/12/27/Nginx-Performance-Tuning-Pre-md/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="Archlinux User, Kubernetes, Support Engineer">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2022-12-27">
+      <meta 
+        property="og:article:modified_time" 
+        content="2023-01-01">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Linux">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Nginx性能调整（不一定对
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2022-12-27T04:53:02.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2022-12-27</span>
+    </time>
+    
+    
+      <span class="dot"></span>
+      <span>2.4k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Linux/" 
+            class="post-meta-link">
+            Linux
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="Nginx-性能优化"><a href="#Nginx-性能优化" class="headerlink" title="Nginx 性能优化"></a>Nginx 性能优化</h1><p>看了不少的文档和说明， 尝试调整一下Nginx，看看与默认的设置性能表现能有多大的差距,顺便记录一下步骤，不记录的话自己会忘记的。 </p>
+<h2 id="sysctl-参数"><a href="#sysctl-参数" class="headerlink" title="sysctl 参数"></a>sysctl 参数</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~<span class="token punctuation">]</span>$ <span class="token function">cat</span> /etc/sysctl.d/99-hayden.cof
+net.ipv4.tcp_wmem <span class="token operator">=</span> <span class="token number">8192</span> <span class="token number">4194304</span> <span class="token number">8388608</span>
+net.ipv4.tcp_rmem <span class="token operator">=</span> <span class="token number">8192</span> <span class="token number">4194304</span> <span class="token number">8388608</span>
+
+net.core.somaxconn <span class="token operator">=</span> <span class="token number">262144</span>
+
+net.core.default_qdisc<span class="token operator">=</span>fq
+net.ipv4.tcp_congestion_control<span class="token operator">=</span>bbr<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="Nginx-Config"><a href="#Nginx-Config" class="headerlink" title="Nginx Config"></a>Nginx Config</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~<span class="token punctuation">]</span>$ <span class="token function">cat</span> /etc/nginx/nginx.conf
+
+user nginx<span class="token punctuation">;</span>
+worker_processes <span class="token number">1</span><span class="token punctuation">;</span>
+worker_cpu_affinity <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token comment"># error_log /var/log/nginx/error.log;</span>
+pid /run/nginx.pid<span class="token punctuation">;</span>
+
+<span class="token comment"># Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.</span>
+include /usr/share/nginx/modules/*.conf<span class="token punctuation">;</span>
+
+events <span class="token punctuation">&#123;</span>
+    worker_connections <span class="token number">10240</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token punctuation">..</span>.<span class="token comment"># 后面的都是默认值。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Systemd-Nginx-Service"><a href="#Systemd-Nginx-Service" class="headerlink" title="Systemd Nginx Service"></a>Systemd Nginx Service</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~<span class="token punctuation">]</span>$ systemctl <span class="token function">cat</span> nginx
+<span class="token comment"># /usr/lib/systemd/system/nginx.service</span>
+<span class="token punctuation">[</span>Unit<span class="token punctuation">]</span>
+<span class="token assign-left variable">Description</span><span class="token operator">=</span>The nginx HTTP and reverse proxy server
+<span class="token assign-left variable">After</span><span class="token operator">=</span>network-online.target remote-fs.target nss-lookup.target
+<span class="token assign-left variable">Wants</span><span class="token operator">=</span>network-online.target
+
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+<span class="token assign-left variable">Type</span><span class="token operator">=</span>forking
+<span class="token assign-left variable">PIDFile</span><span class="token operator">=</span>/run/nginx.pid
+<span class="token comment"># Nginx will fail to start if /run/nginx.pid already exists but has the wrong</span>
+<span class="token comment"># SELinux context. This might happen when running `nginx -t` from the cmdline.</span>
+<span class="token comment"># https://bugzilla.redhat.com/show_bug.cgi?id=1268621</span>
+<span class="token assign-left variable">ExecStartPre</span><span class="token operator">=</span>/usr/bin/rm -f /run/nginx.pid
+<span class="token assign-left variable">ExecStartPre</span><span class="token operator">=</span>/usr/sbin/nginx -t
+<span class="token assign-left variable">ExecStart</span><span class="token operator">=</span>/usr/sbin/nginx
+<span class="token assign-left variable">ExecReload</span><span class="token operator">=</span>/usr/sbin/nginx -s reload
+<span class="token assign-left variable">KillSignal</span><span class="token operator">=</span>SIGQUIT
+<span class="token assign-left variable">TimeoutStopSec</span><span class="token operator">=</span><span class="token number">5</span>
+<span class="token assign-left variable">KillMode</span><span class="token operator">=</span>process
+<span class="token assign-left variable">PrivateTmp</span><span class="token operator">=</span>true
+<span class="token assign-left variable">LimitAS</span><span class="token operator">=</span>infinity
+<span class="token assign-left variable">LimitRSS</span><span class="token operator">=</span>infinity
+<span class="token assign-left variable">LimitCORE</span><span class="token operator">=</span>infinity
+<span class="token assign-left variable">LimitNOFILE</span><span class="token operator">=</span><span class="token number">65536</span>
+<span class="token assign-left variable">LimitNPROC</span><span class="token operator">=</span><span class="token number">65535</span>
+<span class="token assign-left variable">Nice</span><span class="token operator">=</span>-20
+
+<span class="token punctuation">[</span>Install<span class="token punctuation">]</span>
+<span class="token assign-left variable">WantedBy</span><span class="token operator">=</span>multi-user.target<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="CPU-Isolate"><a href="#CPU-Isolate" class="headerlink" title="CPU Isolate"></a>CPU Isolate</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~<span class="token punctuation">]</span>$ <span class="token function">cat</span> /etc/default/grub
+<span class="token assign-left variable">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="token operator">=</span><span class="token string">"console=tty0 console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 nvme_core.io_timeout=4294967295 rd.emergency=poweroff rd.shell=0 isolcpus=1 nohz_full=1 rcu_nocbs=1"</span>
+<span class="token assign-left variable">GRUB_TIMEOUT</span><span class="token operator">=</span><span class="token number">0</span>
+<span class="token assign-left variable">GRUB_DISABLE_RECOVERY</span><span class="token operator">=</span><span class="token string">"true"</span>
+<span class="token assign-left variable">GRUB_TERMINAL</span><span class="token operator">=</span><span class="token string">"ec2-console"</span>
+<span class="token assign-left variable">GRUB_X86_USE_32BIT</span><span class="token operator">=</span><span class="token string">"true"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="调整中断"><a href="#调整中断" class="headerlink" title="调整中断"></a>调整中断</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~<span class="token punctuation">]</span>$ <span class="token function">cat</span> /proc/interrupts
+           CPU0       CPU1
+ <span class="token number">27</span>:          <span class="token number">0</span>        <span class="token number">845</span>   PCI-MSI <span class="token number">81920</span>-edge      ena-mgmnt@pci:0000:00:05.0
+ <span class="token number">28</span>:    <span class="token number">1455005</span>          <span class="token number">0</span>   PCI-MSI <span class="token number">81921</span>-edge      eth0-Tx-Rx-0
+ <span class="token number">29</span>:          <span class="token number">0</span>    <span class="token number">1870959</span>   PCI-MSI <span class="token number">81922</span>-edge      eth0-Tx-Rx-1
+LOC:     <span class="token number">119785</span>      <span class="token number">15755</span>   Local timer interrupts
+
+~<span class="token punctuation">]</span>$ <span class="token builtin class-name">echo</span> <span class="token number">0</span> <span class="token operator">></span> /proc/irq/29/smp_affinity_list
+~<span class="token punctuation">]</span>$ <span class="token builtin class-name">echo</span> <span class="token number">0</span> <span class="token operator">></span> /proc/irq/28/smp_affinity_list
+~<span class="token punctuation">]</span>$ <span class="token builtin class-name">echo</span> <span class="token number">0</span> <span class="token operator">></span> /proc/irq/27/smp_affinity_list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="关闭-irqbalance"><a href="#关闭-irqbalance" class="headerlink" title="关闭 irqbalance"></a>关闭 irqbalance</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> systemctl stop irqbalance.service
+~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> systemctl disable irqbalance.service
+Removed symlink /etc/systemd/system/multi-user.target.wants/irqbalance.service.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>这些都做完之后，启动一个新的实例，安装nginx之后不做任何的动作， 使用ab命令测试默认页 index.html。 对比</p>
+<h2 id="调整后的实例结果如下"><a href="#调整后的实例结果如下" class="headerlink" title="调整后的实例结果如下"></a>调整后的实例结果如下</h2><p>使用命令： <code>ab -c 3000 -n 50000 http://172.31.37.166:80/index.html</code></p>
+<h3 id="第一次"><a href="#第一次" class="headerlink" title="第一次"></a>第一次</h3><pre class="line-numbers language-none"><code class="language-none">Document Path:          &#x2F;index.html
+Document Length:        732 bytes
+
+Concurrency Level:      3000
+Time taken for tests:   2.225 seconds
+Complete requests:      50000
+Failed requests:        0
+Total transferred:      48250000 bytes
+HTML transferred:       36600000 bytes
+Requests per second:    22474.64 [#&#x2F;sec] (mean)
+Time per request:       133.484 [ms] (mean)
+Time per request:       0.044 [ms] (mean, across all concurrent requests)
+Transfer rate:          21179.71 [Kbytes&#x2F;sec] received
+
+Connection Times (ms)
+              min  mean[+&#x2F;-sd] median   max
+Connect:        0   67 139.7     47    1124
+Processing:    25   63  16.1     61     274
+Waiting:        0   47  13.7     46     254
+Total:         57  130 143.2    106    1191
+
+Percentage of the requests served within a certain time (ms)
+  50%    106
+  66%    125
+  75%    131
+  80%    135
+  90%    142
+  95%    149
+  98%    165
+  99%   1173
+ 100%   1191 (longest request)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="第二次"><a href="#第二次" class="headerlink" title="第二次"></a>第二次</h3><pre class="line-numbers language-none"><code class="language-none">Document Path:          &#x2F;index.html
+Document Length:        732 bytes
+
+Concurrency Level:      3000
+Time taken for tests:   2.232 seconds
+Complete requests:      50000
+Failed requests:        0
+Total transferred:      48250000 bytes
+HTML transferred:       36600000 bytes
+Requests per second:    22397.25 [#&#x2F;sec] (mean)
+Time per request:       133.945 [ms] (mean)
+Time per request:       0.045 [ms] (mean, across all concurrent requests)
+Transfer rate:          21106.78 [Kbytes&#x2F;sec] received
+
+Connection Times (ms)
+              min  mean[+&#x2F;-sd] median   max
+Connect:        0   67 141.3     47    1092
+Processing:    22   63  15.8     60     106
+Waiting:        0   47  13.5     46      84
+Total:         60  130 143.5    108    1175
+
+Percentage of the requests served within a certain time (ms)
+  50%    108
+  66%    122
+  75%    131
+  80%    134
+  90%    141
+  95%    149
+  98%    165
+  99%   1150
+ 100%   1175 (longest request)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="第三次"><a href="#第三次" class="headerlink" title="第三次"></a>第三次</h3><pre class="line-numbers language-none"><code class="language-none">Document Path:          &#x2F;index.html
+Document Length:        732 bytes
+
+Concurrency Level:      3000
+Time taken for tests:   2.220 seconds
+Complete requests:      50000
+Failed requests:        0
+Total transferred:      48250000 bytes
+HTML transferred:       36600000 bytes
+Requests per second:    22526.08 [#&#x2F;sec] (mean)
+Time per request:       133.179 [ms] (mean)
+Time per request:       0.044 [ms] (mean, across all concurrent requests)
+Transfer rate:          21228.19 [Kbytes&#x2F;sec] received
+
+Connection Times (ms)
+              min  mean[+&#x2F;-sd] median   max
+Connect:        0   64 123.5     49    1087
+Processing:    35   65  15.1     63     108
+Waiting:        0   48  13.2     48      88
+Total:         61  129 125.5    115    1166
+
+Percentage of the requests served within a certain time (ms)
+  50%    115
+  66%    123
+  75%    132
+  80%    136
+  90%    140
+  95%    145
+  98%    159
+  99%   1139
+ 100%   1166 (longest request)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="并未调整的实例结果如下"><a href="#并未调整的实例结果如下" class="headerlink" title="并未调整的实例结果如下"></a>并未调整的实例结果如下</h2><p>使用命令：<code>ab -c 3000 -n 50000 http://172.31.45.66:80/index.html</code></p>
+<h3 id="第一次-1"><a href="#第一次-1" class="headerlink" title="第一次"></a>第一次</h3><pre class="line-numbers language-none"><code class="language-none">Document Path:          &#x2F;index.html
+Document Length:        615 bytes
+
+Concurrency Level:      3000
+Time taken for tests:   2.197 seconds
+Complete requests:      50000
+Failed requests:        9856
+   (Connect: 0, Receive: 0, Length: 4928, Exceptions: 4928)
+Total transferred:      38221056 bytes
+HTML transferred:       27719280 bytes
+Requests per second:    22754.61 [#&#x2F;sec] (mean)
+Time per request:       131.841 [ms] (mean)
+Time per request:       0.044 [ms] (mean, across all concurrent requests)
+Transfer rate:          16986.43 [Kbytes&#x2F;sec] received
+
+Connection Times (ms)
+              min  mean[+&#x2F;-sd] median   max
+Connect:        0   61 115.4     47    1110
+Processing:    23   65  15.2     65     112
+Waiting:        0   45  18.6     48      88
+Total:         61  126 115.4    111    1209
+
+Percentage of the requests served within a certain time (ms)
+  50%    111
+  66%    120
+  75%    125
+  80%    128
+  90%    139
+  95%    144
+  98%    157
+  99%   1143
+ 100%   1209 (longest request)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="第二次-1"><a href="#第二次-1" class="headerlink" title="第二次"></a>第二次</h3><pre class="line-numbers language-none"><code class="language-none">Document Path:          &#x2F;index.html
+Document Length:        615 bytes
+
+Concurrency Level:      3000
+Time taken for tests:   2.202 seconds
+Complete requests:      50000
+Failed requests:        9408
+   (Connect: 0, Receive: 0, Length: 4704, Exceptions: 4704)
+Total transferred:      38411008 bytes
+HTML transferred:       27857040 bytes
+Requests per second:    22710.18 [#&#x2F;sec] (mean)
+Time per request:       132.099 [ms] (mean)
+Time per request:       0.044 [ms] (mean, across all concurrent requests)
+Transfer rate:          17037.52 [Kbytes&#x2F;sec] received
+
+Connection Times (ms)
+              min  mean[+&#x2F;-sd] median   max
+Connect:        0   64 123.9     48    1089
+Processing:    22   65  15.9     65     116
+Waiting:        0   46  18.9     48      89
+Total:         65  128 125.4    111    1171
+
+Percentage of the requests served within a certain time (ms)
+  50%    111
+  66%    124
+  75%    128
+  80%    132
+  90%    141
+  95%    146
+  98%    166
+  99%   1124
+ 100%   1171 (longest request)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="第三次-1"><a href="#第三次-1" class="headerlink" title="第三次"></a>第三次</h3><pre class="line-numbers language-none"><code class="language-none">Document Path:          &#x2F;index.html
+Document Length:        615 bytes
+
+Concurrency Level:      3000
+Time taken for tests:   2.236 seconds
+Complete requests:      50000
+Failed requests:        9216
+   (Connect: 0, Receive: 0, Length: 4608, Exceptions: 4608)
+Total transferred:      38492416 bytes
+HTML transferred:       27916080 bytes
+Requests per second:    22361.25 [#&#x2F;sec] (mean)
+Time per request:       134.161 [ms] (mean)
+Time per request:       0.045 [ms] (mean, across all concurrent requests)
+Transfer rate:          16811.30 [Kbytes&#x2F;sec] received
+
+Connection Times (ms)
+              min  mean[+&#x2F;-sd] median   max
+Connect:        0   64 111.8     52    1110
+Processing:    26   67  15.8     67     113
+Waiting:        0   47  19.0     49      86
+Total:         65  130 114.2    118    1205
+
+Percentage of the requests served within a certain time (ms)
+  50%    118
+  66%    126
+  75%    131
+  80%    134
+  90%    141
+  95%    147
+  98%    158
+  99%   1117
+ 100%   1205 (longest request)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>如果对比的话， 可以明显的发现，Connection Time 的输出中， 明显看到Processing 阶段（在 15.8 - 16.1 之间） 和 Waiting阶段 （在 13.2 - 13.7 之间） 变得稳定。</p>
+<p>观察CPU使用率， 默认的设置 CPU 的使用率在多个核心之间均衡， IRQ以及 us sys 在多个核心上平均分布。<br>调整之后， Nginx在CPU1上处理数据， 中断以及其他进程完全跑满CPU0， Nginx单独在CPU1上面工作， 最大程度的处理数据。 这也是ab命令中返回的 processing time 更短更稳定的原因（大概。</p>
+<p>在调整之后， CPU1 上面会触发大量的RES中断， 这会导致当前的CPU无法完全的跑满， 这个部分还是一个问题， 我不知道RES的中断能不能也移除， 不过我感觉这个可能并不能， 应该是调度的需要， 但是过多的中断数量本身也会导致性能问题， 可能还有其他的解法， 暂时不去考虑了。遗留。</p>
+<h1 id="附加静态页面之后的测试"><a href="#附加静态页面之后的测试" class="headerlink" title="附加静态页面之后的测试"></a>附加静态页面之后的测试</h1><p>Hexo Render Project</p>
+<h2 id="调整之后的测试"><a href="#调整之后的测试" class="headerlink" title="调整之后的测试"></a>调整之后的测试</h2><p>命令： <code>ab -c 3000 -n 50000 http://172.31.37.166:80/index.html</code></p>
+<h3 id="第一次-2"><a href="#第一次-2" class="headerlink" title="第一次"></a>第一次</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Document Path:          /index.html
+Document Length:        <span class="token number">35312</span> bytes
+
+Concurrency Level:      <span class="token number">3000</span>
+Time taken <span class="token keyword">for</span> tests:   <span class="token number">3.373</span> seconds
+Complete requests:      <span class="token number">50000</span>
+Failed requests:        <span class="token number">0</span>
+Total transferred:      <span class="token number">1777400000</span> bytes
+HTML transferred:       <span class="token number">1765600000</span> bytes
+Requests per second:    <span class="token number">14822.50</span> <span class="token punctuation">[</span><span class="token comment">#/sec] (mean)</span>
+Time per request:       <span class="token number">202.395</span> <span class="token punctuation">[</span>ms<span class="token punctuation">]</span> <span class="token punctuation">(</span>mean<span class="token punctuation">)</span>
+Time per request:       <span class="token number">0.067</span> <span class="token punctuation">[</span>ms<span class="token punctuation">]</span> <span class="token punctuation">(</span>mean, across all concurrent requests<span class="token punctuation">)</span>
+Transfer rate:          <span class="token number">514560.94</span> <span class="token punctuation">[</span>Kbytes/sec<span class="token punctuation">]</span> received
+
+Connection Times <span class="token punctuation">(</span>ms<span class="token punctuation">)</span>
+              min  mean<span class="token punctuation">[</span>+/-sd<span class="token punctuation">]</span> median   max
+Connect:        <span class="token number">0</span>   <span class="token number">54</span> <span class="token number">104.2</span>     <span class="token number">44</span>    <span class="token number">1061</span>
+Processing:    <span class="token number">37</span>  <span class="token number">144</span>  <span class="token number">23.0</span>    <span class="token number">145</span>     <span class="token number">196</span>
+Waiting:        <span class="token number">0</span>   <span class="token number">41</span>  <span class="token number">14.4</span>     <span class="token number">38</span>     <span class="token number">103</span>
+Total:         <span class="token number">80</span>  <span class="token number">198</span> <span class="token number">108.1</span>    <span class="token number">193</span>    <span class="token number">1229</span>
+
+Percentage of the requests served within a certain <span class="token function">time</span> <span class="token punctuation">(</span>ms<span class="token punctuation">)</span>
+  <span class="token number">50</span>%    <span class="token number">193</span>
+  <span class="token number">66</span>%    <span class="token number">200</span>
+  <span class="token number">75</span>%    <span class="token number">207</span>
+  <span class="token number">80</span>%    <span class="token number">209</span>
+  <span class="token number">90</span>%    <span class="token number">215</span>
+  <span class="token number">95</span>%    <span class="token number">218</span>
+  <span class="token number">98</span>%    <span class="token number">231</span>
+  <span class="token number">99</span>%   <span class="token number">1194</span>
+ <span class="token number">100</span>%   <span class="token number">1229</span> <span class="token punctuation">(</span>longest request<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="第二次-2"><a href="#第二次-2" class="headerlink" title="第二次"></a>第二次</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Document Path:          /index.html
+Document Length:        <span class="token number">35312</span> bytes
+
+Concurrency Level:      <span class="token number">3000</span>
+Time taken <span class="token keyword">for</span> tests:   <span class="token number">3.094</span> seconds
+Complete requests:      <span class="token number">50000</span>
+Failed requests:        <span class="token number">0</span>
+Total transferred:      <span class="token number">1777400000</span> bytes
+HTML transferred:       <span class="token number">1765600000</span> bytes
+Requests per second:    <span class="token number">16157.77</span> <span class="token punctuation">[</span><span class="token comment">#/sec] (mean)</span>
+Time per request:       <span class="token number">185.669</span> <span class="token punctuation">[</span>ms<span class="token punctuation">]</span> <span class="token punctuation">(</span>mean<span class="token punctuation">)</span>
+Time per request:       <span class="token number">0.062</span> <span class="token punctuation">[</span>ms<span class="token punctuation">]</span> <span class="token punctuation">(</span>mean, across all concurrent requests<span class="token punctuation">)</span>
+Transfer rate:          <span class="token number">560914.54</span> <span class="token punctuation">[</span>Kbytes/sec<span class="token punctuation">]</span> received
+
+Connection Times <span class="token punctuation">(</span>ms<span class="token punctuation">)</span>
+              min  mean<span class="token punctuation">[</span>+/-sd<span class="token punctuation">]</span> median   max
+Connect:        <span class="token number">0</span>   <span class="token number">54</span> <span class="token number">120.1</span>     <span class="token number">39</span>    <span class="token number">1070</span>
+Processing:    <span class="token number">64</span>  <span class="token number">127</span>  <span class="token number">19.7</span>    <span class="token number">128</span>     <span class="token number">180</span>
+Waiting:        <span class="token number">0</span>   <span class="token number">37</span>  <span class="token number">14.1</span>     <span class="token number">35</span>      <span class="token number">98</span>
+Total:        <span class="token number">106</span>  <span class="token number">181</span> <span class="token number">123.6</span>    <span class="token number">171</span>    <span class="token number">1240</span>
+
+Percentage of the requests served within a certain <span class="token function">time</span> <span class="token punctuation">(</span>ms<span class="token punctuation">)</span>
+  <span class="token number">50</span>%    <span class="token number">171</span>
+  <span class="token number">66</span>%    <span class="token number">180</span>
+  <span class="token number">75</span>%    <span class="token number">183</span>
+  <span class="token number">80</span>%    <span class="token number">184</span>
+  <span class="token number">90</span>%    <span class="token number">190</span>
+  <span class="token number">95</span>%    <span class="token number">195</span>
+  <span class="token number">98</span>%    <span class="token number">204</span>
+  <span class="token number">99</span>%   <span class="token number">1184</span>
+ <span class="token number">100</span>%   <span class="token number">1240</span> <span class="token punctuation">(</span>longest request<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="第三次-2"><a href="#第三次-2" class="headerlink" title="第三次"></a>第三次</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Document Path:          /index.html
+Document Length:        <span class="token number">35312</span> bytes
+
+Concurrency Level:      <span class="token number">3000</span>
+Time taken <span class="token keyword">for</span> tests:   <span class="token number">3.212</span> seconds
+Complete requests:      <span class="token number">50000</span>
+Failed requests:        <span class="token number">0</span>
+Total transferred:      <span class="token number">1777400000</span> bytes
+HTML transferred:       <span class="token number">1765600000</span> bytes
+Requests per second:    <span class="token number">15565.24</span> <span class="token punctuation">[</span><span class="token comment">#/sec] (mean)</span>
+Time per request:       <span class="token number">192.737</span> <span class="token punctuation">[</span>ms<span class="token punctuation">]</span> <span class="token punctuation">(</span>mean<span class="token punctuation">)</span>
+Time per request:       <span class="token number">0.064</span> <span class="token punctuation">[</span>ms<span class="token punctuation">]</span> <span class="token punctuation">(</span>mean, across all concurrent requests<span class="token punctuation">)</span>
+Transfer rate:          <span class="token number">540344.85</span> <span class="token punctuation">[</span>Kbytes/sec<span class="token punctuation">]</span> received
+
+Connection Times <span class="token punctuation">(</span>ms<span class="token punctuation">)</span>
+              min  mean<span class="token punctuation">[</span>+/-sd<span class="token punctuation">]</span> median   max
+Connect:        <span class="token number">0</span>   <span class="token number">55</span> <span class="token number">115.1</span>     <span class="token number">43</span>    <span class="token number">1107</span>
+Processing:    <span class="token number">57</span>  <span class="token number">133</span>  <span class="token number">23.3</span>    <span class="token number">136</span>     <span class="token number">190</span>
+Waiting:        <span class="token number">0</span>   <span class="token number">39</span>  <span class="token number">14.6</span>     <span class="token number">36</span>     <span class="token number">101</span>
+Total:        <span class="token number">110</span>  <span class="token number">188</span> <span class="token number">121.2</span>    <span class="token number">182</span>    <span class="token number">1290</span>
+
+Percentage of the requests served within a certain <span class="token function">time</span> <span class="token punctuation">(</span>ms<span class="token punctuation">)</span>
+  <span class="token number">50</span>%    <span class="token number">182</span>
+  <span class="token number">66</span>%    <span class="token number">188</span>
+  <span class="token number">75</span>%    <span class="token number">194</span>
+  <span class="token number">80</span>%    <span class="token number">198</span>
+  <span class="token number">90</span>%    <span class="token number">205</span>
+  <span class="token number">95</span>%    <span class="token number">212</span>
+  <span class="token number">98</span>%    <span class="token number">223</span>
+  <span class="token number">99</span>%   <span class="token number">1238</span>
+ <span class="token number">100</span>%   <span class="token number">1290</span> <span class="token punctuation">(</span>longest request<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="未调整的测试"><a href="#未调整的测试" class="headerlink" title="未调整的测试"></a>未调整的测试</h2><p>命令： <code>ab -c 3000 -n 50000 http://172.31.35.221:80/index.html</code></p>
+<h3 id="第一次-3"><a href="#第一次-3" class="headerlink" title="第一次"></a>第一次</h3><pre class="line-numbers language-none"><code class="language-none">Document Path:          &#x2F;index.html
+Document Length:        0 bytes
+
+Concurrency Level:      3000
+Time taken for tests:   3.217 seconds
+Complete requests:      50000
+Failed requests:        50000
+   (Connect: 0, Receive: 0, Length: 48496, Exceptions: 1504)
+Total transferred:      1723935808 bytes
+HTML transferred:       1712490752 bytes
+Requests per second:    15543.00 [#&#x2F;sec] (mean)
+Time per request:       193.013 [ms] (mean)
+Time per request:       0.064 [ms] (mean, across all concurrent requests)
+Transfer rate:          523342.50 [Kbytes&#x2F;sec] received
+
+Connection Times (ms)
+              min  mean[+&#x2F;-sd] median   max
+Connect:        0   50 115.9     37    1091
+Processing:    28  139  29.4    148     338
+Waiting:        0   45  13.6     48     249
+Total:         60  189 122.8    185    1287
+
+Percentage of the requests served within a certain time (ms)
+  50%    185
+  66%    195
+  75%    197
+  80%    198
+  90%    211
+  95%    216
+  98%    225
+  99%   1233
+ 100%   1287 (longest request)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>未调整的情况下直接就失败了。。 所有的请求最终都Failed了， 尝试调小。<br>命令： <code>ab -c 1897 -n 50000 http://172.31.35.221/index.html</code><br>可以接受的最大值是：</p>
+<pre class="line-numbers language-none"><code class="language-none">Document Path:          &#x2F;index.html
+Document Length:        35312 bytes
+
+Concurrency Level:      1897
+Time taken for tests:   3.206 seconds
+Complete requests:      50000
+Failed requests:        0
+Total transferred:      1777400000 bytes
+HTML transferred:       1765600000 bytes
+Requests per second:    15597.31 [#&#x2F;sec] (mean)
+Time per request:       121.624 [ms] (mean)
+Time per request:       0.064 [ms] (mean, across all concurrent requests)
+Transfer rate:          541458.01 [Kbytes&#x2F;sec] received
+
+Connection Times (ms)
+              min  mean[+&#x2F;-sd] median   max
+Connect:        0   30  86.9     23    1062
+Processing:    30   90  14.9     93     274
+Waiting:        0   30   8.6     30     225
+Total:         53  120  89.5    117    1180
+
+Percentage of the requests served within a certain time (ms)
+  50%    117
+  66%    121
+  75%    124
+  80%    125
+  90%    132
+  95%    140
+  98%    145
+  99%    147
+ 100%   1180 (longest request)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2022/12/27/Nginx-Performance-Tuning-Pre-md/">
+            https://liarlee.site/2022/12/27/Nginx-Performance-Tuning-Pre-md/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2022/12/29/bpftrace-record-md/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">bpftrace 使用以及理解 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2022/12/20/Docker-daemon-proxy-setting-md/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Docker守护进程配置代理 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-text">Nginx 性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sysctl-%E5%8F%82%E6%95%B0"><span class="toc-text">sysctl 参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx-Config"><span class="toc-text">Nginx Config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Systemd-Nginx-Service"><span class="toc-text">Systemd Nginx Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU-Isolate"><span class="toc-text">CPU Isolate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E4%B8%AD%E6%96%AD"><span class="toc-text">调整中断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%97%AD-irqbalance"><span class="toc-text">关闭 irqbalance</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%90%8E%E7%9A%84%E5%AE%9E%E4%BE%8B%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B"><span class="toc-text">调整后的实例结果如下</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1"><span class="toc-text">第三次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E6%9C%AA%E8%B0%83%E6%95%B4%E7%9A%84%E5%AE%9E%E4%BE%8B%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B"><span class="toc-text">并未调整的实例结果如下</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-1"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1-1"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1-1"><span class="toc-text">第三次</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%99%84%E5%8A%A0%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">附加静态页面之后的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">调整之后的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-2"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1-2"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1-2"><span class="toc-text">第三次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AA%E8%B0%83%E6%95%B4%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">未调整的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-3"><span class="toc-text">第一次</span></a></li></ol></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-text">Nginx 性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sysctl-%E5%8F%82%E6%95%B0"><span class="toc-text">sysctl 参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx-Config"><span class="toc-text">Nginx Config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Systemd-Nginx-Service"><span class="toc-text">Systemd Nginx Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU-Isolate"><span class="toc-text">CPU Isolate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E4%B8%AD%E6%96%AD"><span class="toc-text">调整中断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%97%AD-irqbalance"><span class="toc-text">关闭 irqbalance</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%90%8E%E7%9A%84%E5%AE%9E%E4%BE%8B%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B"><span class="toc-text">调整后的实例结果如下</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1"><span class="toc-text">第三次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E6%9C%AA%E8%B0%83%E6%95%B4%E7%9A%84%E5%AE%9E%E4%BE%8B%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B"><span class="toc-text">并未调整的实例结果如下</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-1"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1-1"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1-1"><span class="toc-text">第三次</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%99%84%E5%8A%A0%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">附加静态页面之后的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">调整之后的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-2"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1-2"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1-2"><span class="toc-text">第三次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AA%E8%B0%83%E6%95%B4%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">未调整的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-3"><span class="toc-text">第一次</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-text">Nginx 性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sysctl-%E5%8F%82%E6%95%B0"><span class="toc-text">sysctl 参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx-Config"><span class="toc-text">Nginx Config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Systemd-Nginx-Service"><span class="toc-text">Systemd Nginx Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU-Isolate"><span class="toc-text">CPU Isolate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E4%B8%AD%E6%96%AD"><span class="toc-text">调整中断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%97%AD-irqbalance"><span class="toc-text">关闭 irqbalance</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%90%8E%E7%9A%84%E5%AE%9E%E4%BE%8B%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B"><span class="toc-text">调整后的实例结果如下</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1"><span class="toc-text">第三次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E6%9C%AA%E8%B0%83%E6%95%B4%E7%9A%84%E5%AE%9E%E4%BE%8B%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B"><span class="toc-text">并未调整的实例结果如下</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-1"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1-1"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1-1"><span class="toc-text">第三次</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%99%84%E5%8A%A0%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">附加静态页面之后的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">调整之后的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-2"><span class="toc-text">第一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1-2"><span class="toc-text">第二次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1-2"><span class="toc-text">第三次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AA%E8%B0%83%E6%95%B4%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">未调整的测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1-3"><span class="toc-text">第一次</span></a></li></ol></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

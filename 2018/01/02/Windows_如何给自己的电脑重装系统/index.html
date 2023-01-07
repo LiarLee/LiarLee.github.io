@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>如何使用微软官方镜像重装系统</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="如何使用微软官方镜像重装系统">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2018/01/02/Windows_%E5%A6%82%E4%BD%95%E7%BB%99%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%B5%E8%84%91%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;注意，这是一个完整且详细的新手教程！&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2018-01-02">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Windows">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      如何使用微软官方镜像重装系统
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-01-02T11:25:50.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2018-01-02</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Windows/" 
+          class="post-meta-link">
+          Windows
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Windows/" 
+            class="post-meta-link">
+            Windows
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>注意，这是一个完整且详细的新手教程！</p>
+<span id="more"></span>
+
+<h1 id="一、写在最前面"><a href="#一、写在最前面" class="headerlink" title="一、写在最前面"></a>一、写在最前面</h1><p><strong>有几句有用的建议，在这里先写,能让你的电脑长久运行良好：</strong><br><strong>- 国内的软件普遍都带有广告，这不是Windows的锅</strong><br><strong>- 不要使用360系列的产品</strong> ，有人和我说企业版特别良心，但是我没用过，欢迎尝试后给我反馈<br><strong>- 所有软件都从官方网站下载，不要图方便使用软件升级助手，或者电脑管家</strong><br><strong>- 安装程序请仔细观察是否有捆绑软件，一定取消勾选的捆绑软件</strong><br><strong>- 注意观察安装程序界面的角落位置|折叠菜单|高级选项|更多，否则你的电脑一定会“自动”多很多奇怪的东西</strong><br><strong>- 如果可以尽量使用微软官方的系统，第三方系统或者Ghost系统确实方便了你的安装过程，但是你一定会被广告和捆绑的软件折磨的不要不要的～最重要的是，不能确定是否会有后门程序，谨慎使用Onekey-Ghost和YLMF</strong><br><strong>- 最后一点千万注意，系统优化类软件除非你清楚这个软件都更改了那些设置，否则不要使用，请相信没有任何一个第三方公司比微软更了解自己的产品</strong>  </p>
+<hr>
+<h1 id="二、环境及工具"><a href="#二、环境及工具" class="headerlink" title="二、环境及工具"></a>二、环境及工具</h1><ol>
+<li>可以正常使用的 <strong>计算机A</strong>（也就是可用的电脑）  </li>
+<li>需要重装系统的 <strong>计算机B</strong>（一定要保证开机出现Logo，如果开机Logo都没有，请确认计算机是否通电；检查显示器是否正常；如其他情况请送维修。）  </li>
+<li><strong>4G</strong> 空间以上的 <strong>空U盘</strong>  </li>
+<li><strong>Rufus</strong> (后面介绍这个工具的用途)<br><a target="_blank" rel="noopener" href="https://rufus.akeo.ie/?locale=zh_CN">Rufus-官方网站</a><br><a target="_blank" rel="noopener" href="https://rufus.akeo.ie/downloads/rufus-2.18.exe">Rufus-下载链接</a>  </li>
+<li><strong>微软官方</strong> 的系统镜像文件<br><a target="_blank" rel="noopener" href="http://msdn.itellyou.cn/">MSDNitellyou-搬运官方的非官方下载点</a><br><a href="ed2k://|file|cn_windows_10_multi-edition_version_1709_updated_dec_2017_x64_dvd_100406696.iso|5242322944|7D89E63B0C4B5881DBCDB042FF1EB8F3|/">MSDNitellyou-Windows10中文64位下载链接ed2k</a>  </li>
+<li>最重要的一点，最好有网，没有会麻烦些</li>
+</ol>
+<hr>
+<h1 id="三、原理部分"><a href="#三、原理部分" class="headerlink" title="三、原理部分"></a>三、原理部分</h1><h2 id="为计算机安装操作系统过程"><a href="#为计算机安装操作系统过程" class="headerlink" title="为计算机安装操作系统过程"></a>为计算机安装操作系统过程</h2><ul>
+<li>计算机的简要启动过程： 通电 - 硬件自检 - 寻找操作系统所在硬盘 - 启动操作系统  </li>
+<li>安装系统难理解的是在硬件自检之后，直接从U盘中读取系统安装程序，然后将系统这个大程序写入硬盘的相应分区内</li>
+</ul>
+<hr>
+<h1 id="四、开始安装"><a href="#四、开始安装" class="headerlink" title="四、开始安装"></a>四、开始安装</h1><h2 id="操作部分-–-计算机A"><a href="#操作部分-–-计算机A" class="headerlink" title="操作部分 – 计算机A"></a>操作部分 – 计算机A</h2><p>接下来的操作都是在计算机A下完成的~  </p>
+<h3 id="Rufus"><a href="#Rufus" class="headerlink" title="Rufus"></a>Rufus</h3><p>rufus是用来制作可启动U盘的一款绿色应用程序  </p>
+<h3 id="下载系统镜像文件"><a href="#下载系统镜像文件" class="headerlink" title="下载系统镜像文件"></a>下载系统镜像文件</h3><p>上面提到的系统镜像文件以Win10-1709为例,这是当前最新版本的Windows,下载之后应该是一个后缀名为.iso的文件<br><img src="https://i.loli.net/2018/01/03/5a4cb6ea2f54e.png" alt="系统镜像截图.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/03/5a4cb6ea2f54e.png" class="lozad post-image"></p>
+<h3 id="使用Rufus制作可启动U盘"><a href="#使用Rufus制作可启动U盘" class="headerlink" title="使用Rufus制作可启动U盘"></a>使用Rufus制作可启动U盘</h3><ol>
+<li>双击打开Rufus，插入U盘，确认最顶部设备已经识别你的空U盘<br><img src="https://i.loli.net/2018/01/03/5a4cb75d3e226.png" alt="rufus.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/03/5a4cb75d3e226.png" class="lozad post-image">  </li>
+<li>点击箭头指向的按钮，选择刚才下载的镜像文件<br><img src="https://i.loli.net/2018/01/03/5a4cb8c55439c.png" alt="选择镜像.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/03/5a4cb8c55439c.png" class="lozad post-image">  </li>
+<li>加载镜像文件，选项如图，选择开始<br><img src="https://i.loli.net/2018/01/03/5a4cbab28beaa.png" alt="点击开始.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/03/5a4cbab28beaa.png" class="lozad post-image">  </li>
+<li>点击确认<br><img src="https://i.loli.net/2018/01/03/5a4cbab2bc3b4.png" alt="点击确认.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/03/5a4cbab2bc3b4.png" class="lozad post-image">    </li>
+<li>开始写入 ， 等待<br><img src="https://i.loli.net/2018/01/03/5a4cbab28b960.png" alt="写入镜像.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/03/5a4cbab28b960.png" class="lozad post-image">  </li>
+<li>U盘制作成功<br><img src="https://i.loli.net/2018/01/03/5a4ce0da0574e.png" alt="GG.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/03/5a4ce0da0574e.png" class="lozad post-image"></li>
+</ol>
+<h2 id="操作部分-–-计算机B"><a href="#操作部分-–-计算机B" class="headerlink" title="操作部分 – 计算机B"></a>操作部分 – 计算机B</h2><p>下面的部分转移到重新安装系统的计算机B上面来了～  </p>
+<h3 id="从U盘中启动系统安装程序"><a href="#从U盘中启动系统安装程序" class="headerlink" title="从U盘中启动系统安装程序"></a>从U盘中启动系统安装程序</h3><ol>
+<li>开机按下电源按键之后，请反复按下F12，直到屏幕变成这个样子～<br><a target="_blank" rel="noopener" href="https://i.loli.net/2018/01/03/5a4ce554b6087.jpg"><img src="https://i.loli.net/2018/01/03/5a4ce554b6087.jpg" alt="WeChat Image_20171229111936.jpg" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/03/5a4ce554b6087.jpg" class="lozad post-image"></a>  </li>
+<li>选择引导设备菜单，请选择刚刚制作好的U盘，一般设备名称会是USB……或者Sandisk……或者Kingston……这类的名字，或者如上图–通用闪存设备，回车选择后安装程序自行启动<br><img src="https://i.loli.net/2018/01/04/5a4dfb5b5c97e.png" alt="1.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5b5c97e.png" class="lozad post-image">  </li>
+<li>选择语言，没什么特殊要求就中文就可以了，当然如果需要请下载EN版本的镜像，或者多国语言版，在下拉菜单中选择需要的语言<br><img src="https://i.loli.net/2018/01/04/5a4dfb5b6c842.png" alt="2.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5b6c842.png" class="lozad post-image">  </li>
+<li>点击现在安装…<br><img src="https://i.loli.net/2018/01/04/5a4dfdae8fab5.png" alt="3.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfdae8fab5.png" class="lozad post-image">   </li>
+<li>稍等<br><img src="https://i.loli.net/2018/01/04/5a4dfb5b71520.png" alt="4.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5b71520.png" class="lozad post-image">  </li>
+<li>这里有两种情况：</li>
+</ol>
+<ul>
+<li>有密钥的情况请直接输入，系统会被激活，安装完成之后就是官方正版的系统；  </li>
+<li>没有密钥，只是需要在系统安装完成之后再次输入密钥或者安装一个补丁就好；</li>
+</ul>
+<p>  <img src="https://i.loli.net/2018/01/04/5a4dfb5b7e555.png" alt="5.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5b7e555.png" class="lozad post-image">  </p>
+<ol>
+<li>这个位置就很随意了，选择你需要的版本，我安装的是一个WIN10专业版<br><img src="https://i.loli.net/2018/01/04/5a4dfb5b86205.png" alt="6.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5b86205.png" class="lozad post-image">  </li>
+<li>只能接受，接受才能下一步<br><img src="https://i.loli.net/2018/01/04/5a4dfb5b8612e.png" alt="7.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5b8612e.png" class="lozad post-image">  </li>
+<li>这里也是两种情况：</li>
+</ol>
+<ul>
+<li>如果你的计算机中本身有WIN7、8、8.1，可以选择直接升级，但是升级之后会有Windows Old文件夹占用大量C盘空间，清理会很麻烦；</li>
+<li>如果就已经打算重新安装了，<strong>请确认数据已经备份或者无用</strong>，之后这里选择自定义，进入下一步；</li>
+</ul>
+<p>  <img src="https://i.loli.net/2018/01/04/5a4dfb5ba43a3.png" alt="8.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5ba43a3.png" class="lozad post-image">  </p>
+<ol>
+<li><strong>Note:</strong> 如果你的计算机中有重要数据请自行备份，</li>
+</ol>
+<p>  <strong>- 下面开始进行的操作会直接修改硬盘的内容！！！</strong><br>  <strong>- 下面开始进行的操作会直接修改硬盘的内容！！！</strong><br>  <strong>- 下面开始进行的操作会直接修改硬盘的内容！！！</strong>   </p>
+<p>  硬盘分区关键词：<br>  <strong>驱动器0</strong> 是指物理硬盘编号0，有几块硬盘就顺序向下编号0&#x2F;1&#x2F;2&#x2F;3…<br>  <strong>分区1</strong> 一般是指物理硬盘的第一个分区，通常对应了CDEF不同的字母，同样有几个分区就顺序向下编号1&#x2F;2&#x2F;3…<br>  <strong>主分区</strong> 是我们在系统内使用的硬盘分区，主分区从上到下分别是CDEF盘，图中只有一个主分区，所以我的系统安装完成之后只有一个C盘  </p>
+<p>  图示数字说明:<br>  1-<strong>删除</strong> 硬盘分区会让当前的硬盘空间释放为可用空间，用于打破之前划分的分区，比如可以将分区CDEF的EF删除，合并成新的E盘  </p>
+<p>  2-<strong>格式化</strong> 格式化是清空当前选择分区内的所有数据，所有分区我们都需要格式化  </p>
+<p>  3-<strong>新建</strong> 新建分区需要我们指定大小，比如新建的C盘我希望有100G，那么我需要在新建之后输入100*1024M&#x3D;102400，这样就新建了100G的新分区   </p>
+<p>  4-<strong>类型</strong> 中，我们只需要修改和关注主分区即可,其他保留就可以  </p>
+<p>  <strong>Note:</strong> 点击下一步之前，一定确认我们选择的是 <strong>由上到下的第一个主分区</strong> ，因为系统会安装到高亮选择的主分区内，请 <strong>检查</strong> 之后在点击下一步<br><img src="https://i.loli.net/2018/01/04/5a4dfb5ba4401.png" alt="9.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5ba4401.png" class="lozad post-image"></p>
+<ol>
+<li><p>点了 <strong>下一步</strong> 就开始安装咯， <strong>之前的已经没有办法再更改了</strong> ，除非从1开始再来一次…..<br><img src="https://i.loli.net/2018/01/04/5a4dfb5ba43e3.png" alt="10.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2018/01/04/5a4dfb5ba43e3.png" class="lozad post-image">  </p>
+</li>
+<li><p>结束了，等待它自动重启看看全新的系统吧～</p>
+</li>
+</ol>
+<hr>
+<h1 id="五、配置新系统"><a href="#五、配置新系统" class="headerlink" title="五、配置新系统"></a>五、配置新系统</h1><h2 id="激活"><a href="#激活" class="headerlink" title="激活"></a>激活</h2><p> <strong>淘宝</strong> 激活码 很便宜的  </p>
+<h2 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h2><p><strong>官方网站</strong> 或者 <strong>驱动精灵</strong><br>最好不用鲁大师和360，真的  </p>
+<h2 id="其他选项"><a href="#其他选项" class="headerlink" title="其他选项"></a>其他选项</h2><p>待续吧….累了…</p>
+<hr>
+<h1 id="六、软件推荐"><a href="#六、软件推荐" class="headerlink" title="六、软件推荐"></a>六、软件推荐</h1><p>微信QQ这些都是必备的，我就不说了……说一些好用的软件但是少有人知道的……我平时不安装电脑管家，杀毒软件就一个小红伞，如果真的不放心会在加一个火绒，基本上够了，小红伞对硬盘要求还挺高的，如果觉得安装小红伞卡，就安装小A吧，Avast……  </p>
+<p>软件清单如下：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://notepad-plus-plus.org/">Notepad++</a> 替代Windows记事本的最佳方案，支持代码高亮哦～  </li>
+<li><a target="_blank" rel="noopener" href="http://potplayer.daum.net/?lang=zh_CN">Potplayer</a> Windows下最简单好用的播放器～  </li>
+<li><a target="_blank" rel="noopener" href="http://www.voidtools.com/">Everything</a> Windows搜索神器～  </li>
+<li><a target="_blank" rel="noopener" href="http://www.firefox.com.cn/">Firefox</a> 浏览器……我不知道该怎么说，又爱又恨吧～  </li>
+<li><a target="_blank" rel="noopener" href="https://www.piriform.com/CCLEANER">CCleaner</a> Windows下的老牌清理软件….还不错～</li>
+<li><a href="ed2k://|file|cn_office_professional_plus_2016_x86_x64_dvd_6969182.iso|2588266496|27EEA4FE4BB13CD0ECCDFC24167F9E01|/">Office 2016 - 全家桶 ed2k</a> Office2016 ed2k链接，请直接迅雷下载～</li>
+<li><a target="_blank" rel="noopener" href="http://www.bandisoft.com/bandizip/">Bandizip</a> 美观友好的解压缩软件，省心免费～</li>
+<li><a target="_blank" rel="noopener" href="http://www.mactype.net/">Mactype</a> Windows字体渲染优化，解救windows默认的字体渲染，配置省事，效果明显～</li>
+</ul>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2018/01/02/Windows_%E5%A6%82%E4%BD%95%E7%BB%99%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%B5%E8%84%91%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F/">
+            https://liarlee.site/2018/01/02/Windows_%E5%A6%82%E4%BD%95%E7%BB%99%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%B5%E8%84%91%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2018/01/08/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python_%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-1/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Python入门笔记 (一) </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2017/12/28/Linux/Linux_Firefox-Openh264/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Firefox-Openh264的问题 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%86%99%E5%9C%A8%E6%9C%80%E5%89%8D%E9%9D%A2"><span class="toc-text">一、写在最前面</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7"><span class="toc-text">二、环境及工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8E%9F%E7%90%86%E9%83%A8%E5%88%86"><span class="toc-text">三、原理部分</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E8%A3%85%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%87%E7%A8%8B"><span class="toc-text">为计算机安装操作系统过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-text">四、开始安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E9%83%A8%E5%88%86-%E2%80%93-%E8%AE%A1%E7%AE%97%E6%9C%BAA"><span class="toc-text">操作部分 – 计算机A</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rufus"><span class="toc-text">Rufus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-text">下载系统镜像文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Rufus%E5%88%B6%E4%BD%9C%E5%8F%AF%E5%90%AF%E5%8A%A8U%E7%9B%98"><span class="toc-text">使用Rufus制作可启动U盘</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E9%83%A8%E5%88%86-%E2%80%93-%E8%AE%A1%E7%AE%97%E6%9C%BAB"><span class="toc-text">操作部分 – 计算机B</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8EU%E7%9B%98%E4%B8%AD%E5%90%AF%E5%8A%A8%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F"><span class="toc-text">从U盘中启动系统安装程序</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="toc-text">五、配置新系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BF%80%E6%B4%BB"><span class="toc-text">激活</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%A9%B1%E5%8A%A8"><span class="toc-text">安装驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%80%89%E9%A1%B9"><span class="toc-text">其他选项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90"><span class="toc-text">六、软件推荐</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%86%99%E5%9C%A8%E6%9C%80%E5%89%8D%E9%9D%A2"><span class="toc-text">一、写在最前面</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7"><span class="toc-text">二、环境及工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8E%9F%E7%90%86%E9%83%A8%E5%88%86"><span class="toc-text">三、原理部分</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E8%A3%85%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%87%E7%A8%8B"><span class="toc-text">为计算机安装操作系统过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-text">四、开始安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E9%83%A8%E5%88%86-%E2%80%93-%E8%AE%A1%E7%AE%97%E6%9C%BAA"><span class="toc-text">操作部分 – 计算机A</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rufus"><span class="toc-text">Rufus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-text">下载系统镜像文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Rufus%E5%88%B6%E4%BD%9C%E5%8F%AF%E5%90%AF%E5%8A%A8U%E7%9B%98"><span class="toc-text">使用Rufus制作可启动U盘</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E9%83%A8%E5%88%86-%E2%80%93-%E8%AE%A1%E7%AE%97%E6%9C%BAB"><span class="toc-text">操作部分 – 计算机B</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8EU%E7%9B%98%E4%B8%AD%E5%90%AF%E5%8A%A8%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F"><span class="toc-text">从U盘中启动系统安装程序</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="toc-text">五、配置新系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BF%80%E6%B4%BB"><span class="toc-text">激活</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%A9%B1%E5%8A%A8"><span class="toc-text">安装驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%80%89%E9%A1%B9"><span class="toc-text">其他选项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90"><span class="toc-text">六、软件推荐</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%86%99%E5%9C%A8%E6%9C%80%E5%89%8D%E9%9D%A2"><span class="toc-text">一、写在最前面</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7"><span class="toc-text">二、环境及工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8E%9F%E7%90%86%E9%83%A8%E5%88%86"><span class="toc-text">三、原理部分</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E8%A3%85%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%87%E7%A8%8B"><span class="toc-text">为计算机安装操作系统过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-text">四、开始安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E9%83%A8%E5%88%86-%E2%80%93-%E8%AE%A1%E7%AE%97%E6%9C%BAA"><span class="toc-text">操作部分 – 计算机A</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rufus"><span class="toc-text">Rufus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-text">下载系统镜像文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Rufus%E5%88%B6%E4%BD%9C%E5%8F%AF%E5%90%AF%E5%8A%A8U%E7%9B%98"><span class="toc-text">使用Rufus制作可启动U盘</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E9%83%A8%E5%88%86-%E2%80%93-%E8%AE%A1%E7%AE%97%E6%9C%BAB"><span class="toc-text">操作部分 – 计算机B</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8EU%E7%9B%98%E4%B8%AD%E5%90%AF%E5%8A%A8%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F"><span class="toc-text">从U盘中启动系统安装程序</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="toc-text">五、配置新系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BF%80%E6%B4%BB"><span class="toc-text">激活</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%A9%B1%E5%8A%A8"><span class="toc-text">安装驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%80%89%E9%A1%B9"><span class="toc-text">其他选项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90"><span class="toc-text">六、软件推荐</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

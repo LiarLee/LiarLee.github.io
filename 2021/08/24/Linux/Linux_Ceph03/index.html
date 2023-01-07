@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Ceph Cluster 03 - CephFS</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Ceph Cluster 03 - CephFS">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2021/08/24/Linux/Linux_Ceph03/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;ceph笔记03&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Ceph">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Ceph Cluster 03 - CephFS
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-24T14:29:26.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Ceph/" 
+            class="post-meta-link">
+            Ceph
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>ceph笔记03</p>
+<span id="more"></span>
+
+<h1 id="cephfs的使用"><a href="#cephfs的使用" class="headerlink" title="cephfs的使用"></a>cephfs的使用</h1><h2 id="cephfs的使用条件"><a href="#cephfs的使用条件" class="headerlink" title="cephfs的使用条件"></a>cephfs的使用条件</h2><ol>
+<li>当我们需要多个服务来挂载和实时的同步的时候， 使用到CEPHFS，可以实现文件系统的共享。内核里面现在这个时间已经内置cephfs的挂载模块， 可以直接挂载不需要安装。</li>
+<li>cephfs运行需要MDS服务，用来存储缓存的文件信息。总体需要创建两个存储池，单独创建一个存储MDS信息的存储池， 同时需要创建一个数据池来提供存储空间。</li>
+<li>启用mds的服务 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ceph orch mds <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>创建ceph的存储池<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ceph mds <span class="token function">stat</span>
+<span class="token comment"># 创建一个cephfs的metadata池</span>
+ceph osd pool create metadata <span class="token number">32</span> <span class="token number">32</span> 
+<span class="token comment"># 创建一个cephfs的data池</span>
+ceph osd pool create cephfsdata <span class="token number">64</span> <span class="token number">64</span> 
+<span class="token comment"># 创建ceph的状态</span>
+ceph osd pool <span class="token function">ls</span> 
+ceph -s 
+<span class="token comment"># 创建cephfs的文件系统</span>
+ceph fs new defaultfs metadata cephfsdata
+
+<span class="token comment"># 新的版本里面已经不需要手动创建mds和两个对应的存储池了， 只是需要一条命令就可以自动创建。</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph fs volume create test</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph fs volume ls</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph mds stat</span>
+<span class="token comment"># 需要提前获取挂载的Token： </span>
+<span class="token punctuation">[</span>root@HaydenArchDesktop ceph<span class="token punctuation">]</span><span class="token comment"># sudo scp root@ceph01:/etc/ceph/ceph.client.admin.keyring /etc/ceph/</span>
+<span class="token punctuation">[</span>root@HaydenArchDesktop ceph<span class="token punctuation">]</span><span class="token comment"># mount -t ceph :/ /mnt -o name=admin</span>
+<span class="token punctuation">[</span>root@HaydenArchDesktop mnt<span class="token punctuation">]</span><span class="token comment"># mount | grep ceph</span>
+<span class="token number">192.168</span>.31.11:6789,192.168.31.12:6789,192.168.31.13:6789:/ on /mnt <span class="token builtin class-name">type</span> ceph <span class="token punctuation">(</span>rw,relatime,name<span class="token operator">=</span>admin,secret<span class="token operator">=</span><span class="token operator">&lt;</span>hidden<span class="token operator">></span>,acl<span class="token punctuation">)</span>
+
+<span class="token comment">#</span>
+<span class="token comment"># journalctl -f > /mnt/journal.log   </span>
+<span class="token comment"># 查看cephfs的写入文件的动作过程。 </span>
+<span class="token comment"># 同时使用 tail -f 在另一个窗口中查看文件的内容。 测试写入和查看内容的差距。 </span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h2 id="用户权限"><a href="#用户权限" class="headerlink" title="用户权限"></a>用户权限</h2><p>MDS可以启动多个实例，多个实例会自动来负载不同资源的文件元数据的缓存。<br>客户端通过MON节点进行授权 和 获取MDS的的位置。<br>MDS现在最新的版本默认已经是一主一备， 自动会生成高可用的模式。（之前的手动部署多个MDS服务器， 然后指定MDS的角色）</p>
+<h3 id="创建一个普通用户来进行身份的验证"><a href="#创建一个普通用户来进行身份的验证" class="headerlink" title="创建一个普通用户来进行身份的验证"></a>创建一个普通用户来进行身份的验证</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建一个测试的用户</span>
+ceph auth <span class="token function">add</span> client.testuser mon <span class="token string">'allow r'</span> mds <span class="token string">'allow rw'</span> osd <span class="token string">'allow rwx pool=cephfsdata'</span>
+<span class="token comment"># 测试所建立的用户的权限，获取认证的keyring</span>
+ceph auth get client.testuser
+<span class="token comment"># 导出用户的Keyring， 用来做集群的校验</span>
+ceph auth get client.testuser -o ceph.client.testuser.keyring
+<span class="token comment"># 导出用户的key ， Kubernetes的挂载会使用到</span>
+ceph auth print-key client.testuser <span class="token operator">></span> testuser.key
+<span class="token comment"># 验证用户是否可以获取到集群的状态</span>
+ceph --user testuser -s 
+
+<span class="token comment"># 将挂载点添加到fstab自动开机挂载</span>
+MON01:6789,MON02:6789,<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>.:/ /mnt ceph defaults,name<span class="token operator">=</span>testuser,secretfile<span class="token operator">=</span>/etc/ceph/testuser.key,_netdev <span class="token number">0</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Dashboard权限"><a href="#Dashboard权限" class="headerlink" title="Dashboard权限"></a>Dashboard权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启用或者禁用账户</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph dashboard ac-user-enable admin</span>
+
+<span class="token comment"># 重置Dashboard用户的密码</span>
+<span class="token comment"># Old Version</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph dashboard set-login-credentials admin -i /etc/ceph/dashboard_password</span>
+
+<span class="token comment"># New version command.</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph dashboard -h | grep ac-user</span>
+dashboard ac-user-add-roles <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>roles<span class="token operator">></span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>         Add roles to user
+dashboard ac-user-create <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>rolename<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>name<span class="token operator">></span><span class="token punctuation">]</span>   Create a user. Password <span class="token builtin class-name">read</span> from -i <span class="token operator">&lt;</span>file<span class="token operator">></span>
+dashboard ac-user-del-roles <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>roles<span class="token operator">></span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>         Delete roles from user
+dashboard ac-user-delete <span class="token punctuation">[</span><span class="token operator">&lt;</span>username<span class="token operator">></span><span class="token punctuation">]</span>                       Delete user
+dashboard ac-user-disable <span class="token punctuation">[</span><span class="token operator">&lt;</span>username<span class="token operator">></span><span class="token punctuation">]</span>                      Disable a user
+dashboard ac-user-enable <span class="token punctuation">[</span><span class="token operator">&lt;</span>username<span class="token operator">></span><span class="token punctuation">]</span>                       Enable a user
+dashboard ac-user-set-info <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>email<span class="token operator">></span><span class="token punctuation">]</span>      Set user info
+dashboard ac-user-set-password <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span>--force-         Set user password from -i <span class="token operator">&lt;</span>file<span class="token operator">></span>
+dashboard ac-user-set-password-hash <span class="token operator">&lt;</span>username<span class="token operator">></span>              Set user password bcrypt <span class="token builtin class-name">hash</span> from -i <span class="token operator">&lt;</span>file<span class="token operator">></span>
+dashboard ac-user-set-roles <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>roles<span class="token operator">></span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>         Set user roles
+dashboard ac-user-show <span class="token punctuation">[</span><span class="token operator">&lt;</span>username<span class="token operator">></span><span class="token punctuation">]</span>                         Show user info<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="MDS-高可用"><a href="#MDS-高可用" class="headerlink" title="MDS 高可用"></a>MDS 高可用</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 提升默认的主节点的数量， 来提高MDS服务的吞吐量</span>
+ceph fs <span class="token builtin class-name">set</span> defaultfs max_mds <span class="token number">2</span> 
+ceph fs get defaultfs
+<span class="token comment"># 变成两主两备， （设置Rank）</span>
+<span class="token comment"># 参数： mds_standby_replay true </span>
+         mds_standby_for_name: MDS_NAME
+         mds_standby_for_rank: 备份指定级别的mds
+         mds_standby_for_fscid: 指定文件系统ID，会联合rank配置生效，如果指定了rank就是指定文件系统的rank会进行主备，如果未指定就是指定文件系统的所有Rank。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol>
+<li>如果是一对一的高可用 ， 需要对每个mds进行独立的配置。<br>配置样例： <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置的结果是mds1主， mds2 备； mds3 主， mds4 备.</span>
+<span class="token punctuation">[</span>mds.ceph-mds1<span class="token punctuation">]</span>
+mds_standby_replay <span class="token operator">=</span> <span class="token boolean">true</span> 
+mds_standby_for_name <span class="token operator">=</span> ceph-mds2
+mds_standby_for_fscid <span class="token operator">=</span> defaultfs 
+
+<span class="token punctuation">[</span>mds.ceph-mds3<span class="token punctuation">]</span>
+mds_standby_replay <span class="token operator">=</span> <span class="token boolean">true</span>
+mds_standby_for_name <span class="token operator">=</span> ceph-mds4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2021/08/24/Linux/Linux_Ceph03/">
+            https://liarlee.site/2021/08/24/Linux/Linux_Ceph03/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2021/08/26/Linux/Linux_RangerUsage/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Linux_Ranger_Usage </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2021/08/23/Linux/Linux_Ceph02/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Ceph Cluster 02 - OSD/RBD </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">cephfs的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">cephfs的使用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90"><span class="toc-text">用户权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%9D%A5%E8%BF%9B%E8%A1%8C%E8%BA%AB%E4%BB%BD%E7%9A%84%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个普通用户来进行身份的验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dashboard%E6%9D%83%E9%99%90"><span class="toc-text">Dashboard权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MDS-%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-text">MDS 高可用</span></a></li></ol></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">cephfs的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">cephfs的使用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90"><span class="toc-text">用户权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%9D%A5%E8%BF%9B%E8%A1%8C%E8%BA%AB%E4%BB%BD%E7%9A%84%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个普通用户来进行身份的验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dashboard%E6%9D%83%E9%99%90"><span class="toc-text">Dashboard权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MDS-%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-text">MDS 高可用</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">cephfs的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">cephfs的使用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90"><span class="toc-text">用户权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%9D%A5%E8%BF%9B%E8%A1%8C%E8%BA%AB%E4%BB%BD%E7%9A%84%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个普通用户来进行身份的验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dashboard%E6%9D%83%E9%99%90"><span class="toc-text">Dashboard权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MDS-%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-text">MDS 高可用</span></a></li></ol></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

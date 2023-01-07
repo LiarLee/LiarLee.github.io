@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Sysctl 云平台参数的收集以及一部分解释</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Sysctl 云平台参数的收集以及一部分解释">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2022/04/19/Linux/Linux_Sysctl/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;一些关于sysctl参数设置的收集和解释。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2022-04-19">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Linux">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Sysctl 云平台参数的收集以及一部分解释
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2022-04-19T09:45:39.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2022-04-19</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2.7k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Linux/" 
+            class="post-meta-link">
+            Linux
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>一些关于sysctl参数设置的收集和解释。</p>
+<span id="more"></span>
+
+<h1 id="x2F-etc-x2F-sysctl-d-x2F-00-defaults-conf"><a href="#x2F-etc-x2F-sysctl-d-x2F-00-defaults-conf" class="headerlink" title="&#x2F;etc&#x2F;sysctl.d&#x2F;00-defaults.conf"></a>&#x2F;etc&#x2F;sysctl.d&#x2F;00-defaults.conf</h1><h2 id="kernel-printk"><a href="#kernel-printk" class="headerlink" title="kernel.printk"></a>kernel.printk</h2><p>输出内核日志信息的级别。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 映射到的proc文件系统位置 - /proc/sys/kernel/printk</span>
+<span class="token comment"># Maximize console logging level for kernel printk messages</span>
+kernel.printk <span class="token operator">=</span> <span class="token number">8</span> <span class="token number">4</span> <span class="token number">1</span> <span class="token number">7</span>
+
+<span class="token comment"># (1) 控制台日志级别：优先级高于该值的消息将被打印至控制台。</span>
+<span class="token comment"># (2) 缺省的消息日志级别：将用该值来打印没有优先级的消息。</span>
+<span class="token comment"># (3) 最低的控制台日志级别：控制台日志级别可能被设置的最小值。</span>
+<span class="token comment"># (4) 缺省的控制台：控制台日志级别的缺省值。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>内核中共提供了八种不同的日志级别，在 linux&#x2F;kernel.h 中有相应的宏对应。</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#define KERN_EMERG  &quot;&lt;0&gt;&quot;   &#x2F;* systemis unusable *&#x2F;
+#define KERN_ALERT  &quot;&lt;1&gt;&quot;   &#x2F;* actionmust be taken immediately *&#x2F;
+#define KERN_CRIT    &quot;&lt;2&gt;&quot;   &#x2F;*critical conditions *&#x2F;
+#define KERN_ERR     &quot;&lt;3&gt;&quot;   &#x2F;* errorconditions *&#x2F;
+#define KERN_WARNING &quot;&lt;4&gt;&quot;   &#x2F;* warning conditions *&#x2F;
+#define KERN_NOTICE  &quot;&lt;5&gt;&quot;   &#x2F;* normalbut significant *&#x2F;
+#define KERN_INFO    &quot;&lt;6&gt;&quot;   &#x2F;*informational *&#x2F;
+#define KERN_DEBUG   &quot;&lt;7&gt;&quot;   &#x2F;*debug-level messages *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="kernel-panic"><a href="#kernel-panic" class="headerlink" title="kernel.panic"></a>kernel.panic</h2><p>设置内核的Panic之后自动重启</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Wait 30 seconds and then reboot</span>
+kernel.panic <span class="token operator">=</span> <span class="token number">30</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="neigh-default-gc"><a href="#neigh-default-gc" class="headerlink" title="neigh.default.gc"></a>neigh.default.gc</h2><p>设置arp缓存相关的参数<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/94413312">https://zhuanlan.zhihu.com/p/94413312</a></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Allow neighbor cache entries to expire even when the cache is not full</span>
+net.ipv4.neigh.default.gc_thresh1 <span class="token operator">=</span> <span class="token number">0</span>
+net.ipv6.neigh.default.gc_thresh1 <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token comment"># Avoid neighbor table contention in large subnets</span>
+net.ipv4.neigh.default.gc_thresh2 <span class="token operator">=</span> <span class="token number">15360</span>
+net.ipv6.neigh.default.gc_thresh2 <span class="token operator">=</span> <span class="token number">15360</span>
+net.ipv4.neigh.default.gc_thresh3 <span class="token operator">=</span> <span class="token number">16384</span>
+net.ipv6.neigh.default.gc_thresh3 <span class="token operator">=</span> <span class="token number">16384</span>
+
+<span class="token comment"># gc_thresh1</span>
+存在于ARP高速缓存中的最少层数，如果少于这个数，
+垃圾收集器将不会运行。
+缺省值是128。
+<span class="token comment"># gc_thresh2</span>
+保存在 ARP 高速缓存中的最多的记录软限制。
+垃圾收集器在开始收集前，允许记录数超过这个数字 <span class="token number">5</span> 秒。
+缺省值是 <span class="token number">512</span>。
+<span class="token comment"># gc_thresh3</span>
+保存在 ARP 高速缓存中的最多记录的硬限制，
+一旦高速缓存中的数目高于此，
+垃圾收集器将马上运行。
+缺省值是1024。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="x2F-etc-x2F-sysctl-d-x2F-99-amazon-conf"><a href="#x2F-etc-x2F-sysctl-d-x2F-99-amazon-conf" class="headerlink" title="&#x2F;etc&#x2F;sysctl.d&#x2F;99-amazon.conf"></a>&#x2F;etc&#x2F;sysctl.d&#x2F;99-amazon.conf</h1><h2 id="sched-autogroup-enabled"><a href="#sched-autogroup-enabled" class="headerlink" title="sched_autogroup_enabled"></a>sched_autogroup_enabled</h2><p>通过CFS分组提高了桌面环境的性能表现。这个小小的补丁仅为 Linux Kernel 增加了 233 行代码，却将高负荷下桌面响应最大延迟降低到原先的十分之一，平均延迟降低到六十分之一！该补丁的作用是为每个 TTY 动态地创建任务分组。(<a target="_blank" rel="noopener" href="https://linuxtoy.org/archives/small-patch-but-huge-improvement.html">https://linuxtoy.org/archives/small-patch-but-huge-improvement.html</a>)</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># https://cateee.net/lkddb/web-lkddb/SCHED_AUTOGROUP.html</span>
+<span class="token comment"># https://www.postgresql.org/message-id/50E4AAB1.9040902@optionshouse.com</span>
+<span class="token comment"># This setting enables better interactivity for desktop workloads and not</span>
+<span class="token comment"># suitable for many server workloads.</span>
+<span class="token comment"># 启用后，内核会创建任务组来优化桌面程序的调度。它将把占用大量资源的应用程序放在它们自己的任务组，根据PostgreSQL的测试， 关闭这个选项会将数据库的性能提高30%（上面的Link）。 在后台的服务进程中是提高性能的选项。</span>
+<span class="token comment"># 0：禁止</span>
+<span class="token comment"># 1：开启</span>
+
+kernel.sched_autogroup_enabled<span class="token operator">=</span><span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="x2F-usr-x2F-lib-x2F-sysctl-d-x2F-00-system-conf"><a href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-00-system-conf" class="headerlink" title="&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;00-system.conf"></a>&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;00-system.conf</h1><h2 id="bridge-nf-call-iptables"><a href="#bridge-nf-call-iptables" class="headerlink" title="bridge-nf-call-iptables"></a>bridge-nf-call-iptables</h2><p>网桥设备关闭netfilter模块，开关需要按需求来指定。<br>关闭这个模块会在网桥2层可以转发的时候直接转发， 不会走三层进行数据传输，也就是说不会过Iptables。<br>Kubernetes需要开启这个参数的原因是： <a target="_blank" rel="noopener" href="https://imroc.cc/post/202105/why-enable-bridge-nf-call-iptables/%EF%BC%8C">https://imroc.cc/post/202105/why-enable-bridge-nf-call-iptables/，</a> 修复了Coredns不定期解析失败的问题。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Disable netfilter on bridges.</span>
+net.bridge.bridge-nf-call-ip6tables <span class="token operator">=</span> <span class="token number">0</span>
+net.bridge.bridge-nf-call-iptables <span class="token operator">=</span> <span class="token number">0</span>
+net.bridge.bridge-nf-call-arptables <span class="token operator">=</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="x2F-usr-x2F-lib-x2F-sysctl-d-x2F-10-default-yama-scope-conf"><a href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-10-default-yama-scope-conf" class="headerlink" title="&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;10-default-yama-scope.conf"></a>&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;10-default-yama-scope.conf</h1><h2 id="yama"><a href="#yama" class="headerlink" title="yama"></a>yama</h2><p>Yama is a Linux Security Module that collects system-wide DAC security protections that are not handled by the core kernel itself. This is selectable at build-time with CONFIG_SECURITY_YAMA, and can be controlled at run-time through sysctls in &#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;yama  </p>
+<p><a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html">https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html</a> </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@ip-172-31-11-235 sysctl.d<span class="token punctuation">]</span>$ <span class="token function">cat</span> <span class="token number">10</span>-default-yama-scope.conf
+<span class="token comment"># When yama is enabled in the kernel it might be used to filter any user</span>
+<span class="token comment"># space access which requires PTRACE_MODE_ATTACH like ptrace attach, access</span>
+<span class="token comment"># to /proc/PID/&#123;mem,personality,stack,syscall&#125;, and the syscalls</span>
+<span class="token comment"># process_vm_readv and process_vm_writev which are used for interprocess</span>
+<span class="token comment"># services, communication and introspection (like synchronisation, signaling,</span>
+<span class="token comment"># debugging, tracing and profiling) of processes.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Usage of ptrace attach is restricted by normal user permissions. Normal</span>
+<span class="token comment"># unprivileged processes cannot interact through ptrace with processes</span>
+<span class="token comment"># that they cannot send signals to or processes that are running set-uid</span>
+<span class="token comment"># or set-gid.</span>
+<span class="token comment">#</span>
+<span class="token comment"># yama ptrace scope can be used to reduce these permissions even more.</span>
+<span class="token comment"># This should normally not be done because it will break various programs</span>
+<span class="token comment"># relying on the default ptrace security restrictions. But can be used</span>
+<span class="token comment"># if you don't have any other way to separate processes in their own</span>
+<span class="token comment"># domains. A different way to restrict ptrace is to set the selinux</span>
+<span class="token comment"># deny_ptrace boolean. Both mechanisms will break some programs relying</span>
+<span class="token comment"># on the ptrace system call and might force users to elevate their</span>
+<span class="token comment"># priviliges to root to do their work.</span>
+<span class="token comment">#</span>
+<span class="token comment"># For more information see Documentation/security/Yama.txt in the kernel</span>
+<span class="token comment"># sources. Which also describes the defaults when CONFIG_SECURITY_YAMA</span>
+<span class="token comment"># is enabled in a kernel build (currently 1 for ptrace_scope).</span>
+<span class="token comment">#</span>
+<span class="token comment"># This runtime kernel parameter can be set to the following options:</span>
+<span class="token comment"># (Note that setting this to anything except zero will break programs!)</span>
+<span class="token comment">#</span>
+<span class="token comment"># 0 - Default attach security permissions.</span>
+<span class="token comment"># 1 - Restricted attach. Only child processes plus normal permissions.</span>
+<span class="token comment"># 2 - Admin-only attach. Only executables with CAP_SYS_PTRACE.</span>
+<span class="token comment"># 3 - No attach. No process may call ptrace at all. Irrevocable.</span>
+<span class="token comment">#</span>
+kernel.yama.ptrace_scope <span class="token operator">=</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="x2F-usr-x2F-lib-x2F-sysctl-d-x2F-50-default-conf"><a href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-50-default-conf" class="headerlink" title="&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;50-default.conf"></a>&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;50-default.conf</h1><h2 id="sysrq"><a href="#sysrq" class="headerlink" title="sysrq"></a>sysrq</h2><p>是一个Magic Key的设置，无论内核当前在做什么都会立刻响应这个MagicKey。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">
+<span class="token comment">#  This file is part of systemd.</span>
+<span class="token comment">#</span>
+<span class="token comment">#  systemd is free software; you can redistribute it and/or modify it</span>
+<span class="token comment">#  under the terms of the GNU Lesser General Public License as published by</span>
+<span class="token comment">#  the Free Software Foundation; either version 2.1 of the License, or</span>
+<span class="token comment">#  (at your option) any later version.</span>
+
+<span class="token comment"># See sysctl.d(5) and core(5) for for documentation.</span>
+
+<span class="token comment"># To override settings in this file, create a local file in /etc</span>
+<span class="token comment"># (e.g. /etc/sysctl.d/90-override.conf), and put any assignments</span>
+<span class="token comment"># there.</span>
+
+<span class="token comment"># System Request functionality of the kernel (SYNC)</span>
+<span class="token comment">#</span>
+<span class="token comment"># Use kernel.sysrq = 1 to allow all keys.</span>
+<span class="token comment"># See http://fedoraproject.org/wiki/QA/Sysrq for a list of values and keys.</span>
+kernel.sysrq <span class="token operator">=</span> <span class="token number">16</span>
+
+When running a kernel with SysRq compiled in, /proc/sys/kernel/sysrq controls the functions allowed to be invoked via the SysRq key. Here is the list of possible values <span class="token keyword">in</span> /proc/sys/kernel/sysrq:
+
+    <span class="token number">0</span> - disable sysrq completely
+    <span class="token number">1</span> - <span class="token builtin class-name">enable</span> all functions of sysrq
+    <span class="token operator">></span><span class="token number">1</span> - bitmask of allowed sysrq functions <span class="token punctuation">(</span>see below <span class="token keyword">for</span> detailed <span class="token keyword">function</span> description<span class="token punctuation">)</span>:
+        <span class="token number">2</span> - <span class="token builtin class-name">enable</span> control of console logging level
+        <span class="token number">4</span> - <span class="token builtin class-name">enable</span> control of keyboard <span class="token punctuation">(</span>SAK, unraw<span class="token punctuation">)</span>
+        <span class="token number">8</span> - <span class="token builtin class-name">enable</span> debugging dumps of processes etc.
+        <span class="token number">16</span> - <span class="token builtin class-name">enable</span> <span class="token function">sync</span> <span class="token builtin class-name">command</span>
+        <span class="token number">32</span> - <span class="token builtin class-name">enable</span> remount read-only
+        <span class="token number">64</span> - <span class="token builtin class-name">enable</span> signalling of processes <span class="token punctuation">(</span>term, kill, oom-kill<span class="token punctuation">)</span>
+        <span class="token number">128</span> - allow reboot/poweroff
+        <span class="token number">256</span> - allow nicing of all RT tasks
+<span class="token comment"># 触发的方式</span>
+- <span class="token builtin class-name">echo</span> t <span class="token operator">></span> /proc/sysrq-trigger
+- You press the key combo Alt+SysRq+<span class="token operator">&lt;</span>command key<span class="token operator">></span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="core-uses-pid"><a href="#core-uses-pid" class="headerlink" title="core_uses_pid"></a>core_uses_pid</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Append the PID to the core filename</span>
+<span class="token comment"># DEBUG相关的功能，如果这个文件的内容被配置成1，即使core_pattern中没有设置%p，最后生成的core dump文件名仍会加上进程ID。 </span>
+kernel.core_uses_pid <span class="token operator">=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="kptr-restrict"><a href="#kptr-restrict" class="headerlink" title="kptr_restrict"></a>kptr_restrict</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看内核地址符号的命令： cat /proc/kallsyms</span>
+<span class="token comment"># https://bugzilla.redhat.com/show_bug.cgi?id=1689344</span>
+kernel.kptr_restrict <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token comment"># 0 所有用户都可以查看内核的地址空间输出信息</span>
+<span class="token comment"># 1 只有root用户可以，其他用户看到的都是0</span>
+<span class="token comment"># 2 所有的用户都不可以，输出的结果都是0</span>
+
+<span class="token comment"># Other Link: https://blog.csdn.net/qq1602382784/article/details/80066847</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="rp-filter"><a href="#rp-filter" class="headerlink" title="rp_filter"></a>rp_filter</h2><p>rp_filter参数用于控制系统是否开启对数据包源地址的校验。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Source route verification</span>
+net.ipv4.conf.default.rp_filter <span class="token operator">=</span> <span class="token number">1</span>
+net.ipv4.conf.all.rp_filter <span class="token operator">=</span> <span class="token number">1</span>
+两个参数之中有一个是1， 那么这个功能就是启用的
+- <span class="token number">0</span>：不开启源地址校验。
+- <span class="token number">1</span>：开启严格的反向路径校验。对每个进来的数据包，校验其反向路径是否是最佳路径。如果反向路径不是最佳路径，则直接丢弃该数据包。
+- <span class="token number">2</span>：开启松散的反向路径校验。对每个进来的数据包，校验其源地址是否可达，即反向路径是否能通（通过任意网口），如果反向路径不同，则直接丢弃该数据包。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="accept-source-route"><a href="#accept-source-route" class="headerlink" title="accept_source_route"></a>accept_source_route</h2><p>指允许数据包的发送者指定数据包的发送路径，以及返回给发送者的数据包所走的路径。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Do not accept source routing</span>
+net.ipv4.conf.default.accept_source_route <span class="token operator">=</span> <span class="token number">0</span>
+net.ipv4.conf.all.accept_source_route <span class="token operator">=</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="promote-secondaries"><a href="#promote-secondaries" class="headerlink" title="promote_secondaries"></a>promote_secondaries</h2><p>down掉所属某个子网的primary ip的时候， 所有相关的secondary ip也会down掉,启用的时候，当primary ip宕掉时可以将secondary ip提升为primary ip。 </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Promote secondary addresses when the primary address is removed</span>
+net.ipv4.conf.default.promote_secondaries <span class="token operator">=</span> <span class="token number">1</span>
+net.ipv4.conf.all.promote_secondaries <span class="token operator">=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="protected-links"><a href="#protected-links" class="headerlink" title="protected_links"></a>protected_links</h2><p>fs.protected_hardlinks 	用于限制普通用户建立硬链接  </p>
+<ul>
+<li>0：不限制用户建立硬链接  </li>
+<li>1：限制，如果文件不属于用户，或者用户对此用户没有读写权限，则不能建立硬链接</li>
+</ul>
+<p>fs.protected_symlinks 	用于限制普通用户建立软链接  </p>
+<ul>
+<li>0：不限制用户建立软链接  </li>
+<li>1：限制，允许用户建立软连接的情况是 软连接所在目录是全局可读写目录或者软连接的uid与跟从者的uid匹配，又或者目录所有者与软连接所有者匹配  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Enable hard and soft link protection</span>
+fs.protected_hardlinks <span class="token operator">=</span> <span class="token number">1</span>
+fs.protected_symlinks <span class="token operator">=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h1 id="x2F-usr-x2F-lib-x2F-sysctl-d-x2F-9-ipv6-conf"><a href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-9-ipv6-conf" class="headerlink" title="&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;9-ipv6.conf"></a>&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;9-ipv6.conf</h1><p>关于IPv6地址重复的问题。<br>In case DAD does find a duplicate address, the address we tried to set is deleted (and in the syslog you see a message like this: “eth0: duplicate address detected!”). In such a case, a sysadmin needs to configure an address manually.</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">net.ipv6.conf.all.accept_dad<span class="token operator">=</span><span class="token number">0</span>
+net.ipv6.conf.default.accept_dad<span class="token operator">=</span><span class="token number">0</span>
+net.ipv6.conf.eth0.accept_dad<span class="token operator">=</span><span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+<h2 id="Case-Update"><a href="#Case-Update" class="headerlink" title="Case Update"></a>Case Update</h2><ol>
+<li><p>tcp_tw_recycle（Before 4.12 available）<br>net.ipv4.tcp_timestamps 这个参数开启的时候， 才会生效，可以快速回收处于TIME_WAIT状态的socket。当tcp_tw_recycle开启时（tcp_timestamps同时开启，快速回收socket的效果达到），对于位于NAT设备后面的Client来说，是一场灾难。<br><a target="_blank" rel="noopener" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4396e46187ca5070219b81773c4e65088dac50cc">https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4396e46187ca5070219b81773c4e65088dac50cc</a><br>这个参数在2017年之后的内核已经不存在了， 开发者的Blog <a target="_blank" rel="noopener" href="https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux">https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux</a><br>内核彻底移除这个参数的版本是 4.12 ， 如果内核的版本是4.12 之后，这个问题就不存在了。<br>对于NAT后端的多个实例之间，如果有时间的差距会导致另一个实例收到的报文的Timestamp是之前一个时间点的，这个时候会认为这个请求是来自之前的某个请求的返回。 然而其<br>实是因为时间的原因， 并且这个请求是一个新的请求，由于时间的原因被识别成了旧的请求。<br>这个配置对 Incomming 和 Outgoing的tcp连接都会生效。由于网络的设计是默认不相信可靠的， 所以在TCP的最后进行等待，这样会导致大量的TIME_WAIT， 而这些TIME_WAIT其实是已经不用的， 但是由于无法获得ACK因此无法释放。</p>
+</li>
+<li><p>tcp_tw_reuse<br> <a target="_blank" rel="noopener" href="http://lxr.linux.no/#linux+v3.2.8/Documentation/networking/ip-sysctl.txt#L464">http://lxr.linux.no/#linux+v3.2.8/Documentation/networking/ip-sysctl.txt#L464</a><br>  这个配置只是对客户端生效。也就是说， 客户端发起了FIN之后， 只要客户端收到服务端的FIN， 后续的网络报文已经不再继续关注了。 这样客户端的TIME_WAIT就会下降， 提高了客户端的Timewait的利用率，减少了客户端TW连接的数量。可以提高客户端的并发请求数量。<br> 这个配置参数只对 Outgoing 的参数生效。<br> NOTE： 现在这个选项支持3个参数，0 关闭， 1 开启 ，2 只对回环开启。</p>
+</li>
+</ol>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2022/04/19/Linux/Linux_Sysctl/">
+            https://liarlee.site/2022/04/19/Linux/Linux_Sysctl/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2022/04/19/Linux/Linux_Perf/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Perf 命令的Performance分析 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2022/04/19/Linux/Linux_X11Forward/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">SSH转发X11 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-etc-x2F-sysctl-d-x2F-00-defaults-conf"><span class="toc-text">&#x2F;etc&#x2F;sysctl.d&#x2F;00-defaults.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel-printk"><span class="toc-text">kernel.printk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel-panic"><span class="toc-text">kernel.panic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#neigh-default-gc"><span class="toc-text">neigh.default.gc</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-etc-x2F-sysctl-d-x2F-99-amazon-conf"><span class="toc-text">&#x2F;etc&#x2F;sysctl.d&#x2F;99-amazon.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sched-autogroup-enabled"><span class="toc-text">sched_autogroup_enabled</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-00-system-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;00-system.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bridge-nf-call-iptables"><span class="toc-text">bridge-nf-call-iptables</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-10-default-yama-scope-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;10-default-yama-scope.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#yama"><span class="toc-text">yama</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-50-default-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;50-default.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sysrq"><span class="toc-text">sysrq</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#core-uses-pid"><span class="toc-text">core_uses_pid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kptr-restrict"><span class="toc-text">kptr_restrict</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rp-filter"><span class="toc-text">rp_filter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#accept-source-route"><span class="toc-text">accept_source_route</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#promote-secondaries"><span class="toc-text">promote_secondaries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#protected-links"><span class="toc-text">protected_links</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-9-ipv6-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;9-ipv6.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Case-Update"><span class="toc-text">Case Update</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-etc-x2F-sysctl-d-x2F-00-defaults-conf"><span class="toc-text">&#x2F;etc&#x2F;sysctl.d&#x2F;00-defaults.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel-printk"><span class="toc-text">kernel.printk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel-panic"><span class="toc-text">kernel.panic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#neigh-default-gc"><span class="toc-text">neigh.default.gc</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-etc-x2F-sysctl-d-x2F-99-amazon-conf"><span class="toc-text">&#x2F;etc&#x2F;sysctl.d&#x2F;99-amazon.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sched-autogroup-enabled"><span class="toc-text">sched_autogroup_enabled</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-00-system-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;00-system.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bridge-nf-call-iptables"><span class="toc-text">bridge-nf-call-iptables</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-10-default-yama-scope-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;10-default-yama-scope.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#yama"><span class="toc-text">yama</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-50-default-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;50-default.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sysrq"><span class="toc-text">sysrq</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#core-uses-pid"><span class="toc-text">core_uses_pid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kptr-restrict"><span class="toc-text">kptr_restrict</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rp-filter"><span class="toc-text">rp_filter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#accept-source-route"><span class="toc-text">accept_source_route</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#promote-secondaries"><span class="toc-text">promote_secondaries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#protected-links"><span class="toc-text">protected_links</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-9-ipv6-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;9-ipv6.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Case-Update"><span class="toc-text">Case Update</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-etc-x2F-sysctl-d-x2F-00-defaults-conf"><span class="toc-text">&#x2F;etc&#x2F;sysctl.d&#x2F;00-defaults.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel-printk"><span class="toc-text">kernel.printk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kernel-panic"><span class="toc-text">kernel.panic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#neigh-default-gc"><span class="toc-text">neigh.default.gc</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-etc-x2F-sysctl-d-x2F-99-amazon-conf"><span class="toc-text">&#x2F;etc&#x2F;sysctl.d&#x2F;99-amazon.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sched-autogroup-enabled"><span class="toc-text">sched_autogroup_enabled</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-00-system-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;00-system.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bridge-nf-call-iptables"><span class="toc-text">bridge-nf-call-iptables</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-10-default-yama-scope-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;10-default-yama-scope.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#yama"><span class="toc-text">yama</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-50-default-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;50-default.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sysrq"><span class="toc-text">sysrq</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#core-uses-pid"><span class="toc-text">core_uses_pid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kptr-restrict"><span class="toc-text">kptr_restrict</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rp-filter"><span class="toc-text">rp_filter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#accept-source-route"><span class="toc-text">accept_source_route</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#promote-secondaries"><span class="toc-text">promote_secondaries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#protected-links"><span class="toc-text">protected_links</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#x2F-usr-x2F-lib-x2F-sysctl-d-x2F-9-ipv6-conf"><span class="toc-text">&#x2F;usr&#x2F;lib&#x2F;sysctl.d&#x2F;9-ipv6.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Case-Update"><span class="toc-text">Case Update</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

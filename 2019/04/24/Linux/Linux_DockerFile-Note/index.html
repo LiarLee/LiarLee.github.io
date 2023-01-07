@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>DockerFile笔记</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="DockerFile笔记">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2019/04/24/Linux/Linux_DockerFile-Note/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;Dockerfile的书写规则及Dockerfile的指令说明。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2019-04-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Docker">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      DockerFile笔记
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-04-24T06:27:38.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2019-04-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.8k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Docker/" 
+            class="post-meta-link">
+            Docker
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>Dockerfile的书写规则及Dockerfile的指令说明。</p>
+<span id="more"></span>
+
+<p>Docker的镜像存储到Overlay2  </p>
+<pre class="line-numbers language-none"><code class="language-none">Docker images ls
+    # 查看所有的Docker Images  
+Docker exec -it Container_Name &#x2F;bin&#x2F;sh  
+    # 将容器启动并执行shell命令行  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Docker-Images"><a href="#Docker-Images" class="headerlink" title="Docker Images"></a>Docker Images</h1><ol>
+<li>Docker Images中有启动容器所需要的文件系统及内容，用于启动并创建Docker容器,采用分层机制，最底层为bootfs，之上是rootfs  <ul>
+<li>rootfs:Docker的根文件系统，由Kernel挂载为“ReadOnly”模式，而后通过联合挂载技术额外挂在一个可写层 </li>
+<li>bootfs:用于系统引导的文件系统，包括bootloader及kernel，容器启动之后自动卸载</li>
+</ul>
+</li>
+<li>Docker Images Layer下层的镜像称为父镜像，最底层的叫做Base Images  </li>
+<li>Aufs - Advanced multi-layered unification filesystem  </li>
+<li>Overlayfs - 3.18版本被合并到Linux内核   </li>
+<li>Docker的分层镜像，除了Aufs，还支持btrfs，devicemapper和vfs  </li>
+<li>Docker Registry - Docker daemon自动视图从DockerHub拉取镜像文件  </li>
+<li>Docker Registry的分类 <ul>
+<li>Sponsor Registry：第三方，提供给客户或Docker社区  </li>
+<li>Mirror Registry：第三方，只给客户使用 </li>
+<li>Vendor Registry：由发布Docker镜像的供应商提供  </li>
+<li>Private Regisry：通过设有防火墙及额外的安全层的私有实体提供</li>
+</ul>
+</li>
+<li>云原生 - 面向云环境的运行了云系统本身的调用的程序。通过环境变量进行配置  </li>
+<li>Webhooks - 自动创建镜像  </li>
+<li>Quay.io 除了DockerHub其他的镜像仓库  <ul>
+<li>docker pull quay.io&#x2F;coreos&#x2F;flannel:latest</li>
+</ul>
+</li>
+</ol>
+<h2 id="Docker镜像的保存与恢复"><a href="#Docker镜像的保存与恢复" class="headerlink" title="Docker镜像的保存与恢复"></a>Docker镜像的保存与恢复</h2><pre class="line-numbers language-none"><code class="language-none">docker save -o myimages.gz IMAGE_NAME1 IMAGE_NAME2 
+    # 将多个镜像保存到本地压缩文件  
+scp myimages.gz 
+    # 传输镜像到其他节点  
+docker load -i myimages.gz  
+    # 在新的节点加载镜像  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="Docker-File"><a href="#Docker-File" class="headerlink" title="Docker File"></a>Docker File</h1><h2 id="DockerFile存在的意义"><a href="#DockerFile存在的意义" class="headerlink" title="DockerFile存在的意义"></a>DockerFile存在的意义</h2><p>docker exec CONTAINER –&gt; vi –&gt; RELOAD<br>Docker的容器不利于我们对需要反复调试的服务进行更改，通过Dockerfile的修改可快速调整容器的配置。</p>
+<h2 id="自定义镜像的方法"><a href="#自定义镜像的方法" class="headerlink" title="自定义镜像的方法"></a>自定义镜像的方法</h2><h3 id="基于Docker容器制作镜像"><a href="#基于Docker容器制作镜像" class="headerlink" title="基于Docker容器制作镜像"></a>基于Docker容器制作镜像</h3><ol>
+<li>创建你需要的容器，Docker commit命令进行镜像的制作 </li>
+<li>docker run –name b1 -it busybox  </li>
+<li>mkdir -p &#x2F;data&#x2F;html  </li>
+<li>vi &#x2F;data&#x2F;html&#x2F;index.html  </li>
+<li>docker commit -p b1 </li>
+<li>docker tag IMAGE_ID REPOSITORY:TAG  </li>
+<li>docker image ls  </li>
+<li>docker image rm IMAGE_TAG</li>
+<li>docker imspect – cmd字段自动标志启动自动运行的命令  </li>
+<li>更改docker的默认运行命令  </li>
+<li>docker commit -p -a ‘Liarlee’ -c ‘CMD [“&#x2F;bin&#x2F;httpd”,”-f”,”-h”,”&#x2F;data&#x2F;html”]’ b1 hayden&#x2F;httpd:v0.2 </li>
+<li>docker login -u USERNAME 登录到服务器  </li>
+<li>docker push Liarlee&#x2F;httpd</li>
+</ol>
+<h3 id="基于DockerFile制作DockerImage"><a href="#基于DockerFile制作DockerImage" class="headerlink" title="基于DockerFile制作DockerImage"></a>基于DockerFile制作DockerImage</h3><p>Dockerfile Format  </p>
+<ol>
+<li># 开头的为注释文字   </li>
+<li>INSTRUCTION arguments，采用指令+参数的格式   </li>
+<li>Dockerfile执行的时候是从上至下执行的  </li>
+<li>第一个非注释行必须是FROM指令</li>
+</ol>
+<p>.dockerignore文件路径记录，可以通配，打包时忽略list中的文件<br>可以使用环境变量替换<br>BASH SHELL:<br>echo ${NAME:-tom} 给一个变量设置一个默认值<br>echo ${NAME:+tom} 如果变量有数值，强行改为默认值   </p>
+<h3 id="FROM"><a href="#FROM" class="headerlink" title="- FROM"></a>- FROM</h3><p>FROM指定的镜像将自动拉取作为底层的镜像进行制作;  </p>
+<pre class="line-numbers language-none"><code class="language-none">FROM &lt;repository&gt;[:tag]  
+FROM &lt;repository&gt;@&lt;HASH number&gt;  
+
+EXAMPLE:   
+FROM centos:latest
+    # 使用Centos的最新发行镜像作为底层镜像<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="MAINTAINER"><a href="#MAINTAINER" class="headerlink" title="- MAINTAINER"></a>- MAINTAINER</h3><p>提供制作人的信息，废弃不用了，现在使用LABEL  </p>
+<pre class="line-numbers language-none"><code class="language-none">MAINTAINER &quot;LiarLee&lt;Test@LiarLee.com&gt;&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="LABEL"><a href="#LABEL" class="headerlink" title="- LABEL"></a>- LABEL</h3><p>LABEL是给镜像指定元数据的命令  </p>
+<pre class="line-numbers language-none"><code class="language-none">LABEL maintainer&#x3D;&quot;LiarLee&lt;Test@LiarLee.com&gt;&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<h3 id="COPY"><a href="#COPY" class="headerlink" title="- COPY"></a>- COPY</h3><p>复制本地文件或目录到镜像文件系统中。  </p>
+<pre class="line-numbers language-none"><code class="language-none">COPY \&lt;src&gt; ... \&lt;dest&gt;  
+COPY [&quot;\&lt;src&gt;&quot; ... &quot;\&lt;dest&gt;&quot;]  
+\&lt;src&gt; -- 相对路径    
+\&lt;dest&gt; -- 绝对路径   
+
+- 指定的src目录，会将目录下的所有文件复制到目的地，但是不会将src复制。
+- 如果使用了多个src，或者src使用了通配，目的必须是个目录  
+- 如果dest不存在会被自动创建  
+
+COPY &#x2F;etc&#x2F;passwd &#x2F;etc&#x2F;passwd
+    # 与cp命令相似，复制本地目标文件到容器文件系统中
+COPY &#x2F;usr&#x2F;local&#x2F;src&#x2F;nginx&#x2F;* &#x2F;usr&#x2F;local&#x2F;src&#x2F;nginx&#x2F;
+    # 如果目标目录不存在需要先行创建<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="docker-build命令"><a href="#docker-build命令" class="headerlink" title="docker build命令"></a>docker build命令</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@Hayden test<span class="token punctuation">]</span><span class="token comment"># docker build -h</span>
+Flag shorthand -h has been deprecated, please use --help
+Usage:	<span class="token function">docker</span> build <span class="token punctuation">[</span>OPTIONS<span class="token punctuation">]</span> <span class="token environment constant">PATH</span> <span class="token operator">|</span> URL <span class="token operator">|</span> -
+Build an image from a Dockerfile
+Options:
+      --add-host list           Add a custom host-to-IP mapping <span class="token punctuation">(</span>host:ip<span class="token punctuation">)</span>
+      --build-arg list          Set build-time variables
+      --cache-from strings      Images to consider as cache sources
+      --cgroup-parent string    Optional parent cgroup <span class="token keyword">for</span> the container
+      --compress                Compress the build context using <span class="token function">gzip</span>
+      --cpu-period int          Limit the CPU CFS <span class="token punctuation">(</span>Completely Fair Scheduler<span class="token punctuation">)</span> period
+      --cpu-quota int           Limit the CPU CFS <span class="token punctuation">(</span>Completely Fair Scheduler<span class="token punctuation">)</span> <span class="token function">quota</span>
+  -c, --cpu-shares int          CPU shares <span class="token punctuation">(</span>relative weight<span class="token punctuation">)</span>
+      --cpuset-cpus string      CPUs <span class="token keyword">in</span> <span class="token function">which</span> to allow execution <span class="token punctuation">(</span><span class="token number">0</span>-3, <span class="token number">0,1</span><span class="token punctuation">)</span>
+      --cpuset-mems string      MEMs <span class="token keyword">in</span> <span class="token function">which</span> to allow execution <span class="token punctuation">(</span><span class="token number">0</span>-3, <span class="token number">0,1</span><span class="token punctuation">)</span>
+      --disable-content-trust   Skip image verification <span class="token punctuation">(</span>default <span class="token boolean">true</span><span class="token punctuation">)</span>
+  -f, --file string             Name of the Dockerfile <span class="token punctuation">(</span>Default is <span class="token string">'PATH/Dockerfile'</span><span class="token punctuation">)</span>
+      --force-rm                Always remove intermediate containers
+      --iidfile string          Write the image ID to the <span class="token function">file</span>
+      --isolation string        Container isolation technology
+      --label list              Set metadata <span class="token keyword">for</span> an image
+  -m, --memory bytes            Memory limit
+      --memory-swap bytes       Swap limit equal to memory plus swap: <span class="token string">'-1'</span> to <span class="token builtin class-name">enable</span>
+                                unlimited swap
+      --network string          Set the networking mode <span class="token keyword">for</span> the RUN instructions
+                                during build <span class="token punctuation">(</span>default <span class="token string">"default"</span><span class="token punctuation">)</span>
+      --no-cache                Do not use cache when building the image
+      --pull                    Always attempt to pull a newer version of the image
+  -q, --quiet                   Suppress the build output and print image ID on success
+      --rm                      Remove intermediate containers after a successful
+                                build <span class="token punctuation">(</span>default <span class="token boolean">true</span><span class="token punctuation">)</span>
+      --security-opt strings    Security options
+      --shm-size bytes          Size of /dev/shm
+  -t, --tag list                Name and optionally a tag <span class="token keyword">in</span> the <span class="token string">'name:tag'</span> <span class="token function">format</span>
+      --target string           Set the target build stage to build.
+      --ulimit <span class="token builtin class-name">ulimit</span>           Ulimit options <span class="token punctuation">(</span>default <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>制作一个容器，COPY本地的HTML文件到容器文件系统中  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@Hayden test]# docker build -t busybox-httpd:v0.1-1 .&#x2F;  
+Sending build context to Docker daemon  3.072kB  
+Step 1&#x2F;3 : FROM busybox:latest  
+ ---&gt; d8233ab899d4  
+Step 2&#x2F;3 : MAINTAINER &quot;HAYDEN&lt;HAYDEN@lee.com&gt;&quot;  
+ ---&gt; Running in d581bd9c9aba  
+Removing intermediate container d581bd9c9aba  
+ ---&gt; 8137f8096ce4  
+Step 3&#x2F;3 : COPY index.html &#x2F;data&#x2F;web&#x2F;html&#x2F;  
+ ---&gt; bced33a9e4a4
+Successfully built bced33a9e4a4
+Successfully tagged busybox-httpd:v0.1-1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>查看已经制作完成的镜像</p>
+<pre class="line-numbers language-none"><code class="language-none">[root@Hayden test]# docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+busybox-httpd       v0.1-1              bced33a9e4a4        17 seconds ago      1.2MB
+nginx               latest              881bd08c0b08        3 weeks ago         109MB
+busybox             latest              d8233ab899d4        6 weeks ago         1.2MB<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>运行容器查看结果</p>
+<pre class="line-numbers language-none"><code class="language-none">[root@Hayden test]# docker run --name t1 --rm busybox-httpd:v0.1-1 cat &#x2F;data&#x2F;web&#x2F;html&#x2F;index.html
+&lt;h1&gt;Busybox httpd server.&lt;&#x2F;h1&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="ADD"><a href="#ADD" class="headerlink" title="- ADD"></a>- ADD</h3><p>用于添加URL链接或本地文件到镜像中，支持tar包的自动解压。  </p>
+<pre class="line-numbers language-none"><code class="language-none">ADD &lt;src&gt; ... &lt;dest&gt;  
+ADD [&quot;&lt;src&gt;&quot; ... &quot;&lt;dest&gt;&quot;]  
+ADD命令可以支持URL，在打包镜像的时候下载并打包进去
+ADD命令支持对本地的tar文件打包进镜像的时候进行解压  
+
+EXAMPLE:  
+ADD nginx.org&#x2F;download&#x2F;nginx-1.15.12.tar.gz  
+    # 指令自动打包进入镜像，并同时解压tar包<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="WORKDIR"><a href="#WORKDIR" class="headerlink" title="- WORKDIR"></a>- WORKDIR</h3><pre class="line-numbers language-none"><code class="language-none">WORKDIR &lt;dirpath&gt;  
+指定当前的工作目录
+
+EXAMPLE:
+WORKDIR &#x2F;usr&#x2F;local&#x2F;src&#x2F;nginx
+    # 制定后续操作的工作目录，以调整指令中的相对路径<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="VOLUME"><a href="#VOLUME" class="headerlink" title="- VOLUME"></a>- VOLUME</h3><pre class="line-numbers language-none"><code class="language-none">VOLUME \&lt;mountpoint&gt;  
+VOLUME [&quot;\&lt;mountpoint&gt;&quot;]  
+VOLUME指定挂载的卷  
+只能设置容器中的卷目录，不能制定宿主机的目录，只能使用Docker自动管理的卷 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="EXPOSE"><a href="#EXPOSE" class="headerlink" title="- EXPOSE"></a>- EXPOSE</h3><pre class="line-numbers language-none"><code class="language-none">EXPOSE &lt;port&gt;[&#x2F;&lt;protocol&gt;]   
+指定的协议为tcp or udp , defaults option is TCP  
+可以一次指定多个端口  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="ENV"><a href="#ENV" class="headerlink" title="- ENV"></a>- ENV</h3><pre class="line-numbers language-none"><code class="language-none">ENV &lt;key&gt; &lt;value1&gt; &lt;value2&gt; &lt;value3&gt; &lt;value4&gt;   
+ENV &lt;key&gt;&#x3D;&lt;value&gt; &lt;key&gt;&#x3D;&lt;value&gt;...  
+在Dockerfile中指定环境变量，可将指定的变量在Docker run的时候进行手动的指定，
+影响运行容器时候的命令执行结果，但是不影响docker build的运行结果  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2019/04/24/Linux/Linux_DockerFile-Note/">
+            https://liarlee.site/2019/04/24/Linux/Linux_DockerFile-Note/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2019/05/17/Linux/Linux_Archlinux-Installation/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Archlinux安装过程记录 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2019/01/13/Linux/Linux_Fedora-bootspeedup/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Fedora开机启动速度的优化 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-Images"><span class="toc-text">Docker Images</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E9%95%9C%E5%83%8F%E7%9A%84%E4%BF%9D%E5%AD%98%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">Docker镜像的保存与恢复</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-File"><span class="toc-text">Docker File</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DockerFile%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-text">DockerFile存在的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">自定义镜像的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F"><span class="toc-text">基于Docker容器制作镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EDockerFile%E5%88%B6%E4%BD%9CDockerImage"><span class="toc-text">基于DockerFile制作DockerImage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FROM"><span class="toc-text">- FROM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MAINTAINER"><span class="toc-text">- MAINTAINER</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LABEL"><span class="toc-text">- LABEL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#COPY"><span class="toc-text">- COPY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-build%E5%91%BD%E4%BB%A4"><span class="toc-text">docker build命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ADD"><span class="toc-text">- ADD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WORKDIR"><span class="toc-text">- WORKDIR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VOLUME"><span class="toc-text">- VOLUME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXPOSE"><span class="toc-text">- EXPOSE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ENV"><span class="toc-text">- ENV</span></a></li></ol></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-Images"><span class="toc-text">Docker Images</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E9%95%9C%E5%83%8F%E7%9A%84%E4%BF%9D%E5%AD%98%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">Docker镜像的保存与恢复</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-File"><span class="toc-text">Docker File</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DockerFile%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-text">DockerFile存在的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">自定义镜像的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F"><span class="toc-text">基于Docker容器制作镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EDockerFile%E5%88%B6%E4%BD%9CDockerImage"><span class="toc-text">基于DockerFile制作DockerImage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FROM"><span class="toc-text">- FROM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MAINTAINER"><span class="toc-text">- MAINTAINER</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LABEL"><span class="toc-text">- LABEL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#COPY"><span class="toc-text">- COPY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-build%E5%91%BD%E4%BB%A4"><span class="toc-text">docker build命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ADD"><span class="toc-text">- ADD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WORKDIR"><span class="toc-text">- WORKDIR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VOLUME"><span class="toc-text">- VOLUME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXPOSE"><span class="toc-text">- EXPOSE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ENV"><span class="toc-text">- ENV</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-Images"><span class="toc-text">Docker Images</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E9%95%9C%E5%83%8F%E7%9A%84%E4%BF%9D%E5%AD%98%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">Docker镜像的保存与恢复</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-File"><span class="toc-text">Docker File</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DockerFile%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-text">DockerFile存在的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">自定义镜像的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EDocker%E5%AE%B9%E5%99%A8%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F"><span class="toc-text">基于Docker容器制作镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EDockerFile%E5%88%B6%E4%BD%9CDockerImage"><span class="toc-text">基于DockerFile制作DockerImage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FROM"><span class="toc-text">- FROM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MAINTAINER"><span class="toc-text">- MAINTAINER</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LABEL"><span class="toc-text">- LABEL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#COPY"><span class="toc-text">- COPY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-build%E5%91%BD%E4%BB%A4"><span class="toc-text">docker build命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ADD"><span class="toc-text">- ADD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WORKDIR"><span class="toc-text">- WORKDIR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VOLUME"><span class="toc-text">- VOLUME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXPOSE"><span class="toc-text">- EXPOSE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ENV"><span class="toc-text">- ENV</span></a></li></ol></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

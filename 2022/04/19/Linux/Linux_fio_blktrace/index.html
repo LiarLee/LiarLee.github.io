@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Fio 命令使用的说明</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Fio 命令使用的说明">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2022/04/19/Linux/Linux_fio_blktrace/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;Fio 一些测试和思考， fio ，blktrace等等。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2022-04-19">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Linux">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Fio 命令使用的说明
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2022-04-19T09:45:39.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2022-04-19</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.6k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Linux/" 
+            class="post-meta-link">
+            Linux
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>Fio 一些测试和思考， fio ，blktrace等等。</p>
+<span id="more"></span>
+
+<h3 id="github地址"><a href="#github地址" class="headerlink" title="github地址"></a>github地址</h3><p>  <a target="_blank" rel="noopener" href="https://github.com/axboe/fio">https://github.com/axboe/fio</a><br>  <a target="_blank" rel="noopener" href="https://tobert.github.io/post/2014-04-17-fio-output-explained.html">https://tobert.github.io/post/2014-04-17-fio-output-explained.html</a><br>  <a target="_blank" rel="noopener" href="http://xiaqunfeng.cc/2017/07/12/fio-test-ceph/">http://xiaqunfeng.cc/2017/07/12/fio-test-ceph/</a><br>  <a target="_blank" rel="noopener" href="https://fio.readthedocs.io/en/latest/fio_doc.html">https://fio.readthedocs.io/en/latest/fio_doc.html</a><br>  <a target="_blank" rel="noopener" href="http://linuxperf.com/?p=156">http://linuxperf.com/?p=156</a></p>
+<h3 id="命令和说明"><a href="#命令和说明" class="headerlink" title="命令和说明"></a>命令和说明</h3><pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># fio test file defination</span>
+<span class="token comment"># ini file format </span>
+ <span class="token comment">; -- start job file --</span>
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">global</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">size</span><span class="token punctuation">=</span><span class="token value attr-value">1G # 设置测试文件的大小</span>
+<span class="token key attr-name">runtime</span><span class="token punctuation">=</span><span class="token value attr-value">30 # 设定运行时间， 如果运行时间之内已经完成了文件大小的写入则会保持文件大小和负载继续写。</span>
+<span class="token key attr-name">bs</span><span class="token punctuation">=</span><span class="token value attr-value">4k # 块大小</span>
+<span class="token key attr-name">numjobs</span><span class="token punctuation">=</span><span class="token value attr-value">1 # 定义测试的进程数量 默认是1</span>
+<span class="token key attr-name">direct</span><span class="token punctuation">=</span><span class="token value attr-value">1 # 是否绕过操作系统的Buffer缓冲区， 1 Enable</span>
+<span class="token key attr-name">ioengine</span><span class="token punctuation">=</span><span class="token value attr-value">libaio # io引擎使用libaio模式, 查看可用IO引擎的命令</span> 
+group_reporting # 汇总信息显示
+thread # 使用单进程多线程的模型， 默认是使用多进程模型。
+time_based # 用运行时间为基准， 如果时间没有到达指定的值就继续执行相同的操作， 直接到时间满足要求。
+
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">job1</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">rw</span><span class="token punctuation">=</span><span class="token value attr-value">write</span>
+
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">job2</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">rw</span><span class="token punctuation">=</span><span class="token value attr-value">read</span>
+
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">job3</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">rw</span><span class="token punctuation">=</span><span class="token value attr-value">randwrite</span>
+
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">job4</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">rw</span><span class="token punctuation">=</span><span class="token value attr-value">randread</span>
+
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">job5</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">rw</span><span class="token punctuation">=</span><span class="token value attr-value">randrw</span>
+<span class="token comment">; -- end job file --</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="关于硬盘性能-iostat"><a href="#关于硬盘性能-iostat" class="headerlink" title="关于硬盘性能 iostat"></a>关于硬盘性能 iostat</h2><p>首先， 在man iostat的时候已经明确的提示了，iostat 的 svctm （也就是硬盘的servicetime）是一个不准确的值， 会在后续的版本中移除， 因为他所依赖的数据来源（&#x2F;proc&#x2F;diskstats）中，是从Block Level 出发来进行计算的， 所以svctm其实并不是IO控制器所需要的准确时间， 那么出现了两个问题， 我们能观察的数据是那个？ 以及背后的含义是什么?  </p>
+<h3 id="调度算法-和-读写请求的合并"><a href="#调度算法-和-读写请求的合并" class="headerlink" title="调度算法 和 读写请求的合并"></a>调度算法 和 读写请求的合并</h3><p>内核会对IO的请求进行合并， 但是这个合并不是一直存在的， 反映到IOstat的指标是 rrqm&#x2F;s &amp; wrqm&#x2F;s,  这两个表示对于硬盘的读写请求中， 每秒合并的请求数量； 如果你去查看IO的调度算法， none 算法是完全不合并的， 所以这两列一直都是0.  </p>
+<h3 id="队列的等待时间"><a href="#队列的等待时间" class="headerlink" title="队列的等待时间"></a>队列的等待时间</h3><p>iostat中的await一列， 表示请求的等待时间，正常的情况下应该比较低，那么究竟什么情况下才是性能不佳的表现？<br>await 每个I&#x2F;O的平均耗时是用await表示(blktrace command results: Q2C – 整个IO请求所消耗的时间(Q2I + I2D + D2C &#x3D; Q2C)，相当于iostat的await。)，包括了 IO请求在Kernel中的等待时间 + IO请求从内核出发处理完成回到内核的时间，也就是IO time + Service Time。<br>await 一般情况下应该小于10ms ， 如果没有或者比较大的情况下 ， 应该考虑负载的类型， 来衡量硬盘的负载水平。  </p>
+<h3 id="blktrace"><a href="#blktrace" class="headerlink" title="blktrace"></a>blktrace</h3><p>一个I&#x2F;O请求进入block layer之后，可能会经历下面的过程：</p>
+<pre><code>Q Remap: 可能被DM(Device Mapper)或MD(Multiple Device, Software RAID) remap到其它设备
+G Split: 可能会因为I/O请求与扇区边界未对齐、或者size太大而被分拆(split)成多个物理I/O
+I Merge: 可能会因为与其它I/O请求的物理位置相邻而合并(merge)成一个I/O
+D 被IO Scheduler依照调度策略发送给driver
+C 被driver提交给硬件，经过HBA、电缆（光纤、网线等）、交换机（SAN或网络）、最后到达存储设备，设备完成IO请求之后再把结果发回。
+</code></pre>
+<p>常见的状态切换 Q–G–I–D–C </p>
+<pre class="line-numbers language-r" data-language="r"><code class="language-r"><span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>        <span class="token number">2</span>     <span class="token number">0.000001080</span>  <span class="token number">7134</span>  Q   W <span class="token number">756856</span> <span class="token operator">+</span> <span class="token number">800</span> <span class="token punctuation">[</span>dd<span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>        <span class="token number">3</span>     <span class="token number">0.000004247</span>  <span class="token number">7134</span>  X   W <span class="token number">756856</span> <span class="token operator">/</span> <span class="token number">757368</span> <span class="token punctuation">[</span>dd<span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>        <span class="token number">4</span>     <span class="token number">0.000005806</span>  <span class="token number">7134</span>  G   W <span class="token number">756856</span> <span class="token operator">+</span> <span class="token number">512</span> <span class="token punctuation">[</span>dd<span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>        <span class="token number">5</span>     <span class="token number">0.000008792</span>  <span class="token number">7134</span>  I   W <span class="token number">756856</span> <span class="token operator">+</span> <span class="token number">512</span> <span class="token punctuation">[</span>dd<span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>        <span class="token number">6</span>     <span class="token number">0.000012844</span>  <span class="token number">7134</span>  G   W <span class="token number">757368</span> <span class="token operator">+</span> <span class="token number">288</span> <span class="token punctuation">[</span>dd<span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>        <span class="token number">7</span>     <span class="token number">0.000013202</span>  <span class="token number">7134</span>  I   W <span class="token number">757368</span> <span class="token operator">+</span> <span class="token number">288</span> <span class="token punctuation">[</span>dd<span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>        <span class="token number">8</span>     <span class="token number">0.000031708</span>  <span class="token number">1830</span>  D   W <span class="token number">756856</span> <span class="token operator">+</span> <span class="token number">512</span> <span class="token punctuation">[</span>kworker<span class="token operator">/</span><span class="token number">0</span><span class="token operator">:</span><span class="token number">1</span>H<span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>        <span class="token number">9</span>     <span class="token number">0.000034250</span>  <span class="token number">1830</span>  D   W <span class="token number">757368</span> <span class="token operator">+</span> <span class="token number">288</span> <span class="token punctuation">[</span>kworker<span class="token operator">/</span><span class="token number">0</span><span class="token operator">:</span><span class="token number">1</span>H<span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>       <span class="token number">10</span>     <span class="token number">0.001598439</span>  <span class="token number">7135</span>  C   W <span class="token number">756856</span> <span class="token operator">+</span> <span class="token number">512</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+<span class="token number">259</span><span class="token punctuation">,</span><span class="token number">2</span>    <span class="token number">0</span>       <span class="token number">11</span>     <span class="token number">0.001689880</span>  <span class="token number">7135</span>  C   W <span class="token number">757368</span> <span class="token operator">+</span> <span class="token number">288</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+<span class="token comment"># 主，从设备号 ， 起始Sector 为0 ， 写几个， 时间 ， pid ， 状态 ， R/W ， 未知</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<p>保留blktrace的结果为bin文件</p>
+<pre class="line-numbers language-r" data-language="r"><code class="language-r">blktrace <span class="token operator">-</span>d <span class="token operator">/</span>dev<span class="token operator">/</span>sdb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>使用blkparse 分析已经有的记录</p>
+<pre class="line-numbers language-r" data-language="r"><code class="language-r"><span class="token comment"># 记录性能数据 到 文件。</span>
+root<span class="token operator">@</span>ip<span class="token operator">-</span><span class="token number">172</span><span class="token operator">-</span><span class="token number">31</span><span class="token operator">-</span><span class="token number">11</span><span class="token operator">-</span><span class="token number">235</span><span class="token operator">:</span><span class="token operator">/</span>home<span class="token operator">/</span>ec2<span class="token operator">-</span>user<span class="token operator">|</span>⇒  blktrace <span class="token operator">-</span>d <span class="token operator">/</span>dev<span class="token operator">/</span>nvme0n1p1
+<span class="token operator">^</span>C<span class="token operator">==</span><span class="token operator">=</span> nvme0n1p1 <span class="token operator">==</span><span class="token operator">=</span>
+  CPU  <span class="token number">0</span><span class="token operator">:</span>                    <span class="token number">1</span> events<span class="token punctuation">,</span>        <span class="token number">1</span> KiB data
+  CPU  <span class="token number">1</span><span class="token operator">:</span>                    <span class="token number">0</span> events<span class="token punctuation">,</span>        <span class="token number">0</span> KiB data
+  Total<span class="token operator">:</span>                     <span class="token number">1</span> events <span class="token punctuation">(</span>dropped <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>        <span class="token number">1</span> KiB data
+<span class="token comment"># 每个cpu设备每个设备存储一个单独的文件。</span>
+root<span class="token operator">@</span>ip<span class="token operator">-</span><span class="token number">172</span><span class="token operator">-</span><span class="token number">31</span><span class="token operator">-</span><span class="token number">11</span><span class="token operator">-</span><span class="token number">235</span><span class="token operator">:</span><span class="token operator">/</span>home<span class="token operator">/</span>ec2<span class="token operator">-</span>user<span class="token operator">|</span>⇒  ll
+total <span class="token number">4.0</span>K
+<span class="token operator">-</span>rw<span class="token operator">-</span>r<span class="token operator">-</span><span class="token operator">-</span>r<span class="token operator">-</span><span class="token operator">-</span> <span class="token number">1</span> root root <span class="token number">56</span> Nov  <span class="token number">4</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">55</span> nvme0n1p1.blktrace.<span class="token number">0</span>
+<span class="token operator">-</span>rw<span class="token operator">-</span>r<span class="token operator">-</span><span class="token operator">-</span>r<span class="token operator">-</span><span class="token operator">-</span> <span class="token number">1</span> root root  <span class="token number">0</span> Nov  <span class="token number">4</span> <span class="token number">17</span><span class="token operator">:</span><span class="token number">55</span> nvme0n1p1.blktrace.<span class="token number">1</span>
+
+root<span class="token operator">@</span>ip<span class="token operator">-</span><span class="token number">172</span><span class="token operator">-</span><span class="token number">31</span><span class="token operator">-</span><span class="token number">11</span><span class="token operator">-</span><span class="token number">235</span><span class="token operator">:</span><span class="token operator">/</span>home<span class="token operator">/</span>ec2<span class="token operator">-</span>user<span class="token operator">|</span>⇒  blkparse <span class="token operator">-</span>i nvme0n1p1.blktrace.<span class="token number">0</span>
+<span class="token comment"># 格式化分析的数据为bin。</span>
+root<span class="token operator">@</span>ip<span class="token operator">-</span><span class="token number">172</span><span class="token operator">-</span><span class="token number">31</span><span class="token operator">-</span><span class="token number">11</span><span class="token operator">-</span><span class="token number">235</span><span class="token operator">:</span><span class="token operator">/</span>home<span class="token operator">/</span>ec2<span class="token operator">-</span>user<span class="token operator">|</span>⇒  blkparse <span class="token operator">-</span>i nvme0n1p1 <span class="token operator">-</span>d nvme0n1p1.blktrace.bin
+<span class="token comment"># 使用一个简易的图形方式分析结果。</span>
+root<span class="token operator">@</span>ip<span class="token operator">-</span><span class="token number">172</span><span class="token operator">-</span><span class="token number">31</span><span class="token operator">-</span><span class="token number">11</span><span class="token operator">-</span><span class="token number">235</span><span class="token operator">:</span><span class="token operator">/</span>home<span class="token operator">/</span>ec2<span class="token operator">-</span>user<span class="token operator">|</span>⇒  btt <span class="token operator">-</span>i nvme0n1p1.blktrace.bin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h2 id="历史背景"><a href="#历史背景" class="headerlink" title="历史背景"></a>历史背景</h2><blockquote>
+<p>mdadm 已经不怎么更新和开发了<br>默认推荐使用LVM<br>LVM 和 mdadm 在操作系统都是使用的Raid驱动（内核模块）。</p>
+<p>其实也是可以使用btrfs ， 这个测试的结果是 btrfs 的性能确实是比LVM更好。</p>
+</blockquote>
+<h2 id="相关的问题"><a href="#相关的问题" class="headerlink" title="相关的问题"></a>相关的问题</h2><p>如果说有一个性能的问题， IOPS达不到指定的数值， 思路？<br>首先查看队列深度是不是足够，看svctm时间长不长，看队列的长度 </p>
+<h2 id="iostat命令的理解"><a href="#iostat命令的理解" class="headerlink" title="iostat命令的理解"></a>iostat命令的理解</h2><p>iostat -xkt 1<br>rrqm&#x2F;s wrqm&#x2F;s  - 读写请求的合并数量<br>r&#x2F;s w&#x2F;s - 读写请求数量<br>avgrq - 队列长度<br>await - 时延<br>util - 时间度量 ， 时间周期之内进行IO操作所占的比例。例如 1 秒的时间之内， 取样的点中有多少是在执行IO操作。</p>
+<p>一个例子 ， 如果采样的周期为1s， 那么采样的范围之内 ， 前面的0.5秒有执行IO的操作， 后面的0.5秒没有执行任何的操作， 那么 最后 Util 现在的结果就是50% 。avgrq也是一直平均值， 在采样周期之内如果前后的状况不一致 也会进行平均。</p>
+<p>一般情况下这个参数是准确的，但是大部分的性能问题都是取决数值的取样周期的。</p>
+<p>操作系统默认输出的块大小是 ： 256 ， 参数可见 ：<br>╰─# cat &#x2F;sys&#x2F;block&#x2F;sda&#x2F;queue&#x2F;max_sectors_kb<br>256</p>
+<p>max_segments表示设备能够允许的最大段的数目。    – 这应该是一个内存或者buffer的分段指标。 （待定）<br>max_sectors_kb表示设备允许的最大请求大小。      – 可改 。<br>max_hw_sectors_kb表示单个请求所能处理的最大KB（硬约束） – 这个是上一个参数的Limit。  </p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2022/04/19/Linux/Linux_fio_blktrace/">
+            https://liarlee.site/2022/04/19/Linux/Linux_fio_blktrace/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2022/04/19/Linux/Linux_btrfs/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">关于BTRFS的一些测试 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2022/04/15/Linux/Linux_Shell-Script-Process-Space/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Shell脚本处理目录或者文件名中的空格 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#github%E5%9C%B0%E5%9D%80"><span class="toc-text">github地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%92%8C%E8%AF%B4%E6%98%8E"><span class="toc-text">命令和说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%A1%AC%E7%9B%98%E6%80%A7%E8%83%BD-iostat"><span class="toc-text">关于硬盘性能 iostat</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95-%E5%92%8C-%E8%AF%BB%E5%86%99%E8%AF%B7%E6%B1%82%E7%9A%84%E5%90%88%E5%B9%B6"><span class="toc-text">调度算法 和 读写请求的合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%9F%E5%88%97%E7%9A%84%E7%AD%89%E5%BE%85%E6%97%B6%E9%97%B4"><span class="toc-text">队列的等待时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#blktrace"><span class="toc-text">blktrace</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">相关的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iostat%E5%91%BD%E4%BB%A4%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">iostat命令的理解</span></a>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#github%E5%9C%B0%E5%9D%80"><span class="toc-text">github地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%92%8C%E8%AF%B4%E6%98%8E"><span class="toc-text">命令和说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%A1%AC%E7%9B%98%E6%80%A7%E8%83%BD-iostat"><span class="toc-text">关于硬盘性能 iostat</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95-%E5%92%8C-%E8%AF%BB%E5%86%99%E8%AF%B7%E6%B1%82%E7%9A%84%E5%90%88%E5%B9%B6"><span class="toc-text">调度算法 和 读写请求的合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%9F%E5%88%97%E7%9A%84%E7%AD%89%E5%BE%85%E6%97%B6%E9%97%B4"><span class="toc-text">队列的等待时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#blktrace"><span class="toc-text">blktrace</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">相关的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iostat%E5%91%BD%E4%BB%A4%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">iostat命令的理解</span></a>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#github%E5%9C%B0%E5%9D%80"><span class="toc-text">github地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%92%8C%E8%AF%B4%E6%98%8E"><span class="toc-text">命令和说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%A1%AC%E7%9B%98%E6%80%A7%E8%83%BD-iostat"><span class="toc-text">关于硬盘性能 iostat</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95-%E5%92%8C-%E8%AF%BB%E5%86%99%E8%AF%B7%E6%B1%82%E7%9A%84%E5%90%88%E5%B9%B6"><span class="toc-text">调度算法 和 读写请求的合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%9F%E5%88%97%E7%9A%84%E7%AD%89%E5%BE%85%E6%97%B6%E9%97%B4"><span class="toc-text">队列的等待时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#blktrace"><span class="toc-text">blktrace</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">相关的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iostat%E5%91%BD%E4%BB%A4%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">iostat命令的理解</span></a>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

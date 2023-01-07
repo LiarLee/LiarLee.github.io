@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Docker基础知识二周目</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Docker基础知识二周目">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2021/09/04/Linux/Linux_Docker-again/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;Docker Container 基础 。 again ….. &lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-09-04">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Linux">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Docker基础知识二周目
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-09-04T15:43:42.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-09-04</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>870 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Linux/" 
+            class="post-meta-link">
+            Linux
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>Docker Container 基础 。 again ….. </p>
+<span id="more"></span> 
+
+<h2 id="Docker使用的六个名称空间"><a href="#Docker使用的六个名称空间" class="headerlink" title="Docker使用的六个名称空间"></a>Docker使用的六个名称空间</h2><ol>
+<li>MNT Namespace - 提供文件的挂载和文件系统的隔离</li>
+<li>IPC Namespace - 提供进程间通信</li>
+<li>UTS Namespace - 提供主机名隔离</li>
+<li>PID Namespace - 提供进程以及进程号隔离</li>
+<li>Net Namespace - 提供网络隔离</li>
+<li>User Namespace - 提供用户以及用户id的隔离</li>
+</ol>
+<h2 id="容器的进程ID关系"><a href="#容器的进程ID关系" class="headerlink" title="容器的进程ID关系"></a>容器的进程ID关系</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Host -------------------------------- <span class="token operator">|</span> container ------------------------<span class="token operator">|</span>
+systemd -- containerd -- container-shim -- <span class="token operator">|</span> nginx-master -- nginx-worker
+               <span class="token variable"><span class="token variable">`</span>      -- container-shim -- <span class="token operator">|</span> nginx-master -- nginx-worker
+               <span class="token variable">`</span></span>      -- container-shim -- <span class="token operator">|</span> mysql-master -- mysql-worker
+           dockerd -- docker-proxy -- <span class="token operator">|</span> docker-proxy
+               <span class="token variable"><span class="token variable">`</span>   -- docker-proxy -- <span class="token operator">|</span> docker-proxy
+               <span class="token variable">`</span></span>   -- docker-proxy -- <span class="token operator">|</span> docker-proxy<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>containerd负责控制容器的进程，主机，用户，挂载的隔离。<br>dockerd 启动的docker-proxy用来管理iptables进行网络的隔离。<br>docker.service 里面指定了调用Containerd的socket<br>生成容器的过程钟，API调用过程使用的是grpc。<br>无论dockerd还是containerd最终使用的都是runc（container runtime） ，一个基于Go语言的容器创建工具， 根据OCI标准来创建容器。</p>
+<p>docker-daemon 限制可以限制生成日志的大小</p>
+<ul>
+<li>限制日志的大小使用的是 docker的daemon config， 针对的日志的范围，是docker Container 里面的标准输入输出的日志， 这部分日志的存储是在机器的硬盘上， 位置是（&#x2F;opt&#x2F;docker-storage&#x2F;containers ， 也就是&#x2F;var&#x2F;lib&#x2F;docker&#x2F;containers&#x2F;[CONTAINER_ID]&#x2F;*.json），</li>
+</ul>
+<p> cpu 大约可以分配 1:4  ， mem不建议超过物理内存的分配</p>
+<p>压测镜像： lorel&#x2F;docker-stress-ng </p>
+<h2 id="docker的网络结构"><a href="#docker的网络结构" class="headerlink" title="docker的网络结构"></a>docker的网络结构</h2><p>使用的是宿主机的docker0桥，同时在Host上面生成虚拟网卡veth多个接口 ， 在容器中生成eth0的虚拟网卡对， 虚拟机中的两个容器之间使用的是物理地址进行寻址访问，所以这个部分可以通过arp命令来进行验证。</p>
+<h2 id="Docker容器的资源限制-Cgroup"><a href="#Docker容器的资源限制-Cgroup" class="headerlink" title="Docker容器的资源限制 - Cgroup"></a>Docker容器的资源限制 - Cgroup</h2><p>可以限制 CPU，MEM，DISKIO，NETIO, PRI，PAUSE&#x2F;RESUME。 对于Kubernetes可以对集群的Namespace来进行限制资源的规划。</p>
+<p>查看内核可以支持的cgroup Flag. </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌─<span class="token punctuation">[</span>hayden@HaydenArchDesktop<span class="token punctuation">]</span> - <span class="token punctuation">[</span>~<span class="token punctuation">]</span> - <span class="token punctuation">[</span>Sun Sep 05, 00:14<span class="token punctuation">]</span>
+└─<span class="token punctuation">[</span>$<span class="token punctuation">]</span> <span class="token operator">&lt;></span> zcat /proc/config.gz <span class="token operator">|</span> <span class="token function">grep</span> CGROUP
+<span class="token assign-left variable">CONFIG_CGROUPS</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_BLK_CGROUP</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_WRITEBACK</span><span class="token operator">=</span>y 
+<span class="token assign-left variable">CONFIG_CGROUP_SCHED</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_PIDS</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_RDMA</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_FREEZER</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_HUGETLB</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_DEVICE</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_CPUACCT</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_PERF</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_BPF</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_MISC</span><span class="token operator">=</span>y
+<span class="token comment"># CONFIG_CGROUP_DEBUG is not set</span>
+<span class="token assign-left variable">CONFIG_SOCK_CGROUP_DATA</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_BLK_CGROUP_RWSTAT</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_BLK_CGROUP_IOLATENCY</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_BLK_CGROUP_IOCOST</span><span class="token operator">=</span>y
+<span class="token comment"># CONFIG_BFQ_CGROUP_DEBUG is not set</span>
+<span class="token assign-left variable">CONFIG_NETFILTER_XT_MATCH_CGROUP</span><span class="token operator">=</span>m
+<span class="token assign-left variable">CONFIG_NET_CLS_CGROUP</span><span class="token operator">=</span>m
+<span class="token assign-left variable">CONFIG_CGROUP_NET_PRIO</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_NET_CLASSID</span><span class="token operator">=</span>y
+
+┌─<span class="token punctuation">[</span>hayden@HaydenArchDesktop<span class="token punctuation">]</span> - <span class="token punctuation">[</span>~<span class="token punctuation">]</span> - <span class="token punctuation">[</span>Sun Sep 05, 00:14<span class="token punctuation">]</span>
+└─<span class="token punctuation">[</span>$<span class="token punctuation">]</span> <span class="token operator">&lt;></span> zcat /proc/config.gz <span class="token operator">|</span> <span class="token function">grep</span> MEM <span class="token operator">|</span> <span class="token function">grep</span> CG
+<span class="token assign-left variable">CONFIG_MEMCG</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_MEMCG_SWAP</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_MEMCG_KMEM</span><span class="token operator">=</span>y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><p>Kubernetes 限制是1&#x2F;1000Core ，Docker是1&#x2F;10Core, 只需要通过 –cpus 选项指定容器可以使用的 CPU 个数就可以了，并且还可以指定如 1.5 之类的小数。</p>
+<p>CPU OverCommit 1:8</p>
+<h3 id="MEM"><a href="#MEM" class="headerlink" title="MEM"></a>MEM</h3><p>MEM的限制单位是M； 同时可以限制Swap的使用，但是限制Swap的使用需要内核的支持，大部分时候还是会关闭掉SWAP， 虽然避免了OOM，但是会影响服务的质量。</p>
+<p>MEM 不建议OverCommit</p>
+<blockquote>
+<p>一般情况下 ： 分配0.5&#x2F;1个CPU，mem 2G&#x2F;4G； 根据业务的不同， 一般会是高可用的部署，两个一起对外提供服务；所以会启动两个容器，不需要提供太高的硬件，符合要求即可。</p>
+</blockquote>
+<p>关于OOM的问题和可以调整的参数(&#x2F;proc&#x2F;[PID]&#x2F;)：</p>
+<ol>
+<li>oom_adj 取值范围 -17 to +15 ， 为了兼容旧程序保留的方式</li>
+<li>oom_score 一般是自动计算出来的结果，<strong>综合计算的结果, 参考 ： CPU时间，存活时间，oom_adj计算之后的结果。</strong></li>
+<li>oom_score_adj OOM分数的偏移量，-1000 to +1000, 可以设置-1000表示永远不会被Kill</li>
+</ol>
+<h3 id="DISKIO"><a href="#DISKIO" class="headerlink" title="DISKIO"></a>DISKIO</h3><p>Disk OverCommit : 1:1.2</p>
+<h3 id="PAUSE-RESUME"><a href="#PAUSE-RESUME" class="headerlink" title="PAUSE\RESUME"></a>PAUSE\RESUME</h3>
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2021/09/04/Linux/Linux_Docker-again/">
+            https://liarlee.site/2021/09/04/Linux/Linux_Docker-again/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2021/09/11/Linux/Linux_Kubernetes-day1/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Kubernetes day1 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2021/09/01/Linux/Linux_Ceph04/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Ceph Cluster 04 - CRUSH算法 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E4%BD%BF%E7%94%A8%E7%9A%84%E5%85%AD%E4%B8%AA%E5%90%8D%E7%A7%B0%E7%A9%BA%E9%97%B4"><span class="toc-text">Docker使用的六个名称空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%9A%84%E8%BF%9B%E7%A8%8BID%E5%85%B3%E7%B3%BB"><span class="toc-text">容器的进程ID关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="toc-text">docker的网络结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E5%AE%B9%E5%99%A8%E7%9A%84%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-Cgroup"><span class="toc-text">Docker容器的资源限制 - Cgroup</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU"><span class="toc-text">CPU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MEM"><span class="toc-text">MEM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DISKIO"><span class="toc-text">DISKIO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PAUSE-RESUME"><span class="toc-text">PAUSE\RESUME</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E4%BD%BF%E7%94%A8%E7%9A%84%E5%85%AD%E4%B8%AA%E5%90%8D%E7%A7%B0%E7%A9%BA%E9%97%B4"><span class="toc-text">Docker使用的六个名称空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%9A%84%E8%BF%9B%E7%A8%8BID%E5%85%B3%E7%B3%BB"><span class="toc-text">容器的进程ID关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="toc-text">docker的网络结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E5%AE%B9%E5%99%A8%E7%9A%84%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-Cgroup"><span class="toc-text">Docker容器的资源限制 - Cgroup</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU"><span class="toc-text">CPU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MEM"><span class="toc-text">MEM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DISKIO"><span class="toc-text">DISKIO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PAUSE-RESUME"><span class="toc-text">PAUSE\RESUME</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E4%BD%BF%E7%94%A8%E7%9A%84%E5%85%AD%E4%B8%AA%E5%90%8D%E7%A7%B0%E7%A9%BA%E9%97%B4"><span class="toc-text">Docker使用的六个名称空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%9A%84%E8%BF%9B%E7%A8%8BID%E5%85%B3%E7%B3%BB"><span class="toc-text">容器的进程ID关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="toc-text">docker的网络结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E5%AE%B9%E5%99%A8%E7%9A%84%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-Cgroup"><span class="toc-text">Docker容器的资源限制 - Cgroup</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU"><span class="toc-text">CPU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MEM"><span class="toc-text">MEM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DISKIO"><span class="toc-text">DISKIO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PAUSE-RESUME"><span class="toc-text">PAUSE\RESUME</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

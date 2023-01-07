@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Perf 命令的Performance分析</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Perf 命令的Performance分析">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2022/04/19/Linux/Linux_Perf/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="Archlinux User, Kubernetes, Support Engineer">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2022-04-19">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Linux">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Perf 命令的Performance分析
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2022-04-19T09:45:39.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2022-04-19</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.2k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Linux/" 
+            class="post-meta-link">
+            Linux
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p><a target="_blank" rel="noopener" href="https://blog.gmem.cc/perf">https://blog.gmem.cc/perf</a>  一个非常详细的博客， 太牛逼了。</p>
+<h2 id="使用perf进行性能的简单输出"><a href="#使用perf进行性能的简单输出" class="headerlink" title="使用perf进行性能的简单输出"></a>使用perf进行性能的简单输出</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@ip-172-31-11-235:~<span class="token operator">|</span>⇒  perf <span class="token function">stat</span> <span class="token function">htop</span> -d <span class="token number">1</span>
+
+ Performance counter stats <span class="token keyword">for</span> <span class="token string">'htop -d 1'</span><span class="token builtin class-name">:</span>
+
+        <span class="token number">181.764747</span>      task-clock <span class="token punctuation">(</span>msec<span class="token punctuation">)</span>         <span class="token comment">#    0.055 CPUs utilized</span>
+                <span class="token number">52</span>      context-switches          <span class="token comment">#    0.286 K/sec</span>
+                 <span class="token number">0</span>      cpu-migrations            <span class="token comment">#    0.000 K/sec</span>
+               <span class="token number">320</span>      page-faults               <span class="token comment">#    0.002 M/sec</span>
+   <span class="token operator">&lt;</span>not supported<span class="token operator">></span>      cycles
+   <span class="token operator">&lt;</span>not supported<span class="token operator">></span>      instructions
+   <span class="token operator">&lt;</span>not supported<span class="token operator">></span>      branches
+   <span class="token operator">&lt;</span>not supported<span class="token operator">></span>      branch-misses
+
+       <span class="token number">3.283236218</span> seconds <span class="token function">time</span> elapsed
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="使用perf记录性能指标到文件"><a href="#使用perf记录性能指标到文件" class="headerlink" title="使用perf记录性能指标到文件"></a>使用perf记录性能指标到文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@ip-172-31-41-141 tmp<span class="token punctuation">]</span><span class="token comment"># perf record -F 99 -a -g -p 44551</span>
+<span class="token punctuation">[</span>root@ip-172-31-41-141 tmp<span class="token punctuation">]</span><span class="token comment"># sudo perf record -F 99 -a -g -- sleep 60</span>
+Warning:
+PID/TID switch overriding SYSTEM
+^C<span class="token punctuation">[</span> perf record: Woken up <span class="token number">1</span> <span class="token builtin class-name">times</span> to <span class="token function">write</span> data <span class="token punctuation">]</span>
+<span class="token punctuation">[</span> perf record: Captured and wrote <span class="token number">0.021</span> MB perf.data <span class="token punctuation">(</span><span class="token number">2</span> samples<span class="token punctuation">)</span> <span class="token punctuation">]</span>
+root@ip-172-31-11-235:~<span class="token operator">|</span>⇒  <span class="token function">sudo</span> perf script <span class="token operator">></span> out.perf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h2 id="生成火焰图"><a href="#生成火焰图" class="headerlink" title="生成火焰图"></a>生成火焰图</h2><p>通常的做法是将 out.perf 拷贝到本地机器，在本地生成火焰图：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">git</span> clone --depth <span class="token number">1</span> https://github.com/brendangregg/FlameGraph.git
+<span class="token comment"># 折叠调用栈</span>
+$ perf script <span class="token operator">></span> out.perf
+$ FlameGraph/stackcollapse-perf.pl out.perf <span class="token operator">></span> out.folded
+<span class="token comment"># 生成火焰图</span>
+$ FlameGraph/flamegraph.pl out.folded <span class="token operator">></span> out.svg<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>生成火焰图可以指定参数，–width 可以指定图片宽度，–height 指定每一个调用栈的高度，生成的火焰图，宽度越大就表示CPU耗时越多。<br>FlameGraph&#x2F;flamegraph.pl &lt; out.profile &gt; out.svg</p>
+<p>[root@ip-172-31-18-198 timechart]# perf timechart record -g – curl <a target="_blank" rel="noopener" href="http://localhost:19999/">http://localhost:19999</a><br>[root@ip-172-31-18-198 timechart]# perf timechart<br>Written 0.0 seconds of trace to output.svg.</p>
+<h2 id="制造一个D进程"><a href="#制造一个D进程" class="headerlink" title="制造一个D进程"></a>制造一个D进程</h2><p>Most proper way is to use freezer cgroup. It puts process to uninterruptible sleep in case of FROZEN cgroup state.</p>
+<p>mkdir &#x2F;sys&#x2F;fs&#x2F;cgroup&#x2F;freezer<br>mount -t cgroup -ofreezer freezer &#x2F;sys&#x2F;fs&#x2F;cgroup&#x2F;freezer<br>mkdir &#x2F;sys&#x2F;fs&#x2F;cgroup&#x2F;freezer&#x2F;frozen<br>echo FROZEN &gt; &#x2F;sys&#x2F;fs&#x2F;cgroup&#x2F;freezer&#x2F;frozen&#x2F;freezer.state<br>echo <code>pidof you_process</code> &gt; &#x2F;sys&#x2F;fs&#x2F;cgroup&#x2F;freezer&#x2F;frozen&#x2F;tasks<br>echo <code>pgrep cp</code> &gt; &#x2F;sys&#x2F;fs&#x2F;cgroup&#x2F;freezer&#x2F;frozen&#x2F;tasks<br>echo THAWED &gt; &#x2F;sys&#x2F;fs&#x2F;cgroup&#x2F;freezer&#x2F;frozen&#x2F;freezer.state</p>
+<p>To put again to interruptible sleep, just change cgroup state to THAWED.</p>
+<h2 id="动态追踪"><a href="#动态追踪" class="headerlink" title="动态追踪"></a>动态追踪</h2><ol>
+<li>添加一个动态追踪的Tracepoint Event<pre class="line-numbers language-none"><code class="language-none">perf probe --add&#x3D;&quot;probe:io_schedule_timeout&quot;
+perf probe --add&#x3D;&quot;probe:io_schedule_timeout%return&quot;
+# 使用
+perf record -e probe:tcp_sendmsg -a -g -- sleep 5
+# 分析
+perf report --stdio<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>移除一个动态追踪的Tracepoint Event<pre class="line-numbers language-none"><code class="language-none">perf probe --del&#x3D;&quot;probe:io_schedule_timeout&quot;
+perf probe -d &quot;probe:io_schedule_timeout&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>列出所有存在的probe <pre class="line-numbers language-none"><code class="language-none">perf probe -l<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>查看追踪的结果<pre class="line-numbers language-none"><code class="language-none">perf script
+perf probe -V tcp_sendmsg # 列出可用的变量列表
+perf probe --add &#39;tcp_sendmsg size&#39; # 追踪这个变量
+# Add a tracepoint for tcp_sendmsg() return, and capture the return value:
+perf probe &#39;tcp_sendmsg%return $retval&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h2 id="关于Off-cpu进程的分析"><a href="#关于Off-cpu进程的分析" class="headerlink" title="关于Off-cpu进程的分析"></a>关于Off-cpu进程的分析</h2><ol>
+<li>按步骤生成<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">]$ &#x2F;usr&#x2F;share&#x2F;bcc&#x2F;tools&#x2F;offcputime -df -p &#96;pgrep -nx mysqld&#96; 30 &gt; out.stacks
+[...copy out.stacks to your local system if desired...]
+]$ git clone https:&#x2F;&#x2F;github.com&#x2F;brendangregg&#x2F;FlameGraph
+]$ cd FlameGraph
+]$ .&#x2F;flamegraph.pl --color&#x3D;io --title&#x3D;&quot;Off-CPU Time Flame Graph&quot; --countname&#x3D;us &lt; out.stacks &gt; out.svg<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>一条命令出图 <pre class="line-numbers language-none"><code class="language-none">]$ grep do_command &lt; out.stacks | .&#x2F;flamegraph.pl --color&#x3D;io --title&#x3D;&quot;Off-CPU Time Flame Graph&quot; --countname&#x3D;us &gt; out.svg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h2 id="perf命令的常见参数"><a href="#perf命令的常见参数" class="headerlink" title="perf命令的常见参数"></a>perf命令的常见参数</h2><ol>
+<li>内核设置<br>要启用内核动态追踪，需要使用内核编译参数CONFIG_KPROBES&#x3D;y、CONFIG_KPROBE_EVENTS&#x3D;y。<br>要追踪基于帧指针的内核栈，需要内核编译参数CONFIG_FRAME_POINTER&#x3D;y。<br>要启用用户动态追踪，需要使用内核编译参数CONFIG_UPROBES&#x3D;y、CONFIG_UPROBE_EVENTS&#x3D;y</li>
+<li>子命令列表</li>
+</ol>
+<p>perf支持一系列的子命令：<br>子命令 	说明<br>annotate 	读取perf.data并显示被注解的代码<br>bench 	基准测试的框架<br>config 	在配置文件中读写配置项<br>diff 	读取perf.data并显示剖析差异<br>evlist 	列出perf.data中的事件名称<br>inject 	用于增强事件流的过滤器<br>kmem 	跟踪&#x2F;度量内核内存属性<br>kvm 	跟踪&#x2F;度量KVM客户机系统<br>list 	显示符号化的事件列表<br>lock 	分析锁事件<br>mem 	分析内存访问<br>record 	执行剖析<br>report 	显示剖析结果<br>sched 	分析调度器<br>stat 	获取性能计数<br>top 	显示成本最高的操作并动态刷新<br>trace 	类似于strace的工具<br>probe 	定义新的动态追踪点</p>
+<ol start="3">
+<li>perrf record 命令参数 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">--exclude-perf 	不记录perf自己发起的事件
+-p 	收集指定进程的事件，逗号分割的PID列表
+-a 	使用Per-CPU模式，如果不指定-C，则相当于全局模式。如果指定-C，则可以选定若干CPU
+-g 	记录调用栈
+-F 	以指定的频率剖析
+-T 	记录样本时间戳
+-s 	记录每个线程的事件计数器，配合 perf report -T使用<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h1 id="微基准测试"><a href="#微基准测试" class="headerlink" title="微基准测试"></a>微基准测试</h1><p>From youtube video： </p>
+<p>&#96;&#96;&#96;bash<br>root@HaydenArchDesktop &#x2F;tmp# perf bench sched pipe</p>
+<h1 id="Running-‘sched-x2F-pipe’-benchmark"><a href="#Running-‘sched-x2F-pipe’-benchmark" class="headerlink" title="Running ‘sched&#x2F;pipe’ benchmark:"></a>Running ‘sched&#x2F;pipe’ benchmark:</h1><h1 id="Executed-1000000-pipe-operations-between-two-processes"><a href="#Executed-1000000-pipe-operations-between-two-processes" class="headerlink" title="Executed 1000000 pipe operations between two processes"></a>Executed 1000000 pipe operations between two processes</h1><pre><code> Total time: 2.407 [sec]
+
+   2.407455 usecs/op
+     415376 ops/sec
+</code></pre>
+<p>root@HaydenArchDesktop &#x2F;tmp# taskset -c 0 perf bench sched pipe</p>
+<h1 id="Running-‘sched-x2F-pipe’-benchmark-1"><a href="#Running-‘sched-x2F-pipe’-benchmark-1" class="headerlink" title="Running ‘sched&#x2F;pipe’ benchmark:"></a>Running ‘sched&#x2F;pipe’ benchmark:</h1><h1 id="Executed-1000000-pipe-operations-between-two-processes-1"><a href="#Executed-1000000-pipe-operations-between-two-processes-1" class="headerlink" title="Executed 1000000 pipe operations between two processes"></a>Executed 1000000 pipe operations between two processes</h1><pre><code> Total time: 2.381 [sec]
+
+   2.381081 usecs/op
+     419977 ops/sec
+</code></pre>
+<h1 id="这里的时间提升不明显的原因是，-我的Archlinux是ZenKernel，-感觉可能在调度上已经做了不少的事情-，如果随便启动一个redhat-这个指标的差距会比较大。"><a href="#这里的时间提升不明显的原因是，-我的Archlinux是ZenKernel，-感觉可能在调度上已经做了不少的事情-，如果随便启动一个redhat-这个指标的差距会比较大。" class="headerlink" title="这里的时间提升不明显的原因是， 我的Archlinux是ZenKernel， 感觉可能在调度上已经做了不少的事情 ，如果随便启动一个redhat , 这个指标的差距会比较大。"></a>这里的时间提升不明显的原因是， 我的Archlinux是ZenKernel， 感觉可能在调度上已经做了不少的事情 ，如果随便启动一个redhat , 这个指标的差距会比较大。</h1>
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2022/04/19/Linux/Linux_Perf/">
+            https://liarlee.site/2022/04/19/Linux/Linux_Perf/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2022/04/19/Linux/Linux_OOMKiller/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">OOM行为 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2022/04/19/Linux/Linux_Sysctl/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Sysctl 云平台参数的收集以及一部分解释 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8perf%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E7%9A%84%E7%AE%80%E5%8D%95%E8%BE%93%E5%87%BA"><span class="toc-text">使用perf进行性能的简单输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8perf%E8%AE%B0%E5%BD%95%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E5%88%B0%E6%96%87%E4%BB%B6"><span class="toc-text">使用perf记录性能指标到文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%81%AB%E7%84%B0%E5%9B%BE"><span class="toc-text">生成火焰图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E9%80%A0%E4%B8%80%E4%B8%AAD%E8%BF%9B%E7%A8%8B"><span class="toc-text">制造一个D进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA"><span class="toc-text">动态追踪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EOff-cpu%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-text">关于Off-cpu进程的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#perf%E5%91%BD%E4%BB%A4%E7%9A%84%E5%B8%B8%E8%A7%81%E5%8F%82%E6%95%B0"><span class="toc-text">perf命令的常见参数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BE%AE%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="toc-text">微基准测试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Running-%E2%80%98sched-x2F-pipe%E2%80%99-benchmark"><span class="toc-text">Running ‘sched&#x2F;pipe’ benchmark:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Executed-1000000-pipe-operations-between-two-processes"><span class="toc-text">Executed 1000000 pipe operations between two processes</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Running-%E2%80%98sched-x2F-pipe%E2%80%99-benchmark-1"><span class="toc-text">Running ‘sched&#x2F;pipe’ benchmark:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Executed-1000000-pipe-operations-between-two-processes-1"><span class="toc-text">Executed 1000000 pipe operations between two processes</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E7%9A%84%E6%97%B6%E9%97%B4%E6%8F%90%E5%8D%87%E4%B8%8D%E6%98%8E%E6%98%BE%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%98%AF%EF%BC%8C-%E6%88%91%E7%9A%84Archlinux%E6%98%AFZenKernel%EF%BC%8C-%E6%84%9F%E8%A7%89%E5%8F%AF%E8%83%BD%E5%9C%A8%E8%B0%83%E5%BA%A6%E4%B8%8A%E5%B7%B2%E7%BB%8F%E5%81%9A%E4%BA%86%E4%B8%8D%E5%B0%91%E7%9A%84%E4%BA%8B%E6%83%85-%EF%BC%8C%E5%A6%82%E6%9E%9C%E9%9A%8F%E4%BE%BF%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AAredhat-%E8%BF%99%E4%B8%AA%E6%8C%87%E6%A0%87%E7%9A%84%E5%B7%AE%E8%B7%9D%E4%BC%9A%E6%AF%94%E8%BE%83%E5%A4%A7%E3%80%82"><span class="toc-text">这里的时间提升不明显的原因是， 我的Archlinux是ZenKernel， 感觉可能在调度上已经做了不少的事情 ，如果随便启动一个redhat , 这个指标的差距会比较大。</span></a>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8perf%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E7%9A%84%E7%AE%80%E5%8D%95%E8%BE%93%E5%87%BA"><span class="toc-text">使用perf进行性能的简单输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8perf%E8%AE%B0%E5%BD%95%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E5%88%B0%E6%96%87%E4%BB%B6"><span class="toc-text">使用perf记录性能指标到文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%81%AB%E7%84%B0%E5%9B%BE"><span class="toc-text">生成火焰图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E9%80%A0%E4%B8%80%E4%B8%AAD%E8%BF%9B%E7%A8%8B"><span class="toc-text">制造一个D进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA"><span class="toc-text">动态追踪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EOff-cpu%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-text">关于Off-cpu进程的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#perf%E5%91%BD%E4%BB%A4%E7%9A%84%E5%B8%B8%E8%A7%81%E5%8F%82%E6%95%B0"><span class="toc-text">perf命令的常见参数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BE%AE%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="toc-text">微基准测试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Running-%E2%80%98sched-x2F-pipe%E2%80%99-benchmark"><span class="toc-text">Running ‘sched&#x2F;pipe’ benchmark:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Executed-1000000-pipe-operations-between-two-processes"><span class="toc-text">Executed 1000000 pipe operations between two processes</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Running-%E2%80%98sched-x2F-pipe%E2%80%99-benchmark-1"><span class="toc-text">Running ‘sched&#x2F;pipe’ benchmark:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Executed-1000000-pipe-operations-between-two-processes-1"><span class="toc-text">Executed 1000000 pipe operations between two processes</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E7%9A%84%E6%97%B6%E9%97%B4%E6%8F%90%E5%8D%87%E4%B8%8D%E6%98%8E%E6%98%BE%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%98%AF%EF%BC%8C-%E6%88%91%E7%9A%84Archlinux%E6%98%AFZenKernel%EF%BC%8C-%E6%84%9F%E8%A7%89%E5%8F%AF%E8%83%BD%E5%9C%A8%E8%B0%83%E5%BA%A6%E4%B8%8A%E5%B7%B2%E7%BB%8F%E5%81%9A%E4%BA%86%E4%B8%8D%E5%B0%91%E7%9A%84%E4%BA%8B%E6%83%85-%EF%BC%8C%E5%A6%82%E6%9E%9C%E9%9A%8F%E4%BE%BF%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AAredhat-%E8%BF%99%E4%B8%AA%E6%8C%87%E6%A0%87%E7%9A%84%E5%B7%AE%E8%B7%9D%E4%BC%9A%E6%AF%94%E8%BE%83%E5%A4%A7%E3%80%82"><span class="toc-text">这里的时间提升不明显的原因是， 我的Archlinux是ZenKernel， 感觉可能在调度上已经做了不少的事情 ，如果随便启动一个redhat , 这个指标的差距会比较大。</span></a>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8perf%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E7%9A%84%E7%AE%80%E5%8D%95%E8%BE%93%E5%87%BA"><span class="toc-text">使用perf进行性能的简单输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8perf%E8%AE%B0%E5%BD%95%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E5%88%B0%E6%96%87%E4%BB%B6"><span class="toc-text">使用perf记录性能指标到文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%81%AB%E7%84%B0%E5%9B%BE"><span class="toc-text">生成火焰图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E9%80%A0%E4%B8%80%E4%B8%AAD%E8%BF%9B%E7%A8%8B"><span class="toc-text">制造一个D进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA"><span class="toc-text">动态追踪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EOff-cpu%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-text">关于Off-cpu进程的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#perf%E5%91%BD%E4%BB%A4%E7%9A%84%E5%B8%B8%E8%A7%81%E5%8F%82%E6%95%B0"><span class="toc-text">perf命令的常见参数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BE%AE%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="toc-text">微基准测试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Running-%E2%80%98sched-x2F-pipe%E2%80%99-benchmark"><span class="toc-text">Running ‘sched&#x2F;pipe’ benchmark:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Executed-1000000-pipe-operations-between-two-processes"><span class="toc-text">Executed 1000000 pipe operations between two processes</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Running-%E2%80%98sched-x2F-pipe%E2%80%99-benchmark-1"><span class="toc-text">Running ‘sched&#x2F;pipe’ benchmark:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Executed-1000000-pipe-operations-between-two-processes-1"><span class="toc-text">Executed 1000000 pipe operations between two processes</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E7%9A%84%E6%97%B6%E9%97%B4%E6%8F%90%E5%8D%87%E4%B8%8D%E6%98%8E%E6%98%BE%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%98%AF%EF%BC%8C-%E6%88%91%E7%9A%84Archlinux%E6%98%AFZenKernel%EF%BC%8C-%E6%84%9F%E8%A7%89%E5%8F%AF%E8%83%BD%E5%9C%A8%E8%B0%83%E5%BA%A6%E4%B8%8A%E5%B7%B2%E7%BB%8F%E5%81%9A%E4%BA%86%E4%B8%8D%E5%B0%91%E7%9A%84%E4%BA%8B%E6%83%85-%EF%BC%8C%E5%A6%82%E6%9E%9C%E9%9A%8F%E4%BE%BF%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AAredhat-%E8%BF%99%E4%B8%AA%E6%8C%87%E6%A0%87%E7%9A%84%E5%B7%AE%E8%B7%9D%E4%BC%9A%E6%AF%94%E8%BE%83%E5%A4%A7%E3%80%82"><span class="toc-text">这里的时间提升不明显的原因是， 我的Archlinux是ZenKernel， 感觉可能在调度上已经做了不少的事情 ，如果随便启动一个redhat , 这个指标的差距会比较大。</span></a>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

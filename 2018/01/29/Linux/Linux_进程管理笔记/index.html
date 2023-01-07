@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Linux-进程管理笔记</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Linux-进程管理笔记">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2018/01/29/Linux/Linux_%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B0/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;h2 id=&#34;进程的优先级&#34;&gt;&lt;a href=&#34;#进程的优先级&#34; class=&#34;headerlink&#34; title=&#34;进程的优先级&#34;&gt;&lt;/a&gt;进程的优先级&lt;/h2&gt;&lt;h3 id=&#34;说明&#34;&gt;&lt;a href=&#34;#说明&#34; class=&#34;headerlink&#34; title=&#34;说明&#34;&gt;&lt;/a&gt;说明&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;优先级越高的进程就能够获得更多的CPU运行时间&lt;/li&gt;
+&lt;li&gt;能够更优先的获得运行的机会&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;优先级的调整&#34;&gt;&lt;a href=&#34;#优先级的调整&#34; class=&#34;headerlink&#34; title=&#34;优先级的调整&#34;&gt;&lt;/a&gt;优先级的调整&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;用户可以调整的优先级(priority)范围是100-139&lt;br&gt;每一个进程都有一个nice值, nice值是从-20到19，分别对应100-139&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可以调整进程自己的nice值，来调整优先级  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;nice值越小，优先级越高  &lt;/li&gt;
+&lt;li&gt;默认情况下每个进程的优先级都是0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果有进程的优先级是3，就说明该进程降低了自己的优先级，普通用户只能调大nice值，管理员可以随意调整&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2018-01-29">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Linux">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Linux-进程管理笔记
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-01-29T03:27:14.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2018-01-29</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.5k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Linux/" 
+            class="post-meta-link">
+            Linux
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h2 id="进程的优先级"><a href="#进程的优先级" class="headerlink" title="进程的优先级"></a>进程的优先级</h2><h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><ul>
+<li>优先级越高的进程就能够获得更多的CPU运行时间</li>
+<li>能够更优先的获得运行的机会</li>
+</ul>
+<h3 id="优先级的调整"><a href="#优先级的调整" class="headerlink" title="优先级的调整"></a>优先级的调整</h3><ul>
+<li>用户可以调整的优先级(priority)范围是100-139<br>每一个进程都有一个nice值, nice值是从-20到19，分别对应100-139</li>
+</ul>
+<p>可以调整进程自己的nice值，来调整优先级  </p>
+<ul>
+<li>nice值越小，优先级越高  </li>
+<li>默认情况下每个进程的优先级都是0</li>
+</ul>
+<p>如果有进程的优先级是3，就说明该进程降低了自己的优先级，普通用户只能调大nice值，管理员可以随意调整</p>
+<span id="more"></span>
+
+<h3 id="PID（process-ID）-进程号"><a href="#PID（process-ID）-进程号" class="headerlink" title="PID（process ID）:进程号"></a>PID（process ID）:进程号</h3><h2 id="init进程"><a href="#init进程" class="headerlink" title="init进程"></a>init进程</h2><p>每一个进程都有父进程，除了init，init是所有进程的父进程<br>init的进程号永远为1   </p>
+<h2 id="其他进程"><a href="#其他进程" class="headerlink" title="其他进程"></a>其他进程</h2><p>进程的相关属性信息在&#x2F;proc目录下，每一个目录对应一个进程<br>每一个进程的进程号都是唯一的，即使进程退出了，进程的号码一般不会被占用<br>访问到的都是内核的映射。不是文件，是内核参数<br>进程号文件夹中的文件记载了进程运行的命令，内存，使用的cpu等等  </p>
+<h2 id="进程的分类"><a href="#进程的分类" class="headerlink" title="进程的分类"></a>进程的分类</h2><ul>
+<li>与终端有关的进程</li>
+<li>与终端无关的进程</li>
+</ul>
+<h2 id="进程状态表"><a href="#进程状态表" class="headerlink" title="进程状态表"></a>进程状态表</h2><table>
+<thead>
+<tr>
+<th align="center">标识符</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">D</td>
+<td align="left">不可中断的睡眠</td>
+</tr>
+<tr>
+<td align="center">R</td>
+<td align="left">运行或就绪</td>
+</tr>
+<tr>
+<td align="center">S</td>
+<td align="left">可中断的睡眠</td>
+</tr>
+<tr>
+<td align="center">T</td>
+<td align="left">停止</td>
+</tr>
+<tr>
+<td align="center">Z</td>
+<td align="left">僵死</td>
+</tr>
+<tr>
+<td align="center">&lt;</td>
+<td align="left">高优先级的进程</td>
+</tr>
+<tr>
+<td align="center">N</td>
+<td align="left">低优先级的进程</td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td align="left">前台进程组中的进程</td>
+</tr>
+<tr>
+<td align="center">l</td>
+<td align="left">表示多线程进程</td>
+</tr>
+<tr>
+<td align="center">s</td>
+<td align="left">会话进程的首进程(领导者进程)</td>
+</tr>
+</tbody></table>
+<h2 id="进程查看命令"><a href="#进程查看命令" class="headerlink" title="进程查看命令"></a>进程查看命令</h2><p><strong>ps命令</strong> 显示进程状态，多种使用风格，unix的两大阵营，BSD风格（不加-），SYSV风格（加-)</p>
+<p>Example： <code>ps -aux</code>  </p>
+<h3 id="参数说明-BSD风格"><a href="#参数说明-BSD风格" class="headerlink" title="参数说明-BSD风格"></a>参数说明-BSD风格</h3><p>a：BSD风格，显示所有与终端有关的进程，与x一起用显示所有<br>u：能够显示详细的信息<br>x：BSD风格，显示所有与终端无关的进程  </p>
+<h4 id="ps命令输出信息的说明"><a href="#ps命令输出信息的说明" class="headerlink" title="ps命令输出信息的说明"></a>ps命令输出信息的说明</h4><p>单独查看Firefox进程的例子  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost Liarlee]# ps -aux | grep firefox  
+USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND  
+root       1915  5.7  6.9 9324108 570096 tty2   Sl+  11:23   2:00 &#x2F;usr&#x2F;lib64&#x2F;firefox&#x2F;firefox  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>说明表格  </p>
+<table>
+<thead>
+<tr>
+<th align="center">USER</th>
+<th align="left">PID</th>
+<th align="left">%CPU</th>
+<th align="left">%MEM</th>
+<th align="left">RSS</th>
+<th align="left">VSZ</th>
+<th align="left">TTY</th>
+<th align="left">START</th>
+<th align="left">STAT</th>
+<th align="left">TIME</th>
+<th align="left">COMMAND</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">进程发起者</td>
+<td align="left">进程号</td>
+<td align="left">使用cpu百分比</td>
+<td align="left">使用内存的百分比</td>
+<td align="left">常驻内存集</td>
+<td align="left">虚拟内存集</td>
+<td align="left">控制台关联</td>
+<td align="left">启动时间</td>
+<td align="left">状态</td>
+<td align="left">运行时间</td>
+<td align="left">哪一个命令启动的进程</td>
+</tr>
+<tr>
+<td align="center"><em>[]表示是一个内核线程，不是一个用户进程</em></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="另一个风格-SYSV风格"><a href="#另一个风格-SYSV风格" class="headerlink" title="另一个风格-SYSV风格"></a>另一个风格-SYSV风格</h3><p>-e SYSV风格，显示所有的进程<br>-F 额外的完全格式，显示更多的字段<br>-l 长格式  </p>
+<p>PRI：优先级<br>NI：nice值<br>SZ：size<br>PSR：正在运行在那个CPU  </p>
+<p>ps -o 指定显示的字段,ps 不加参数只显示前台进程，一般使用ps -axo<br>例：ps -axo comm,pid,ni<br>man文档中有单独的说明-o可以指定那些字段  </p>
+<h2 id="pstree进程树"><a href="#pstree进程树" class="headerlink" title="pstree进程树"></a>pstree进程树</h2><p>pgrep  查找符合某种特性的进程    例： pgrep bash   pgrep -u root bash  以root用户为属主运行的bash进程<br>   只显示进程号，不显示进程的名称<br>   -u euid        有效ID<br>   -U uid         进程发起者ID  </p>
+<p>pidof     查看某一个进程名字对应得进程号   pidof init    |   pidof sshd    |    pidof crond</p>
+<h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><h3 id="关于top显示信息的说明"><a href="#关于top显示信息的说明" class="headerlink" title="关于top显示信息的说明"></a>关于top显示信息的说明</h3><pre><code>   当前系统时间 ， up运行时长，登陆用户，平均负载（平均队列长度，队列长度越小cpu负载越低）。
+   所有的进程数量，正在运行的进程数量，多少个睡眠进程，多少个僵尸进程
+   每个cpu负载，默认是多颗cpu平均负载，数字1，表示展开查看。
+       us ： 用户空间占用的
+       sy： 运行在系统占据了多少
+       ni：nice值影响的cpu比例
+       id： 空闲的百分比
+       wa： 等待IO完成的百分比，占据的时间
+       hi ：中断占据的百分比
+       si ： 软中断的时间
+       st ： 被偷走的时间
+   内存的使用
+   交换的使用
+   默认使用cpu百分比排序
+</code></pre>
+<h3 id="top交互式的子命令"><a href="#top交互式的子命令" class="headerlink" title="top交互式的子命令"></a>top交互式的子命令</h3><pre><code>   M：使用内存百分比排序
+   P： 使用cpu百分比排序
+   T： 占用cpu时间排序
+
+   l：不显示平均负载启动时间  
+   t：不显示进程和cpu负载   
+   m：不显示关于内存和交换的信息
+
+   c：  是否显示完整的命令行
+   q： 退出top
+   k：  杀死某个进程
+</code></pre>
+<h3 id="更改top命令的选项："><a href="#更改top命令的选项：" class="headerlink" title="更改top命令的选项："></a>更改top命令的选项：</h3><pre><code>   -d    更改刷新是时常
+   -b   批处理模式   会刷新一次，刷新出一屏
+   -n  3 ： 批处理模式只显示多少次
+</code></pre>
+<h2 id="进程间通信："><a href="#进程间通信：" class="headerlink" title="进程间通信："></a>进程间通信：</h2><p>进程之间彼此不能感受到彼此的存在，因此进程间的通信有几种机制：  </p>
+<h3 id="IPC"><a href="#IPC" class="headerlink" title="IPC"></a>IPC</h3><p>进程间通信，unix中非常常用的机制，inter process Communication<br>               共享内存<br>               信号：signal<br>               semaphore  </p>
+<h3 id="手动控制进程间通信：-kill"><a href="#手动控制进程间通信：-kill" class="headerlink" title="手动控制进程间通信： kill"></a>手动控制进程间通信： kill</h3><pre><code>       kill -l  显示所有的kill信号
+       1 sighup        让一个进程不重启，重读配置文件，让文件的新配置生效
+       2 sigint          中断一个进程，ctrl c 就是发送了 2 信号
+       9 sigkill            杀死一个进程  ， 强行关闭  ， 没有任何余地
+       15 sigterm        中止一个进程
+</code></pre>
+<h3 id="指定发送信号："><a href="#指定发送信号：" class="headerlink" title="指定发送信号："></a>指定发送信号：</h3><p>   kill -1<br>   kill -sigkill<br>   kill -kill</p>
+<h2 id="杀死所有某个名字的进程："><a href="#杀死所有某个名字的进程：" class="headerlink" title="杀死所有某个名字的进程："></a>杀死所有某个名字的进程：</h2><p>killall  command</p>
+<h2 id="调整运行中进程的优先级"><a href="#调整运行中进程的优先级" class="headerlink" title="调整运行中进程的优先级"></a>调整运行中进程的优先级</h2><pre><code>     renice    进程优先级   进程号
+       renice   3   3704
+</code></pre>
+<p>nice -n nice值 命令</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>vmstat<br>   vmstat 1   每一秒显示一次</p>
+<p>pkill 类似于 pgrep</p>
+<p>bg  把前台的作业放入后台<br>   bg 【%】jobid  可以指定执行某一个作业  默认执行+ 作业<br>jobs  查看后台的所有作业  作业号不同于进程号<br>   如果进程上有+ 号 说明接下来将要继续操作的作业<br>    如果进程上有-好  说明执行完+的作业之后再执行-号作业  </p>
+<p>fg 将后台的作业放入前台 ，用法类似于bg  </p>
+<p>如果杀死某些作业 ， kill  %2   杀死作业2  </p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2018/01/29/Linux/Linux_%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B0/">
+            https://liarlee.site/2018/01/29/Linux/Linux_%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B0/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2018/01/29/Linux/Linux_%E7%94%B5%E8%AF%9D%E9%9D%A2%E8%AF%95/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Linux-电话面试 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2018/01/22/Linux/Linux_Nginx-InstalltionNote/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Nginx编译安装 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">进程的优先级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-text">说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7%E7%9A%84%E8%B0%83%E6%95%B4"><span class="toc-text">优先级的调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PID%EF%BC%88process-ID%EF%BC%89-%E8%BF%9B%E7%A8%8B%E5%8F%B7"><span class="toc-text">PID（process ID）:进程号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init%E8%BF%9B%E7%A8%8B"><span class="toc-text">init进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%BF%9B%E7%A8%8B"><span class="toc-text">其他进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">进程的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E8%A1%A8"><span class="toc-text">进程状态表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E6%9F%A5%E7%9C%8B%E5%91%BD%E4%BB%A4"><span class="toc-text">进程查看命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E-BSD%E9%A3%8E%E6%A0%BC"><span class="toc-text">参数说明-BSD风格</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ps%E5%91%BD%E4%BB%A4%E8%BE%93%E5%87%BA%E4%BF%A1%E6%81%AF%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">ps命令输出信息的说明</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%A6%E4%B8%80%E4%B8%AA%E9%A3%8E%E6%A0%BC-SYSV%E9%A3%8E%E6%A0%BC"><span class="toc-text">另一个风格-SYSV风格</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pstree%E8%BF%9B%E7%A8%8B%E6%A0%91"><span class="toc-text">pstree进程树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#top"><span class="toc-text">top</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Etop%E6%98%BE%E7%A4%BA%E4%BF%A1%E6%81%AF%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">关于top显示信息的说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#top%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%9A%84%E5%AD%90%E5%91%BD%E4%BB%A4"><span class="toc-text">top交互式的子命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9top%E5%91%BD%E4%BB%A4%E7%9A%84%E9%80%89%E9%A1%B9%EF%BC%9A"><span class="toc-text">更改top命令的选项：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A"><span class="toc-text">进程间通信：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IPC"><span class="toc-text">IPC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E6%8E%A7%E5%88%B6%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A-kill"><span class="toc-text">手动控制进程间通信： kill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7%EF%BC%9A"><span class="toc-text">指定发送信号：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%80%E6%AD%BB%E6%89%80%E6%9C%89%E6%9F%90%E4%B8%AA%E5%90%8D%E5%AD%97%E7%9A%84%E8%BF%9B%E7%A8%8B%EF%BC%9A"><span class="toc-text">杀死所有某个名字的进程：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E8%BF%90%E8%A1%8C%E4%B8%AD%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">调整运行中进程的优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-text">其他</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">进程的优先级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-text">说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7%E7%9A%84%E8%B0%83%E6%95%B4"><span class="toc-text">优先级的调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PID%EF%BC%88process-ID%EF%BC%89-%E8%BF%9B%E7%A8%8B%E5%8F%B7"><span class="toc-text">PID（process ID）:进程号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init%E8%BF%9B%E7%A8%8B"><span class="toc-text">init进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%BF%9B%E7%A8%8B"><span class="toc-text">其他进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">进程的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E8%A1%A8"><span class="toc-text">进程状态表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E6%9F%A5%E7%9C%8B%E5%91%BD%E4%BB%A4"><span class="toc-text">进程查看命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E-BSD%E9%A3%8E%E6%A0%BC"><span class="toc-text">参数说明-BSD风格</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ps%E5%91%BD%E4%BB%A4%E8%BE%93%E5%87%BA%E4%BF%A1%E6%81%AF%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">ps命令输出信息的说明</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%A6%E4%B8%80%E4%B8%AA%E9%A3%8E%E6%A0%BC-SYSV%E9%A3%8E%E6%A0%BC"><span class="toc-text">另一个风格-SYSV风格</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pstree%E8%BF%9B%E7%A8%8B%E6%A0%91"><span class="toc-text">pstree进程树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#top"><span class="toc-text">top</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Etop%E6%98%BE%E7%A4%BA%E4%BF%A1%E6%81%AF%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">关于top显示信息的说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#top%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%9A%84%E5%AD%90%E5%91%BD%E4%BB%A4"><span class="toc-text">top交互式的子命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9top%E5%91%BD%E4%BB%A4%E7%9A%84%E9%80%89%E9%A1%B9%EF%BC%9A"><span class="toc-text">更改top命令的选项：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A"><span class="toc-text">进程间通信：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IPC"><span class="toc-text">IPC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E6%8E%A7%E5%88%B6%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A-kill"><span class="toc-text">手动控制进程间通信： kill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7%EF%BC%9A"><span class="toc-text">指定发送信号：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%80%E6%AD%BB%E6%89%80%E6%9C%89%E6%9F%90%E4%B8%AA%E5%90%8D%E5%AD%97%E7%9A%84%E8%BF%9B%E7%A8%8B%EF%BC%9A"><span class="toc-text">杀死所有某个名字的进程：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E8%BF%90%E8%A1%8C%E4%B8%AD%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">调整运行中进程的优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-text">其他</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">进程的优先级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-text">说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7%E7%9A%84%E8%B0%83%E6%95%B4"><span class="toc-text">优先级的调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PID%EF%BC%88process-ID%EF%BC%89-%E8%BF%9B%E7%A8%8B%E5%8F%B7"><span class="toc-text">PID（process ID）:进程号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init%E8%BF%9B%E7%A8%8B"><span class="toc-text">init进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%BF%9B%E7%A8%8B"><span class="toc-text">其他进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">进程的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E8%A1%A8"><span class="toc-text">进程状态表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E6%9F%A5%E7%9C%8B%E5%91%BD%E4%BB%A4"><span class="toc-text">进程查看命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E-BSD%E9%A3%8E%E6%A0%BC"><span class="toc-text">参数说明-BSD风格</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ps%E5%91%BD%E4%BB%A4%E8%BE%93%E5%87%BA%E4%BF%A1%E6%81%AF%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">ps命令输出信息的说明</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%A6%E4%B8%80%E4%B8%AA%E9%A3%8E%E6%A0%BC-SYSV%E9%A3%8E%E6%A0%BC"><span class="toc-text">另一个风格-SYSV风格</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pstree%E8%BF%9B%E7%A8%8B%E6%A0%91"><span class="toc-text">pstree进程树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#top"><span class="toc-text">top</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Etop%E6%98%BE%E7%A4%BA%E4%BF%A1%E6%81%AF%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-text">关于top显示信息的说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#top%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%9A%84%E5%AD%90%E5%91%BD%E4%BB%A4"><span class="toc-text">top交互式的子命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9top%E5%91%BD%E4%BB%A4%E7%9A%84%E9%80%89%E9%A1%B9%EF%BC%9A"><span class="toc-text">更改top命令的选项：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A"><span class="toc-text">进程间通信：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IPC"><span class="toc-text">IPC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E6%8E%A7%E5%88%B6%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A-kill"><span class="toc-text">手动控制进程间通信： kill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7%EF%BC%9A"><span class="toc-text">指定发送信号：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%80%E6%AD%BB%E6%89%80%E6%9C%89%E6%9F%90%E4%B8%AA%E5%90%8D%E5%AD%97%E7%9A%84%E8%BF%9B%E7%A8%8B%EF%BC%9A"><span class="toc-text">杀死所有某个名字的进程：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E8%BF%90%E8%A1%8C%E4%B8%AD%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">调整运行中进程的优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-text">其他</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

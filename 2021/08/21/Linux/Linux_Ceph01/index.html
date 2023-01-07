@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Ceph Cluster 01 - Installation</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Ceph Cluster 01 - Installation">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2021/08/21/Linux/Linux_Ceph01/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;Ceph Installation Record.&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-21">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Ceph">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Ceph Cluster 01 - Installation
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-21T15:09:06.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-21</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.5k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Ceph/" 
+            class="post-meta-link">
+            Ceph
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>Ceph Installation Record.</p>
+<span id="more"></span>
+
+<h1 id="INIT"><a href="#INIT" class="headerlink" title="INIT"></a>INIT</h1><h2 id="INIT-OS"><a href="#INIT-OS" class="headerlink" title="INIT OS"></a>INIT OS</h2><p>OS Version: Fedora 34 Server<br>CEPH Version: v15.2.0 (Octopus) +<br>DOCKER Version: 20.10.8</p>
+<h2 id="CONFIG-hostname-and-IP"><a href="#CONFIG-hostname-and-IP" class="headerlink" title="CONFIG hostname and IP"></a>CONFIG hostname and IP</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/hosts
+  <span class="token number">192.168</span>.122.121 ceph01 ceph01.liarlee.site
+  <span class="token number">192.168</span>.122.122 ceph02 ceph02.liarlee.site
+  <span class="token number">192.168</span>.122.123 ceph03 ceph03.liarlee.site
+  <span class="token number">192.168</span>.122.124 ceph04 ceph04.liarlee.site
+
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">ssh</span> <span class="token number">192.168</span>.122.121 <span class="token builtin class-name">echo</span> <span class="token string">"ceph01.liarlee.site"</span> <span class="token operator">></span> /etc/hostname
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">ssh</span> <span class="token number">192.168</span>.122.122 <span class="token builtin class-name">echo</span> <span class="token string">"ceph02.liarlee.site"</span> <span class="token operator">></span> /etc/hostname
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">ssh</span> <span class="token number">192.168</span>.122.123 <span class="token builtin class-name">echo</span> <span class="token string">"ceph03.liarlee.site"</span> <span class="token operator">></span> /etc/hostname
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">ssh</span> <span class="token number">192.168</span>.122.124 <span class="token builtin class-name">echo</span> <span class="token string">"ceph04.liarlee.site"</span> <span class="token operator">></span> /etc/hostname
+
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ nmcli conn mod enp1s0 ipv4.address <span class="token number">192.168</span>.122.121/24
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ nmcli conn mod enp1s0 ipv4.address <span class="token number">192.168</span>.122.122/24
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ nmcli conn mod enp1s0 ipv4.address <span class="token number">192.168</span>.122.123/24
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ nmcli conn mod enp1s0 ipv4.address <span class="token number">192.168</span>.122.124/24
+
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ nmcli conn mod enp1s0 ipv4.gateway <span class="token number">192.168</span>.122.1
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ nmcli conn mod enp1s0 ipv4.dns <span class="token number">192.168</span>.122.1
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ nmcli conn mod enp1s0 ipv4.method manual
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ nmcli conn up enp1s0
+
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> systemctl stop firewalld <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> systemctl disable firewalld
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">vim</span> /etc/config/selinux <span class="token comment"># change it to disabled</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="CONFIG-dnf-repo"><a href="#CONFIG-dnf-repo" class="headerlink" title="CONFIG dnf repo"></a>CONFIG dnf repo</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># config docker</span>
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">wget</span> -O /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/fedora/docker-ce.repo
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> <span class="token function">sed</span> -i <span class="token string">'s+download.docker.com+mirrors.tuna.tsinghua.edu.cn/docker-ce+'</span> /etc/yum.repos.d/docker-ce.repo
+<span class="token comment"># Add GPG Key.</span>
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> <span class="token function">rpm</span> --import <span class="token string">'https://mirrors.tuna.tsinghua.edu.cn/ceph/keys/release.asc'</span>
+<span class="token comment"># update cache and install cephadm.</span>
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ dnf makecache -y <span class="token operator">&amp;&amp;</span> dnf <span class="token function">install</span> <span class="token function">curl</span> <span class="token function">wget</span> <span class="token function">htop</span> -y
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ dnf <span class="token function">install</span> cephadm -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="INSTALL-Docker"><a href="#INSTALL-Docker" class="headerlink" title="INSTALL Docker"></a>INSTALL Docker</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> dnf remove <span class="token function">docker</span> <span class="token punctuation">\</span>
+                  docker-client <span class="token punctuation">\</span>
+                  docker-client-latest <span class="token punctuation">\</span>
+                  docker-common <span class="token punctuation">\</span>
+                  docker-latest <span class="token punctuation">\</span>
+                  docker-latest-logrotate <span class="token punctuation">\</span>
+                  docker-logrotate <span class="token punctuation">\</span>
+                  docker-selinux <span class="token punctuation">\</span>
+                  docker-engine-selinux <span class="token punctuation">\</span>
+                  docker-engine
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> dnf <span class="token function">install</span> docker-ce docker-ce-cli containerd.io -y
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> systemctl start <span class="token function">docker</span> containerd
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> <span class="token function">docker</span> containerd
+
+<span class="token comment"># Config proxy for docker daemon.</span>
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ <span class="token function">mkdir</span> /etc/systemd/system/docker.service.d/
+<span class="token punctuation">[</span>root@ceph01 docker.service.d<span class="token punctuation">]</span>$ <span class="token function">cat</span> http-proxy.conf
+  <span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+  <span class="token assign-left variable">Environment</span><span class="token operator">=</span><span class="token string">"HTTP_PROXY=http://192.168.31.199:7890/"</span>
+  <span class="token assign-left variable">Environment</span><span class="token operator">=</span><span class="token string">"HTTPS_PROXY=http://192.168.31.199:7890/"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="INSTALL-CEPH"><a href="#INSTALL-CEPH" class="headerlink" title="INSTALL CEPH"></a>INSTALL CEPH</h1><p>Cephadm tools were default in Fedora Repo, No need to change the repo to tsinghua or aliyun. Just install. WOW ~ Fedora YYDS.</p>
+<h2 id="BOOTSTRAP-ceph"><a href="#BOOTSTRAP-ceph" class="headerlink" title="BOOTSTRAP ceph"></a>BOOTSTRAP ceph</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ cephadm bootstrap --mon-ip <span class="token number">192.168</span>.122.121 --allow-fqdn-hostname<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>Please notice the output, context include username and password and dashboard address.</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">Ceph Dashboard is now available at</span><span class="token punctuation">:</span>
+
+       <span class="token key atrule">URL</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//localhost.localdomain<span class="token punctuation">:</span>8443/
+      <span class="token key atrule">User</span><span class="token punctuation">:</span> admin
+  <span class="token key atrule">Password</span><span class="token punctuation">:</span> 20jrekw4ko
+
+Enabling client.admin keyring and conf on hosts with "admin" label
+<span class="token key atrule">You can access the Ceph CLI with</span><span class="token punctuation">:</span>
+
+  sudo /usr/sbin/cephadm shell <span class="token punctuation">-</span><span class="token punctuation">-</span>fsid e8997974<span class="token punctuation">-</span>029f<span class="token punctuation">-</span>11ec<span class="token punctuation">-</span>a59a<span class="token punctuation">-</span>525400c06f36 <span class="token punctuation">-</span>c /etc/ceph/ceph.conf <span class="token punctuation">-</span>k /etc/ceph/ceph.client.admin.keyring<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="USE-ceph-shell"><a href="#USE-ceph-shell" class="headerlink" title="USE ceph shell"></a>USE ceph shell</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># temprary use</span>
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ cephadm shell -- ceph -s
+
+<span class="token comment"># start a interactive shell</span>
+<span class="token punctuation">[</span>root@ceph01 ~<span class="token punctuation">]</span>$ cephadm shell
+
+<span class="token comment"># check the ceph status </span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph -s
+
+<span class="token comment"># list ceph hosts</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 ceph<span class="token punctuation">]</span>$ ceph orch <span class="token function">host</span> <span class="token function">ls</span> --format yaml
+
+<span class="token comment"># general a new ssh key for cephadm</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 ceph<span class="token punctuation">]</span>$ cephadm get-pub-key <span class="token operator">></span> /etc/ceph/ceph.pub
+
+<span class="token comment"># copy new key to hosts</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 ceph<span class="token punctuation">]</span>$ ssh-copy-id -f -i /etc/ceph/ceph.pub root@192.168.122.122
+<span class="token punctuation">[</span>ceph: root@ceph01 ceph<span class="token punctuation">]</span>$ ssh-copy-id -f -i /etc/ceph/ceph.pub root@192.168.122.123
+<span class="token punctuation">[</span>ceph: root@ceph01 ceph<span class="token punctuation">]</span>$ ssh-copy-id -f -i /etc/ceph/ceph.pub root@192.168.122.124<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="MAINTAIN-Hosts"><a href="#MAINTAIN-Hosts" class="headerlink" title="MAINTAIN Hosts"></a>MAINTAIN Hosts</h1><h2 id="ADD-hosts"><a href="#ADD-hosts" class="headerlink" title="ADD hosts"></a>ADD hosts</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>ceph: root@ceph01 ceph<span class="token punctuation">]</span>$ ceph orch <span class="token function">host</span> <span class="token function">add</span> ceph02.liarlee.site <span class="token number">192.168</span>.122.122
+<span class="token punctuation">[</span>ceph: root@ceph01 ceph<span class="token punctuation">]</span>$ ceph orch <span class="token function">host</span> <span class="token function">add</span> ceph03.liarlee.site <span class="token number">192.168</span>.122.123
+<span class="token punctuation">[</span>ceph: root@ceph01 ceph<span class="token punctuation">]</span>$ ceph orch <span class="token function">host</span> <span class="token function">add</span> ceph04.liarlee.site <span class="token number">192.168</span>.122.124
+
+<span class="token comment"># set mon sub-network </span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph config <span class="token builtin class-name">set</span> mon public_network <span class="token number">192.168</span>.122.0/24<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h2 id="ADD-osd"><a href="#ADD-osd" class="headerlink" title="ADD osd"></a>ADD osd</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># auto-detect available devices (need time to sync the status 1 by 1)</span>
+<span class="token comment"># NOTE: Strangely enough, the command automatically recognizes all devices, including the ZRAM!  QAQ.....</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch apply osd --all-available-devices
+
+<span class="token comment"># list devices</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch device <span class="token function">ls</span>
+Hostname             Path        Type  Serial  Size   Health   Ident  Fault  Available
+ceph01.liarlee.site  /dev/vdb    hdd           <span class="token number">21</span>.4G  Unknown  N/A    N/A    Yes
+ceph01.liarlee.site  /dev/vdc    hdd           <span class="token number">21</span>.4G  Unknown  N/A    N/A    Yes
+ceph01.liarlee.site  /dev/vdd    hdd           <span class="token number">21</span>.4G  Unknown  N/A    N/A    Yes
+ceph01.liarlee.site  /dev/zram0  ssd           2071M  Unknown  N/A    N/A    No
+
+<span class="token comment"># MANUAL ADD OSD</span>
+<span class="token comment"># It is not necessary. </span>
+<span class="token comment"># INIT DISK in MON node</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch daemon <span class="token function">add</span> osd ceph01.liarlee.site:/dev/vdb
+Created osd<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token number">0</span> on <span class="token function">host</span> <span class="token string">'ceph01.liarlee.site'</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch daemon <span class="token function">add</span> osd ceph01.liarlee.site:/dev/vdc
+Created osd<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token number">1</span> on <span class="token function">host</span> <span class="token string">'ceph01.liarlee.site'</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch daemon <span class="token function">add</span> osd ceph01.liarlee.site:/dev/vdd
+Created osd<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token number">2</span> on <span class="token function">host</span> <span class="token string">'ceph01.liarlee.site'</span>
+
+<span class="token comment"># MANUAL DELETE OSD</span>
+<span class="token comment"># It is not necessary. </span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch osd <span class="token function">rm</span> <span class="token number">0</span>
+Scheduled OSD<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">for</span> removal
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch osd <span class="token function">rm</span> <span class="token number">1</span>
+Scheduled OSD<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">for</span> removal
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch osd <span class="token function">rm</span> <span class="token number">2</span>
+Scheduled OSD<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">for</span> removal
+
+<span class="token comment"># Enable the device scan enhencement, show the infomation about Health, Ident, Fault. </span>
+ceph config <span class="token builtin class-name">set</span> mgr mgr/cephadm/device_enhanced_scan <span class="token boolean">true</span>
+
+<span class="token comment"># OSD memory auto tune, for performance maybe.</span>
+ceph config <span class="token builtin class-name">set</span> osd osd_memory_target_autotune <span class="token boolean">true</span>
+
+<span class="token comment"># mark the auto manage to true.</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch apply osd --all-available-devices --unmanaged<span class="token operator">=</span>true
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch device <span class="token function">ls</span> --wide
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph osd status
+
+<span class="token comment"># Check Deleting Status</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch osd <span class="token function">rm</span> status
+OSD_ID  HOST                 STATE                    PG_COUNT  REPLACE  FORCE  DRAIN_STARTED_AT
+<span class="token number">0</span>       ceph01.liarlee.site  done, waiting <span class="token keyword">for</span> purge  <span class="token number">0</span>         False    False  None
+<span class="token number">1</span>       ceph01.liarlee.site  started                  <span class="token number">0</span>         False    False  None
+<span class="token number">2</span>       ceph01.liarlee.site  started                  <span class="token number">0</span>         False    False  None
+
+<span class="token comment"># remove the devices and reuse in cluster.</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch apply osd --all-available-devices --unmanaged<span class="token operator">=</span>true
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch device zap ceph01.liarlee.site /dev/vdb --force
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch device zap ceph01.liarlee.site /dev/vdc --force
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch device zap ceph01.liarlee.site /dev/vdd --force
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch apply osd --all-available-devices --unmanaged<span class="token operator">=</span>false<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="MANAGE-services"><a href="#MANAGE-services" class="headerlink" title="MANAGE services"></a>MANAGE services</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># reduce mon instance to 3</span>
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch <span class="token function">ls</span> mon
+NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT
+mon                                         <span class="token number">4</span>/5  2m ago     10h  count:5
+
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch apply mon <span class="token number">3</span>
+Scheduled mon update<span class="token punctuation">..</span>.
+
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch <span class="token function">ls</span> mon
+mon                                         <span class="token number">4</span>/3  4m ago     39s  count:3
+
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch redeploy mon
+Scheduled to redeploy mon.ceph01.liarlee.site on <span class="token function">host</span> <span class="token string">'ceph01.liarlee.site'</span>
+Scheduled to redeploy mon.ceph02 on <span class="token function">host</span> <span class="token string">'ceph02.liarlee.site'</span>
+Scheduled to redeploy mon.ceph03 on <span class="token function">host</span> <span class="token string">'ceph03.liarlee.site'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="COMPLETED"><a href="#COMPLETED" class="headerlink" title="COMPLETED"></a>COMPLETED</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph orch <span class="token function">ls</span>
+NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT
+alertmanager               ?:9093,9094      <span class="token number">1</span>/1  0s ago     10h  count:1
+crash                                       <span class="token number">4</span>/4  9m ago     10h  *
+grafana                    ?:3000           <span class="token number">1</span>/1  0s ago     10h  count:1
+mgr                                         <span class="token number">2</span>/2  9m ago     10h  count:2
+mon                                         <span class="token number">3</span>/3  9m ago     5m   count:3
+node-exporter              ?:9100           <span class="token number">4</span>/4  9m ago     10h  *
+osd.all-available-devices                 <span class="token number">12</span>/16  9m ago     20m  *
+prometheus                 ?:9095           <span class="token number">1</span>/1  0s ago     10h  count:1
+
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph pg <span class="token function">stat</span>
+<span class="token number">1</span> pgs: <span class="token number">1</span> active+clean<span class="token punctuation">;</span> <span class="token number">0</span> B data, <span class="token number">82</span> MiB used, <span class="token number">240</span> GiB / <span class="token number">240</span> GiB avail
+
+<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span>$ ceph osd status
+ID  HOST                  USED  AVAIL  WR OPS  WR DATA  RD OPS  RD DATA  STATE
+ <span class="token number">0</span>  ceph01.liarlee.site  7364k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">1</span>  ceph01.liarlee.site  7364k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">2</span>  ceph01.liarlee.site  7300k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">3</span>  ceph02.liarlee.site  7364k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">4</span>  ceph03.liarlee.site  6980k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">5</span>  ceph04.liarlee.site  6532k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">6</span>  ceph02.liarlee.site  7236k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">7</span>  ceph03.liarlee.site  6596k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">8</span>  ceph04.liarlee.site  6404k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+ <span class="token number">9</span>  ceph02.liarlee.site  7108k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+<span class="token number">10</span>  ceph04.liarlee.site  6596k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up
+<span class="token number">11</span>  ceph03.liarlee.site  7172k  <span class="token number">19</span>.9G      <span class="token number">0</span>        <span class="token number">0</span>       <span class="token number">0</span>        <span class="token number">0</span>   exists,up<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="IMAGE"><a href="#IMAGE" class="headerlink" title="IMAGE"></a>IMAGE</h1><p><img src="https://i.loli.net/2021/08/22/qViGPvDdZ8wco6U.png" alt="2021-08-22_12-05_2.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2021/08/22/qViGPvDdZ8wco6U.png" class="lozad post-image"><br><img src="https://i.loli.net/2021/08/22/d5RtTisZ9X86uKF.png" alt="2021-08-22_12-05_1.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2021/08/22/d5RtTisZ9X86uKF.png" class="lozad post-image"><br><img src="https://i.loli.net/2021/08/22/EhgBwruF394AWRd.png" alt="2021-08-22_12-03.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2021/08/22/EhgBwruF394AWRd.png" class="lozad post-image"><br><img src="https://i.loli.net/2021/08/22/OCrDxyGzqc1n43K.png" alt="2021-08-22_12-05.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2021/08/22/OCrDxyGzqc1n43K.png" class="lozad post-image"><br><img src="https://i.loli.net/2021/08/22/2DLJcrTbnNxVSaw.png" alt="2021-08-22_12-04.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2021/08/22/2DLJcrTbnNxVSaw.png" class="lozad post-image"><br><img src="https://i.loli.net/2021/08/22/PU1EL8bZASpq3XH.png" alt="2021-08-22_12-02_1.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2021/08/22/PU1EL8bZASpq3XH.png" class="lozad post-image"><br><img src="https://i.loli.net/2021/08/22/Hmkdnbtx3Ijw1Ah.png" alt="2021-08-22_12-02.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://i.loli.net/2021/08/22/Hmkdnbtx3Ijw1Ah.png" class="lozad post-image"></p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2021/08/21/Linux/Linux_Ceph01/">
+            https://liarlee.site/2021/08/21/Linux/Linux_Ceph01/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2021/08/23/Linux/Linux_Ceph02/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Ceph Cluster 02 - OSD/RBD </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2021/07/01/Linux/Linux_Ubuntu-kernel-Complie/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Ubuntu 18.04 内核编译初试 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#INIT"><span class="toc-text">INIT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#INIT-OS"><span class="toc-text">INIT OS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CONFIG-hostname-and-IP"><span class="toc-text">CONFIG hostname and IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CONFIG-dnf-repo"><span class="toc-text">CONFIG dnf repo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#INSTALL-Docker"><span class="toc-text">INSTALL Docker</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#INSTALL-CEPH"><span class="toc-text">INSTALL CEPH</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BOOTSTRAP-ceph"><span class="toc-text">BOOTSTRAP ceph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#USE-ceph-shell"><span class="toc-text">USE ceph shell</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MAINTAIN-Hosts"><span class="toc-text">MAINTAIN Hosts</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ADD-hosts"><span class="toc-text">ADD hosts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADD-osd"><span class="toc-text">ADD osd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MANAGE-services"><span class="toc-text">MANAGE services</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#COMPLETED"><span class="toc-text">COMPLETED</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IMAGE"><span class="toc-text">IMAGE</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#INIT"><span class="toc-text">INIT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#INIT-OS"><span class="toc-text">INIT OS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CONFIG-hostname-and-IP"><span class="toc-text">CONFIG hostname and IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CONFIG-dnf-repo"><span class="toc-text">CONFIG dnf repo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#INSTALL-Docker"><span class="toc-text">INSTALL Docker</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#INSTALL-CEPH"><span class="toc-text">INSTALL CEPH</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BOOTSTRAP-ceph"><span class="toc-text">BOOTSTRAP ceph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#USE-ceph-shell"><span class="toc-text">USE ceph shell</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MAINTAIN-Hosts"><span class="toc-text">MAINTAIN Hosts</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ADD-hosts"><span class="toc-text">ADD hosts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADD-osd"><span class="toc-text">ADD osd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MANAGE-services"><span class="toc-text">MANAGE services</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#COMPLETED"><span class="toc-text">COMPLETED</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IMAGE"><span class="toc-text">IMAGE</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#INIT"><span class="toc-text">INIT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#INIT-OS"><span class="toc-text">INIT OS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CONFIG-hostname-and-IP"><span class="toc-text">CONFIG hostname and IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CONFIG-dnf-repo"><span class="toc-text">CONFIG dnf repo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#INSTALL-Docker"><span class="toc-text">INSTALL Docker</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#INSTALL-CEPH"><span class="toc-text">INSTALL CEPH</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BOOTSTRAP-ceph"><span class="toc-text">BOOTSTRAP ceph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#USE-ceph-shell"><span class="toc-text">USE ceph shell</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MAINTAIN-Hosts"><span class="toc-text">MAINTAIN Hosts</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ADD-hosts"><span class="toc-text">ADD hosts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADD-osd"><span class="toc-text">ADD osd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MANAGE-services"><span class="toc-text">MANAGE services</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#COMPLETED"><span class="toc-text">COMPLETED</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IMAGE"><span class="toc-text">IMAGE</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

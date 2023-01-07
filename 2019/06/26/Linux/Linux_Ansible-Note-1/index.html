@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>Ansible笔记-1</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Ansible笔记-1">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2019/06/26/Linux/Linux_Ansible-Note-1/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;Ansible的学习笔记。&lt;br&gt;Ansible管理方式是资源在目标主机上，定义所期望的目标状态的方式；每一个操作必须是幂等的（可重复操作但结果不变的）。ansible采用ssh链接所管理的服务器，因此具有agentless的优势。&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2019-06-26">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Ansible">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Ansible笔记-1
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2019-06-26T04:32:52.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2019-06-26</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.5k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Ansible/" 
+            class="post-meta-link">
+            Ansible
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>Ansible的学习笔记。<br>Ansible管理方式是资源在目标主机上，定义所期望的目标状态的方式；每一个操作必须是幂等的（可重复操作但结果不变的）。ansible采用ssh链接所管理的服务器，因此具有agentless的优势。</p>
+<span id="more"></span>
+
+<h1 id="Ansible的安装"><a href="#Ansible的安装" class="headerlink" title="Ansible的安装"></a>Ansible的安装</h1><p>Ansible在Redhat的仓库中就有二进制包，直接dnf或yum安装就可以了。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ yum <span class="token function">install</span> -y Ansible<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="Ansible的配置文件"><a href="#Ansible的配置文件" class="headerlink" title="Ansible的配置文件"></a>Ansible的配置文件</h1><p>Ansible的配置文件常用的有：</p>
+<ol>
+<li>&#x2F;etc&#x2F;ansible&#x2F;ansible.cfg  <strong>Ansible的配置文件</strong></li>
+<li>&#x2F;etc&#x2F;ansible&#x2F;hosts       <strong>Ansible允许控制的主机列表，可在hosts文件中对服务器进行分组</strong></li>
+</ol>
+<h1 id="Ansible的组件"><a href="#Ansible的组件" class="headerlink" title="Ansible的组件"></a>Ansible的组件</h1><ol>
+<li>ansible</li>
+<li>ansible-playbook</li>
+<li>ansible-doc</li>
+</ol>
+<h1 id="Ansible的配置和使用"><a href="#Ansible的配置和使用" class="headerlink" title="Ansible的配置和使用"></a>Ansible的配置和使用</h1><h2 id="Ansible命令模式"><a href="#Ansible命令模式" class="headerlink" title="Ansible命令模式"></a>Ansible命令模式</h2><blockquote>
+<p>ansible [HOST_PARTTEN] -m [MODUELS] -a “[ARGS]” -f [Forks] -C -u [USERNAME] -c [CONNTECTION]</p>
+</blockquote>
+<h2 id="基于密钥认证ansible"><a href="#基于密钥认证ansible" class="headerlink" title="基于密钥认证ansible"></a>基于密钥认证ansible</h2><p>ansible支持使用ssh用户命名密码的认证方式，也支持使用ssh密钥认证的方式进行链接。ssh密钥的方式可以保证安全性，同时免去输入密码的麻烦。</p>
+<ol>
+<li>生成ansible的密钥 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ssh-keygen -t rsa -P <span class="token string">""</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>复制ansible的公钥到需要连接控制的host上   <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ssh-copy-id -i ~/.ssh/id-rsa.pub root@<span class="token punctuation">[</span>host1-IP<span class="token punctuation">]</span>
+<span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ssh-copy-id -i ~/.ssh/id-rsa.pub root@<span class="token punctuation">[</span>host2-IP<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>在ansible的hosts文件中记录需要控制的主机名或者IP <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ <span class="token builtin class-name">echo</span> <span class="token string">"[host1-IP]"</span> <span class="token operator">>></span> /etc/ansible/hosts
+<span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ <span class="token builtin class-name">echo</span> <span class="token string">"[host2-IP]"</span> <span class="token operator">>></span> /etc/ansible/hosts<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>使用ansible进行控制测试 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">ping</span>       <span class="token comment"># 进行连通测试</span>
+<span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">ping</span> --list-hosts      <span class="token comment"># 列举所有受影响的主机，但是不执行操作</span>
+<span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">ping</span> -C        <span class="token comment"># 进行测试，但是不对控制的主机作更改</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h2 id="ansible使用示例"><a href="#ansible使用示例" class="headerlink" title="ansible使用示例"></a>ansible使用示例</h2><p>Ansible默认将所有的操作通过模块的方式定义，这里列举了一些常用的模块：</p>
+<h3 id="ansible管理查询命令"><a href="#ansible管理查询命令" class="headerlink" title="ansible管理查询命令"></a>ansible管理查询命令</h3><p>使用ansible-doc命令来进行模块的文档查看, <em>&#x2F;var&#x2F;log&#x2F;messages</em> 中会记录操作日志。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible-doc -l      <span class="token comment"># 列举所有当前可用的模块和简单说明</span>
+<span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible-doc -s <span class="token punctuation">[</span>MODULES_NAME<span class="token punctuation">]</span>     <span class="token comment"># 查看指定模块的使用方法和说明</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="user模块"><a href="#user模块" class="headerlink" title="user模块"></a>user模块</h3><p>设定主机的用户状态，对用户进行创建删除，更改信息以及参数。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 设置所有主机创建用户user,设置内容有uid,groups,shell</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m user -a <span class="token string">"name=user1 uid=3000 state=present groups=testgrp shell=/bin/zsh"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="group模块"><a href="#group模块" class="headerlink" title="group模块"></a>group模块</h3><p>设置主机的组状态，对组状态进行编辑。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 控制所有主机创建组testgrp,设置内容有gid,非系统组</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m group -a <span class="token string">"gid=3000 name=testgrp state=present system=no"</span>
+<span class="token comment"># 控制所有主机删除testgrp</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m group -a <span class="token string">"gid=3000 name=testgrp state=absent"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="copy模块"><a href="#copy模块" class="headerlink" title="copy模块"></a>copy模块</h3><p>从本地复制内容到控制的所有主机,指定源地址和目的地址。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 复制本地/etc/fstab到所有主机的/tmp/fstab.ansible,同时设置权限为755</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m copy -a <span class="token string">"src=/etc/fstab dest=/tmp/fstab.ansible mode=755"</span>
+<span class="token comment"># 通过键盘输入的文本内容传输到目的文件中，文件可不存在，可同时设置文件的属主属组</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m copy -a <span class="token string">"content='hello,world<span class="token entity" title="\n">\n</span>' dest=/tmp/test.txt owner=liarlee group=liarlee"</span>
+<span class="token comment"># 递归复制目录及其子文件到所有主机的/tmp/下</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m copy -a <span class="token string">"src=/etc/httpd dest=/tmp/"</span>
+<span class="token comment"># 复制目录下的所有文件到所有主机的/tmp/下，不创建对应的目录</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m copy -a <span class="token string">"src=/etc/httpd/ dest=/tmp/"</span>
+<span class="token comment"># 在所有主机的目录下新建一个空文件</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m copy -a <span class="token string">"content='' dest=/tmp/testfile"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="fetch模块"><a href="#fetch模块" class="headerlink" title="fetch模块"></a>fetch模块</h3><p>可从远程主机复制文件到本地。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 从某个主机复制文件到本地目录，文件不存在退出</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible <span class="token punctuation">[</span>HOST1<span class="token punctuation">]</span> -m fetch -a <span class="token string">"src=/etc/fstab dest=/tmp/fstab.host1 fail-on-missing=yes"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="command模块"><a href="#command模块" class="headerlink" title="command模块"></a>command模块</h3><p>command模块不调用shell去解析命令，仅仅读取第一个命令进行简单执行,因此不支持管道传递参数。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在所有主机上执行ifconfig</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token builtin class-name">command</span> -a <span class="token string">"ifconfig"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="shell模块"><a href="#shell模块" class="headerlink" title="shell模块"></a>shell模块</h3><p>使用shell执行传递的命令，支持管道传递参数</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 执行shell命令修改用户的密码</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m shell -a <span class="token string">"echo PASSWORD | passwd --stdin user1"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="file模块"><a href="#file模块" class="headerlink" title="file模块"></a>file模块</h3><p>用于设定文件的状态以及属性</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在所有主机上建立目录</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">file</span> -a <span class="token string">"path=/tmp/testdir state=directory"</span>
+<span class="token comment"># 在所有主机上对文件建立符号链接</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">file</span> -a <span class="token string">"src=/tmp/testfile path=/tmp/testfile.link state=link"</span>
+<span class="token comment"># 在所有主机上设置文件或目录的权限</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">file</span> -a <span class="token string">"path=/tmp/testfile mode=0755"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="cron模块"><a href="#cron模块" class="headerlink" title="cron模块"></a>cron模块</h3><p>用于设置计划任务</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 设置每三分钟运行一次同步时间的脚本</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">cron</span> -a <span class="token string">"miniute=*/3 name=synctime job='usr/sbin/update 172.16.0.1 &amp;> /dev/null'state=present"</span>
+<span class="token comment"># 删除设置的计划任务</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">cron</span> -a <span class="token string">"miniute=*/3 name=synctime job='usr/sbin/update 172.16.0.1 &amp;> /dev/null'state=absent"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="yum模块"><a href="#yum模块" class="headerlink" title="yum模块"></a>yum模块</h3><p>用于调用yum进行软件包的安装卸载等，定义主机安装软件包的状态</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在所有主机安装nginx</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m yum -a <span class="token string">"name=nginx state=install"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="serivce模块"><a href="#serivce模块" class="headerlink" title="serivce模块"></a>serivce模块</h3><p>用于定义管理目标主机的服务状态</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在所有的主机上启动nginx服务</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">service</span> -a <span class="token string">"name=nginx state=startd"</span>
+<span class="token comment"># 在所有的主机上设置nginx开机启动</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">service</span> -a <span class="token string">"name=nginx enabled"</span>
+<span class="token comment"># 在所有主机上停止nginx服务</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">service</span> -a <span class="token string">"name=nginx state=stoppd"</span>
+<span class="token comment"># 在所有的主机上重载nginx的配置文件</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">service</span> -a <span class="token string">"name=nginx state=reloaded"</span>
+<span class="token comment"># 在所有主机上重启nginx服务</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m <span class="token function">service</span> -a <span class="token string">"name=nginx state=restarted"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="scripts模块"><a href="#scripts模块" class="headerlink" title="scripts模块"></a>scripts模块</h3><p>用于在所有主机上执行设置好的脚本</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在所有的主机上执行test.sh</span>
+    <span class="token punctuation">[</span>root@localhost Liarlee<span class="token punctuation">]</span>$ ansible all -m scripts -a <span class="token string">"/tmp/test.sh"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2019/06/26/Linux/Linux_Ansible-Note-1/">
+            https://liarlee.site/2019/06/26/Linux/Linux_Ansible-Note-1/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2019/07/07/Linux/Linux_Ansible-Note-2/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Ansible笔记-2 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2019/06/25/Linux/Linux_VM-timer/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">KVM中windows7虚拟机时间问题 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">Ansible的安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">Ansible的配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E7%BB%84%E4%BB%B6"><span class="toc-text">Ansible的组件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">Ansible的配置和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ansible%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="toc-text">Ansible命令模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81ansible"><span class="toc-text">基于密钥认证ansible</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ansible%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">ansible使用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ansible%E7%AE%A1%E7%90%86%E6%9F%A5%E8%AF%A2%E5%91%BD%E4%BB%A4"><span class="toc-text">ansible管理查询命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#user%E6%A8%A1%E5%9D%97"><span class="toc-text">user模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#group%E6%A8%A1%E5%9D%97"><span class="toc-text">group模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#copy%E6%A8%A1%E5%9D%97"><span class="toc-text">copy模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fetch%E6%A8%A1%E5%9D%97"><span class="toc-text">fetch模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#command%E6%A8%A1%E5%9D%97"><span class="toc-text">command模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell%E6%A8%A1%E5%9D%97"><span class="toc-text">shell模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#file%E6%A8%A1%E5%9D%97"><span class="toc-text">file模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cron%E6%A8%A1%E5%9D%97"><span class="toc-text">cron模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yum%E6%A8%A1%E5%9D%97"><span class="toc-text">yum模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serivce%E6%A8%A1%E5%9D%97"><span class="toc-text">serivce模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scripts%E6%A8%A1%E5%9D%97"><span class="toc-text">scripts模块</span></a></li></ol></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">Ansible的安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">Ansible的配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E7%BB%84%E4%BB%B6"><span class="toc-text">Ansible的组件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">Ansible的配置和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ansible%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="toc-text">Ansible命令模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81ansible"><span class="toc-text">基于密钥认证ansible</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ansible%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">ansible使用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ansible%E7%AE%A1%E7%90%86%E6%9F%A5%E8%AF%A2%E5%91%BD%E4%BB%A4"><span class="toc-text">ansible管理查询命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#user%E6%A8%A1%E5%9D%97"><span class="toc-text">user模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#group%E6%A8%A1%E5%9D%97"><span class="toc-text">group模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#copy%E6%A8%A1%E5%9D%97"><span class="toc-text">copy模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fetch%E6%A8%A1%E5%9D%97"><span class="toc-text">fetch模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#command%E6%A8%A1%E5%9D%97"><span class="toc-text">command模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell%E6%A8%A1%E5%9D%97"><span class="toc-text">shell模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#file%E6%A8%A1%E5%9D%97"><span class="toc-text">file模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cron%E6%A8%A1%E5%9D%97"><span class="toc-text">cron模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yum%E6%A8%A1%E5%9D%97"><span class="toc-text">yum模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serivce%E6%A8%A1%E5%9D%97"><span class="toc-text">serivce模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scripts%E6%A8%A1%E5%9D%97"><span class="toc-text">scripts模块</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">Ansible的安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">Ansible的配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E7%BB%84%E4%BB%B6"><span class="toc-text">Ansible的组件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ansible%E7%9A%84%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">Ansible的配置和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ansible%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="toc-text">Ansible命令模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81ansible"><span class="toc-text">基于密钥认证ansible</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ansible%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">ansible使用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ansible%E7%AE%A1%E7%90%86%E6%9F%A5%E8%AF%A2%E5%91%BD%E4%BB%A4"><span class="toc-text">ansible管理查询命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#user%E6%A8%A1%E5%9D%97"><span class="toc-text">user模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#group%E6%A8%A1%E5%9D%97"><span class="toc-text">group模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#copy%E6%A8%A1%E5%9D%97"><span class="toc-text">copy模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fetch%E6%A8%A1%E5%9D%97"><span class="toc-text">fetch模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#command%E6%A8%A1%E5%9D%97"><span class="toc-text">command模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell%E6%A8%A1%E5%9D%97"><span class="toc-text">shell模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#file%E6%A8%A1%E5%9D%97"><span class="toc-text">file模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cron%E6%A8%A1%E5%9D%97"><span class="toc-text">cron模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yum%E6%A8%A1%E5%9D%97"><span class="toc-text">yum模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serivce%E6%A8%A1%E5%9D%97"><span class="toc-text">serivce模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scripts%E6%A8%A1%E5%9D%97"><span class="toc-text">scripts模块</span></a></li></ol></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

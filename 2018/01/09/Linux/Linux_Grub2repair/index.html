@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Archlinux User, Kubernetes, Support Engineer">
+  <link 
+    rel="icon" 
+    href="/img/logo.png">
+  <title>grub2手动修复引导错误</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="grub2手动修复引导错误">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://liarlee.site/2018/01/09/Linux/Linux_Grub2repair/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+      <meta 
+        property="og:img" 
+        content="&lt;p&gt;grub2引导错误的手动解决方法&lt;/p&gt;">
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2018-01-09">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-10-13">
+      <meta 
+        property="og:article:author" 
+        content="Liarlee">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="grub2">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+      
+      
+      
+      
+        
+        
+        
+        <script>
+          function prismThemeChange() {
+            if(document.getElementById('theme-color').dataset.mode === 'dark') {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            } else {
+              if(document.querySelector('[data-prism]')) {
+                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+              } else {
+                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+              }
+            }
+          }
+          prismThemeChange()
+        </script>
+      
+      
+        
+        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
+      
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+        prismThemeChange();
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+        prismThemeChange();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/logo.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      grub2手动修复引导错误
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2018-01-09T05:27:57.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2018-01-09</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/grub2/" 
+            class="post-meta-link">
+            grub2
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>grub2引导错误的手动解决方法</p>
+<span id="more"></span>
+
+<h2 id="grub是什么"><a href="#grub是什么" class="headerlink" title="grub是什么"></a>grub是什么</h2><ul>
+<li><p>引用百度百科    </p>
+<blockquote>
+<p>GNU GRUB（简称“GRUB”）是一个来自GNU项目的启动引导程序。GRUB是多启动规范的实现，它允许用户可以在计算机内同时拥有多个操作系统，并在计算机启动时选择希望运行的操作系统。GRUB可用于选择操作系统分区上的不同内核，也可用于向这些内核传递启动参数。<br>GNU GRUB的前身为Grand Unified Bootloader。它主要用于类Unix系统；同大多Linux发行版一样，GNU系统也采用GNU GRUB作为它的启动器。Solaris从10 1&#x2F;06版开始在x86系统上也采用GNU GRUB作为启动器。  </p>
+</blockquote>
+</li>
+<li><p>引用fedora官方wiki  </p>
+<blockquote>
+<p>GRUB 2 is the latest version of GNU GRUB, the GRand Unified Bootloader. A bootloader is the first software program that runs when a computer starts. It is responsible for loading and transferring control to the operating system kernel, (Linux, in the case of Fedora). The kernel, in turn, initializes the rest of the operating system.<br>GRUB 2 has replaced what was formerly known as GRUB (i.e. version 0.9x), which has, in turn, become GRUB Legacy.<br>Starting with Fedora 16, GRUB 2 is the default bootloader on x86 BIOS systems. For upgrades of BIOS systems the default is also to install GRUB 2, but you can opt to skip bootloader configuration entirely.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="修复grub2引导程序开机失败"><a href="#修复grub2引导程序开机失败" class="headerlink" title="修复grub2引导程序开机失败"></a>修复grub2引导程序开机失败</h2><p>一般情况下系统的grub文件不会丢失，但是有的时候比如我们进行了系统设置的更改或者文件的误删除会导致系统无法正常启动，这个时候我们需要对grub进行手动的配置，才能是计算机正确的进入系统之中，进入系统之后只要重新生成grub引导文件，就可以让系统重启自动完成引导进入系统了。  </p>
+<h3 id="指出-x2F-boot位置"><a href="#指出-x2F-boot位置" class="headerlink" title="指出&#x2F;boot位置"></a>指出&#x2F;boot位置</h3><ol>
+<li>指定grub的硬盘引导分区，也就是&#x2F;boot所在的硬盘分区<br><code>grub&gt; root (hd0,0)</code></li>
+</ol>
+<h3 id="指出vmlinuz内核文件"><a href="#指出vmlinuz内核文件" class="headerlink" title="指出vmlinuz内核文件"></a>指出vmlinuz内核文件</h3><ol>
+<li>指出kernel所在的分区，主要是vmlinuz内核文件所在的位置<br><code>grub&gt; kernel /vmlinuz</code></li>
+<li>指出initrd所在的分区，指定初始化文件所在的位置<br><code>grub&gt; initrd /initrd</code></li>
+</ol>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><ol>
+<li>文件锁定成功之后，就可以启动系统<br><code>grub&gt; boot</code></li>
+</ol>
+<h2 id="在系统中重新安装和更改grub2"><a href="#在系统中重新安装和更改grub2" class="headerlink" title="在系统中重新安装和更改grub2"></a>在系统中重新安装和更改grub2</h2><h3 id="安装或者重新安装grub2（非必须-如果有需要的时候执行）"><a href="#安装或者重新安装grub2（非必须-如果有需要的时候执行）" class="headerlink" title="安装或者重新安装grub2（非必须-如果有需要的时候执行）"></a>安装或者重新安装grub2（非必须-如果有需要的时候执行）</h3><p>安装grub2到硬盘分区，一般为硬盘的第一个分区的开始位置  </p>
+<ol>
+<li>传统引导方式安装grub2<br><code>[root@localhost /]# grub2-install /dev/sda</code>  </li>
+<li>EFI引导安装grub2<br><code>[root@localhost /]# dnf reinstall grub2-efi shim</code></li>
+</ol>
+<h3 id="重新生成grub配置文件"><a href="#重新生成grub配置文件" class="headerlink" title="重新生成grub配置文件"></a>重新生成grub配置文件</h3><p>使用grub2-mkconfig生成新的grub2配置文件，同时指定引导时读取该文件<br>不同的安装方式有不同的命令  </p>
+<ol>
+<li>标准的传统引导安装方式<br><code>[root@localhost /]# grub2-mkconfig -o /boot/grub2/grub.cfg</code></li>
+<li>EFI引导方式<br><code>[root@localhost /]# grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg</code></li>
+</ol>
+<h2 id="Windows-amp-Linux双系统修复"><a href="#Windows-amp-Linux双系统修复" class="headerlink" title="Windows&amp;Linux双系统修复"></a>Windows&amp;Linux双系统修复</h2><p>windows和linux的双系统请注意安装顺序，可以减少很多麻烦  </p>
+<ul>
+<li>先安装windows - 然后安装linux</li>
+</ul>
+<p>如果先安装了linux，那么在安装windows之后，系统的MBR会被windows覆写，导致linux系统无法正常引导，这个时候需要使用livecd进行修复grub2，让grub2重新安装并且控制引导系统的分区  </p>
+<hr>
+<hr>
+<hr>
+<h2 id="删除系统更新之后多余的启动项"><a href="#删除系统更新之后多余的启动项" class="headerlink" title="删除系统更新之后多余的启动项"></a>删除系统更新之后多余的启动项</h2><p>系统更新之后总是会多很多的旧版本内核的启动项，每次启动的时候看起来都很乱，简单操作就可以去掉多余的启动项，如下：  </p>
+<h3 id="暴力方式"><a href="#暴力方式" class="headerlink" title="暴力方式"></a>暴力方式</h3><ol>
+<li><p>在boot目录下面强制删除内核文件，然后重新生成grub2.cfg即可  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost boot]# rm -rf vmlinuz-4.13.9-300.fc27.x86_64   
+[root@localhost boot]# rm -rf vmlinuz-4.14.5-300.fc27.x86_64  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li><p>重新生成配置文件：  </p>
+<pre class="line-numbers language-none"><code class="language-none">[root@localhost boot]# grub2-mkconfig -o &#x2F;boot&#x2F;efi&#x2F;EFI&#x2F;fedora&#x2F;grub.cfg
+Generating grub configuration file ...
+Found linux image: &#x2F;boot&#x2F;vmlinuz-4.14.11-300.fc27.x86_64
+Found initrd image: &#x2F;boot&#x2F;initramfs-4.14.11-300.fc27.x86_64.img
+Found linux image: &#x2F;boot&#x2F;vmlinuz-0-rescue-2fbfdacc99ad4255953ae8b2ec521e9d
+Found initrd image: &#x2F;boot&#x2F;initramfs-0-rescue-2fbfdacc99ad4255953ae8b2ec521e9d.img
+done<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h3 id="正确方式"><a href="#正确方式" class="headerlink" title="正确方式"></a>正确方式</h3><ul>
+<li>使用dnf命令卸载旧内核：  <pre class="line-numbers language-none"><code class="language-none">[root@localhost &#x2F;]# dnf remove kernel-4.13.9-300.fc27.x86_64  
+[root@localhost &#x2F;]# dnf remove kernel-4.14.5-300.fc27.x86_64  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ul>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            Liarlee
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://liarlee.site/2018/01/09/Linux/Linux_Grub2repair/">
+            https://liarlee.site/2018/01/09/Linux/Linux_Grub2repair/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2018/01/09/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python_%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-2/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Python入门笔记 (二) </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2018/01/08/Python%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/Python_%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-1/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Python入门笔记 (一) </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#grub%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">grub是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8Dgrub2%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E5%BC%80%E6%9C%BA%E5%A4%B1%E8%B4%A5"><span class="toc-text">修复grub2引导程序开机失败</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%87%BA-x2F-boot%E4%BD%8D%E7%BD%AE"><span class="toc-text">指出&#x2F;boot位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%87%BAvmlinuz%E5%86%85%E6%A0%B8%E6%96%87%E4%BB%B6"><span class="toc-text">指出vmlinuz内核文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%AD%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85%E5%92%8C%E6%9B%B4%E6%94%B9grub2"><span class="toc-text">在系统中重新安装和更改grub2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%88%96%E8%80%85%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85grub2%EF%BC%88%E9%9D%9E%E5%BF%85%E9%A1%BB-%E5%A6%82%E6%9E%9C%E6%9C%89%E9%9C%80%E8%A6%81%E7%9A%84%E6%97%B6%E5%80%99%E6%89%A7%E8%A1%8C%EF%BC%89"><span class="toc-text">安装或者重新安装grub2（非必须-如果有需要的时候执行）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E7%94%9F%E6%88%90grub%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">重新生成grub配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-amp-Linux%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%BF%AE%E5%A4%8D"><span class="toc-text">Windows&amp;Linux双系统修复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%B3%BB%E7%BB%9F%E6%9B%B4%E6%96%B0%E4%B9%8B%E5%90%8E%E5%A4%9A%E4%BD%99%E7%9A%84%E5%90%AF%E5%8A%A8%E9%A1%B9"><span class="toc-text">删除系统更新之后多余的启动项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E6%96%B9%E5%BC%8F"><span class="toc-text">暴力方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E6%96%B9%E5%BC%8F"><span class="toc-text">正确方式</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">Liarlee</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>95</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>6</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>33</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#grub%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">grub是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8Dgrub2%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E5%BC%80%E6%9C%BA%E5%A4%B1%E8%B4%A5"><span class="toc-text">修复grub2引导程序开机失败</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%87%BA-x2F-boot%E4%BD%8D%E7%BD%AE"><span class="toc-text">指出&#x2F;boot位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%87%BAvmlinuz%E5%86%85%E6%A0%B8%E6%96%87%E4%BB%B6"><span class="toc-text">指出vmlinuz内核文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%AD%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85%E5%92%8C%E6%9B%B4%E6%94%B9grub2"><span class="toc-text">在系统中重新安装和更改grub2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%88%96%E8%80%85%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85grub2%EF%BC%88%E9%9D%9E%E5%BF%85%E9%A1%BB-%E5%A6%82%E6%9E%9C%E6%9C%89%E9%9C%80%E8%A6%81%E7%9A%84%E6%97%B6%E5%80%99%E6%89%A7%E8%A1%8C%EF%BC%89"><span class="toc-text">安装或者重新安装grub2（非必须-如果有需要的时候执行）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E7%94%9F%E6%88%90grub%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">重新生成grub配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-amp-Linux%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%BF%AE%E5%A4%8D"><span class="toc-text">Windows&amp;Linux双系统修复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%B3%BB%E7%BB%9F%E6%9B%B4%E6%96%B0%E4%B9%8B%E5%90%8E%E5%A4%9A%E4%BD%99%E7%9A%84%E5%90%AF%E5%8A%A8%E9%A1%B9"><span class="toc-text">删除系统更新之后多余的启动项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E6%96%B9%E5%BC%8F"><span class="toc-text">暴力方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E6%96%B9%E5%BC%8F"><span class="toc-text">正确方式</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">74</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Healthcare-IT/">
+        <div class="categories-list-item">
+          Healthcare-IT
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/ESXi/">
+        <div class="categories-list-item">
+          ESXi
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Linux/" 
+        title="Linux">
+        <div class="tags-list-item">Linux</div>
+      </a>
+    
+      <a 
+        href="/tags/Kubernetes/" 
+        title="Kubernetes">
+        <div class="tags-list-item">Kubernetes</div>
+      </a>
+    
+      <a 
+        href="/tags/Python/" 
+        title="Python">
+        <div class="tags-list-item">Python</div>
+      </a>
+    
+      <a 
+        href="/tags/Fedora/" 
+        title="Fedora">
+        <div class="tags-list-item">Fedora</div>
+      </a>
+    
+      <a 
+        href="/tags/Ceph/" 
+        title="Ceph">
+        <div class="tags-list-item">Ceph</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Windows/" 
+        title="Windows">
+        <div class="tags-list-item">Windows</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Ansible/" 
+        title="Ansible">
+        <div class="tags-list-item">Ansible</div>
+      </a>
+    
+      <a 
+        href="/tags/Hexo/" 
+        title="Hexo">
+        <div class="tags-list-item">Hexo</div>
+      </a>
+    
+      <a 
+        href="/tags/docker/" 
+        title="docker">
+        <div class="tags-list-item">docker</div>
+      </a>
+    
+      <a 
+        href="/tags/KVM/" 
+        title="KVM">
+        <div class="tags-list-item">KVM</div>
+      </a>
+    
+      <a 
+        href="/tags/Vim/" 
+        title="Vim">
+        <div class="tags-list-item">Vim</div>
+      </a>
+    
+      <a 
+        href="/tags/Shell/" 
+        title="Shell">
+        <div class="tags-list-item">Shell</div>
+      </a>
+    
+      <a 
+        href="/tags/Ranger/" 
+        title="Ranger">
+        <div class="tags-list-item">Ranger</div>
+      </a>
+    
+      <a 
+        href="/tags/RabbitMQ/" 
+        title="RabbitMQ">
+        <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#grub%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">grub是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8Dgrub2%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E5%BC%80%E6%9C%BA%E5%A4%B1%E8%B4%A5"><span class="toc-text">修复grub2引导程序开机失败</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%87%BA-x2F-boot%E4%BD%8D%E7%BD%AE"><span class="toc-text">指出&#x2F;boot位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%87%BAvmlinuz%E5%86%85%E6%A0%B8%E6%96%87%E4%BB%B6"><span class="toc-text">指出vmlinuz内核文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%AD%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85%E5%92%8C%E6%9B%B4%E6%94%B9grub2"><span class="toc-text">在系统中重新安装和更改grub2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%88%96%E8%80%85%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85grub2%EF%BC%88%E9%9D%9E%E5%BF%85%E9%A1%BB-%E5%A6%82%E6%9E%9C%E6%9C%89%E9%9C%80%E8%A6%81%E7%9A%84%E6%97%B6%E5%80%99%E6%89%A7%E8%A1%8C%EF%BC%89"><span class="toc-text">安装或者重新安装grub2（非必须-如果有需要的时候执行）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E7%94%9F%E6%88%90grub%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">重新生成grub配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-amp-Linux%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%BF%AE%E5%A4%8D"><span class="toc-text">Windows&amp;Linux双系统修复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%B3%BB%E7%BB%9F%E6%9B%B4%E6%96%B0%E4%B9%8B%E5%90%8E%E5%A4%9A%E4%BD%99%E7%9A%84%E5%90%AF%E5%8A%A8%E9%A1%B9"><span class="toc-text">删除系统更新之后多余的启动项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E6%96%B9%E5%BC%8F"><span class="toc-text">暴力方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E6%96%B9%E5%BC%8F"><span class="toc-text">正确方式</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-03</div>
+        <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-29</div>
+        <a href="/2022/12/29/bpftrace-record-md/"><div class="recent-posts-item-content">bpftrace 使用以及理解</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-27</div>
+        <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-12-20</div>
+        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker守护进程配置代理</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2017
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Liarlee's Notebook
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>
