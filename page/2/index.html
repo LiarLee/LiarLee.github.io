@@ -285,6 +285,49 @@
   <div class="card">
     
     <article class="card card-content">
+      <a href="/2022/04/19/Linux/Linux_Epoll/">
+        <h1 class="post-title">
+          Epoll vs select vs poll vs io_uring
+        </h1>
+      </a>
+      <div class="card-excerpt">
+        
+          select方式：使用fd_set结构体告诉内核同时监控那些文件句柄，使用逐个排查方式去检查是否有文件句柄就绪或者超时。该方式有以下缺点：文件句柄数量是有上限的，逐个检查吞吐量低，每次调用都要重复初始化fd_set。po...
+        
+      </div>
+      <div class="card-post-footer">
+        <div class="post-meta">
+          <time datetime="2022-04-19T09:45:39.000Z">
+            <i 
+              class="iconfont icon-calendar" 
+              style="margin-right: 2px;">
+            </i>
+            <span>2022-04-19</span>
+          </time>
+          
+            
+            
+              
+            
+            <span class="dot"></span>
+            
+              
+              <a 
+                href="/categories/Linux/" 
+                class="post-meta-link">
+                Linux
+              </a>
+            
+          
+        </div>
+        <a href="/2022/04/19/Linux/Linux_Epoll/">继续阅读 </a>
+      </div>
+    </article>
+  </div>
+
+  <div class="card">
+    
+    <article class="card card-content">
       <a href="/2022/04/19/Linux/Linux_KernelParam_NOHZ/">
         <h1 class="post-title">
           关于内核Config中的参数 CONFIG_NO_HZ
@@ -671,49 +714,6 @@
     </article>
   </div>
 
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2021/10/02/Linux/Linux_Kubernetes-day2/">
-        <h1 class="post-title">
-          Kubernetes day2
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          对于etcd的操作和备份 
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2021-10-02T02:49:55.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2021-10-02</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2021/10/02/Linux/Linux_Kubernetes-day2/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
 
   <div class="nav">
   
@@ -970,11 +970,15 @@
     
       
         
+      
+    
+      
+        
           <a 
             href="/archives/2023" 
             class="archive-card-list-item">
             2023
-            <span class="archive-card-list-item-badge">1</span>
+            <span class="archive-card-list-item-badge">2</span>
           </a>
         
         
@@ -1379,15 +1383,11 @@
     
       
         
-      
-    
-      
-        
           <a 
             href="/archives/2018" 
             class="archive-card-list-item">
             2018
-            <span class="archive-card-list-item-badge">24</span>
+            <span class="archive-card-list-item-badge">23</span>
           </a>
         
         
@@ -1428,6 +1428,11 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-01-09</div>
+        <a href="/2023/01/09/Books_%E8%AF%97%E8%AF%8D%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">诗词收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
         <div class="recent-posts-item-title">2023-01-03</div>
         <a href="/2023/01/03/malloc-docker-image-md/"><div class="recent-posts-item-content">制作一个可用的malloc image</div></a>
       </div>
@@ -1440,11 +1445,6 @@
       <div class="recent-posts-item">
         <div class="recent-posts-item-title">2022-12-27</div>
         <a href="/2022/12/27/Nginx-Performance-Tuning-Pre-md/"><div class="recent-posts-item-content">Nginx性能调整（不一定对</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2022-12-20</div>
-        <a href="/2022/12/20/Docker-daemon-proxy-setting-md/"><div class="recent-posts-item-content">Docker/Containerd 配置代理</div></a>
       </div>
     
   </div>
@@ -1472,11 +1472,15 @@
     
       
         
+      
+    
+      
+        
           <a 
             href="/archives/2023" 
             class="archive-card-list-item">
             2023
-            <span class="archive-card-list-item-badge">1</span>
+            <span class="archive-card-list-item-badge">2</span>
           </a>
         
         
@@ -1881,15 +1885,11 @@
     
       
         
-      
-    
-      
-        
           <a 
             href="/archives/2018" 
             class="archive-card-list-item">
             2018
-            <span class="archive-card-list-item-badge">24</span>
+            <span class="archive-card-list-item-badge">23</span>
           </a>
         
         
