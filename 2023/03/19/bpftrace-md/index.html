@@ -49,7 +49,7 @@
         content="2023-03-19">
       <meta 
         property="og:article:modified_time" 
-        content="2023-03-19">
+        content="2023-03-21">
       <meta 
         property="og:article:author" 
         content="Liarlee">
@@ -326,7 +326,7 @@
     
     
       <span class="dot"></span>
-      <span>490 字</span>
+      <span>528 字</span>
     
   </div>
   
@@ -335,7 +335,8 @@
     id="section" 
     class="post-content">
     <p>关于bpftrace追踪的总结, 追踪tcp状态的方法， 通过使用特定的tracepoint的来获取tcp状态的变化： </p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~$ bpftrace -e <span class="token string">'tracepoint:sock:inet_sock_set_state &#123; printf("%s %d %d\n", comm, pid, args->newstate); &#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~$ bpftrace -e <span class="token string">'tracepoint:sock:inet_sock_set_state &#123; printf("%s %d %d\n", comm, pid, args->newstate); &#125;'</span>
+~$ bpftrace -e <span class="token string">'tracepoint:sock:inet_sock_set_state &#123; printf("%s - %d -> %d - %d - %s\n",strftime("%H:%M:%S.%L", nsecs), args->oldstate, args->newstate, pid, comm); &#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>关于返回值的说明： </p>
 <blockquote>
@@ -343,7 +344,7 @@
 </blockquote>
 <p>tcp_set_state 是一个内核函数，用于设置 TCP 套接字的状态。它有 12 个可能的返回值，分别对应 TCP 协议中定义的 12 种状态1。这些状态是：</p>
 <blockquote>
-<p>TCP_ESTABLISHED：连接已建立<br>TCP_SYN_SENT：主动打开连接，已发送 SYN 包<br>TCP_SYN_RECV：被动打开连接，已收到 SYN 包<br>TCP_FIN_WAIT1：主动关闭连接，已发送 FIN 包<br>TCP_FIN_WAIT2：主动关闭连接，已收到对方的 ACK 包<br>TCP_TIME_WAIT：主动关闭连接，等待一段时间以确保对方收到最后一个 ACK 包<br>TCP_CLOSE：连接已关闭<br>TCP_CLOSE_WAIT：被动关闭连接，已收到 FIN 包<br>TCP_LAST_ACK：被动关闭连接，已发送最后一个 ACK 包<br>TCP_LISTEN：监听状态，等待被动打开连接<br>TCP_CLOSING：双方同时关闭连接，交换 FIN 和 ACK 包的过程中<br>TCP_NEW_SYN_RECV：临时状态，用于处理 SYN 队列溢出的情况</p>
+<p>1 TCP_ESTABLISHED：连接已建立<br>2 TCP_SYN_SENT：主动打开连接，已发送 SYN 包<br>3 TCP_SYN_RECV：被动打开连接，已收到 SYN 包<br>4 TCP_FIN_WAIT1：主动关闭连接，已发送 FIN 包<br>5 TCP_FIN_WAIT2：主动关闭连接，已收到对方的 ACK 包<br>6 TCP_TIME_WAIT：主动关闭连接，等待一段时间以确保对方收到最后一个 ACK 包<br>7 TCP_CLOSE：连接已关闭<br>8 TCP_CLOSE_WAIT：被动关闭连接，已收到 FIN 包<br>9 TCP_LAST_ACK：被动关闭连接，已发送最后一个 ACK 包<br>10 TCP_LISTEN：监听状态，等待被动打开连接<br>11 TCP_CLOSING：双方同时关闭连接，交换 FIN 和 ACK 包的过程中<br>12 TCP_NEW_SYN_RECV：临时状态，用于处理 SYN 队列溢出的情况</p>
 </blockquote>
 <p>追踪点还是比较简单的， 查看追踪点可用的参数。 </p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token operator">~</span>$ cat <span class="token operator">/</span>sys<span class="token operator">/</span>kernel<span class="token operator">/</span>debug<span class="token operator">/</span>tracing<span class="token operator">/</span>events<span class="token operator">/</span>syscalls<span class="token operator">/</span>sys_enter_sendmsg<span class="token operator">/</span>format
