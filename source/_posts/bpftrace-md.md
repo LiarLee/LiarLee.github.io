@@ -10,24 +10,25 @@ tags:
 
 ```bash 
 ~$ bpftrace -e 'tracepoint:sock:inet_sock_set_state { printf("%s %d %d\n", comm, pid, args->newstate); }'
+~$ bpftrace -e 'tracepoint:sock:inet_sock_set_state { printf("%s - %d -> %d - %d - %s\n",strftime("%H:%M:%S.%L", nsecs), args->oldstate, args->newstate, pid, comm); }'
 ```
 
 关于返回值的说明： 
   > https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-9/-/blob/main/include/net/tcp_states.h  
 
 tcp_set_state 是一个内核函数，用于设置 TCP 套接字的状态。它有 12 个可能的返回值，分别对应 TCP 协议中定义的 12 种状态1。这些状态是：
-  > TCP_ESTABLISHED：连接已建立
-  > TCP_SYN_SENT：主动打开连接，已发送 SYN 包
-  > TCP_SYN_RECV：被动打开连接，已收到 SYN 包
-  > TCP_FIN_WAIT1：主动关闭连接，已发送 FIN 包
-  > TCP_FIN_WAIT2：主动关闭连接，已收到对方的 ACK 包
-  > TCP_TIME_WAIT：主动关闭连接，等待一段时间以确保对方收到最后一个 ACK 包
-  > TCP_CLOSE：连接已关闭
-  > TCP_CLOSE_WAIT：被动关闭连接，已收到 FIN 包
-  > TCP_LAST_ACK：被动关闭连接，已发送最后一个 ACK 包
-  > TCP_LISTEN：监听状态，等待被动打开连接
-  > TCP_CLOSING：双方同时关闭连接，交换 FIN 和 ACK 包的过程中
-  > TCP_NEW_SYN_RECV：临时状态，用于处理 SYN 队列溢出的情况
+  > 1 TCP_ESTABLISHED：连接已建立
+  > 2 TCP_SYN_SENT：主动打开连接，已发送 SYN 包
+  > 3 TCP_SYN_RECV：被动打开连接，已收到 SYN 包
+  > 4 TCP_FIN_WAIT1：主动关闭连接，已发送 FIN 包
+  > 5 TCP_FIN_WAIT2：主动关闭连接，已收到对方的 ACK 包
+  > 6 TCP_TIME_WAIT：主动关闭连接，等待一段时间以确保对方收到最后一个 ACK 包
+  > 7 TCP_CLOSE：连接已关闭
+  > 8 TCP_CLOSE_WAIT：被动关闭连接，已收到 FIN 包
+  > 9 TCP_LAST_ACK：被动关闭连接，已发送最后一个 ACK 包
+  > 10 TCP_LISTEN：监听状态，等待被动打开连接
+  > 11 TCP_CLOSING：双方同时关闭连接，交换 FIN 和 ACK 包的过程中
+  > 12 TCP_NEW_SYN_RECV：临时状态，用于处理 SYN 队列溢出的情况
 
 追踪点还是比较简单的， 查看追踪点可用的参数。 
 ```c
