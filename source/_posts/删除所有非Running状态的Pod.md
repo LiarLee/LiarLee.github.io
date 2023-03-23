@@ -16,7 +16,7 @@ tags: Kubernetes
 记录一个命令来处理这个类型的Pod。 
 
 ```bash
-~$ kubectl delete pod --field-selector="status.phase==Failed"
+kubectl delete pod --field-selector="status.phase==Failed"
 ```
 
 # 测试方法
@@ -30,6 +30,7 @@ tags: Kubernetes
   fallocate -l 72G ./large.file
   ```
 1. 等待节点的DiskPressure被识别， 然后触发驱逐。 
+  ![Snipaste_2023-03-23_23-49-57.png](https://s2.loli.net/2023/03/24/FhKR1VcmTykOQHM.png)
 1. 删除文件， 取消DiskPressure状态， 等待 30 个新的Pod Ready。
    ```bash
    rm -rf ./large.file
@@ -39,3 +40,4 @@ tags: Kubernetes
    ~$ kubectl delete pod --field-selector="status.phase==Failed"
    ```
 1. Over.
+  ![38298320d5dbfe6c1c7763c4784d2e9.png](https://s2.loli.net/2023/03/24/r268vuJj9fFncae.png)
