@@ -366,10 +366,10 @@
 <li>集群内两个节点， 其中一个节点Taint  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">kubectl taint nodes ip-172-31-60-181.cn-north-1.compute.internal <span class="token assign-left variable">app</span><span class="token operator">=</span>grafana:NoSchedule<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li>启动30个Grafana</li>
 <li>登录到节点上面， 创建一个巨大的文件， 触发DiskPressure。  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">fallocate -l 72G ./large.file<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li>等待节点的DiskPressure被识别， 然后触发驱逐。 </li>
+<li>等待节点的DiskPressure被识别， 然后触发驱逐。<br>  <img src="https://s2.loli.net/2023/03/24/FhKR1VcmTykOQHM.png" alt="Snipaste_2023-03-23_23-49-57.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://s2.loli.net/2023/03/24/FhKR1VcmTykOQHM.png" class="lozad post-image"></li>
 <li>删除文件， 取消DiskPressure状态， 等待 30 个新的Pod Ready。<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> -rf ./large.file<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li>使用命令清除所有不是Running状态的Pod。<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~$ kubectl delete pod --field-selector<span class="token operator">=</span><span class="token string">"status.phase==Failed"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li>Over.</li>
+<li>Over.<br>  <img src="https://s2.loli.net/2023/03/24/r268vuJj9fFncae.png" alt="38298320d5dbfe6c1c7763c4784d2e9.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://s2.loli.net/2023/03/24/r268vuJj9fFncae.png" class="lozad post-image"></li>
 </ol>
 
   </div>
