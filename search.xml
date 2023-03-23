@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>删除所有非Running状态的Pod</title>
+      <link href="/2023/03/23/%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/"/>
+      <url>/2023/03/23/%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/</url>
+      
+        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>遇到了一个奇怪的问题， 如果所有的节点上面都有Taint， 然后这个没有Taint的节点磁盘满了， 会导致当前的节点上面留下需要状态不正常的Pod， 这些Pod大概率是停留在了Evicted状态， 或者是Completed, 甚至是 Unknown 就离谱。 </p><p>这种状态的Pod Deployment默认的情况下不会自动回收， 所以需要人工操作一下。 </p><h1 id="处理方法"><a href="#处理方法" class="headerlink" title="处理方法"></a>处理方法</h1><p>记录一个命令来处理这个类型的Pod。 </p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~$ kubectl delete pod --field-selector<span class="token operator">=</span><span class="token string">"status.phase==Failed"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h1 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h1><ol><li>集群内两个节点， 其中一个节点Taint  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">kubectl taint nodes ip-172-31-60-181.cn-north-1.compute.internal <span class="token assign-left variable">app</span><span class="token operator">=</span>grafana:NoSchedule<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li><li>启动30个Grafana</li><li>登录到节点上面， 创建一个巨大的文件， 触发DiskPressure。  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">fallocate -l 72G ./large.file<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li><li>等待节点的DiskPressure被识别， 然后触发驱逐。 </li><li>删除文件， 取消DiskPressure状态， 等待 30 个新的Pod Ready。<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> -rf ./large.file<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li><li>使用命令清除所有不是Running状态的Pod。<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~$ kubectl delete pod --field-selector<span class="token operator">=</span><span class="token string">"status.phase==Failed"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li><li>Over.</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Kubernetes </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>关于内核追踪的一点点认识</title>
       <link href="/2023/03/19/bpftrace-md/"/>
       <url>/2023/03/19/bpftrace-md/</url>

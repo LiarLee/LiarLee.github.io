@@ -18,17 +18,17 @@
   <link 
     rel="icon" 
     href="/img/logo.png">
-  <title>Ceph Cluster 03 - CephFS</title>
+  <title>删除所有非Running状态的Pod</title>
   
     
       <meta 
         property="og:title" 
-        content="Ceph Cluster 03 - CephFS">
+        content="删除所有非Running状态的Pod">
     
     
       <meta 
         property="og:url" 
-        content="https://liarlee.site/2021/08/24/Linux/Linux_Ceph03/index.html">
+        content="https://liarlee.site/2023/03/23/%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/index.html">
     
     
       <meta 
@@ -38,7 +38,7 @@
     
       <meta 
         property="og:img" 
-        content="&lt;p&gt;ceph笔记03&lt;/p&gt;">
+        content="Archlinux User, Kubernetes, Support Engineer">
     
     
       <meta 
@@ -46,10 +46,10 @@
         content="article">
       <meta 
         property="og:article:published_time" 
-        content="2021-08-24">
+        content="2023-03-23">
       <meta 
         property="og:article:modified_time" 
-        content="2022-10-13">
+        content="2023-03-24">
       <meta 
         property="og:article:author" 
         content="Liarlee">
@@ -57,7 +57,7 @@
         
           <meta 
             property="og:article:tag" 
-            content="Ceph">
+            content="Kubernetes">
         
       
     
@@ -307,16 +307,16 @@
 <article class="card card-content">
   <header>
     <h1 class="post-title">
-      Ceph Cluster 03 - CephFS
+      删除所有非Running状态的Pod
     </h1>
   </header>
   <div class="post-meta post-show-meta">
-    <time datetime="2021-08-24T14:29:26.000Z">
+    <time datetime="2023-03-23T15:42:22.000Z">
       <i 
         class="iconfont icon-calendar" 
         style="margin-right: 2px;">
       </i>
-      <span>2021-08-24</span>
+      <span>2023-03-23</span>
     </time>
     
       <span class="dot"></span>
@@ -330,7 +330,7 @@
     
     
       <span class="dot"></span>
-      <span>1k 字</span>
+      <span>260 字</span>
     
   </div>
   
@@ -345,9 +345,9 @@
         
           
           <a 
-            href="/tags/Ceph/" 
+            href="/tags/Kubernetes/" 
             class="post-meta-link">
-            Ceph
+            Kubernetes
           </a>
         
       </div>
@@ -357,93 +357,19 @@
   <div 
     id="section" 
     class="post-content">
-    <p>ceph笔记03</p>
-<span id="more"></span>
+    <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>遇到了一个奇怪的问题， 如果所有的节点上面都有Taint， 然后这个没有Taint的节点磁盘满了， 会导致当前的节点上面留下需要状态不正常的Pod， 这些Pod大概率是停留在了Evicted状态， 或者是Completed, 甚至是 Unknown 就离谱。 </p>
+<p>这种状态的Pod Deployment默认的情况下不会自动回收， 所以需要人工操作一下。 </p>
+<h1 id="处理方法"><a href="#处理方法" class="headerlink" title="处理方法"></a>处理方法</h1><p>记录一个命令来处理这个类型的Pod。 </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~$ kubectl delete pod --field-selector<span class="token operator">=</span><span class="token string">"status.phase==Failed"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h1 id="cephfs的使用"><a href="#cephfs的使用" class="headerlink" title="cephfs的使用"></a>cephfs的使用</h1><h2 id="cephfs的使用条件"><a href="#cephfs的使用条件" class="headerlink" title="cephfs的使用条件"></a>cephfs的使用条件</h2><ol>
-<li>当我们需要多个服务来挂载和实时的同步的时候， 使用到CEPHFS，可以实现文件系统的共享。内核里面现在这个时间已经内置cephfs的挂载模块， 可以直接挂载不需要安装。</li>
-<li>cephfs运行需要MDS服务，用来存储缓存的文件信息。总体需要创建两个存储池，单独创建一个存储MDS信息的存储池， 同时需要创建一个数据池来提供存储空间。</li>
-<li>启用mds的服务 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ceph orch mds <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li>创建ceph的存储池<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ceph mds <span class="token function">stat</span>
-<span class="token comment"># 创建一个cephfs的metadata池</span>
-ceph osd pool create metadata <span class="token number">32</span> <span class="token number">32</span> 
-<span class="token comment"># 创建一个cephfs的data池</span>
-ceph osd pool create cephfsdata <span class="token number">64</span> <span class="token number">64</span> 
-<span class="token comment"># 创建ceph的状态</span>
-ceph osd pool <span class="token function">ls</span> 
-ceph -s 
-<span class="token comment"># 创建cephfs的文件系统</span>
-ceph fs new defaultfs metadata cephfsdata
-
-<span class="token comment"># 新的版本里面已经不需要手动创建mds和两个对应的存储池了， 只是需要一条命令就可以自动创建。</span>
-<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph fs volume create test</span>
-<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph fs volume ls</span>
-<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph mds stat</span>
-<span class="token comment"># 需要提前获取挂载的Token： </span>
-<span class="token punctuation">[</span>root@HaydenArchDesktop ceph<span class="token punctuation">]</span><span class="token comment"># sudo scp root@ceph01:/etc/ceph/ceph.client.admin.keyring /etc/ceph/</span>
-<span class="token punctuation">[</span>root@HaydenArchDesktop ceph<span class="token punctuation">]</span><span class="token comment"># mount -t ceph :/ /mnt -o name=admin</span>
-<span class="token punctuation">[</span>root@HaydenArchDesktop mnt<span class="token punctuation">]</span><span class="token comment"># mount | grep ceph</span>
-<span class="token number">192.168</span>.31.11:6789,192.168.31.12:6789,192.168.31.13:6789:/ on /mnt <span class="token builtin class-name">type</span> ceph <span class="token punctuation">(</span>rw,relatime,name<span class="token operator">=</span>admin,secret<span class="token operator">=</span><span class="token operator">&lt;</span>hidden<span class="token operator">></span>,acl<span class="token punctuation">)</span>
-
-<span class="token comment">#</span>
-<span class="token comment"># journalctl -f > /mnt/journal.log   </span>
-<span class="token comment"># 查看cephfs的写入文件的动作过程。 </span>
-<span class="token comment"># 同时使用 tail -f 在另一个窗口中查看文件的内容。 测试写入和查看内容的差距。 </span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ol>
-<h2 id="用户权限"><a href="#用户权限" class="headerlink" title="用户权限"></a>用户权限</h2><p>MDS可以启动多个实例，多个实例会自动来负载不同资源的文件元数据的缓存。<br>客户端通过MON节点进行授权 和 获取MDS的的位置。<br>MDS现在最新的版本默认已经是一主一备， 自动会生成高可用的模式。（之前的手动部署多个MDS服务器， 然后指定MDS的角色）</p>
-<h3 id="创建一个普通用户来进行身份的验证"><a href="#创建一个普通用户来进行身份的验证" class="headerlink" title="创建一个普通用户来进行身份的验证"></a>创建一个普通用户来进行身份的验证</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建一个测试的用户</span>
-ceph auth <span class="token function">add</span> client.testuser mon <span class="token string">'allow r'</span> mds <span class="token string">'allow rw'</span> osd <span class="token string">'allow rwx pool=cephfsdata'</span>
-<span class="token comment"># 测试所建立的用户的权限，获取认证的keyring</span>
-ceph auth get client.testuser
-<span class="token comment"># 导出用户的Keyring， 用来做集群的校验</span>
-ceph auth get client.testuser -o ceph.client.testuser.keyring
-<span class="token comment"># 导出用户的key ， Kubernetes的挂载会使用到</span>
-ceph auth print-key client.testuser <span class="token operator">></span> testuser.key
-<span class="token comment"># 验证用户是否可以获取到集群的状态</span>
-ceph --user testuser -s 
-
-<span class="token comment"># 将挂载点添加到fstab自动开机挂载</span>
-MON01:6789,MON02:6789,<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>.:/ /mnt ceph defaults,name<span class="token operator">=</span>testuser,secretfile<span class="token operator">=</span>/etc/ceph/testuser.key,_netdev <span class="token number">0</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Dashboard权限"><a href="#Dashboard权限" class="headerlink" title="Dashboard权限"></a>Dashboard权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启用或者禁用账户</span>
-<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph dashboard ac-user-enable admin</span>
-
-<span class="token comment"># 重置Dashboard用户的密码</span>
-<span class="token comment"># Old Version</span>
-<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph dashboard set-login-credentials admin -i /etc/ceph/dashboard_password</span>
-
-<span class="token comment"># New version command.</span>
-<span class="token punctuation">[</span>ceph: root@ceph01 /<span class="token punctuation">]</span><span class="token comment"># ceph dashboard -h | grep ac-user</span>
-dashboard ac-user-add-roles <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>roles<span class="token operator">></span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>         Add roles to user
-dashboard ac-user-create <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>rolename<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>name<span class="token operator">></span><span class="token punctuation">]</span>   Create a user. Password <span class="token builtin class-name">read</span> from -i <span class="token operator">&lt;</span>file<span class="token operator">></span>
-dashboard ac-user-del-roles <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>roles<span class="token operator">></span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>         Delete roles from user
-dashboard ac-user-delete <span class="token punctuation">[</span><span class="token operator">&lt;</span>username<span class="token operator">></span><span class="token punctuation">]</span>                       Delete user
-dashboard ac-user-disable <span class="token punctuation">[</span><span class="token operator">&lt;</span>username<span class="token operator">></span><span class="token punctuation">]</span>                      Disable a user
-dashboard ac-user-enable <span class="token punctuation">[</span><span class="token operator">&lt;</span>username<span class="token operator">></span><span class="token punctuation">]</span>                       Enable a user
-dashboard ac-user-set-info <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>email<span class="token operator">></span><span class="token punctuation">]</span>      Set user info
-dashboard ac-user-set-password <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span>--force-         Set user password from -i <span class="token operator">&lt;</span>file<span class="token operator">></span>
-dashboard ac-user-set-password-hash <span class="token operator">&lt;</span>username<span class="token operator">></span>              Set user password bcrypt <span class="token builtin class-name">hash</span> from -i <span class="token operator">&lt;</span>file<span class="token operator">></span>
-dashboard ac-user-set-roles <span class="token operator">&lt;</span>username<span class="token operator">></span> <span class="token punctuation">[</span><span class="token operator">&lt;</span>roles<span class="token operator">></span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>         Set user roles
-dashboard ac-user-show <span class="token punctuation">[</span><span class="token operator">&lt;</span>username<span class="token operator">></span><span class="token punctuation">]</span>                         Show user info<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="MDS-高可用"><a href="#MDS-高可用" class="headerlink" title="MDS 高可用"></a>MDS 高可用</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 提升默认的主节点的数量， 来提高MDS服务的吞吐量</span>
-ceph fs <span class="token builtin class-name">set</span> defaultfs max_mds <span class="token number">2</span> 
-ceph fs get defaultfs
-<span class="token comment"># 变成两主两备， （设置Rank）</span>
-<span class="token comment"># 参数： mds_standby_replay true </span>
-         mds_standby_for_name: MDS_NAME
-         mds_standby_for_rank: 备份指定级别的mds
-         mds_standby_for_fscid: 指定文件系统ID，会联合rank配置生效，如果指定了rank就是指定文件系统的rank会进行主备，如果未指定就是指定文件系统的所有Rank。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ol>
-<li>如果是一对一的高可用 ， 需要对每个mds进行独立的配置。<br>配置样例： <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 配置的结果是mds1主， mds2 备； mds3 主， mds4 备.</span>
-<span class="token punctuation">[</span>mds.ceph-mds1<span class="token punctuation">]</span>
-mds_standby_replay <span class="token operator">=</span> <span class="token boolean">true</span> 
-mds_standby_for_name <span class="token operator">=</span> ceph-mds2
-mds_standby_for_fscid <span class="token operator">=</span> defaultfs 
-
-<span class="token punctuation">[</span>mds.ceph-mds3<span class="token punctuation">]</span>
-mds_standby_replay <span class="token operator">=</span> <span class="token boolean">true</span>
-mds_standby_for_name <span class="token operator">=</span> ceph-mds4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<h1 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h1><ol>
+<li>集群内两个节点， 其中一个节点Taint  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">kubectl taint nodes ip-172-31-60-181.cn-north-1.compute.internal <span class="token assign-left variable">app</span><span class="token operator">=</span>grafana:NoSchedule<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>启动30个Grafana</li>
+<li>登录到节点上面， 创建一个巨大的文件， 触发DiskPressure。  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">fallocate -l 72G ./large.file<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>等待节点的DiskPressure被识别， 然后触发驱逐。 </li>
+<li>删除文件， 取消DiskPressure状态， 等待 30 个新的Pod Ready。<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> -rf ./large.file<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>使用命令清除所有不是Running状态的Pod。<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">~$ kubectl delete pod --field-selector<span class="token operator">=</span><span class="token string">"status.phase==Failed"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>Over.</li>
 </ol>
 
   </div>
@@ -464,8 +390,8 @@ mds_standby_for_name <span class="token operator">=</span> ceph-mds4<span aria-h
           <span style="font-weight: bold;">文章链接：</span><a 
             target="_blank" 
             rel="nofollow noopener noreferrer" 
-            href="https://liarlee.site/2021/08/24/Linux/Linux_Ceph03/">
-            https://liarlee.site/2021/08/24/Linux/Linux_Ceph03/
+            href="https://liarlee.site/2023/03/23/%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/">
+            https://liarlee.site/2023/03/23/%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/
           </a>
         </p>
         <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
@@ -475,29 +401,15 @@ mds_standby_for_name <span class="token operator">=</span> ceph-mds4<span aria-h
 </article>
 <div class="nav">
   
-    <div class="nav-item-prev">
-      <a 
-        href="/2021/08/26/Linux/Linux_RangerUsage/" 
-        class="nav-link">
-        <i class="iconfont icon-left nav-prev-icon"></i>
-        <div>
-          <div class="nav-label">上一篇</div>
-          
-            <div class="nav-title">Linux_Ranger_Usage </div>
-          
-        </div>
-      </a>
-    </div>
-  
   
     <div class="nav-item-next">
       <a 
-        href="/2021/08/23/Linux/Linux_Ceph02/" 
+        href="/2023/03/19/bpftrace-md/" 
         class="nav-link">
         <div>
           <div class="nav-label">下一篇</div>
           
-            <div class="nav-title">Ceph Cluster 02 - OSD/RBD </div>
+            <div class="nav-title">关于内核追踪的一点点认识 </div>
           
         </div>
         <i class="iconfont icon-right nav-next-icon"></i>
@@ -515,7 +427,7 @@ mds_standby_for_name <span class="token operator">=</span> ceph-mds4<span aria-h
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">cephfs的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">cephfs的使用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90"><span class="toc-text">用户权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%9D%A5%E8%BF%9B%E8%A1%8C%E8%BA%AB%E4%BB%BD%E7%9A%84%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个普通用户来进行身份的验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dashboard%E6%9D%83%E9%99%90"><span class="toc-text">Dashboard权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MDS-%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-text">MDS 高可用</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">处理方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95"><span class="toc-text">测试方法</span></a></li></ol>
 </div></main>
             <aside class="left-column">
               
@@ -563,7 +475,7 @@ mds_standby_for_name <span class="token operator">=</span> ceph-mds4<span aria-h
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">cephfs的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">cephfs的使用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90"><span class="toc-text">用户权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%9D%A5%E8%BF%9B%E8%A1%8C%E8%BA%AB%E4%BB%BD%E7%9A%84%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个普通用户来进行身份的验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dashboard%E6%9D%83%E9%99%90"><span class="toc-text">Dashboard权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MDS-%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-text">MDS 高可用</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">处理方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95"><span class="toc-text">测试方法</span></a></li></ol>
       </div>
     </article>
   
@@ -748,7 +660,7 @@ mds_standby_for_name <span class="token operator">=</span> ceph-mds4<span aria-h
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">cephfs的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cephfs%E7%9A%84%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">cephfs的使用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90"><span class="toc-text">用户权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%9D%A5%E8%BF%9B%E8%A1%8C%E8%BA%AB%E4%BB%BD%E7%9A%84%E9%AA%8C%E8%AF%81"><span class="toc-text">创建一个普通用户来进行身份的验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dashboard%E6%9D%83%E9%99%90"><span class="toc-text">Dashboard权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MDS-%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-text">MDS 高可用</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">处理方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95"><span class="toc-text">测试方法</span></a></li></ol>
     </article>
   
   
