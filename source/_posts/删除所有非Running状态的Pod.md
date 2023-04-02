@@ -5,7 +5,7 @@ date: 2023-03-23 23:42:22
 tags: Kubernetes
 ---
 
-# 背景
+## 背景
 
 遇到了一个奇怪的问题， 如果所有的节点上面都有Taint， 然后这个没有Taint的节点磁盘满了， 会导致当前的节点上面留下许多状态不正常的Pod， 这些Pod大概率是停留在了Evicted状态， 或者是Completed, 甚至是 Unknown 就离谱。 
 
@@ -13,14 +13,14 @@ tags: Kubernetes
 
 [Knowledge Source](https://gist.github.com/ipedrazas/9c622404fb41f2343a0db85b3821275d)
 
-# 处理方法
+## 处理方法
 记录一个命令来处理这个类型的Pod。 
 
 ```bash
 kubectl delete pod --field-selector="status.phase==Failed"
 ```
 
-# 测试方法
+## 测试方法
 1. 集群内两个节点， 其中一个节点Taint
   ```bash
   kubectl taint nodes ip-172-31-60-181.cn-north-1.compute.internal app=grafana:NoSchedule
