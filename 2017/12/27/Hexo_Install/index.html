@@ -115,15 +115,15 @@
           function prismThemeChange() {
             if(document.getElementById('theme-color').dataset.mode === 'dark') {
               if(document.querySelector('[data-prism]')) {
-                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+                changeCSS('/js/lib/prism/prism-tomorrow.min.css', '[data-prism]', 'prism-tomorrow');
               } else {
-                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+                loadCSS('/js/lib/prism/prism-tomorrow.min.css', 'prism', 'prism-tomorrow');
               }
             } else {
               if(document.querySelector('[data-prism]')) {
-                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+                changeCSS('/js/lib/prism/prism-tomorrow.min.css', '[data-prism]', 'prism-tomorrow');
               } else {
-                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+                loadCSS('/js/lib/prism/prism-tomorrow.min.css', 'prism', 'prism-tomorrow');
               }
             }
           }
@@ -463,7 +463,7 @@
 </blockquote>
 <p>如果上一部分生成SSH密钥的时候输入了密码，请在这个命令运行之后按照提示输入密码，返回结果如下：  </p>
 <blockquote>
-<p>[root@localhost .ssh]# ssh -T <a href="mailto:&#x67;&#105;&#116;&#64;&#x67;&#x69;&#116;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#109;">&#x67;&#105;&#116;&#64;&#x67;&#x69;&#116;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#109;</a><br>Hi test! You’ve successfully authenticated, but GitHub does not provide shell access.  </p>
+<p>[root@localhost .ssh]# ssh -T <a href="mailto:&#x67;&#105;&#x74;&#64;&#103;&#105;&#116;&#104;&#x75;&#x62;&#x2e;&#99;&#x6f;&#x6d;">&#x67;&#105;&#x74;&#64;&#103;&#105;&#116;&#104;&#x75;&#x62;&#x2e;&#99;&#x6f;&#x6d;</a><br>Hi test! You’ve successfully authenticated, but GitHub does not provide shell access.  </p>
 </blockquote>
 <p>我们已经成功的连接上了Github上面的repo，github的配置结束了～  </p>
 <h3 id="配置Hexo-deployer"><a href="#配置Hexo-deployer" class="headerlink" title="配置Hexo-deployer"></a>配置Hexo-deployer</h3><p>git可以将我们的blog推送到repo上面去，但是本身我们也可以使用hexo提供的工具来进行blog的更新。  </p>
@@ -475,12 +475,12 @@
 </li>
 <li><p>修改配置文件中的这个部分，如下是最终的修改结果：  </p>
 <blockquote>
-<p> 77 # Deployment<br> 78 ## Docs: <a target="_blank" rel="noopener" href="https://hexo.io/docs/deployment.html">https://hexo.io/docs/deployment.html</a><br> 79 deploy:<br> 80   type:  git<br> 81   repo:  <a href="mailto:&#103;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;">&#103;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;</a>:test&#x2F;test.github.io.git<br> 82   branch:  master  </p>
+<p> 77 # Deployment<br> 78 ## Docs: <a target="_blank" rel="noopener" href="https://hexo.io/docs/deployment.html">https://hexo.io/docs/deployment.html</a><br> 79 deploy:<br> 80   type:  git<br> 81   repo:  <a href="mailto:&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;</a>:test&#x2F;test.github.io.git<br> 82   branch:  master  </p>
 </blockquote>
 </li>
 <li><p>现在将我们本地的默认站点推送到Github上面去试试吧！   </p>
 <blockquote>
-<p><code>[root@localhost test]# hexo d</code><br>INFO  Deploying: git<br>INFO  Clearing .deploy_git folder…<br>INFO  Copying files from public folder…<br>INFO  Copying files from extend dirs…<br>[master caa83a9] Site updated: 2017-12-27 18:26:01<br> 1 file changed, 63 insertions(+), 11 deletions(-)<br>To github.com:test&#x2F;test.github.io.git<br>62dcd56..caa83a9  HEAD -&gt; master<br>Branch master set up to track remote branch master from   <a href="mailto:&#x67;&#105;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;">&#x67;&#105;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;</a>:test&#x2F;test.github.io.git.<br>INFO  Deploy done: git  </p>
+<p><code>[root@localhost test]# hexo d</code><br>INFO  Deploying: git<br>INFO  Clearing .deploy_git folder…<br>INFO  Copying files from public folder…<br>INFO  Copying files from extend dirs…<br>[master caa83a9] Site updated: 2017-12-27 18:26:01<br> 1 file changed, 63 insertions(+), 11 deletions(-)<br>To github.com:test&#x2F;test.github.io.git<br>62dcd56..caa83a9  HEAD -&gt; master<br>Branch master set up to track remote branch master from   <a href="mailto:&#103;&#105;&#116;&#x40;&#103;&#105;&#x74;&#104;&#117;&#98;&#x2e;&#99;&#111;&#x6d;">&#103;&#105;&#116;&#x40;&#103;&#105;&#x74;&#104;&#117;&#98;&#x2e;&#99;&#111;&#x6d;</a>:test&#x2F;test.github.io.git.<br>INFO  Deploy done: git  </p>
 </blockquote>
 </li>
 <li><p>输出最后Deploy done,就表示我们的原始页面已经上传成功了～，访问Repo的名字就可以直接看到初始blog的样子了。</p>
@@ -633,17 +633,17 @@
   </div>
   <div class="categories-list">
     
-      <a href="/categories/Books/">
-        <div class="categories-list-item">
-          Books
-          <span class="categories-list-item-badge">3</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
           <span class="categories-list-item-badge">77</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
         </div>
       </a>
     
@@ -750,12 +750,6 @@
       </a>
     
       <a 
-        href="/tags/docker/" 
-        title="docker">
-        <div class="tags-list-item">docker</div>
-      </a>
-    
-      <a 
         href="/tags/KVM/" 
         title="KVM">
         <div class="tags-list-item">KVM</div>
@@ -783,6 +777,12 @@
         href="/tags/RabbitMQ/" 
         title="RabbitMQ">
         <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+      <a 
+        href="/tags/Orthanc/" 
+        title="Orthanc">
+        <div class="tags-list-item">Orthanc</div>
       </a>
     
   </div>

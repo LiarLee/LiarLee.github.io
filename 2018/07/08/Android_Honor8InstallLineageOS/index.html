@@ -115,15 +115,15 @@
           function prismThemeChange() {
             if(document.getElementById('theme-color').dataset.mode === 'dark') {
               if(document.querySelector('[data-prism]')) {
-                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+                changeCSS('/js/lib/prism/prism-tomorrow.min.css', '[data-prism]', 'prism-tomorrow');
               } else {
-                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+                loadCSS('/js/lib/prism/prism-tomorrow.min.css', 'prism', 'prism-tomorrow');
               }
             } else {
               if(document.querySelector('[data-prism]')) {
-                changeCSS('/js/lib/prism/prism-okaidia.min.css', '[data-prism]', 'prism-okaidia');
+                changeCSS('/js/lib/prism/prism-tomorrow.min.css', '[data-prism]', 'prism-tomorrow');
               } else {
-                loadCSS('/js/lib/prism/prism-okaidia.min.css', 'prism', 'prism-okaidia');
+                loadCSS('/js/lib/prism/prism-tomorrow.min.css', 'prism', 'prism-tomorrow');
               }
             }
           }
@@ -579,17 +579,17 @@
   </div>
   <div class="categories-list">
     
-      <a href="/categories/Books/">
-        <div class="categories-list-item">
-          Books
-          <span class="categories-list-item-badge">3</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
           <span class="categories-list-item-badge">77</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Books/">
+        <div class="categories-list-item">
+          Books
+          <span class="categories-list-item-badge">3</span>
         </div>
       </a>
     
@@ -696,12 +696,6 @@
       </a>
     
       <a 
-        href="/tags/docker/" 
-        title="docker">
-        <div class="tags-list-item">docker</div>
-      </a>
-    
-      <a 
         href="/tags/KVM/" 
         title="KVM">
         <div class="tags-list-item">KVM</div>
@@ -729,6 +723,12 @@
         href="/tags/RabbitMQ/" 
         title="RabbitMQ">
         <div class="tags-list-item">RabbitMQ</div>
+      </a>
+    
+      <a 
+        href="/tags/Orthanc/" 
+        title="Orthanc">
+        <div class="tags-list-item">Orthanc</div>
       </a>
     
   </div>
