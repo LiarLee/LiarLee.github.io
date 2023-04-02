@@ -1,0 +1,14 @@
+kind: pipeline
+name: default
+
+steps:
+- name: hexo-build
+  image: node:19.9.0-bullseye
+  environment:
+    TOKEN:
+      from_secret: Hexo-Deploy-GitPush
+  commands:
+  - npm install
+  - npm run clean
+  - npm run build
+  - npm run deploy

@@ -54,6 +54,7 @@ prismjs:
   enable: true
   preprocess: true
   line_number: true
+  line_threshold: 0
   tab_replace: '  '
 
 # Home page setting
@@ -102,8 +103,10 @@ theme: kaze
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: 'git'
-  repo: git@github.com:LiarLee/LiarLee.github.io.git
-  branch: master
+  type: git
+  repo:
+    github:
+      url: https://github.com/LiarLee/LiarLee.github.io.git
+      branch: master
+      token: $TOKEN
   message: "Hexo Auto Deploy."
-

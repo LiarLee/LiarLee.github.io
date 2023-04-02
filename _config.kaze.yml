@@ -132,7 +132,7 @@ footer:
 # Post
 #------------------------
 toc:
-  showListNumber: false
+  showListNumber: true
   maxDepth: 6
   minDepth: 1
 
@@ -160,8 +160,8 @@ og:
 # we support eight highlight themes, you can go to prism website (https://prismjs.com) for more information
 # theme: default | coy | dark | funky | okaidia | solarizedlight | tomorrow | twilight
 prism:
-  theme: okaidia
-  darkTheme: okaidia
+  theme: tomorrow
+  darkTheme: tomorrow
 # show the number of words in posts
 wordcount:
   enable: true
@@ -195,7 +195,7 @@ color:
   code-background-color: "#e9eaf0"
 
 font:
-  font-size: 16px # global font-size
+  font-size: 14px # global font-size
   font-family: 'sans-serif,"PingFang SC",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue","Microsoft YaHei",sans-serif' # global font-family
 
 #------------------------
