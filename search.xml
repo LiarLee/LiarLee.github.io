@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Linux 使用内核tc流量控制</title>
+      <link href="/2023/04/02/Linux-tc%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/"/>
+      <url>/2023/04/02/Linux-tc%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/</url>
+      
+        <content type="html"><![CDATA[<h1 id="tc-的简单介绍"><a href="#tc-的简单介绍" class="headerlink" title="tc 的简单介绍"></a>tc 的简单介绍</h1><p>linux 默认提供的tc流量控制功能， 可以通过网络子系统对于os的网络流量进行精确的限制， 基于这个功能可以扩展网络的能力， 并制造一些事故现场（bushi。</p><p><a href="https://www.kernel.org/doc/html/v5.3/admin-guide/cgroup-v1/net_cls.html">Linux Kernel Document For Network Classifier Cgroup</a></p><p>如果需要更多的细节的话， 可以直接 man tc 获取。</p><h1 id="tc-的控制逻辑"><a href="#tc-的控制逻辑" class="headerlink" title="tc 的控制逻辑"></a>tc 的控制逻辑</h1><h1 id="tc-的使用方式"><a href="#tc-的使用方式" class="headerlink" title="tc 的使用方式"></a>tc 的使用方式</h1><h2 id="1"><a href="#1" class="headerlink" title="1"></a>1</h2><h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><h2 id="3"><a href="#3" class="headerlink" title="3"></a>3</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>删除所有非Running状态的Pod</title>
       <link href="/2023/03/23/%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/"/>
       <url>/2023/03/23/%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/</url>
