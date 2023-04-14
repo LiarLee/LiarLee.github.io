@@ -453,7 +453,7 @@ time_total: <span class="token number">50.756470</span><span aria-hidden="true" 
 <p>6.25MB * 1024 &#x3D; 6400KB * 1024 &#x3D; 6553600 Bytes</p>
 <p>6553600 * 2 &#x3D; 13107200 # 这个是linux kernel buffer size </p>
 </blockquote>
-<p>在这个测试的过程中发现， 数据发送方的通告的window size， 固定是 tcp_rmem 值的一半。 发现这个是 BDP 计算出来的结果是 6553600， 如果这个值直接配置到tcp_rmem中，抓包出来windowsize就正好是预期的一半， 这会导致限定的千兆带宽正好占用500Mbps。</p>
+<p>在这个测试的过程中发现， 数据发送方的通告的window size， 固定是 tcp_rmem 值的一半。 发现 BDP 计算出来的结果是 6553600， 如果这个值直接配置到tcp_rmem中，抓包出来windowsize就正好是预期的一半， 这会导致限定的千兆带宽正好占用500Mbps。</p>
 <h3 id="测试1-增加客户端的-rmem"><a href="#测试1-增加客户端的-rmem" class="headerlink" title="测试1 增加客户端的 rmem"></a>测试1 增加客户端的 rmem</h3><ul>
 <li><p>服务端参数</p>
 <pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">net.ipv4.tcp_rmem &#x3D; 4096	131072	6291456
@@ -472,7 +472,7 @@ net.ipv4.tcp_rmem &#x3D; 13107200 13107200 13107200<span aria-hidden="true" clas
 time_connect: 0.053408
 time_starttransfer: 0.103699
 time_total: 37.118881<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<p>这个测试有一个补充的地方， 如果我把服务端的wmem 最大值 设置为 13107200 ， 那么也可以跑满带宽。</p>
 <h3 id="测试2-增加服务端的-wmem"><a href="#测试2-增加服务端的-wmem" class="headerlink" title="测试2 增加服务端的 wmem"></a>测试2 增加服务端的 wmem</h3><ul>
 <li><p>服务端参数</p>
 <pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">net.ipv4.tcp_wmem &#x3D; 13107200 13107200 13107200
@@ -502,7 +502,7 @@ time_total: 17.007612<span aria-hidden="true" class="line-numbers-rows"><span></
 <p>原因是由于curl在获取到数据包之后快速的ack了收到的包， 然后向服务端更新了接收窗口， 由于curl的动作太快了， 所以我的 Bytes in flight 非常小，窗口一直在被更新， 所以窗口的尺寸非常大， 而且稳定。NOTE： 这个逻辑的证据是：  测试4， 让curl没有时间收取数据包。<br><img src="https://s2.loli.net/2023/04/14/8KWyBIgZTQC4GVN.png" alt="2023-04-12_23-10.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://s2.loli.net/2023/04/14/8KWyBIgZTQC4GVN.png" class="lozad post-image"></p>
 </blockquote>
 <p>截取了其中的一部分稳定传输中的抓包结果， 如图：<br><img src="https://s2.loli.net/2023/04/14/qRGDdPh3pubUiZz.png" alt="2023-04-12_23-17.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://s2.loli.net/2023/04/14/qRGDdPh3pubUiZz.png" class="lozad post-image"></p>
-<p>稳定传输中基本上是有空间， 收到之前的ack 就立刻发送新的到链路中（网络这边的gap比较大， 试着开始补</p>
+<p>稳定传输中基本上是有空间， 收到之前的ack 就立刻发送新的到链路中。</p>
 <h3 id="测试3-锁定-wmem-以及-rmem-4096"><a href="#测试3-锁定-wmem-以及-rmem-4096" class="headerlink" title="测试3 锁定 wmem 以及 rmem 4096"></a>测试3 锁定 wmem 以及 rmem 4096</h3><ul>
 <li><p>服务端参数  </p>
 <pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">net.ipv4.tcp_wmem &#x3D; 4096 4096 4096
