@@ -126,7 +126,7 @@ curl -o /dev/null -v http://nginx.liarlee.site/Fedora-Workstation-Live-x86_64-38
 
 ## 仅控制带宽
 
-在添加了带宽控制之后， 带宽控制在 1000Mbps， 带宽结果： 
+在添加了带宽控制， 带宽控制在 1000Mbps， 带宽监控结果： 
 
 ![2023-04-12_17-03.png](/home/ec2-user/githubrepo/assets/ZVxCb43c2Wynaze.png)
 
@@ -269,7 +269,7 @@ TCP慢启动时候的截图：
 截取了其中的一部分稳定传输中的抓包结果， 如图：
 ![2023-04-12_23-17.png](https://s2.loli.net/2023/04/14/qRGDdPh3pubUiZz.png)
 
-稳定传输中基本上是有空间， 收到之前的ack 就立刻发送新的到链路中（网络这边的gap比较大， 试着开始补
+稳定传输中基本上是有空间， 收到之前的ack 就立刻发送新的到链路中.
 
 ### 测试3 锁定 wmem 以及 rmem 4096
 
@@ -311,5 +311,8 @@ TCP慢启动时候的截图：
 基本上随着窗口的变化而变化， curl的下载速度并不快， 下载的速度也不太稳定。。
 ![2023-04-14_17-09_1.png](https://s2.loli.net/2023/04/14/KZmte1CzfvIsoLM.png)
 
-
+## 问题汇总：
+1. 如何计算每秒传输了多少MB数据？
+1. 对于RecvBuffer 或者 SendBuffer 被填满的时候， 应用程序的表现是什么样子的？ 我的理解是，本来应该通过系统调用write（）写入的数据在 SendBuffer 满了的情况下， 应用会在等待io的状态。
+1. wmem的值 与 Send-Q 中的数值的关系是什么？
 
