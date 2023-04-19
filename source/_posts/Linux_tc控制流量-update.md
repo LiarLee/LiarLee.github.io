@@ -126,7 +126,7 @@ curl 的测试命令如下：（更新版本， 之前的测试版本少了一�
 
 在添加了带宽控制， 带宽控制在 1000Mbps， 带宽监控结果： 
 
-![2023-04-12_17-03.png](/home/ec2-user/githubrepo/assets/ZVxCb43c2Wynaze.png)
+![2023-04-12_17-03.png](https://s2.loli.net/2023/04/14/ZVxCb43c2Wynaze.png)
 
 Curl命令的结果： 
 
@@ -152,7 +152,7 @@ tc class add dev eth0 parent 1:0 classid 1:1 htb rate 1000mbit
 tc qdisc add dev eth0 parent 1:1 handle 2:0 netem delay 50ms
 ```
 
-测试的时候使用curl命令， 将结果直接输出到/dev/null, 这个场景下， 客户端收写数据的速度非常快，这样的测试排除了大文件落硬盘速度慢的问题， 但是也让客户端收到这批数据之后立刻可以发送ack给服务端（Client - ACK——> Server）， 告知服务端我这边的数据已经处理完了， 回收 RecvBuffer 空间.
+测试的时候使用curl命令， 将结果直接输出到 /dev/null, 这个场景下， 客户端收写数据的速度非常快，这样的测试排除了大文件落硬盘速度慢的问题， 但是也让客户端收到这批数据之后立刻可以发送ack给服务端（Client - ACK——> Server）， 告知服务端我这边的数据已经处理完了， 回收 RecvBuffer 空间.
 
 在添加带宽控制和 50ms 延迟之后， 带宽使用：  
 ![2023-04-12_17-03_1.png](https://s2.loli.net/2023/04/14/wS7UK5IQWLMd2TG.png)
@@ -182,7 +182,9 @@ time_starttransfer: 0.103339
 time_total: 50.756470
 ```
 
-上面的这个测试结果中存在的问题是， 链路的带宽没有被充分利用， 所以发送数据的速度已经慢很多，并且时间也比较长。
+链路的带宽没有被充分利用， 所以发送数据的速度已经慢很多，并且时间也比较长。
+
+在有延迟的情况下， 发送方会按照接收的窗口进行配置，
 
 ### 调整参数以及相关理论
 
