@@ -62,7 +62,7 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 > 
 > ```
 
-上面的这个文档中的说明，默认的三个值分别是： 最小， 默认， 最大。
+这文档中的说明，默认的三个值分别是： 最小， 默认， 最大。测试了一下， 如果只是需要实际调整的话， 调整那个最大值即可， 在高延迟的链路中， 调整最大值就可以生效。 在测试的过程中， 将三个值都固定到预期，控制变量。
 
 对于TCP协议的接收与发送两方， 各自有自己的RecvBuffer 和 SendBuffer， 发送方会考虑链路上面可以承载的数据量（带宽）， 以及 对方可以承载的数据量（rmem）。
 
@@ -71,6 +71,15 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 两个EC2 c5.2xlarge， 其中一个部署Nginx， 并设置 file index on ,  发布一个 Fedora ISO， 大小大约 2G。另一个上面只是客户端， 使用的访问客户端是Curl。
 
 # 测试准备
+
+测试的过程其实涉及了四个部分的延迟问题:
+
+- 发送方的应用程序性能。
+- 发送方的发送缓冲区大小， SendBuffer
+- 接收方的接收缓冲区大小， RecvBuffer
+- 接收方的应用程序性能。
+
+调整延迟和控制带宽 ， 这两个部分控制的都是网络传输部分的性能，测试的过程中默认认为 发送 以及接收方的性能都完全没有问题。
 
 ## 基准
 
@@ -107,21 +116,10 @@ time_total: 1.762040
   net.ipv4.tcp_rmem = 4096	16384	4194304
   ```
 
-给服务端添加一个 50ms 的 延迟， 使用 tc 工具， [参考文档](https://zhuanlan.zhihu.com/p/443427232)， 命令如下：
+curl 的测试命令如下：（更新版本， 之前的测试版本少了一些参数 
 
 ```bash
-tc qdisc del dev eth0 root
-tc qdisc add dev eth0 root handle 1:0 htb default 1
-tc class add dev eth0 parent 1:0 classid 1:1 htb rate 1000mbit
-tc qdisc add dev eth0 parent 1:1 handle 2:0 netem delay 50ms
-```
-
-测试的时候使用curl命令， 将结果直接输出到/dev/null, 这个场景下， 客户端收写数据的速度非常快，这样的测试排除了大文件落硬盘速度慢的问题， 但是也让客户端收到这批数据之后立刻可以发送ack给服务端（Client - ACK——> Server）， 告知服务端我这边的数据已经处理完了， 回收 RecvBuffer 空间.
-
-命令如下： 
-
-```bash
-curl -o /dev/null -v http://nginx.liarlee.site/Fedora-Workstation-Live-x86_64-38_Beta-1.3.iso -t -s -w "time_connect: %{time_connect}\ntime_starttransfer: %{time_starttransfer}\ntime_total: %{time_total}\n"
+~]$ curl -o /dev/null -s -w "time_namelookup:%{time_namelookup}\ntime_connect: %{time_connect}\ntime_appconnect: %{time_appconnect}\ntime_redirect:  %{time_redirect}\ntime_pretransfer:  %{time_pretransfer}\ntime_starttransfer: %{time_starttransfer}\ntime_total: %{time_total}\n"  http://nginx.liarlee.site/Fedora-Workstation-Live-x86_64-38_Beta-1.3.iso 
 ```
 
 ## 仅控制带宽
@@ -141,7 +139,20 @@ time_starttransfer: 0.002304
 time_total: 16.633562
 ```
 
+在仅仅控制带宽的前提下， 由于延迟忽略不计， 所以传输的数据量可以使用全部的带宽，这个场景下面**传输的速度取决于网络带宽的大小**， 网络带宽越大， 传输的数据量和速度都会相应的增加。
+
 ## 控制带宽+延迟
+
+给服务端添加一个 50ms 的 延迟， 使用 tc 工具， [参考文档](https://zhuanlan.zhihu.com/p/443427232)， 命令如下：
+
+```bash
+tc qdisc del dev eth0 root
+tc qdisc add dev eth0 root handle 1:0 htb default 1
+tc class add dev eth0 parent 1:0 classid 1:1 htb rate 1000mbit
+tc qdisc add dev eth0 parent 1:1 handle 2:0 netem delay 50ms
+```
+
+测试的时候使用curl命令， 将结果直接输出到/dev/null, 这个场景下， 客户端收写数据的速度非常快，这样的测试排除了大文件落硬盘速度慢的问题， 但是也让客户端收到这批数据之后立刻可以发送ack给服务端（Client - ACK——> Server）， 告知服务端我这边的数据已经处理完了， 回收 RecvBuffer 空间.
 
 在添加带宽控制和 50ms 延迟之后， 带宽使用：  
 ![2023-04-12_17-03_1.png](https://s2.loli.net/2023/04/14/wS7UK5IQWLMd2TG.png)
@@ -311,7 +322,7 @@ TCP慢启动时候的截图：
 基本上随着窗口的变化而变化， curl的下载速度并不快， 下载的速度也不太稳定。。
 ![2023-04-14_17-09_1.png](https://s2.loli.net/2023/04/14/KZmte1CzfvIsoLM.png)
 
-## 问题汇总：
+## 问题汇总
 1. 如何计算每秒传输了多少MB数据？
 1. 对于RecvBuffer 或者 SendBuffer 被填满的时候， 应用程序的表现是什么样子的？ 我的理解是，本来应该通过系统调用write（）写入的数据在 SendBuffer 满了的情况下， 应用会在等待io的状态。
 1. wmem的值 与 Send-Q 中的数值的关系是什么？
