@@ -200,6 +200,18 @@ time_total: 50.756470
 
 在这个测试的过程中发现， 数据发送方的通告的window size， 固定是 tcp_rmem 值的一半。 发现这个是 BDP 计算出来的结果是 6553600， 如果这个值直接配置到tcp_rmem中，抓包出来windowsize就正好是预期的一半， 这会导致限定的千兆带宽正好占用500Mbps。
 
+buffersize 设置成了 2倍 的 接收窗口的原因是：   Linux Kernel 的参数 `net.ipv4.tcp_adv_win_scale = 1`， [内核文档](https://docs.kernel.org/networking/ip-sysctl.html?highlight=tcp_adv_win_scale)中的说明如下：
+
+```
+tcp_adv_win_scale - INTEGER
+
+    Count buffering overhead as bytes/2^tcp_adv_win_scale (if tcp_adv_win_scale > 0) or bytes-bytes/2^(-tcp_adv_win_scale), if it is <= 0.
+    Possible values are [-31, 31], inclusive.
+    Default: 1
+```
+
+由于这个值 当前的主流版本可能都是1 ， 所以默认会用一半的rmem空间来通告自己的接收窗口大小，但是这东西我怎么没测试出来正确的结果....
+
 #### 测试1 增加客户端的 rmem
 
 - 服务端参数
