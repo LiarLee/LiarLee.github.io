@@ -66,6 +66,10 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 
 对于TCP协议的接收与发送两方， 各自有自己的RecvBuffer 和 SendBuffer， 发送方会考虑链路上面可以承载的数据量（带宽）， 以及 对方可以承载的数据量（rmem）。
 
+实际上， 只是更新 max 的值， 并不会更新 Recvbuffer. 
+如果想增大 receive buffer 的大小, 可以增加 tcp_rmem 的 default 的值大小.
+
+
 ## 测试环境
 
 两个EC2 c5.2xlarge， 其中一个部署Nginx， 并设置 file index on ,  发布一个 Fedora ISO， 大小大约 2G。另一个上面只是客户端， 使用的访问客户端是Curl。
@@ -211,6 +215,8 @@ tcp_adv_win_scale - INTEGER
 ```
 
 由于这个值 当前的主流版本可能都是1 ， 所以默认会用一半的rmem空间来通告自己的接收窗口大小，但是这东西我怎么没测试出来正确的结果....
+https://unix.stackexchange.com/questions/94770/what-does-net-ipv4-tcp-app-win-do 
+https://emacsist.github.io/2019/07/13/linux%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0/
 
 #### 测试1 增加客户端的 rmem
 
