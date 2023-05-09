@@ -124,17 +124,34 @@ t系列的实例都是突增类型， 可以允许一定的时间使用超过实
 
 ？？？对于测试的结果， 我这边确实不同，我读取到的RTT 60ms 明显要比大佬测试的时候的RTT 10ms 更高. 我把这个理解为 中国区AWS 与 Global的差异， 这个问题也许还能继续分析?
 
+
+
+调整 rmem ， wmem 的大小到 MTU * CWND = 9001 * 60 = 540600 ，这个数值x2 设置到发送和接收的窗口， 重新抓包， 理论上应该看不到快速重传了。并且拥塞的窗口应该是稳定在 60 左右。 
+
+测试的过程中观察， 设置 最终的值为 1000000， ss命令中的 CWND稳定在 57 ， 抓包的结果中没有快速重传， 但是带宽的利用率由于延迟的原因所以也无法用满， 速度还是被限制了， 但是被限制的原因是 RWND， 所以也是为什么 CWND可以比较稳定不再变化的原因。
+
+![2023-05-09_15-04_1.png](https://s2.loli.net/2023/05/09/B9y1vpEAQ7nDUrc.png)
+![2023-05-09_15-04.png](https://s2.loli.net/2023/05/09/o4SgzJrtXf5wixe.png)
+
+
+
 ### Topic 2
 
-如何查看实例在限速状态的丢包率 和 重传率？ 
+如何查看实例在限速状态的 丢包率 和 重传率？ 
 
-在客户端的抓包结果里面， 使用字段 tcp.stream eq 0 and tcp.analysis.fast_retransmission 调整到对应的tcp stream
+在客户端的抓包结果里面， 使用字段 tcp.stream eq 0 and tcp.analysis.fast_retransmission 调整到对应的 tcp stream， 然后在Conversion
+
+s界面中统计的 Percent Filter 里面的百分比就是重传率， 丢包应该是 ： tcp.analysis.lost_segment
 
 如图：
 
 ![2023-05-09_01-28.png](https://s2.loli.net/2023/05/09/EziyN9YQBHxZSmk.png)
 
-？？？我的抓包结果两边统计同一个流的数据不太一样， 差异可能需要研究一下？
+基于这个抓包结果里面的基本上是乱序和快速重传，Server是发送数据的源头， 客户端没有收到认为这个是丢包。
+
+那么**丢包率**看Client的抓包结果应该就可以。 
+
+查看**重传率** 从Server这测的抓包结果来看。 
 
 ### Topic 3
 
