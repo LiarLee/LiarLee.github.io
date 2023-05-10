@@ -221,3 +221,5 @@ cdn:
   busuanzi: /js/lib/busuanzi.min.js
   artitalk: https://cdn.jsdelivr.net/npm/artitalk
   md5: /js/lib/md5.min.js
+  font: 
+    css: https://cdnjs.cloudflare.com/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/lxgwwenkaiscreenr.css
