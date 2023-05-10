@@ -42,6 +42,9 @@ links:
   XuHardy:
     url: https://Xu-Hardy.github.io
     avatar: https://avatars.githubusercontent.com/u/29247022?s=64&v=4
+  Felix:
+    url: https://felixlx.github.io
+    avatar: https://felixlx.github.io/medias/logo.png
   Plantegg:
     url: https://plantegg.github.io/ 
     avatar: https://twitter.com/plantegg/photo
@@ -196,7 +199,7 @@ color:
 
 font:
   font-size: 14px # global font-size
-  font-family: 'sans-serif,"PingFang SC",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue","Microsoft YaHei",sans-serif' # global font-family
+  font-family: 'LXGWWenKai','sans-serif,"PingFang SC",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue","Microsoft YaHei",sans-serif' # global font-family
 
 #------------------------
 # cdn config
