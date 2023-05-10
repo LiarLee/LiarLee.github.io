@@ -1,14 +1,14 @@
 ---
-title: 网络流量控制测试
+title: Linux OS 网络流量控制测试
 category: Linux
 date: 2023-04-14 17:41:03
-tags:
+tags: Linux
 ---
 ## 内核参数的说明
 
 对于TCP来说，会遇到如下的几个参数。
 
-如果我们需要查看一下当前OS的这个参数， 命令如下：
+如果我们需要查看一下当前OS的TCP参数， 命令如下：
 
 ```bash
 ]$ sysctl -a | egrep "rmem|wmem|tcp_mem|adv_win|moderate"
@@ -62,7 +62,7 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 > 
 > ```
 
-这文档中的说明，默认的三个值分别是： 最小， 默认， 最大。测试了一下， 如果只是需要实际调整的话， 调整那个最大值即可， 在高延迟的链路中， 调整最大值就可以生效。 在测试的过程中， 将三个值都固定到预期，控制变量。
+这文档中的说明，默认的三个值分别是： 最小， 默认， 最大。测试了一下， 如果只是需要实际调整的话， 调整那个最大值即可， 在高延迟的链路中， 调整默认值或者最大值就可以生效。 在测试的过程中， 将三个值都固定到预期，控制变量。
 
 对于TCP协议的接收与发送两方， 各自有自己的RecvBuffer 和 SendBuffer， 发送方会考虑链路上面可以承载的数据量（带宽）， 以及 对方可以承载的数据量（rmem）。
 
@@ -72,7 +72,18 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 
 ## 测试环境
 
-两个EC2 c5.2xlarge， 其中一个部署Nginx， 并设置 file index on ,  发布一个 Fedora ISO， 大小大约 2G。另一个上面只是客户端， 使用的访问客户端是Curl。
+两个EC2 c5.2xlarge， 其中一个部署Nginx， 并使用如下配置文件部分设置 ,  发布一个 Fedora ISO， 大小大约 2G。另一个上面只是客户端， 使用的访问客户端是Curl。
+
+```nginx
+http {
+    server {
+	    autoindex on;
+	    autoindex_localtime on;
+        }
+    }
+}
+这个配置文件中的其他部分就省略吧。
+```
 
 ## 测试准备
 
@@ -88,21 +99,6 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 ### 基准
 
 两个机器的内核参数使用默认值， 先通过tc流量控制注入一些延迟， 查看并分析RTT对于传输速度的影响。
-
-如果使用默认的参数， 那么2G的 ISO 文件可以快速的传完， 这是两个实例的基准表现， 这也是创建了一个TCP Connection 的较好的性能表现， EC2 之间的带宽较大 10Gbps。
-
-```bash
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 172.31.48.133:80...
-100 1967M  100 1967M    0     0  1116M      0  0:00:01  0:00:01 --:--:-- 1116M
-* Connection #0 to host nginx.liarlee.site left intact
-time_connect: 0.005461
-time_starttransfer: 0.005797
-time_total: 1.762040
-```
-
-总体看起来使用了 2s 不到的时间， 就传输完成了2G的文件。
 
 两个server之间默认的内核参数：
 
@@ -125,6 +121,22 @@ curl 的测试命令如下：（更新版本， 之前的测试版本少了一�
 ```bash
 ~]$ curl -o /dev/null -s -w "time_namelookup:%{time_namelookup}\ntime_connect: %{time_connect}\ntime_appconnect: %{time_appconnect}\ntime_redirect:  %{time_redirect}\ntime_pretransfer:  %{time_pretransfer}\ntime_starttransfer: %{time_starttransfer}\ntime_total: %{time_total}\n"  http://nginx.liarlee.site/Fedora-Workstation-Live-x86_64-38_Beta-1.3.iso 
 ```
+
+如果使用默认的参数， 那么2G的 ISO 文件可以快速的传完， 这是两个实例的基准表现， 这也是创建了一个TCP Connection 的较好的性能表现， EC2 之间的带宽较大 10Gbps。
+
+```bash
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   
+Trying 172.31.48.133:80...
+100 1967M  100 1967M    0     0  1116M      0  0:00:01  0:00:01 --:--:-- 1116M
+* Connection #0 to host nginx.liarlee.site left intact
+time_connect: 0.005461
+time_starttransfer: 0.005797
+time_total: 1.762040
+```
+
+总体看起来使用了 2s 不到的时间， 就传输完成了2G的文件。
 
 ### 仅控制带宽
 
@@ -188,9 +200,50 @@ time_total: 50.756470
 
 链路的带宽没有被充分利用， 所以发送数据的速度已经慢很多，并且时间也比较长。
 
-在有延迟的情况下， 发送方会按照接收的窗口进行配置，
+在有延迟的情况下， 发送方会按照接收的窗口进行配置。
 
-### 调整参数以及相关理论
+### 加入随机延迟
+
+```bash
+tc qdisc add dev eth0 root netem delay 100ms 10ms # 上下浮动 10ms
+tc qdisc add dev eth0 root netem delay 100ms 10ms 30% # 30% 数据包会浮动， 其他稳定
+```
+
+### 加入丢包
+
+tc子系统可以在网卡上面直接控制丢包的百分比：
+
+```bash
+tc qdisc add dev eth0 root netem loss 1% # 随机丢 1%
+tc qdisc change dev eth0 root netem delay 100ms 20ms distribution normal # 模拟重复数据包
+tc qdisc change dev eth0 root netem corrupt 0.1% # 模拟数据包错误， 损坏， 损坏率 1%
+tc qdisc change dev eth0 root netem gap 5 delay 10ms  # 模拟数据包乱序.规律的乱序， 5倍数的包准时发，其他延迟 10ms
+tc qdisc change dev eth0 root netem delay 10ms reorder 25% 50% # 随机乱序， 25% 准时， 其他延迟 10ms， Relate 50%
+```
+
+### 配置到特定IP地址的流控
+
+有的时候故意测试非常奇怪的场景， 如果加在eth上面就会很奇怪， 整体的流量都被影响了， 那么最简单的设置就是限制一下生效的范围： 
+
+指定IP地址延迟17ms
+
+```bash
+tc qdisc del dev eth0 root
+tc qdisc add dev eth0 root handle 1: prio
+tc filter add dev eth0 parent 1:0 protocol ip pref 55 handle ::55 u32 match ip dst 172.31.65.30 flowid 2:1
+tc qdisc add dev eth0 parent 1:1 handle 2: netem delay 17ms
+####### ！ ！ ！ ！ ！ ！ ！ ！ ！ 
+这个在容器的网桥上面不生效..... 麻 ！ ！ 
+直接设置在宿主机的eth0上面是可以正常使用的， 在宿主机的网桥上面应该是网桥设备不支持吧。
+```
+
+指定IP地址和端口触发延迟
+
+```bash
+这个太难了 我不会 ， 后面在看吧， 感觉暂时用不到， 限制到IP地址就可以了。
+```
+
+## 理论说明以及后续测试
 
 如果我的网络延迟小到可以忽略不计，那么这个时候发送方缓冲区里面的数据基本上就是实时抵达对方， 并且立刻可以接收到对方的ACK报文， 这样无论我的发送和接收的Buffer有多小或者多大都无所谓， 数据包都可以快速的发送出去， 然后被确认收到。
 
@@ -214,11 +267,11 @@ tcp_adv_win_scale - INTEGER
     Default: 1
 ```
 
-由于这个值 当前的主流版本可能都是1 ， 所以默认会用一半的rmem空间来通告自己的接收窗口大小，但是这东西我怎么没测试出来正确的结果....
+由于这个值 当前的主流版本可能都是1 ， 所以默认会用一半的rmem空间来通告自己的接收窗口大小，但是这参数的取值范围写的是 -31 到 31 ， 但是大部分写的都是  1 0  -1 这三个值， 感觉网络上面目前没有正确答案呢？
 https://unix.stackexchange.com/questions/94770/what-does-net-ipv4-tcp-app-win-do 
 https://emacsist.github.io/2019/07/13/linux%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0/
 
-#### 测试1 增加客户端的 rmem
+### 测试1 增加客户端的 rmem
 
 - 服务端参数
 
@@ -250,7 +303,7 @@ time_starttransfer: 0.103699
 time_total: 37.118881
 ```
 
-#### 测试2 增加服务端的 wmem
+### 测试2 增加服务端的 wmem
 
 - 服务端参数
 
@@ -302,7 +355,7 @@ TCP慢启动时候的截图：
 
 稳定传输中基本上是有空间， 收到之前的ack 就立刻发送新的到链路中.
 
-#### 测试3 锁定 wmem 以及 rmem 4096
+### 测试3 锁定 wmem 以及 rmem 4096
 
 - 服务端参数  
 
@@ -325,7 +378,7 @@ TCP慢启动时候的截图：
 2. 客户端参数不动， 只是改服务端的wmem参数限制到 4096， 传输速度快了一些，但是开始的时候数据包发送的速度比较快， send-q中的指标快速被降低下来，虽然速度变快了一些， 但是不多。*我想这个地方还能观察一下Nginx的行为， 应用程序应该也是变慢的。*
 3. 服务端的参数不动， 只是改客户端的参数，这个时候nginx的sendbuffer里面堆积了许多数据，因为接收的窗口太小， 所以与上面的截图一样，到处都是 WindowFull。
 
-#### 测试4 与curl抢占CPU
+### 测试4 与curl抢占CPU
 
 运行命令： 启动一个JVM， 跑计算的线程， 这个程序是自己写的，CPU密集型， 运行起来之后就可以使用率100%。
 
@@ -342,8 +395,21 @@ TCP慢启动时候的截图：
 基本上随着窗口的变化而变化， curl的下载速度并不快， 下载的速度也不太稳定。。
 ![2023-04-14_17-09_1.png](https://s2.loli.net/2023/04/14/KZmte1CzfvIsoLM.png)
 
-### 问题汇总
+## 问题汇总
 1. 如何计算每秒传输了多少MB数据？
-1. 对于RecvBuffer 或者 SendBuffer 被填满的时候， 应用程序的表现是什么样子的？ 我的理解是，本来应该通过系统调用write（）写入的数据在 SendBuffer 满了的情况下， 应用会在等待io的状态。
+1. 对于RecvBuffer 或者 SendBuffer 被填满的时候， 应用程序的表现是什么样子的？ 我的理解是，应该通过系统调用write（）写入的数据在 SendBuffer 满了的情况下， 应用会在等待io的状态。
 1. wmem的值 与 Send-Q 中的数值的关系是什么？
 
+---
+
+## 参考文档
+
+https://tonydeng.github.io/sdn-handbook/linux/tc.html
+
+https://plantegg.github.io/2016/08/24/Linux%20tc%20qdisc%E7%9A%84%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/
+
+https://tldp.org/HOWTO/Traffic-Control-HOWTO/
+
+https://blog.csdn.net/dog250/article/details/40483627
+
+https://arthurchiao.art/blog/lartc-qdisc-zh/
