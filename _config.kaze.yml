@@ -198,7 +198,7 @@ color:
   code-background-color: "#e9eaf0"
 
 font:
-  font-size: 14px # global font-size
+  font-size: 12px # global font-size
   font-family: '"LXGW WenKai Screen",sans-serif,"PingFang SC",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue","Microsoft YaHei"' # global font-family
 
 #------------------------
@@ -221,5 +221,3 @@ cdn:
   busuanzi: /js/lib/busuanzi.min.js
   artitalk: https://cdn.jsdelivr.net/npm/artitalk
   md5: /js/lib/md5.min.js
-  font: 
-    css: https://cdnjs.cloudflare.com/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/lxgwwenkaiscreenr.css
