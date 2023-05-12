@@ -12,7 +12,7 @@ windows新版本淘汰了.net 3.5，默认不安装。但是在没有网络的�
 <!-- more-->
 1. 打开cmd或者Powershell
 1. 输入命令:  
-  `dism.exe /online /enable-feature /all /featurename:NetFX3 Source:Z:\sources\sxs`
+    `dism.exe /online /enable-feature /all /featurename:NetFX3 Source:Z:\sources\sxs`
 1. 等待系统处理命令，完成。
 
 **Note:命令中可以不添加/all，最后一条参数中的Z盘符改为镜像挂载所在的盘符即可**  
