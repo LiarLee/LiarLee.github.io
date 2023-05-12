@@ -146,6 +146,17 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
 
 好了 我看不动了，Cached 的最后结果： os所有可用的文件页面 - SwapCached的数值 - Buffers的数值，大概应该是这个意思， 按照这么算的话， 确实会加入 shmem 的部分，[邮件归档以及解释](https://lore.kernel.org/all/YS0Eq+tNe4Pr7O0X@casper.infradead.org/T/)
 
+> That's a reasonable position to take.
+>
+> Another point of view is that everything in tmpfs is part of the page cache and can be written out to swap, so keeping it as part of Cached is not misleading.
+>
+> I can see it both ways, and personally, I'd lean towards clarifying
+> the documentation about how shmem is accounted rather than changing how the memory usage is reported.
+
+这是上面的邮件链接中的一部分， 解释了为什么将 shmem 计算到 Cached 中的原因，看起来现在应该由一个新的指标数值来处理这个了。
+
+
+
 更多的部分看参考链接吧，我顺便看了讲解，大佬讲的清楚。
 
 
