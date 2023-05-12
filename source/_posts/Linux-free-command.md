@@ -144,9 +144,9 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
 	__kernel_ulong_t bufferram;	/* Memory used by buffers */
 ```
 
-好了 我看不动了，Cached 的最后结果： os所有可用的文件页面 - SwapCached的数值 - Buffers的数值，大概应该是这个意思， 按照这个算法就算不对啊......就先这样吧。
+好了 我看不动了，Cached 的最后结果： os所有可用的文件页面 - SwapCached的数值 - Buffers的数值，大概应该是这个意思， 按照这么算的话， 确实会加入 shmem 的部分，[邮件归档以及解释](https://lore.kernel.org/all/YS0Eq+tNe4Pr7O0X@casper.infradead.org/T/)
 
-更多的部分看参考链接吧，对了答案 顺便看了讲解，大佬讲的清楚。
+更多的部分看参考链接吧，我顺便看了讲解，大佬讲的清楚。
 
 
 
