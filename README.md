@@ -7,4 +7,7 @@ Source Code in here.
 3. broswer the blog to check result.
 
 
-Test drone again.
+## create the new markdown file.
+```
+./node_modules/.bin/hexo new "Markdown Filename."
+```
