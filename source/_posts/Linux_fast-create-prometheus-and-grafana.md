@@ -12,7 +12,9 @@ tags: Docker
    ```bash
    mkdir /opt/monitor
    mkdir /opt/monitor/grafana
+   mkdir /opt/monitor/grafana_data
    mkdir /opt/monitor/prometheus
+   mkdir /opt/monitor/prometheus_data
    touch /opt/monitor/docker-compose.yaml
    ```
 
@@ -53,6 +55,22 @@ tags: Docker
        user: '472'
    ```
 
+4. 准备基础配置文件
+
+   ```bash
+   docker compose up -d 
+   docker cp grafana:/etc/grafana/grafana.ini /opt/monitor/grafana/grafana.ini
+   docker cp prometheus:/etc/prometheus/prometheus.yml /opt/monitor/prometheus/prometheus.yaml
+   
+   chown -R 472:472 /opt/monitor/grafana_data
+   chown -R 472:472 /opt/monitor/grafana
+   
+   chown -R nobody:nobody /opt/monitor/prometheus_data
+   chown -R nobody:nobody /opt/monitor/prometheus
+   
+   docker compose down --remove-orphans
+   ```
+
 3. 准备prometheus 作为默认的Datasource
 
    ```yaml
@@ -68,24 +86,8 @@ tags: Docker
      access: proxy
      editable: true
    ```
-
-4. 准备基础配置文件
-
-   ```bash
-   docker compose up -d 
-   docker cp monitor-grafana-1:/etc/grafana/grafana.ini /opt/monitor/grafana/grafana.ini
-   docker cp monitor-prometheus-1:/etc/prometheus/prometheus.yml /opt/monitor/prometheus/prometheus.yaml
    
-   chown -R 472:472 /opt/monitor/grafana_data
-   chown -R 472:472 /opt/monitor/grafana
-   
-   chown -R nobody:nobody /opt/monitor/prometheus_data
-   chown -R nobody:nobody /opt/monitor/prometheus
-   
-   docker compose down --remove-orphans
-   ```
-
-5. 修改配置文件中需要的参数, 然后重启即可。
+5. 修改配置文件中需要的参数, 取消配置文件中的注释， 然后重启即可。
 
    ```bash
    docker compose down --remove-orphans && docker compose up -d
