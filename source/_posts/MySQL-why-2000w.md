@@ -261,12 +261,11 @@ gmt_modified datetime
 insert into tt1 (person_id, person_name1, person_name2, person_name3, person_name4, person_name5, gmt_create, gmt_modified)
 values (1, lpad('',3000,'*'), lpad('',3000,'*'), lpad('',3000,'*'), lpad('',3000,'*'), lpad('',3000,'*'), now(), now());
 
-insert into tt1 (person_id, person_name1, person_name2, person_name3, person_name4, person_name5, gmt_create, gmt_modified)
-select person_id, person_name1, person_name2, person_name3, person_name4, person_name5, now(), now() from tt1;
+employees/employees
 
 show table status like 'tt1'\G
 
-hexodump -s 49216 -n 10 ./tt1.ibd
+hexdump -s 49216 -n 10 ./tt1.ibd
 
 ```
 
@@ -274,7 +273,7 @@ hexodump -s 49216 -n 10 ./tt1.ibd
 
 这次的话， 添加数据的时间实在是太久了， 记录一下中间结果的变化吧： 
 
-```
+```mysql
 MySQL [test]> select count(*) from tt1;
 +----------+
 | count(*) |
@@ -315,5 +314,39 @@ Query OK, 262144 rows affected (13 min 42.06 sec)
 
 
 
+
+SELECT b.name, a.name, index_id, TYPE, a.SPACE, a.PAGE_NO FROM information_schema.INNODB_INDEXES a, information_schema.INNODB_TABLES b WHERE a.TABLE_ID = b.table_id AND a.SPACE <> 0 AND b.NAME = 'tt1';
+
+mysql> SELECT b.name, a.name, index_id, type, a.space, a.PAGE_NO FROM information_schema.INNODB_INDEXES a, information_schema.INNODB_TABLES b WHERE a.table_id = b.table_id AND a.space <> 0;
+
+| cap/sbtest24                            | PRIMARY                   |      356 |    3 |   129 |       4 |
+| test/test                               | PRIMARY                   |      359 |    3 |   131 |       4 |
+| test/tt1                                | PRIMARY                   |      360 |    3 |   132 |       4 |
++-----------------------------------------+---------------------------+----------+------+-------+---------+
+
+
 ```
+
+
+
+
+
+> 对于MySQL的内存使用，在数据库启动后，不会立即将buffer pool对应的内存占用，而是随着使用逐步占用。
+>
+> 在5月19日看到您的实例有连接数达到1200，并持续了一段时间，内存随之下降。您可以通过查看 Innodb_buffer_pool_size 的值来确定 buffer pool 的最大值。
+> 然后根据公式来计算预期的内存使用情况：
+> Maximum MySQL Memory Usage = innodb_buffer_pool_size + key_buffer_size + ((read_buffer_size + read_rnd_buffer_size + sort_buffer_size + join_buffer_size) X max_connections)
+>
+> 我按照您的配置，创建了mysql 5.7.41 版本，实例类型为 db.m5.xlarge ，公式中的参数均为默认值，计算结果如下：
+> Maximum MySQL Memory Usage
+> = innodb_buffer_pool_size + key_buffer_size + ((read_buffer_size + read_rnd_buffer_size + sort_buffer_size + join_buffer_size) X max_connections)
+> = 11811160064 + 16777216 + (262144 + 524288 + 262144 + 262144 ) * 1200
+> = 13400801280 即 12.48GB
+>
+> 总内存为 16 GB ，减去 12.48 GB，还剩下 3.52 GB。再除去一些SQL执行中消耗的内存以及操作系统等消耗的内存，目前指标上显示剩余1.5GB左右。
+>
+> 在5月19日连接数增加前，按300连接数算，上述公式计算结果为 11.38 GB，然而可用内存指标显示为 7 GB，相加起来是大于 16 GB 的。由此也能说明是 MySQL 并未直接将参数设置的所有可用内存都占用，而是随着使用逐步增加的。
+> 当连接数增加后，MySQL真正使用了这部分内存(如buffer pool)，不会主动释放。
+>
+> 因此目前可用内存状况符合预期，如果您希望回收 MySQL 占用的内存，可以考虑重启数据库，但之后业务量较大时，还会重新占用这些内存。
 
