@@ -63,7 +63,7 @@ tags: Docker
    datasources:
    - name: Prometheus
      type: prometheus
-     url: http://prometheus:9090 
+     url: http://localhost:9090 
      isDefault: true
      access: proxy
      editable: true
@@ -78,6 +78,7 @@ tags: Docker
    
    chown -R 472:472 /opt/monitor/grafana_data
    chown -R 472:472 /opt/monitor/grafana
+   
    chown -R nobody:nobody /opt/monitor/prometheus_data
    chown -R nobody:nobody /opt/monitor/prometheus
    
