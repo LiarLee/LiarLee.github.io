@@ -10,10 +10,10 @@ tags: Docker
 1. 创建一个目录.
 
    ```bash
-mkdir /opt/monitor
-mkdir /opt/monitor/grafana
-mkdir /opt/monitor/prometheus
-touch /opt/monitor/docker-compose.yaml
+   mkdir /opt/monitor
+   mkdir /opt/monitor/grafana
+   mkdir /opt/monitor/prometheus
+   touch /opt/monitor/docker-compose.yaml
    ```
 
 2. 创建docker-compose 文件
@@ -53,13 +53,28 @@ touch /opt/monitor/docker-compose.yaml
        user: '472'
    ```
 
-3. 准备基础配置文件
+3. 准备prometheus 作为默认的Datasource
+
+   ```yaml
+   touch /opt/monitor/grafana/datasource/datasource.yml
+   ---
+   apiVersion: 1
+   
+   datasources:
+   - name: Prometheus
+     type: prometheus
+     url: http://prometheus:9090 
+     isDefault: true
+     access: proxy
+     editable: true
+   ```
+
+4. 准备基础配置文件
 
    ```bash
    docker compose up -d 
    docker cp monitor-grafana-1:/etc/grafana/grafana.ini /opt/monitor/grafana/grafana.ini
    docker cp monitor-prometheus-1:/etc/prometheus/prometheus.yml /opt/monitor/prometheus/prometheus.yaml
-   touch /opt/monitor/grafana/datasource/datasource.yml
    
    chown -R 472:472 /opt/monitor/grafana_data
    chown -R 472:472 /opt/monitor/grafana
@@ -69,7 +84,7 @@ touch /opt/monitor/docker-compose.yaml
    docker compose down --remove-orphans
    ```
 
-4. 修改配置文件中需要的参数, 然后重启即可。
+5. 修改配置文件中需要的参数, 然后重启即可。
 
    ```bash
    docker compose down --remove-orphans && docker compose up -d
