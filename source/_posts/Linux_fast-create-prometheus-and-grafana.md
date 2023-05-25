@@ -23,16 +23,15 @@ touch /opt/monitor/docker-compose.yaml
    version: "3"
    services:
      prometheus:
-       image: prom/prometheus:latest
+       container_name: prometheus
+       image: reg.liarlee.site/docker.io/prom/prometheus:latest
        restart: always
        network_mode: host
        environment:
-         - PUID=1001
-         - PGID=1001
          - TZ=Asia/Shanghai
        volumes:
-         - /opt/monitor/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
-         - /opt/monitor/prometheus:/prometheus
+         # - /opt/monitor/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+         - /opt/monitor/prometheus_data:/prometheus
        command:
          - '--config.file=/etc/prometheus/prometheus.yml'
          - '--storage.tsdb.path=/prometheus'
@@ -40,14 +39,16 @@ touch /opt/monitor/docker-compose.yaml
          - '--web.console.templates=/usr/share/prometheus/consoles'
          - '--storage.tsdb.retention.time=90d'
      grafana:
-       image: grafana/grafana-oss:main-ubuntu
+       container_name: grafana
+       image: reg.liarlee.site/docker.io/grafana/grafana-oss:main-ubuntu
        restart: always
        network_mode: host
        environment:
          - TZ=Asia/Shanghai
        volumes:
-         - /opt/monitor/grafana:/var/lib/grafana
-         - /opt/monitor/grafana/grafana.ini:/etc/grafana/grafana.ini
+         - /opt/monitor/grafana_data:/var/lib/grafana
+         - /opt/monitor/grafana/datasource:/etc/grafana/provisioning/datasources
+         # - /opt/monitor/grafana/grafana.ini:/etc/grafana/grafana.ini
          - /etc/localtime:/etc/localtime:ro
        user: '472'
    ```
@@ -56,8 +57,15 @@ touch /opt/monitor/docker-compose.yaml
 
    ```bash
    docker compose up -d 
-   docker cp grafana:/etc/grafana/grafana.ini /opt/monitor/grafana/grafana.ini
-   docker cp prometheus:/etc/prometheus/prometheus.yml /opt/monitor/prometheus/prometheus.yaml
+   docker cp monitor-grafana-1:/etc/grafana/grafana.ini /opt/monitor/grafana/grafana.ini
+   docker cp monitor-prometheus-1:/etc/prometheus/prometheus.yml /opt/monitor/prometheus/prometheus.yaml
+   touch /opt/monitor/grafana/datasource/datasource.yml
+   
+   chown -R 472:472 /opt/monitor/grafana_data
+   chown -R 472:472 /opt/monitor/grafana
+   chown -R nobody:nobody /opt/monitor/prometheus_data
+   chown -R nobody:nobody /opt/monitor/prometheus
+   
    docker compose down --remove-orphans
    ```
 
