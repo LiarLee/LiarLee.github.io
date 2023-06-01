@@ -261,11 +261,15 @@ gmt_modified datetime
 insert into tt1 (person_id, person_name1, person_name2, person_name3, person_name4, person_name5, gmt_create, gmt_modified)
 values (1, lpad('',3000,'*'), lpad('',3000,'*'), lpad('',3000,'*'), lpad('',3000,'*'), lpad('',3000,'*'), now(), now());
 
-employees/employees
+insert into tt1 (person_id, person_name1, person_name2, person_name3, person_name4, person_name5, gmt_create, gmt_modified)
+select person_id, person_name1, person_name2, person_name3, person_name4, person_name5, now(), now() from tt1;
 
 show table status like 'tt1'\G
 
-hexdump -s 49216 -n 10 ./tt1.ibd
+
+rename user 'root'@'localhost'  to 'root'@'%';
+
+select user,host from mysql.user;
 
 ```
 
@@ -324,7 +328,9 @@ mysql> SELECT b.name, a.name, index_id, type, a.space, a.PAGE_NO FROM informatio
 | test/tt1                                | PRIMARY                   |      360 |    3 |   132 |       4 |
 +-----------------------------------------+---------------------------+----------+------+-------+---------+
 
+计算对应需要查看的位置， 字节数: 16 * 1024 * page_no + 64
 
+hexdump -s 49216 -n 10 ./tt1.ibd
 ```
 
 
@@ -349,4 +355,62 @@ mysql> SELECT b.name, a.name, index_id, type, a.space, a.PAGE_NO FROM informatio
 > 当连接数增加后，MySQL真正使用了这部分内存(如buffer pool)，不会主动释放。
 >
 > 因此目前可用内存状况符合预期，如果您希望回收 MySQL 占用的内存，可以考虑重启数据库，但之后业务量较大时，还会重新占用这些内存。
+
+
+
+
+
+### Mysql80重置密码
+
+```mysql
+echo "skip-grant-tables" >> /etc/my.cnf
+sudo systemctl restart mysqld
+
+mysql -uroot -p
+
+SET PASSWORD = 'root';
+
+rename user 'root'@'localhost'  to 'root'@'%';
+
+select user,host from mysql.user;
+
+
+```
+
+
+
+### MySQLVersion 8.0 修改密码策略： 
+
+```
+mysql -u wordpress -p -h mysql.liarlee.site
+
+MySQL [(none)]> SHOW VARIABLES LIKE 'validate_password%';
++--------------------------------------+--------+
+| Variable_name                        | Value  |
++--------------------------------------+--------+
+| validate_password.check_user_name    | ON     |
+| validate_password.dictionary_file    |        |
+| validate_password.length             | 8      |
+| validate_password.mixed_case_count   | 1      |
+| validate_password.number_count       | 1      |
+| validate_password.policy             | MEDIUM |
+| validate_password.special_char_count | 1      |
++--------------------------------------+--------+
+7 rows in set (0.010 sec)
+
+MySQL [(none)]> set global validate_password.policy=0;
+Query OK, 0 rows affected (0.000 sec)
+
+MySQL [(none)]> set global validate_password.length=4;
+Query OK, 0 rows affected (0.001 sec)
+
+MySQL [(none)]> set password='123123';
+Query OK, 0 rows affected (0.005 sec)
+```
+
+
+
+
+
+
 
