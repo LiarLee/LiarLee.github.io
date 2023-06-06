@@ -7,7 +7,7 @@ tags: MySQL
 
 基于这个问题的测试[为什么MySQL单表不要超过2000w行？](https://articles.zsxq.com/id_szzdrtss5t7o.html)
 
-测试过程记录： 
+## 测试过程： 
 
 ```
 CREATE TABLE test(
@@ -45,27 +45,8 @@ mysql> describe table test;
 1 row in set, 1 warning (0.00 sec)
 
 MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  2097152 |
-+----------+
 1 row in set (0.045 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  2097152 |
-+----------+
 1 row in set (0.050 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  2097152 |
-+----------+
 1 row in set (0.050 sec)
 ```
 
@@ -81,27 +62,8 @@ mysql> describe table test;
 1 row in set, 1 warning (0.00 sec)
 
 MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  4194304 |
-+----------+
 1 row in set (0.126 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  4194304 |
-+----------+
 1 row in set (0.120 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  4194304 |
-+----------+
 1 row in set (0.119 sec)
 ```
 
@@ -117,27 +79,8 @@ mysql> describe table test;
 1 row in set, 1 warning (0.00 sec)
 
 MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  8388608 |
-+----------+
 1 row in set (0.266 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  8388608 |
-+----------+
 1 row in set (0.266 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-|  8388608 |
-+----------+
 1 row in set (0.253 sec)
 ```
 
@@ -153,27 +96,8 @@ mysql> describe table test;
 1 row in set, 1 warning (0.00 sec)
 
 MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-| 16777216 |
-+----------+
 1 row in set (0.544 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-| 16777216 |
-+----------+
 1 row in set (0.524 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-| 16777216 |
-+----------+
 1 row in set (0.523 sec)
 ```
 
@@ -189,27 +113,8 @@ mysql> describe table test;
 1 row in set, 1 warning (0.00 sec)
 
 MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-| 33554432 |
-+----------+
 1 row in set (1.068 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-| 33554432 |
-+----------+
 1 row in set (1.057 sec)
-
-MySQL [test]> select count(*) from test;
-+----------+
-| count(*) |
-+----------+
-| 33554432 |
-+----------+
 1 row in set (1.044 sec)
 ```
 
@@ -243,7 +148,7 @@ Max_data_length: 0
 
 ---
 
-换个方案（ 从大佬那边伸手拿来的
+## 换个方案（ 从大佬那边伸手拿来的
 
 ```
 CREATE TABLE tt1(
@@ -266,14 +171,11 @@ select person_id, person_name1, person_name2, person_name3, person_name4, person
 
 show table status like 'tt1'\G
 
-
 rename user 'root'@'localhost'  to 'root'@'%';
 
 select user,host from mysql.user;
 
 ```
-
-
 
 这次的话， 添加数据的时间实在是太久了， 记录一下中间结果的变化吧： 
 
@@ -315,10 +217,7 @@ Query OK, 65536 rows affected (2 min 57.96 sec)
 Query OK, 131072 rows affected (6 min 6.59 sec)
 Query OK, 262144 rows affected (13 min 42.06 sec)
 
-
-
-
-
+# 查table的Page_NO
 SELECT b.name, a.name, index_id, TYPE, a.SPACE, a.PAGE_NO FROM information_schema.INNODB_INDEXES a, information_schema.INNODB_TABLES b WHERE a.TABLE_ID = b.table_id AND a.SPACE <> 0 AND b.NAME = 'tt1';
 
 mysql> SELECT b.name, a.name, index_id, type, a.space, a.PAGE_NO FROM information_schema.INNODB_INDEXES a, information_schema.INNODB_TABLES b WHERE a.table_id = b.table_id AND a.space <> 0;
@@ -329,8 +228,11 @@ mysql> SELECT b.name, a.name, index_id, type, a.space, a.PAGE_NO FROM informatio
 +-----------------------------------------+---------------------------+----------+------+-------+---------+
 
 计算对应需要查看的位置， 字节数: 16 * 1024 * page_no + 64
-
+# 使用hexdump 查看表格所在的b+树有几层。
 hexdump -s 49216 -n 10 ./tt1.ibd
+
+# 创建tt2完全复制tt1的内容。
+create table tt2 as select * from tt1;
 ```
 
 
@@ -358,8 +260,6 @@ hexdump -s 49216 -n 10 ./tt1.ibd
 
 
 
-
-
 ### Mysql80重置密码
 
 ```mysql
@@ -373,11 +273,7 @@ SET PASSWORD = 'root';
 rename user 'root'@'localhost'  to 'root'@'%';
 
 select user,host from mysql.user;
-
-
 ```
-
-
 
 ### MySQLVersion 8.0 修改密码策略： 
 
@@ -406,11 +302,40 @@ Query OK, 0 rows affected (0.001 sec)
 
 MySQL [(none)]> set password='123123';
 Query OK, 0 rows affected (0.005 sec)
+
 ```
 
+如果添加了 skip-grant-tables 参数的话， 默认需要先flush priviledges; 然后才能更改密码， 否则的话会报错：
 
+> ERROR 1290 (HY000): The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
 
+解决办法是 ： 
 
+```mysql
+mysql> alter user 'root'@'localhost' identified by '123123';
+ERROR 1290 (HY000): The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
+
+mysql> flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> alter user 'root'@'localhost' identified by '123123';
+ERROR 1819 (HY000): Your password does not satisfy the current policy requirements
+
+mysql> set global validate_password.policy=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set global validate_password.length=4;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set password='123123';
+ERROR 1133 (42000): Can't find any matching row in the user table
+
+mysql> alter user 'root'@'localhost' identified by '123123';
+Query OK, 0 rows affected (0.00 sec)
+```
 
 
 

@@ -270,3 +270,10 @@ net.ipv6.conf.eth0.accept_dad=0
      这个配置只是对客户端生效。也就是说， 客户端发起了FIN之后， 只要客户端收到服务端的FIN， 后续的网络报文已经不再继续关注了。 这样客户端的TIME_WAIT就会下降， 提高了客户端的Timewait的利用率，减少了客户端TW连接的数量。可以提高客户端的并发请求数量。 
     这个配置参数只对 Outgoing 的参数生效。
     NOTE： 现在这个选项支持3个参数，0 关闭， 1 开启 ，2 只对回环开启。
+
+
+
+
+
+### Other Memory and OOM Controll
+
