@@ -1,7 +1,7 @@
 ---
 title: Docker/Containerd 配置代理
 date: 2022-12-20 12:39:07
-tags:
+tags: Docker
 ---
 
 记录一下 Docker Daemon / Containerd 配置代理的步骤，尽管能用的时候不太多。
