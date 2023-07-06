@@ -1,6 +1,6 @@
 ---
 title: VPCFlowlog解析
-category: Linux
+category: AWS
 date: 2023-07-05 11:33:43
 tags:
 ---
@@ -21,4 +21,20 @@ https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structur
 
 
 
-记录一个问题， 为什么 ack 会被记录为 16  ， 怎么算的， 哪里规定的。
+这个记录里面的值， 是这样计算出来的， 从右向左 ， 从 0 次方开始计算。
+
+> FIN  2^0
+>
+> SYN 2^1 
+>
+> RST 2^2
+>
+> PSH 2^3
+>
+> ACK 2^4
+>
+> URG 2^5
+>
+> ECE 2^6
+>
+> CWR 2^7
