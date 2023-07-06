@@ -219,7 +219,16 @@ Update 2023-05-10
 
 另一个说法是， 没有给网络添加延时， 这不符合逻辑， RTT增高确实是不合理的现象。 
 
-如果从当前的现象来观察， 那么我觉得RTT升高确实不应该是故意增加的， 而是因为硬件的压力大。
-
 ![2023-05-10_10-53.png](https://s2.loli.net/2023/05/10/v7FPdLZyMkGNjSO.png)
 
+---
+
+Update 2023-07-04
+
+我最后找到了原因， 在ENA驱动程序的文档中是这样描述流控这个行为的： 
+
+> 当实例的网络流量超过最大值时，AWS 将通过排队然后丢弃网络数据包来调整超过最大值的流量。您可以使用网络性能指标监控流量何时超过最大值。这些指标可以实时告知您对网络流量的影响以及可能的网络性能问题。
+>
+> https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/WindowsGuide/monitoring-network-performance-ena.htmlhttps://docs.aws.amazon.com/zh_cn/AWSEC2/latest/WindowsGuide/monitoring-network-performance-ena.html
+
+基于上面的描述就可以确认， 延迟高的原因是 队列 ， 丢包的原因是控制操作系统的TCP协议， 让 TCP 协议来遵守底层的规则。 看到了相关的指标， 两者是分开的。 
