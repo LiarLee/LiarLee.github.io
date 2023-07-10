@@ -1,3 +1,10 @@
+---
+title: BufferIO与DirectIO的比较
+category: Linux
+date: 2023-07-10 11:34:36
+tags: Linux
+---
+
 ## 测试方法
 
 使用BufferIO的方式， 测试文件的写入： 

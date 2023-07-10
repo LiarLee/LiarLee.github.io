@@ -2,7 +2,7 @@
 title: 关于内核追踪的一点点认识
 category: Linux
 date: 2023-03-19 00:08:52
-tags:
+tags: Linux
 ---
 
 

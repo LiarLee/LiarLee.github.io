@@ -7,6 +7,8 @@ tags: Linux
 
 ## 在aws触发linux的crash
 
+
+
 发送一个诊断请求给EC2， 触发os本身NMI Unknown事件，这个时间会触发Kdump记录当时的现场。
 
 ```bash
@@ -31,7 +33,13 @@ drwxr-xr-x. 2 root root 67 Jun  9 09:39 127.0.0.1-2023-06-09-09:39:56
 [root@mysql 5.14.0-284.11.1.el9_2.x86_64]#  crash /usr/lib/debug/lib/modules/5.14.0-284.11.1.el9_2.x86_64/vmlinux /var/crash/127.0.0.1-2023-06-09-09\:39\:56/vmcore
 ```
 
+相关文档： 
 
+[New – Trigger a Kernel Panic to Diagnose Unresponsive EC2 Instances](https://aws.amazon.com/blogs/aws/new-trigger-a-kernel-panic-to-diagnose-unresponsive-ec2-instances/)
+
+[发送诊断中断（适用于高级用户）](https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/UserGuide/diagnostic-interrupt.html)
+
+主要的问题是怎么解读这个结果， 目前我的理解是 找大佬。
 
 ## Other
 
@@ -60,5 +68,5 @@ cscope -d
 
 
 
-主要的问题是怎么解读这个结果， 目前我的建议是 找大佬。
+
 

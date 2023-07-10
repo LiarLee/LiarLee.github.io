@@ -2,7 +2,7 @@
 title: bpftrace 使用以及理解
 category: Linux
 date: 2022-12-29 17:29:25
-tags:
+tags: Linux
 ---
 
 # BPFtrace oneline program
