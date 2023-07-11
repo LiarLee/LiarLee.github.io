@@ -1,13 +1,9 @@
 ---
-title: add redhat release to eks.
+title: 添加一个Redhat到EKS集群， 基于Packer的步骤
 category: Linux
 date: 2023-07-11 11:29:53
-tags:
+tags: Kubernetes
 ---
-
-
-
-a
 
 
 
