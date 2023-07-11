@@ -1,6 +1,7 @@
 ---
-title: git使用以及命令记录
-date: 2022-12-19 17:54:11
+title: Git常见的命令
+category: Linux
+date: 2023-07-12 06:52:18
 tags: Linux
 ---
 
