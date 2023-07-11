@@ -7,6 +7,14 @@ tags:
 
 
 
+a
+
+
+
+Copy From zhojiew 的私有仓库文档， 已经经过授权  ~ 
+
+---
+
 
 
 官方提供了基于packer工具的构建脚本
