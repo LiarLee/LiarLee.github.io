@@ -413,3 +413,11 @@ https://tldp.org/HOWTO/Traffic-Control-HOWTO/
 https://blog.csdn.net/dog250/article/details/40483627
 
 https://arthurchiao.art/blog/lartc-qdisc-zh/
+
+关于这个问题的更多解释： 
+
+我上面的内容里面可能有一部分图不太好： 
+
+https://www.kawabangga.com/posts/4794
+
+这个里面有比较清晰的描述， 例如图里面的每条线是做什么的， 其实应该看的是 tcptrace 不是 steven 这个图。
