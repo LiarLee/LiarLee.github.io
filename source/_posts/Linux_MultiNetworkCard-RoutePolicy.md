@@ -206,11 +206,11 @@ network:
 - 开启 NetworkManager 
 - 开启 Firewalld
 
-1. 也不知道行不行，反正大概吧。
+大概是这样，没测试：
 
-   ```bash
-   nmcli connection add type ethernet con-name Internal-Workstations-0 ifname eth0 ipv4.method manual ipv4.addresses 172.31.11.110 ipv4.routes "172.31.11.110 src=172.31.0.1 table=1" ipv4.routing-rules "priority 500 from 172.31.11.110 table 1" connection.zone internal-0
-   
-   nmcli connection add type ethernet con-name Internal-Workstations-1 ifname eth1 ipv4.method manual ipv4.addresses 172.31.11.124 ipv4.routes "172.31.11.124 src=172.31.0.1 table=2" ipv4.routing-rules "priority 600 from 172.31.11.124 table 2" connection.zone internal-1
-   ```
+```bash
+nmcli connection add type ethernet con-name Internal-Workstations-0 ifname eth0 ipv4.method manual ipv4.addresses 172.31.11.110 ipv4.routes "172.31.11.110 src=172.31.0.1 table=1" ipv4.routing-rules "priority 500 from 172.31.11.110 table 1" connection.zone internal-0
+
+nmcli connection add type ethernet con-name Internal-Workstations-1 ifname eth1 ipv4.method manual ipv4.addresses 172.31.11.124 ipv4.routes "172.31.11.124 src=172.31.0.1 table=2" ipv4.routing-rules "priority 600 from 172.31.11.124 table 2" connection.zone internal-1
+```
 
