@@ -1,5 +1,12 @@
-```bash
+---
+title: 删除所有非Running状态的Pod
+category: Linux
+date: 2023-08-05 23:42:22
+tags: Kubernetes
+---
 
+手动获取Token 并发送请求给容器接口。
+```bash
 /var/run/secrets/kubernetes.io/serviceaccount $ pwd
 
 
