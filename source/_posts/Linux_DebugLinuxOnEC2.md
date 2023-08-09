@@ -66,7 +66,27 @@ cscope -d
 ]$ lsinitrd /boot/initramfs-$(uname -r).img | grep -E "nvme|ena"
 ```
 
+### 安全软件引起的用户空间进程失去响应： 
 
+https://access.redhat.com/solutions/5201171
 
+### grubby 命令简单的用法
 
+设置内核参数： 
+
+```bash
+# 查看所有内核的参数
+$ grubby --info=ALL
+# 设置默认的启动内核
+$ grubby --set-default-index=1
+# 查看当前的默认启动内核
+$ grubby --default-kernel
+# 移除所有内核的参数
+$ grubby --update-kernel=ALL --remove-args="systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8"
+# 更新所有内核的参数
+$ grubby --update-kernel=ALL --args="systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8"
+# 为特定的内核添加参数。
+$ grubby --update-kernel=/boot/vmlinuz-5.9.1-1.el8.elrepo.x86_64 --args=“systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8”
+
+```
 

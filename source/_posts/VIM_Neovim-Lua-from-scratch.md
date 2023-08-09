@@ -13,10 +13,10 @@ tags: VIM
 
 - 打开代码， 会显示代码高亮。 
 - vim可以默认满足的要求， 尽可能少的使用鼠标。
-- 代码错误提示 LSP ， 挂了Language Server， 确实还没开始配置。
+- 代码错误提示 LSP ， 挂了Language Server， (Done.
 - 主题， 目前使用的是 catppuccin-frappe
 - Markdown Preview （ 目前还没有 
-- 代码补全（这个还没添加
+- 代码补全（ Done. 
 
 
 
@@ -38,6 +38,10 @@ tags: VIM
 | `<Leader-fg>` | Telescope Find Live grep 过滤文件中的关键字                  |
 | `<Leader-fb>` | Telescope Find Buffer 查看Buffer中的数据。VIMbuffer          |
 | `<Leader-fh>` | Telescope Find Help（ not use， Just record                  |
+| `<Leader-ss>` | Alias VIM Command :PackerSync                                |
+| `<Leader-ms>` | Alias VIM Command :Mason                                     |
+| `<Leader-ld>` | Goto the definition of the word under the cursor, if there's only one, otherwise show all options in Telescope |
+| `<Leader-lt>` | Lists Function names, variables, from Treesitter             |
 |       `<C-n>` | Telescope PageDown 在Insert模式下面的上下移动。              |
 |       `<C-p>` | Telescope PageUp 在Insert模式下面的上下移动。                |
 |     `<j / k>` | Telescope NORMAL Up/Down Normal模式下的上下移动。            |
