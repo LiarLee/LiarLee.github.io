@@ -70,6 +70,8 @@ cscope -d
 
 https://access.redhat.com/solutions/5201171
 
+https://access.redhat.com/solutions/2838901
+
 ### grubby 命令简单的用法
 
 设置内核参数： 
@@ -82,11 +84,21 @@ $ grubby --set-default-index=1
 # 查看当前的默认启动内核
 $ grubby --default-kernel
 # 移除所有内核的参数
-$ grubby --update-kernel=ALL --remove-args="systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8"
+$ grubby --update-kernel=ALL --remove-args="systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8 crashkernel=512M"
 # 更新所有内核的参数
-$ grubby --update-kernel=ALL --args="systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8"
+$ grubby --update-kernel=ALL --args="systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8 crashkernel=512M"
 # 为特定的内核添加参数。
-$ grubby --update-kernel=/boot/vmlinuz-5.9.1-1.el8.elrepo.x86_64 --args=“systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8”
+$ grubby --update-kernel=/boot/vmlinuz-5.9.1-1.el8.elrepo.x86_64 --args=“systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8 crashkernel=512M”
+
+[root@ip-172-31-0-170 ~]# sudo kdumpctl status
+kdump: Kdump is operational
+
+[root@ip-172-31-0-170 ~]# sudo kdumpctl showmem
+kdump: Reserved 256MB memory for crash kernel
+
+[root@ip-172-31-0-170 ~]# cat /proc/cmdline
+BOOT_IMAGE=(hd0,gpt1)/boot/vmlinuz-6.1.34-59.116.amzn2023.x86_64 root=UUID=483d7075-a0f8-4ba8-a951-a668fa079cac ro console=tty0 console=ttyS0,115200n8 nvme_core.io_timeout=42949672
+95 rd.emergency=poweroff rd.shell=0 selinux=1 security=selinux quiet systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M loglevel=8 crashkernel=512M
 
 ```
 
