@@ -1,0 +1,62 @@
+- class_name: 沉默的大多数
+  classh_desc: Silent majority
+  link_list:
+    - name: MartinHan
+      link: http://martinhan.com
+      avatar: http://martinhan.com/img/avatar_trans.png
+      descr: BigBrother
+    - name: Zhaojiew
+      link: https://blog.csdn.net/sinat_41567654
+      avatar: http://profile-avatar.csdnimg.cn/25364671b6e047f788c38b95e75011c5_sinat_41567654.jpg!1
+      descr: DEP 卷王
+    - name: XuHardy
+      link: https://Xu-Hardy.github.io
+      avatar: https://avatars.githubusercontent.com/u/29247022?s=64&v=4
+    - name: Felix
+      link: https://blog.felixfelix.top
+      avatar: https://felixlx.github.io/medias/logo.png
+    - name: Plantegg
+      link: https://plantegg.github.io/ 
+      avatar: https://twitter.com/plantegg/photo
+    - name: Szp2016
+      link: https://szp2016.github.io/
+      avatar: https://szp2016.github.io/images/hard.jpg
+    - name: 依云
+      link: https://blog.lilydjwg.me/
+      avatar: https://blog.lilydjwg.me/user_files/lilydjwg/config/avatar.png?1375032417
+    - name: CodeRemixer
+      link: https://coderemixer.com/
+      avatar: https://avatars.githubusercontent.com/u/39441409?s=200&v=4
+    - name: Farseerfc的小窝
+      link: https://farseerfc.me/zhs/
+      avatar: https://farseerfc.me/images/avatar.jpg
+    - name: LukeSmith
+      link: https://lukesmith.xyz/index
+      avatar: https://lukesmith.xyz/pix/tallulah-1882.jpg
+    - name: Reimu
+      link: https://blog.k8s.li/
+      avatar: https://blog.k8s.li/images/avatar.png
+    - name: Riboseyim
+      link: https://riboseyim.com/
+      avatar: https://avatars.githubusercontent.com/u/1736800?v=4
+    - name: Brendangregg
+      link: https://www.brendangregg.com/index.html
+      avatar: https://www.brendangregg.com/Images/brendan_rajasthan2011_thumb.jpg
+    - name: CHEGVA
+      link: https://chegva.com/
+      avatar: https://cdn.chegva.com/wp-content/uploads/2016/05/cropped-cropped-cropped-minecraft-che-guevara-1332496-192x192.jpg
+    - name: Hanbaoying
+      link: https://www.hanbaoying.com/
+      avatar: https://www.hanbaoying.com/public/img/yellowdeer.png
+    - name: 浅墨的部落格
+      link: https://www.0xffffff.org/
+      avatar: https://www.0xffffff.org/img/logo.png
+    - name: OSDev.org
+      link: https://wiki.osdev.org/Expanded_Main_Page
+      avatar: https://wiki.osdev.org/skins/common/images/osdev.png
+    - name: Huangyingsheng
+      link: https://www.cnblogs.com/huangyingsheng/
+      avatar: https://pic.cnblogs.com/face/1854318/20191101101058.png
+    - name: 蜗窝科技
+      link: http://www.wowotech.net/
+      avatar: http://www-x-wowotech-x-net.img.abc188.com/content/templates/default/images/rss.gif
