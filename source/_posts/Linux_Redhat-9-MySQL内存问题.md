@@ -1,3 +1,10 @@
+---
+title: Linux Redhat 9 oom不触发
+category: Linux
+date: 2023-07-12 06:52:18
+tags: Linux
+---
+
 ## 测试环境
 
 Amazon AMI ID: ami-0e54fe8afeb8fa59a
@@ -12,11 +19,11 @@ MySQL Version:  Ver 8.0.33 for Linux on x86_64 (MySQL Community Server - GPL)
 
 1. 使用上面的AMI启动一个新的实例， 在实例启动之后ssh连接进去。
 
-2. 按照MySQL官方的repo 安装一个社区的版本。
+2. 按照MySQL官方的 repo 安装一个社区的版本。
 
    ```bash
-   https://dev.mysql.com/downloads/repo/yum/
-   (mysql80-community-release-el9-1.noarch.rpm)
+   # https://dev.mysql.com/downloads/repo/yum/ 
+   # (mysql80-community-release-el9-1.noarch.rpm)
    
    wget https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
    
@@ -38,7 +45,7 @@ MySQL Version:  Ver 8.0.33 for Linux on x86_64 (MySQL Community Server - GPL)
 
    ```bash
    vim /etc/my.cnf
-   # 设置buffer pool 的参数大于物理内存。 例如 os 本身由可用的内存是 16G， 那么设置一个更大的值即可。
+   #设置buffer pool 的参数大于物理内存。 例如 os 本身由可用的内存是 16G， 那么设置一个更大的值即可。
    innodb_buffer_pool_size = 40G
    
    sudo systemctl enable --now mysqld

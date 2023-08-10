@@ -37,7 +37,7 @@ git -u origin master
 ### 配置代理
 ```bash
 # 设置代理
-ec2-user@arch ~> git config --global http.proxy socks5://1.1.1.1:7890
+ec2-user@arch ~> gitc config --global http.proxy socks5://1.1.1.1:7890
 ec2-user@arch ~> git config --global https.proxy socks5://1.1.1.1:7890
 # 取消代理
 git config --global --unset http.proxy git config --global --unset https.proxy
