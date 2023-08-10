@@ -15,7 +15,7 @@ MySQL Version:  Ver 8.0.33 for Linux on x86_64 (MySQL Community Server - GPL)
 2. 按照MySQL官方的repo 安装一个社区的版本。
 
    ```bash
-   # https://dev.mysql.com/downloads/repo/yum/
+   https://dev.mysql.com/downloads/repo/yum/
    (mysql80-community-release-el9-1.noarch.rpm)
    
    wget https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm

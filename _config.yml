@@ -4,7 +4,7 @@
 
 # Site
 title: Liarlee's Notebook
-subtitle: 'N/A'
+subtitle: 'Writing Down ...'
 description: 'Archlinux User, Support Engineer'
 keywords: Linux
 author: Liarlee
@@ -53,7 +53,7 @@ highlight:
 prismjs:
   enable: true
   preprocess: true
-  line_number: true
+  line_number: false
   line_threshold: 0
   tab_replace: '  '
 
@@ -98,7 +98,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: kaze
+theme: butterfly
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
