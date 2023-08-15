@@ -5,7 +5,7 @@ date: 2023-06-28 17:12:22
 tags: Linux
 ---
 
-## 在aws触发linux的crash
+## 在ec2触发linux的crash
 
 
 
@@ -68,9 +68,47 @@ cscope -d
 
 ### 安全软件引起的用户空间进程失去响应： 
 
-https://access.redhat.com/solutions/5201171
+Redhat关于这个问题的文档说明： 
 
-https://access.redhat.com/solutions/2838901
+- https://access.redhat.com/solutions/5201171
+
+- https://access.redhat.com/solutions/2838901
+
+使用Ftrace的方法，和一部分命令的使用方法： 
+
+```bash
+[root@ip-172-31-51-167 ~]$ echo 'func fanotify_get_response +p' > /sys/kernel/debug/dynamic_debug/control
+```
+
+追踪这个系统调用， 并输出 callgraph.
+内核的DynamicTracing， 这是一个古老的方式了， 出现在Kprobe之前。会直接将追踪的结果输出到dmesg中。 
+
+```bash
+[root@ip-172-31-51-167 ~]$ perf trace -s -p 2688
+[root@ip-172-31-51-167 ~]$ cd /var/crash/127.0.0.1-2023-08-11-06:53:10
+[root@ip-172-31-51-167 ~]$ crash /usr/lib/debug/lib/modules/6.1.34-59.116.amzn2023.x86_64/vmlinux  vmcore
+[root@ip-172-31-51-167 127.0.0.1-2023-08-11-06:53:10]$ ll /var/crash
+total 0
+drwxr-xr-x. 2 root root 67 Aug 10 05:52 127.0.0.1-2023-08-10-05:52:16
+drwxr-xr-x. 2 root root 67 Aug 10 06:13 127.0.0.1-2023-08-10-06:13:44
+drwxr-xr-x. 2 root root 67 Aug 11 05:45 127.0.0.1-2023-08-10-13:03:27
+drwxr-xr-x. 2 root root 91 Aug 12 15:05 127.0.0.1-2023-08-11-04:57:13
+drwxr-xr-x. 2 root root 67 Aug 11 08:41 127.0.0.1-2023-08-11-06:53:10
+drwxr-xr-x. 2 root root 67 Aug 11 20:56 badstop
+drwxr-xr-x. 2 root root 41 Aug 11 20:46 crash
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### grubby 命令简单的用法
 
