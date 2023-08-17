@@ -7,7 +7,7 @@ categories: Linux
 
 记录一下自己的集群安装过程和常见的命令。
 
-<!-- more -->
+
 
 ## Elastic search三节点的安装
 

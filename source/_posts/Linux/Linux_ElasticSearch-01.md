@@ -7,10 +7,6 @@ categories: Linux
 
 ElasticSearch的安装过程。
 
-<!-- more -->
-
-![Artical_Cover.jpg](https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg)
-
 # 准备源码包 
 1. 需要下载的包有三个：[网站地址](https://www.elastic.co/cn/downloads/)
    - ElasticSearch- 分布式、RESTful 风格的搜索和分析。/usr/local/src/elasticsearch
@@ -51,7 +47,7 @@ ElasticSearch的安装过程。
 	node.data: true
 	network.host: YOUR_HOSTNAME
 	discovery.zen.ping.unicast.hosts: ["YOUR_OTHER_NODE_HOSTNAME "]
-
+	
 	```
 2. 切换到elk用户，尝试启动elk
 	su elk 

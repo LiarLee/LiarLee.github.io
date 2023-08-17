@@ -7,8 +7,6 @@ categories: Linux
 
 ceph笔记03
 
-<!-- more -->
-
 # cephfs的使用
 
 ## cephfs的使用条件

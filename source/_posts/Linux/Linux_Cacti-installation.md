@@ -2,12 +2,10 @@
 title: Cacti的安装教程
 date: 2018-04-01 16:01:48
 tags: Cacti
-categories: Linux
+categories: Linux 
 ---
 
-这次的内容是Cacti的安装。
-
-<!-- more-->
+当时记录Cacti的安装记录。
 
 ## 安装环境  
 OS : CentOS 7 Server Everything -- Minimal Version  

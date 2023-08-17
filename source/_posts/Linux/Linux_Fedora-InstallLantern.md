@@ -1,7 +1,7 @@
 ---
 title: Fw:Fedora使用Lantern
 date: 2018-02-25 10:02:01
-tags: Lantern
+tags: Fedora
 categories: Linux
 ---
 

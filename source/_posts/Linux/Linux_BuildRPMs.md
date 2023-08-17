@@ -7,12 +7,12 @@ categories: Linux
 
 关于制作RPM包的笔记～
 
-<!-- more -->
-![Artical_Cover.jpg](https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg)
-# 一.制作RPM包教程  
-源码包的制作教程基于RHEL 5 & 6,当我写这个的时候还没有7版本,我会在后续更新新版本的路数.
+## 一. 制作RPM包教程  
 
-## 1. rpm包的制作流程简述
+源码包的制作教程基于RHEL 5 & 6,当我写这个的时候还没有7版本, 我会在后续更新新版本的路数（大半夜翻到这个破防了， 来自18年的flag ， 现在是时间是 2023 - 08 - 18 ， 过了。
+
+### 1. rpm包的制作流程简述
+
 1. 放置源码进入SOURCES文件夹
 1. 写好SPEC文件
 1. 运行rpmbuild命令,自动执行安装和清理
@@ -23,22 +23,22 @@ categories: Linux
 1. 生成完整的RPM包
 1. 手动进行安装测试
 
-## 2. 如何做准备
+### 2. 如何做准备
 需要明确的几个问题：
 1. 我们需要做一个什么样的RPM包，这个RPM包使用来做什么的，RPMs不一定包含的是二进制的内容，不一定需要编译。
-1. 至少我们需要源码，注意原材料的收集。
-1. 官方建议使用干净的源码，如果有补丁需要在制作的过程中打上补丁。
-1. 同一个软件，不同版本的RPM，新版本是否可以支持升级旧版本。需不需要清理旧版本的文件。升级是否会造成冲突。
-1. 依赖关系。
-1. 每一个PRM包都提供一种功能，Capability，可以被其他的PRM包依赖。RPM包的名字和所安装的文件都可以给其他的软件提供依赖。
-1. 自身名字的意义，提供的每一文件也可以被依赖，
-1. 他的安装和运行需要依赖于其他的RPM包本身或者所具有的文件，叫做依赖关系。  
-1. 两类依赖关系，编译依赖和安装依赖。
-1. 规划依赖关系，写SPEC文件。
-1. 制作RPMs。
-1. 简单测试RPMs。
+2. 至少我们需要源码，注意原材料的收集。
+3. 官方建议使用干净的源码，如果有补丁需要在制作的过程中打上补丁。
+4. 同一个软件，不同版本的RPM，新版本是否可以支持升级旧版本。需不需要清理旧版本的文件。升级是否会造成冲突。
+5. 依赖关系。
+6. 每一个PRM包都提供一种功能，Capability，可以被其他的PRM包依赖。RPM包的名字和所安装的文件都可以给其他的软件提供依赖。
+7. 自身名字的意义，提供的每一文件也可以被依赖，
+8. 他的安装和运行需要依赖于其他的RPM包本身或者所具有的文件，叫做依赖关系。  
+9. 两类依赖关系，编译依赖和安装依赖。
+10. 规划依赖关系，写SPEC文件。
+11. 制作RPMs。
+12. 简单测试RPMs。
 
-## 3. RPMs的规划
+### 3. RPMs的规划
 1. 是否是应用程序，是否需要补丁，是否需要新的功能。
 1. 是一个程序的库文件
 1. 是一个系统配置文件集
@@ -46,115 +46,122 @@ categories: Linux
 1. 是否拆分完整的软件，例如：MySQL-5.5.22.tar.gz，在制作RPM包的时候被拆分为MySQL，mysql-server，mysql-devel，等等。
 1. 是一个二进制还是源码，当时都有。例如:src.rpm,里面包括了 source.tar.gz 和 spec,需要使用者安装完成之后编译再安装。
 
-## 4. 制作过程
-### 1. 设计目录结构(set up the directory structure)  
+### 4. 制作过程
+#### 1. 设计目录结构(set up the directory structure)  
 **制作RPM过程中千万不能用root用户**    
 每个版本对于目录的要求不同，五个不同的目录：  
+
   1. **BUILD**：不需要放任何的内容，这个目录是真正工作的目录。用于解压编译源码。  
   1. **RPMS**：制作完成的RPM包放在这个里面，里面的目录的名字和结构与特定平台架构有关，可以交叉平台编译。  
   1. **SOURCES**:所有收集的源码都在这个目录里面。  
   1. **SPECS**:放置SPEC文件，作为制作过程的指导说明。以软件包的名字命名，以.spec结尾。  
   1. **SRPMS**:放置了SRC(source)格式的RPM包。  
 红帽提供了默认的制作目录，在/usr/src/redhat.
-```
-[LiarLee@localhost ~] tree /usr/src/redhat
-```
 
-### 2. 放置文件到正确的指定的目录(Place the sources in the right dirctory)。  
+    ```
+    [LiarLee@localhost ~] tree /usr/src/redhat
+    ```
+
+#### 2. 放置文件到正确的指定的目录(Place the sources in the right dirctory)。  
   我们首先需要自己制定自己的制作源码目录，在不使用root用户的前提下进行制作,需要修改系统的宏，来制定新的工作目录。修改工作目录的过程如下：
   1. 使用命令查看默认的宏：
-  ```
-  [LiarLee@localhost ~] rpmbuild --showrc   \\ 显示所有的相关宏定义
-  _build——表示目录; __rm——表示命令
-  ```
+      ```
+      [LiarLee@localhost ~] rpmbuild --showrc   \\ 显示所有的相关宏定义
+      _build——表示目录; __rm——表示命令
+      ```
   1. 使用命令查看默认的配置文件：
-  ```
-    [LiarLee@localhost ~] rpmbuild --showrc | grep macrofiles    \\ 显示配置文件的全局路径和文件名  
-  \\ 权限由小到大，后一个文件的参数覆盖前面所有的定义  
-  \\ 所以我们在家目录下创建隐藏文件.rpmmacros可以直接配置自定义的设置。
-  ```
+      ```
+      [LiarLee@localhost ~] rpmbuild --showrc | grep macrofiles    \\ 显示配置文件的全局路径和文件名  
+      \\ 权限由小到大，后一个文件的参数覆盖前面所有的定义  
+      \\ 所以我们在家目录下创建隐藏文件.rpmmacros可以直接配置自定义的设置。
+      ```
   1. 使用命令查看默认的工作目录定义：
-  ```
-    [LiarLee@localhost ~] rpmbuild --showrc | grep _topdir   \\ 显示默认的工作目录宏定义  
-  \\ 以相同的模式在.rpmmacros中直接覆盖配置，可以更改工作目录  
-  ```
+      ```
+      [LiarLee@localhost ~] rpmbuild --showrc | grep _topdir   \\ 显示默认的工作目录宏定义  
+      \\ 以相同的模式在.rpmmacros中直接覆盖配置，可以更改工作目录  
+      ```
   1. 更改topdir的宏，使用rpmbuilder的用户，创建.rpmmacros,添加内容配置宏:  
-  ```
-  [LiarLee@localhost ~] vim .rpmmacros         \\ Create .rpmmacros file  
-      %_topdir    /home/rpmbuilder/rpmbild/  
-  [LiarLee@localhost ~] mkdir -pv rpmbuild/{BUILD,RPMS,SOURCES,SPEC,SRPMS}  
-  [LiarLee@localhost ~] rpmbuild --showrc | grep _topdir      \\ Review the Result  
-  ```
+      ```
+      [LiarLee@localhost ~] vim .rpmmacros         \\ Create .rpmmacros file  
+          %_topdir    /home/rpmbuilder/rpmbild/  
+      [LiarLee@localhost ~] mkdir -pv rpmbuild/{BUILD,RPMS,SOURCES,SPEC,SRPMS}  
+      [LiarLee@localhost ~] rpmbuild --showrc | grep _topdir      \\ Review the Result  
+      ```
 
-### 3. 创建一个spec文件(Create a spec file that tells the rpmbuild command what to do)。
+#### 3. 创建一个spec文件(Create a spec file that tells the rpmbuild command what to do)。
   1. spec文件使用软件的名字版本作为文件名；.spec作为扩展名。  
   1. rpm -qi mysql & rpm -qpi mysql,命令查看rpm信息，信息从spec文件中定义，软件包信息说明段落定义。
   1. spec文件有如下几个段落：
-    1. The introduction section  
-    设置软件包的基本信息
-    ```
-    Summary:  \\ 简单描述
-    Name:     \\ 软件名字
-    Version:  \\ 版本号
-    Release:  \\ 发行号
-    License:  \\ 协议
-    Group:    \\ GROUP范围在这个文件中描述 /usr/share/doc/rpm-*/GROUPS
-    URL:      \\ 从何处获取的站点链接，下载路径
-    Packager:  \\ 制作者<制作者邮箱>
-    Vendor：   \\ 制作者的公司或者本人名字      
-    Source:      \\ 源文件地址，一个链接地址
-    BuildRoot:   \\ 制作RPM包的时候的虚拟Root目录
-    BuildRequires:   \\ 制作过程依赖于哪些软件包的名字
-    ```
-    1. The prep section  
-    解压源码包到BUILD目录的段，cd到需要的目录，设置环境变量。
-    ```
-    %prep
-    %setup
-    ```
-    1. The build section
-    这是源码包安装的make过程.
-    ```
-    %build
-    ./configure  OR   %configure
-    ./make       OR   %{__make}
-    make % {?_smp_mflags}    \\ 多对称处理器加速编译
-    ```
-    1. The install section
-    这里是安装make install过程。系统中有install命令,install方式类似于COPY模式.
-    ```  
-    %install
-    %{__rm}
-    %{__make} install DESTDIR="%{buildroot}"
-    %find_lang %{name}
-    ```
-    1. The script section
-    这里是定义执行需要的脚本，用来配置环境。例如:添加Apache用户.    
-      %pre        Note:安装前执行
-      %post       Note:安装后执行
-      %preun      Note:卸载前执行
-      %postun     Note:卸载后执行
-    1. The clean section
-    清理之前所用到的BuildRoot目录的。
-    ```
-    %clean
-    %{__rm}
-    ```
-    1. The files section
-    对安装的软件的程序进行规划,哪些文件安装到那个文件夹,**BUILDROOT下的所有文件必须在这个段中存在**
-    ```
-    %files
-    %config(noreplace)  \\ 不替换旧的配置
-    ```
-    1. The changelog section  
-    记录版本迭代  
-    ```
-      * Wed Apr 11 2012 Liarlee.site <Liarlee@site.com> - ReleaseNumber 更改时间
-      - Comments
-      - Comments
-    ```
-
-### 4. 开始编译(Build the source and binary RPMs)
+     1. The introduction section
+        设置软件包的基本信息
+        ```
+        Summary:  \\ 简单描述
+        Name:     \\ 软件名字
+        Version:  \\ 版本号
+        Release:  \\ 发行号
+        License:  \\ 协议
+        Group:    \\ GROUP范围在这个文件中描述 /usr/share/doc/rpm-*/GROUPS
+        URL:      \\ 从何处获取的站点链接，下载路径
+        Packager:  \\ 制作者<制作者邮箱>
+        Vendor：   \\ 制作者的公司或者本人名字      
+        Source:      \\ 源文件地址，一个链接地址
+        BuildRoot:   \\ 制作RPM包的时候的虚拟Root目录
+        BuildRequires:   \\ 制作过程依赖于哪些软件包的名字
+        ```
+	2. The prep section
+        解压源码包到BUILD目录的段，cd到需要的目录，设置环境变量。
+        ```
+        %prep
+        %setup
+        ```
+	3. The build section
+        这是源码包安装的make过程.
+        ```
+        %build
+        ./configure  OR   %configure
+        ./make       OR   %{__make}
+        make % {?_smp_mflags}    \\ 多对称处理器加速编译
+        ```
+	4. The install section
+        这里是安装make install过程。系统中有install命令,install方式类似于COPY模式.
+        ```  
+        %install
+        %{__rm}
+        %{__make} install DESTDIR="%{buildroot}"
+        %find_lang %{name}
+        ```
+     
+	5. The script section
+         这里是定义执行需要的脚本，用来配置环境。例如:添加Apache用户.    
+            %pre        Note:安装前执行
+            %post       Note:安装后执行
+            %preun      Note:卸载前执行
+            %postun     Note:卸载后执行
+     
+	6. The clean section
+        清理之前所用到的BuildRoot目录的。
+        ```
+        %clean
+        %{__rm}
+        ```
+	7. The files section
+        对安装的软件的程序进行规划,哪些文件安装到那个文件夹,**BUILDROOT下的所有文件必须在这个段中存在**
+        ```
+        %files
+        %config(noreplace)  \\ 不替换旧的配置
+        ```
+     
+     8. The changelog section  
+         记录版本迭代  
+     
+        ```
+        * Wed Apr 11 2012 Liarlee.site <Liarlee@site.com> - ReleaseNumber 更改时间
+        
+        - Comments
+        - Comments
+        ```
+     
+#### 4. 开始编译(Build the source and binary RPMs)
 1. rpmbuild命令说明:  
   ```
   rpmbuild -bp        \\ 执行到prep section
@@ -173,7 +180,7 @@ categories: Linux
 [LiarLee@localhost ~] rpmbuild -ba SoftwareName.spec   \\开始制作的命令
 ```
 
-# rpm2cpio命令的说明
+#### rpm2cpio命令的说明
   src-rpm包只是将源码打包成RPM格式,当我们安装src.rpm格式的安装包的时候会把包含的文件,解压到用户默认的工作目录下,所以这种格式的RPM包我们不用安装,直接制作RPM包即可.进行rebuild OR recompile.  
   ```   
   [LiarLee@localhost ~] rpm2cpio mysql.src.rpm > mysql.cpio  
@@ -184,19 +191,19 @@ categories: Linux
     rpm.pbone.net  
 
 
-# 二. 从头开始写新的SPEC files
+## 二. 从头开始写新的SPEC files
 制作RPM包的核心是写SPEC files，难以掌握的地方
 介绍SPEC文件的基本语法和简单用法
 
-## 1. Spec files overview
+### 1. Spec files overview
 SPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编译，做成不同的RPM包，依赖关系。  Macro是指的变量  
 大多数的字段由tag+value组成,tag是标签--Directives,不区分大小写;value是区分大小写的.    
 
-### 1.1 宏的自定义  
+#### 1.1 宏的自定义  
 **用户自定义宏** : %define macro_name value  
 **引用方式** : %{macro_name} OR %macro_name  
 
-### 1.2 注释的方式  
+#### 1.2 注释的方式  
 使用#来进行注释  
 %--不能在注释中使用,如果必须使用需要双写%%  
 ```
@@ -204,36 +211,36 @@ SPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编
 \#this is a comment for %%prep  
 ```
 
-## 2. Defining package infomation
+### 2. Defining package infomation
 如何定义SPEC文件内的字段  
 
-### 2.1 软件包的信息
+#### 2.1 软件包的信息
 - Name - 软件包名称 - 不能有短横线  
 - Version - 版本号 - 不能有短横线  
 - Release - 发行版本号  
 - Group - /usr/src/doc/rpm-version/GROUPS文件中有详细的描述说明有哪些组可以使用  
 
-### 2.2 制作方信息
+#### 2.2 制作方信息
 - Vendor - 公司或者组织制作的RPM  
 - URL - 一个主页链接  
 - Packager - 名字<邮箱地址>  
 - License - 许可,GPLv2,....etc.  
 
-### 2.3 描述信息
+#### 2.3 描述信息
 - Summary - 不能超过50个字符,短描述  
 - %description section - 全面描述,如果字符过多可以提前换行.  
 
-### 2.4 定义依赖关系
+#### 2.4 定义依赖关系
 - Requires : Capability - 定义软件包的能力,如果未定义显示包名.  
 - Provides : Capability - 定义对外提供的能力  
 - BuildRequires : Capability - 可以出现多次,直接写出需要的软件包名  
 
-### 2.5 设定Build目录  
+#### 2.5 设定Build目录  
 - build - 用于解压安装源码  
 - buildroot : ${_tmppath}/%{name}-%{version}-root  
   使用$RPM_BUILD_ROOT 或者 %{buildroot}  
 
-### 2.6 命名Source文件
+#### 2.6 命名Source文件
 使用Sources字段 和 patch字段,指定源文件和补丁  
 - Source0: https:// OR 相对路径, https不会下载, 自动本地寻址  
 - Source1: sourcefiles_name  
@@ -243,7 +250,7 @@ SPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编
 - Patch3: patchfiles_name  
 补丁定义后可以直接使用patch命令进行补丁的安装,所以使用patch字段  
 
-## 3. Controlling the build
+### 3. Controlling the build
 如何控制编译
 ```
 %prep                 \\ 把Source内的解压源码包到BUILD目录,cd到源码目录,配置环境  
@@ -287,14 +294,14 @@ $1            \\ 第一次安装
 $2 OR $2+     \\ 升级  
 $0            \\ 卸载  
 ```
-## 4. Filling the list of files
+### 4. Filling the list of files
 填充文件列表
 
-## 5. adding change log entries
+### 5. adding change log entries
 添加更新日志
 
 
-# CentOS7打包Nginx过程记录 
+## 三. CentOS7打包Nginx过程记录 
 1. useradd rpmbuilder -p rpmbuilder
 2. yum install -y rpmdevtools rpmbuild
 3. cd /home/rpmbuilder/

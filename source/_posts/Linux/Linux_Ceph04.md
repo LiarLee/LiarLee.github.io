@@ -69,4 +69,3 @@ ceph pg ls-by-pool  magedu-ssdpool | awk '{print $1,$2,$15}'
 
 
 
-

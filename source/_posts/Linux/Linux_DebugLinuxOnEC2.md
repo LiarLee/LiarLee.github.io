@@ -98,18 +98,6 @@ drwxr-xr-x. 2 root root 67 Aug 11 20:56 badstop
 drwxr-xr-x. 2 root root 41 Aug 11 20:46 crash
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### grubby 命令简单的用法
 
 设置内核参数： 

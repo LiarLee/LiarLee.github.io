@@ -7,8 +7,6 @@ categories: Linux
 
 记录Linux启动流程。
 
-<!-- more -->
-![Artical_Cover.jpg](https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg)
 # Linux启动的简要流程
 ## Linux-MBR启动流程
 POST -- GRUB(Bootloader-MBR) -- Kernel -- init

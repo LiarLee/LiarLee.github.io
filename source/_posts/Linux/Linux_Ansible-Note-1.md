@@ -133,7 +133,7 @@ command模块不调用shell去解析命令，仅仅读取第一个命令进行�
 # 在所有主机安装nginx
     [root@localhost Liarlee]$ ansible all -m yum -a "name=nginx state=install"
 ```
-### serivce模块
+### service模块
 用于定义管理目标主机的服务状态
 ```bash
 # 在所有的主机上启动nginx服务

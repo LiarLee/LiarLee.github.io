@@ -1,14 +1,53 @@
 ---
-title: 关于内核追踪的一点点认识
+title: bpftrace 使用tracepoint 追踪 tcp 状态变化
 category: Linux
 date: 2023-03-19 00:08:52
 tags: Linux
 ---
+## 入门教程
 
+大佬的博客， 入门教程： http://arthurchiao.art/blog/bpf-advanced-notes-1-zh/
+
+## 记录基础的bpftrace使用方法
+
+单行程序的使用方法； 
+
+```bash
+[root@localhost-live ~]# bpftrace -e 'tracepoint:syscalls:sys_enter_execve { printf("%s %s\n", comm, str(args->filename));}'
+```
+
+## Tracepoint如何获取可用参数的解释
+
+```bash
+[root@localhost-live sys_enter_execve]# pwd
+/sys/kernel/tracing/events/syscalls/sys_enter_execve
+[root@localhost-live sys_enter_execve]# grep -ri .
+format:name: sys_enter_execve
+format:ID: 742
+format:format:
+format:	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+format:	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+format:	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+format:	field:int common_pid;	offset:4;	size:4;	signed:1;
+format:	field:int __syscall_nr;	offset:8;	size:4;	signed:1;
+format:	field:const char * filename;	offset:16;	size:8;	signed:0;
+format:	field:const char *const * argv;	offset:24;	size:8;	signed:0;
+format:	field:const char *const * envp;	offset:32;	size:8;	signed:0;
+format:print fmt: "filename: 0x%08lx, argv: 0x%08lx, envp: 0x%08lx", ((unsigned long)(REC->filename)), ((unsigned long)(REC->argv)), ((unsigned long)(REC->envp))
+trigger:# Available triggers:
+trigger:# traceon traceoff snapshot stacktrace enable_event disable_event enable_hist disable_hist hist
+filter:none
+id:742
+enable:0
+```
+
+
+
+## 记录尝试追踪tcp状态变化的方法
 
 关于bpftrace追踪的总结, 追踪tcp状态的方法， 通过使用特定的tracepoint的来获取tcp状态的变化： 
 
-```bash 
+```bash
 ~$ bpftrace -e 'tracepoint:sock:inet_sock_set_state { printf("%s %d %d\n", comm, pid, args->newstate); }'
 ~$ bpftrace -e 'tracepoint:sock:inet_sock_set_state { printf("%s - %d -> %d - %d - %s\n",strftime("%H:%M:%S.%L", nsecs), args->oldstate, args->newstate, pid, comm); }'
 ```
@@ -30,7 +69,7 @@ tcp_set_state 是一个内核函数，用于设置 TCP 套接字的状态。它�
   > 11 TCP_CLOSING：双方同时关闭连接，交换 FIN 和 ACK 包的过程中
   > 12 TCP_NEW_SYN_RECV：临时状态，用于处理 SYN 队列溢出的情况
 
-追踪点还是比较简单的， 查看追踪点可用的参数。 
+追踪点理解起来还是比较简单的， 查看追踪点可用的参数，在这个部分可以看。 
 ```c
 ~$ cat /sys/kernel/debug/tracing/events/syscalls/sys_enter_sendmsg/format
 name: sys_enter_sendmsg
@@ -50,4 +89,4 @@ format:
 print fmt: "fd: 0x%08lx, msg: 0x%08lx, flags: 0x%08lx", ((unsigned long)(REC->fd)), ((unsigned long)(REC->msg)), ((unsigned long)(REC->flags))
 ```
 
-如果是使用 kprobe 的话， 不能使用 args， 需要使用确定的arg0 - argN， 这个部分还在摸索， 目前尝试用这个参数还是失败。 取到对应的得值但是print不出来。
+如果是使用 kprobe 的话， 不能使用 args， 需要使用确定的arg0 - argN， 这个部分还在摸索， 目前尝试用这个参数还是失败。 取到对应的得值， 但是print不出来。

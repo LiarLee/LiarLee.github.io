@@ -7,8 +7,6 @@ category: Linux
 
 Fio 一些测试和思考， fio ，blktrace等等。
 
-<!-- more -->
-
 ### github地址
 
   https://github.com/axboe/fio

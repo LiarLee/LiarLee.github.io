@@ -16,7 +16,7 @@ categories: Linux
 我的机器耗时间最长的是 
 1. dnf-makecache.service 占用了 1min 8.124s；  
 1. plymouth-quit-wait.service 占用了 1min 744ms 
-  
+
 
 ### 重点来了
 所以关闭它，阻止今后开机的时候启动

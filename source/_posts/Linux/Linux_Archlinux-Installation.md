@@ -8,8 +8,8 @@ categories: Linux
 自己尝试安装了archlinux在虚拟机里，记录安装过程，不过现在archlinux的WIKI是描述清晰的，直接查看和参考即可。  
 
 <!-- more -->
-![Artical_Cover.jpg](https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg)
-# pacman常用命令  
+
+## pacman常用命令  
 
 pacman命令的常用说明：  
 ```
@@ -24,14 +24,14 @@ pacman命令的常用说明：
 	[root@LiarLee ~]# pacman -Syyu 下载已经更新本地的所有软件包
 ```
 
-# 安装Archlinux  
-## 1. 获取Archlinux镜像   
+## 安装Archlinux  
+### 1. 获取Archlinux镜像   
 从这个页面获取镜像： [LINK HERE](https://www.archlinux.org/download/)
-## 2. 启动到Archlinux Live环境  
+### 2. 启动到Archlinux Live环境  
 在VMware中使用镜像文件直接引导Archlinux Live环境。  
-## 3. 设置Archlinux的键盘布局  
+### 3. 设置Archlinux的键盘布局  
 默认为US键盘布局，此处未作修改。    
-## 4. 连接到Internet  
+### 4. 连接到Internet  
 使用ip link命令查看目前网卡的状态  
 ```
 root@archiso ~ # ip link show
@@ -79,7 +79,7 @@ root@archiso ~ # ping baidu.com
 ```
 网络连接到此为止无需配置，可以正常访问网络。
 
-## 5. 更新系统时间，硬件时间同步  
+### 5. 更新系统时间，硬件时间同步  
 使用命令查看系统时间以及硬件时间，将同步的当前时间写入硬件：  
 ```
 	root@archiso ~ # timedatectl status
@@ -94,7 +94,7 @@ root@archiso ~ # ping baidu.com
 	root@archiso ~ # timedatectl set-ntp true
 ```
 
-## 6. 建立系统的硬盘分区  
+### 6. 建立系统的硬盘分区  
 建立硬盘分区，我建立了两个分区，一个根分区和一个交换分区。  
 ```
 root@archiso ~ # fdisk -l 
@@ -116,7 +116,7 @@ root@archiso ~ # fdisk -l
 	Sector size (logical/physical): 512 bytes / 512 bytes
 	I/O size (minimum/optimal): 512 bytes / 512 bytes
 ```
-## 7. 已经建立分区的格式化
+### 7. 已经建立分区的格式化
 1. 格式化ext4分区
 ```
 	root@archiso ~ # mkfs.ext4 /dev/sda2
@@ -126,19 +126,19 @@ root@archiso ~ # fdisk -l
 	root@archiso ~ # mkswap /dev/sda1  # 将/dev/sda1格式化为swap分区
 	root@archiso ~ # swapon /dev/sda1  # 将/dev/sda1启用为swap分区
 ```
-## 8. 挂载分区
+### 8. 挂载分区
 使用系统挂载点/mnt，将/dev/sda2作为系统的根目录挂载到/mnt上。 
 ```
 	root@archiso ~ # mount /dev/sda2 /mnt
 ```
-## 9. 定义安装所需的Mirrorlist  
-## 10. 安装基础的Archlinux系统组件  
+### 9. 定义安装所需的Mirrorlist  
+### 10. 安装基础的Archlinux系统组件  
 部署安装linux的文件系统，安装系统基础组建的软件包。  
 ```
 	[root@LiarLee /]# pacstrap /mnt base
 ```
-## 11. 新系统的相关配置
-### 1. fstab  
+### 11. 新系统的相关配置
+#### 1. fstab  
 根据自己建立的分区自动生成系统的分区表。  
 	```
 	[root@LiarLee /]# genfstab -U /mnt >> /mnt/etc/fstab		# 生成新的fstab，写入安装硬盘的/etc/fstab  
@@ -149,25 +149,25 @@ root@archiso ~ # fdisk -l
 		# <file system> <dir> <type> <options> <dump> <pass>
 		# /dev/sda2
 		UUID=3b61b364-b9eb-4e31-b65a-55fdcf09c614	/         	ext4      	rw,relatime	0 1
-
+	
 		# /dev/sda1
 		UUID=91987ac9-fa6b-4ac5-a9c5-014169dcf058	none      	swap      	defaults  	0 0
 	```
-### 2. chroot  
+#### 2. chroot  
 使用chroot命令切换根文件系统。  
 ```
 	[root@LiarLee /]# arch-chroot /mnt
 ```
-### 3. timezone   
+#### 3. timezone   
 chroot命令相当于直接将当前的shell切换到了新安装的系统中。  
 设置新的系统的时间及同步硬件时间。  
 ```
 	[root@LiarLee /]# ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 	[root@LiarLee /]# hwclock --systohc
 ```
-### 4. 本地设置  
+#### 4. 本地设置  
 
-### 5. 网络设置  
+#### 5. 网络设置  
 配置hostname以及本地解析hosts文件的解析条目。  
 ```
 [root@LiarLee /]# vim /etc/hostname
@@ -179,50 +179,50 @@ chroot命令相当于直接将当前的shell切换到了新安装的系统中。
 	IP_ADDRESS 	YOUR_HOSTNAME.YOUR_DOMAIN YOUR_HOSTNAME
 ```
 
-### 6. 生成initramfs  
+#### 6. 生成initramfs  
 为新的系统生成ramfs。  
 ramfs的作用是，利用ramfs的文件系统，快速驱动周边的系统设备。在ramfs的使命结束后，自动chroot到新系统的文件系统中。  
 ```
 	[root@LiarLee /]# mkinitcpio -p linux
 ```
-### 7. 设置root密码  
+#### 7. 设置root密码  
 修改root密码。  
 ```
 	[root@LiarLee /]# passwd 
 ```
-### 8. 安装grub2  
+#### 8. 安装grub2  
 这里pacman命令已经可以使用了，因此直接在这个安装grub2，这样才可以在后面正确的重启到新安装好的系统。  
 ```
 	[root@LiarLee /]# pacman -S grub2 
 	[root@LiarLee /]# grub-mkconfig 
 ```
-## 12. 重启引导新系统  
+### 12. 重启引导新系统  
 将已经安装完成的那个根分区卸载，之后就可以重启了。  
 ```
 	[root@LiarLee /]# umount -R /mnt  # umount 接触挂载新的根文件系统  
 	[root@LiarLee /]# fuser /mnt		# fuser 查看占用文件系统的进程，如果确认的话可以直接-k结束所有占用的进程
 	[root@LiarLee /]# reboot 		# 重启
 ```
-## 13. 安装图形化界面  
+### 13. 安装图形化界面  
 
-### 1. 安装Xorg:  
+#### 1. 安装Xorg  
 安装如下的所有组件，重启就可以进入图形化环境了。  
 	1. 运行错误 xterm:command not found  
-		[root@LiarLee /]# pacman -S xterm zlib
+		```[root@LiarLee /]# pacman -S xterm zlib```
 	1. 运行报错 twm:command not found  
-		[root@LiarLee /]# pacman -S xorg-twm xorg-xclock
+		```[root@LiarLee /]# pacman -S xorg-twm xorg-xclock```
 	1. 安装鼠标驱动  
-		[root@LiarLee /]# pacman -S xf86-input-mouse
+		```[root@LiarLee /]# pacman -S xf86-input-mouse```
 	1. 安装VMware图形驱动  
-		[root@LiarLee /]# pacman -S xf86-video-vmware
+		```[root@LiarLee /]# pacman -S xf86-video-vmware```
 	1. 安装Xorg服务本体  
-		[root@LiarLee /]# pacman -S xorg-server xorg-xinit 
+		```[root@LiarLee /]# pacman -S xorg-server xorg-xinit ```
 	1. 安装Gnome桌面环境  
-		[root@LiarLee /]# pacman -S gnome
+		```[root@LiarLee /]# pacman -S gnome```
 	1. 安装GDM - Gnome桌面管理工具，也可用其他替换  
-		[root@LiarLee /]# pacman -S gdm
+		[```root@LiarLee /]# pacman -S gdm```
 
-### 2. 安装图形化之后测试启动速度  
+#### 2. 安装图形化之后测试启动速度  
 systemd提供了命令检测启动的速度，包括内核启动速度以及用户空间的启动速度。
 1. systemd-analyze  
 1. systemd-analyze blame    
@@ -232,7 +232,7 @@ systemd提供了命令检测启动的速度，包括内核启动速度以及用�
 	Startup finished in 1.892s (kernel) + 1.182s (userspace) = 3.075s 
 	graphical.target reached after 1.182s in userspace
 ```
-### 3. 刷新国内的镜像源   
+#### 3. 刷新国内的镜像源   
 ```
 	[root@LiarLee /]# cd /etc/pacman.d/
 	[root@LiarLee pacman.d]#  mv mirrorlist mirrorlist.bak
@@ -242,7 +242,7 @@ systemd提供了命令检测启动的速度，包括内核启动速度以及用�
 	[root@LiarLee pacman.d]# sed 's/^Server/#Server/g' ./mirrorlist >> ./mirrorlist
 	[root@LiarLee pacman.d]# s[root@LiarLee pacman.d]# spacman -Syyu
 ```
-## 14. 自行编译内核操作：  
+### 14. 自行编译内核操作 
 ```
 	[root@LiarLee /]# pacman -S base-devel bc xmlto kmod inetutils
 	[root@LiarLee /]# useradd -d /home/admin -p admin admin  
@@ -258,13 +258,13 @@ systemd提供了命令检测启动的速度，包括内核启动速度以及用�
 	[root@LiarLee /]# make nconfig
 	[root@LiarLee /]# make 
 ```
-	 
-## 15. 一些问题 
+
+### 15. 部分问题
 1. 重启之后没有DHCP获取IP地址的解决方法：  
-``` 
+``` bash
 	[root@LiarLee /]# systemctl enable dhcpcd
 	[root@LiarLee /]# systemctl start dhcpcd 
-	[root@LiarLee /]# pacman -S net-tools 
-```	 
-	
+	[root@LiarLee /]# pacman -S net-tools
+```
 
+2. Wayland + Sway + Hypeland. （计划中， 等我闲的不行了.....

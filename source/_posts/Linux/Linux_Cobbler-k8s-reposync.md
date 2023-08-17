@@ -7,7 +7,7 @@ categories: Linux
 
 昨天晚上尝试使用阿里云的时候出现问题 ，阿里云的k8s源安装的时候报错，无法正常通过yum安装。内网正好放了一台Cobbler，所以直接从Cobbler同步阿里的repo过来放到内网，防止这个事情再次发生。
 
-<!-- more -->
+
 
 # Cobbler是什么
 > Cobbler是一个免费开源系统安装部署软件，用于自动化网络安装操作系统。 Cobbler 集成了 DNS, DHCP,[1][2]软件包更新， 带外管理以及配置管理， 方便操作系统安装自动化。Cobbler 可以支持PXE启动, 操作系统重新安装, 以及虚拟化客户机创建，包括Xen, KVM or VMware. Cobbler透过koan程序以支持虚拟化客户机安装。Cobbler 可以支持管理复杂网路环境，如创建在链路聚合以太网的桥接环境。 [FROM Wikipedia](https://en.wikipedia.org/wiki/Cobbler_(software))

@@ -7,8 +7,6 @@ categories: Linux
 
 Ceph Installation Record.
 
-<!-- more -->
-
 # INIT 
 ## INIT OS 
 OS Version: Fedora 34 Server

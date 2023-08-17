@@ -7,8 +7,6 @@ categories: Linux
 
 通过systemctl 来管理系统的服务和软件，但是如果是自己安装的软件就没有办法使用了。其实是可以自己定义systemd的管理脚本的，类似与之前的SysV风格的管理脚本。
 
-<!-- more -->
-![Artical_Cover.jpg](https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg)
 ## Systemd是什么
 > systemd is a suite of basic building blocks for a Linux system. It provides a system and service manager that runs as PID 1 and starts the rest of the system. systemd provides aggressive parallelization capabilities, uses socket and D-Bus activation for starting services, offers on-demand starting of daemons, keeps track of processes using Linux control groups, maintains mount and automount points, and implements an elaborate transactional dependency-based service control logic. systemd supports SysV and LSB init scripts and works as a replacement for sysvinit. Other parts include a logging daemon, utilities to control basic system configuration like the hostname, date, locale, maintain a list of logged-in users and running containers and virtual machines, system accounts, runtime directories and settings, and daemons to manage simple network configuration, network time synchronization, log forwarding, and name resolution.
 
@@ -18,7 +16,7 @@ Systemd默认的文件配置路径有：
 	- /etc/systemd/system/*
 	- /run/systemd/system/*
 	- /usr/lib/systemd/system/*
-  
+
 ## Systemd Unit File 的模板 
 有这样的几个模块：
 1. [Unit]

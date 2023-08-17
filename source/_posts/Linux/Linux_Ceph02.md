@@ -7,10 +7,8 @@ categories: Linux
 
 Ceph的使用笔记。
 
-<!-- more -->
+创建存储池
 
-# USAGE
-## 创建存储池
 ```bash
 # 创建一个PG为64 ，PGP为64的存储池。
 [ceph: root@ceph01 /]# ceph osd pool create test-64 64 64

@@ -7,8 +7,6 @@ categories: Linux
 
 fedora27中Firefox插件OpenH264不启用  
 
-<!-- more-->
-![Artical_Cover.jpg](https://i.loli.net/2019/09/17/gLbZKEiln2rq7yx.jpg)
 # 环境
 OS：Fedora 27 Workstation  
 Software: Firefox 57  
