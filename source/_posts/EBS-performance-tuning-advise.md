@@ -22,7 +22,7 @@ Agenda
 
 应用程序IO请求下发的路径。
 
-三个方向， iops， 带宽， 延迟，按照这三个方面， 控制变量做压力测试。
+三个方向， iops， 带宽， 延迟，按照这三个方面来观察这个EBS本身的性能。 
 
 ### 使用新版本的内核： 
 
@@ -33,7 +33,7 @@ Agenda
 
 ### 使用 Raid0 
 
-使用Raid0 可以提高带宽， 并且节省成本。
+使用 Raid0 可以提高带宽， 并且节省成本。
 
 1. 能更换磁盘类型达到性能， 可以使用Raid0 
 2. 不建议在EBS 做 Raid1 5 6 三种， 校验的方式会降低性能。
@@ -56,18 +56,20 @@ HDD： 1MiB的IOsize ， 建议的队列长度 4
 For st1/sc1. 
 
 ```bash
-blockdev --report /dev/nvme1n1
-blockdev --setra 2048 /dev/nvme1n1
-blockdev --getra /dev/nvme1n1
+blockdev --report /dev/nvme1n1 # 查看块设备的参数
+blockdev --setra 2048 /dev/nvme1n1  # 设置块设备预读取数据量的大小
+blockdev --getra /dev/nvme1n1 # 查看参数是否生效。
 ```
 
-这个部分是为了增加吞吐量而在Read的同时将后面的一部分数据读取进入内存， 这样可以提高顺序读取的效率， 提高读取的效率， 让需要的数据提前进入内存。
+这个部分是为了增加吞吐量而在Read的同时将后面的一部分数据读取进入内存， 这样可以提高顺序读取的效率， 提高读取的效率， 让顺序读取的业务数据提前进入内存。
 
 
 
-### 使用NitroSystem
+### 使用 Nitro 架构实例
 
 - 之前使用zen的时候有一个Dom0来进行实例的管理。 nitro 做成 Hardware， nitro 管理VPC等等等， 尽可能把 X86 过度给客户来使用。
+
+  Refer to： https://zhuanlan.zhihu.com/p/270522703
 
 - 开启EBS优化选项。 非优化的场景下，会与网络请求共享带宽， EBS优化这个功能单独隔离了EBS的网络请求。
 
@@ -105,14 +107,15 @@ ebs设置默认的 Block Size是 16k ， 其他厂商可能是 4k的。 这个�
 
 # 这个命令的运行结果是， 一个 job 在 iodepth 为 1 的时候， 写入与底层一样的块大小，在iostat 中可以看到  avgqu-zs 的大小是 1。
 # 添加一个process之后， 队列的size 变成了2 ； 添加一个 iodepth 之后， 队列的大小为 1 ~ 2 之间。 
-# 大佬认为这个是 Process 的蓄流将请求合并了， 所以没有造成对应的压力。 
+# 大佬认为内核的蓄流将请求合并了， 所以没有造成对应的压力。 
+
 fio --directory=/mnt --name fio_test_file --ioengine=libaio --direct=1 --rw=read --rate_iops=1 --bs=16k --size=200M --iodepth=1 --numjobs=1 --time_based --runtime=600 --group_reporting --norandommap
 
 ```
 
 perf record -g result (libaio):
 
-```
+```ini
 fio 319375 86964.196578:     250000 cpu-clock:pppH:
         ffffffff88355470 put_dec+0x0 (/lib/modules/6.4.10-arch1-1/build/vmlinux)
         ffffffff8835584b number+0x33b (/lib/modules/6.4.10-arch1-1/build/vmlinux)
@@ -132,7 +135,8 @@ fio 319375 86964.196578:     250000 cpu-clock:pppH:
 
 perf record -g result (psync):
 
-```fio 324148 87167.271746:     250000 cpu-clock:pppH:
+```ini
+fio 324148 87167.271746:     250000 cpu-clock:pppH:
         ffffffff8835480c strlen+0xc (/lib/modules/6.4.10-arch1-1/build/vmlinux)
         ffffffff87a2990b seq_puts+0x1b (/lib/modules/6.4.10-arch1-1/build/vmlinux)
         ffffffff87aa94ee render_sigset_t+0x1e (/lib/modules/6.4.10-arch1-1/build/vmlinux)
@@ -158,33 +162,27 @@ iostat -dx 3
 Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
 nvme0n1       2147.33  34842.67     0.00   0.00    0.46    16.23    0.33      1.33     0.00   0.00    1.00     4.00    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    1.00 100.00
 
-
 Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
 nvme0n1       2128.33  34248.00     0.00   0.00    0.46    16.09    5.33     49.83     1.33  20.00    0.94     9.34    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.99  99.87
-
-
-
-
-
 ```
 
 监控数据来源：  cat /proc/diskstats
 
-这些所有的指标都是By Device的， 与进程的部分无关，统计的是进入到设备的请求。
+这些所有的指标都是By Device的， 与进程的部分无关，统计的是提交到设备的请求。
 
-- rrqm/s wrqm/s  两个看的是的merge的请求数量， 表示发送给驱动程序并被驱动程序合并的请求数量，表示有没有进行合并，这也表示系统将随机IO请求合并成连续以提高性能。 
+- **rrqm/s - wrqm/s**  两个看的是的merge的请求数量， 表示发送给驱动程序并被驱动程序合并的请求数量，表示有没有进行合并，这也表示系统将随机IO请求合并成连续以提高性能。 
 
-- r/s w/s  IO读写的请求数量IOPS， 发送给磁盘设备的请求数。
+- **r/s - w/s**  IO读写的请求数量IOPS， 发送给磁盘设备的请求数。
 
-- rKB/s wKB/s 吞吐量， 可以使用 -m 转换成MB/s， 设备的传输数据量的吞吐量信息。 
+- **rKB/s - wKB/s** 吞吐量， 可以使用 -m 转换成MB/s， 设备的传输数据量的吞吐量信息。 
 
-- avgrq-sz  平均请求大小， 也就是IOsize 的大小。单位是扇区（512B）。
+- **avgrq-sz**  平均请求大小， 也就是IOsize 的大小。单位是扇区（512B）。
 
-  rareq-sz / wareq-sz 新版本的iostat已经是这两个指标了， 这两个指标单位是 KB.
+  **rareq-sz -  wareq-sz** 新版本的iostat已经是这两个指标了， 这两个指标单位是 KB.
 
-- avgqu-sz  在驱动队列和设备队列中或活跃的平均请求数量。 单位是 个。
+- **avgqu-sz**  在驱动队列和设备队列中或活跃的平均请求数量。 单位是 个。
 
-- await， 这个指标记录的总的延迟， 新的版本也包括 rw 两类请求的延迟。 延迟单位是 ms ，通常不应该超过10ms.
+- **await**， 这个指标记录的总的延迟， 新的版本也包括 rw 两类请求的延迟。 延迟单位是 ms ，通常不应该超过10ms.
 
 
 
