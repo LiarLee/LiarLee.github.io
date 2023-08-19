@@ -11,8 +11,6 @@ https://datatracker.ietf.org/doc/html/rfc1180
 Chinese Version:  
 http://arthurchiao.art/blog/rfc1180-a-tcp-ip-tutorial-zh/
 
-
-
 ---
 
 Tuning initcwnd for optimum performance: 
@@ -20,6 +18,4 @@ Tuning initcwnd for optimum performance:
 https://www.cdnplanet.com/blog/tune-tcp-initcwnd-for-optimum-performance/
 
 https://www.kawabangga.com/posts/5217
-
-
 

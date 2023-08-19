@@ -6,7 +6,7 @@ tags: Linux
 ---
 ## 内核参数的说明
 
-对于TCP来说，会遇到如下的几个参数。
+对于 #TCP 来说，会遇到如下的几个参数。
 
 如果我们需要查看一下当前OS的TCP参数， 命令如下：
 
@@ -21,7 +21,7 @@ net.ipv4.tcp_rmem = 4096	131072	6291456
 net.ipv4.tcp_wmem = 4096	16384	4194304
 ```
 
-这两个参数其实表示的是当前内核预留的 Socket Buffer， 单位是 Bytes， 也是具体指内存的大小。具体的说明我找到[Kernel文档的说明](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt)如下：
+这两个参数其实表示的是当前内核预留的 Socket Buffer， 单位是 Bytes， 也是具体指 #内存 的大小。具体的说明我找到[Kernel文档的说明](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt)如下：
 
 > ```
 > tcp_rmem - vector of 3 INTEGERs: min, default, max
@@ -68,7 +68,6 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 
 实际上， 只是更新 max 的值， 并不会更新 Recvbuffer. 
 如果想增大 receive buffer 的大小, 可以增加 tcp_rmem 的 default 的值大小.
-
 
 ## 测试环境
 
@@ -271,7 +270,7 @@ tcp_adv_win_scale - INTEGER
 https://unix.stackexchange.com/questions/94770/what-does-net-ipv4-tcp-app-win-do 
 https://emacsist.github.io/2019/07/13/linux%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0/
 
-### 测试1 增加客户端的 rmem
+### 测试1 增加客户端的 Rmem
 
 - 服务端参数
 
@@ -303,7 +302,7 @@ time_starttransfer: 0.103699
 time_total: 37.118881
 ```
 
-### 测试2 增加服务端的 wmem
+### 测试2 增加服务端的 Wmem
 
 - 服务端参数
 
@@ -322,7 +321,6 @@ time_total: 37.118881
 带宽的结果： 
 
 ![2023-04-12_17-47.png](https://s2.loli.net/2023/04/14/85zygfpMBRnha19.png)
-
 
 curl 的结果： 
 
@@ -355,7 +353,7 @@ TCP慢启动时候的截图：
 
 稳定传输中基本上是有空间， 收到之前的ack 就立刻发送新的到链路中.
 
-### 测试3 锁定 wmem 以及 rmem 4096
+### 测试3 锁定 Wmem 以及 Rmem 4096
 
 - 服务端参数  
 

@@ -6,11 +6,8 @@ categories: Linux
 ---
 
 ceph笔记04
-
-<!-- more -->
-
 # 修改CRUSH算法的分配方式
-## 基础概念： 
+## 基础概念：
 ### 五种运行图： MON服务维护
 1. Monitor Map - 监控的运行图 MON的状态
 2. OSD Map - OSD的状态， 每隔六秒钟汇报一次状态
@@ -64,8 +61,5 @@ ceph osd crush rule dump
 ceph osd pool create magedu-ssdpool 32 32 magedu_ssd_rule
 ceph pg ls-by-pool  magedu-ssdpool | awk '{print $1,$2,$15}' 
 
-
 #### 分机械盘和固态盘调整运行图的配置
-
-
 

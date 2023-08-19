@@ -6,14 +6,13 @@ categories: Linux
 ---
 
 Ceph Installation Record.
-
-# INIT 
-## INIT OS 
+# 开始
+## 部署信息
 OS Version: Fedora 34 Server
 CEPH Version: v15.2.0 (Octopus) + 
 DOCKER Version: 20.10.8
 
-## CONFIG hostname and IP 
+## 配置实例的 Hostname 和网络
 ```bash
 vim /etc/hosts
   192.168.122.121 ceph01 ceph01.liarlee.site
@@ -40,7 +39,7 @@ vim /etc/hosts
 [root@ceph01 ~]$ vim /etc/config/selinux # change it to disabled
 ```
 
-## CONFIG dnf repo
+## CONFIG Dnf Repo
 ```bash
 # config docker
 [root@ceph01 ~]$ wget -O /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -78,7 +77,7 @@ vim /etc/hosts
 
 # INSTALL CEPH
 Cephadm tools were default in Fedora Repo, No need to change the repo to tsinghua or aliyun. Just install. WOW ~ Fedora YYDS.
-## BOOTSTRAP ceph
+## BOOTSTRAP Ceph
 ```bash
 [root@ceph01 ~]$ cephadm bootstrap --mon-ip 192.168.122.121 --allow-fqdn-hostname
 ```
@@ -96,7 +95,7 @@ You can access the Ceph CLI with:
 	sudo /usr/sbin/cephadm shell --fsid e8997974-029f-11ec-a59a-525400c06f36 -c /etc/ceph/ceph.conf -k /etc/ceph/ceph.client.admin.keyring
 ```
 
-## USE ceph shell
+## USE Ceph Shell
 ```bash
 # temprary use
 [root@ceph01 ~]$ cephadm shell -- ceph -s
@@ -120,7 +119,7 @@ You can access the Ceph CLI with:
 ```
 
 # MAINTAIN Hosts
-## ADD hosts
+## ADD Hosts
 ```bash
 [ceph: root@ceph01 ceph]$ ceph orch host add ceph02.liarlee.site 192.168.122.122
 [ceph: root@ceph01 ceph]$ ceph orch host add ceph03.liarlee.site 192.168.122.123
@@ -130,8 +129,7 @@ You can access the Ceph CLI with:
 [ceph: root@ceph01 /]$ ceph config set mon public_network 192.168.122.0/24
 ```
 
-
-## ADD osd
+## ADD Osd
 ```bash
 # auto-detect available devices (need time to sync the status 1 by 1)
 # NOTE: Strangely enough, the command automatically recognizes all devices, including the ZRAM!  QAQ.....
@@ -190,7 +188,7 @@ OSD_ID  HOST                 STATE                    PG_COUNT  REPLACE  FORCE  
 [ceph: root@ceph01 /]$ ceph orch apply osd --all-available-devices --unmanaged=false
 ```
 
-## MANAGE services
+## MANAGE Services
 ```shell
 # reduce mon instance to 3
 [ceph: root@ceph01 /]$ ceph orch ls mon

@@ -1,5 +1,5 @@
 ---
-title: ElasticSearch 01
+title: ElasticSearch 安装记录
 date: 2019-09-11 17:25:57
 tags: ElasticSearch
 categories: Linux
@@ -7,7 +7,7 @@ categories: Linux
 
 ElasticSearch的安装过程。
 
-# 准备源码包 
+# 准备源码包
 1. 需要下载的包有三个：[网站地址](https://www.elastic.co/cn/downloads/)
    - ElasticSearch- 分布式、RESTful 风格的搜索和分析。/usr/local/src/elasticsearch
    - Logstash - 采集、转换、充实，然后输出。/usr/local/src/logstash

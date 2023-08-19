@@ -59,7 +59,7 @@ tz: 2016b
 1. 失败请更换cnpm 或者 更换淘宝源重试。  
 2. 如果安装，确认自己在正确的目录下，执行`npm install`重试  
 
-### 安装Hexo-server  
+### 安装Hexo-server
 安装Hexo-server主要是作为本地测试使用，通过本地localhost:4000访问来预览，方便调整。  
 1. 使用如下命令执行安装：  
 > `[root@localhost test]npm install hexo-server -g`
@@ -156,7 +156,7 @@ INFO  Deploy done: git
 └── npm@6.4.1
 ```
 
-# hexo常用命令说明
+# Hexo常用命令说明
 Hexo目录下常用的命令有：
 ```
 [root@localhost test]# hexo s           //启动hexo本地服务进行blog预览

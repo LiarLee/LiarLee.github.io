@@ -4,15 +4,12 @@ date: 2019-07-24 15:07:34
 tags: Linux
 categories: Linux
 ---
-
 Linux文件管理笔记
 
-<!-- more -->
-
 文件系统默认的规定是遵守FHS规定的。
-
-> FHS(Filesystem Hierarchy Standard) defines the directory structure and directory contents in Linux distributions.  [FHS_Website](https://refpecs.linuxfoundation.org/fhs.shtml)
-> 
+[[EBS-performance-tuning-advise]]
+> FHS(Filesystem Hierarchy Standard) defines the directory structure and directory contents in Linux distributions.    
+> [FHS_Website](https://refpecs.linuxfoundation.org/fhs.shtml)
 
 标准的根文件系统，应该具有如下的结构，所有的文件目录均在根文件系统下。
 1.  /bin  -- 单用户模式下可运行的二进制命令。所有用户都可以使用。
@@ -37,7 +34,7 @@ Linux文件管理笔记
 12. /sys  -- 设备，驱动，一些内核功能的相关信息。
 13. /proc -- 虚拟文件系统展示进程及内核信息文件。系统启动目录创建，系统关闭目录消失。
 14. /var -- 变量文件。在系统运行的过程中反复变化的文件。比如日志，邮件，信息输出等。
-    1.  /var/log -- 系统应用程序产生的日志文件默认存放路径。
+    1. /var/log -- 系统应用程序产生的日志文件默认存放路径。
     2. /var/spool/mail -- 每个用户的邮件。
 15. /home -- 用户的家目录，saved files, personal settings,etc.
 

@@ -4,19 +4,14 @@ date: 2018-01-08 15:16:21
 tags: Python
 categories: Python
 ---
-
-![bg.jpg](https://i.loli.net/2018/01/11/5a572d992f8a2.jpg)  
-
-## Python的输入输出  
+## Python的输入输出
 ```
 print('Hello,World!')  
 name = input()
 print('Your name is', name, ',Right?')
 ```
 
-<!-- more-->
-
-## Python字符中文编码Title   
+## Python字符中文编码Title
 ```
 #!/usr/bin/env python3  
 # -*- coding: utf-8 -*-  
@@ -25,7 +20,7 @@ a = input()
 age = int(a)                       \\print输出都是字符串，格式化为数字之后才可以使用
 ```
 
-## Python输出多行内容   
+## Python输出多行内容
 ```
 print('''line1
 ...line2
@@ -33,12 +28,12 @@ print('''line1
 ''')
 ```
 
-## Python的语句拼接   
+## Python的语句拼接
 ```
 print('Hello,World!','My Name is Liarlee.')  
 ```
 
-## Python占位符  
+## Python占位符
 ```
 name = Liarlee
 age = 24
@@ -46,9 +41,9 @@ print('Hello,%s' % (name))
 print('Your age is %d' % (age))
 ```
 
-## python中使用list和tuple    
+## Python中使用list和tuple
 
-### List -- 列表    
+### List -- 列表
 ```
 classmates = [Liarlee,TEST,WTF,LOL]
 ```
@@ -65,15 +60,15 @@ classmates[1] = Liarlee            \\直接更改某个索引位置的值
 classmates.sort()                  \\list排序
 ```
 
-### Tuple -- 元组    
+### Tuple -- 元组
 另一种有序列表叫元组：tuple。tuple和list非常类似，但是tuple一旦初始化就不能修改  
 ```
 classmates = (Liarlee,TEST,WTF,LOL)
 ```
 
-## 循环和判断   
+## 循环和判断
 
-### IF判断   
+### IF判断
 ```
 if
 elif
@@ -84,7 +79,7 @@ elif
 else                                        \\完全if格式        
 ```
 
-### FOR……IN……循环  
+### FOR……IN……循环
 ```  
 for classmate in classmates:
   print(classmate)
@@ -92,7 +87,7 @@ for classmate in classmates:
 list(range(101))                              \\生成0-100数字存入list
 ```
 
-### WHILE循环  
+### WHILE循环
 ```
 # -*- coding: utf-8 -*-
 classmates = [Liarlee,TEST,WTF,LOL]
@@ -102,9 +97,9 @@ while i < 4:
     i = i + 1
 ```
 
-## dict和set  
+## Dict和set
 
-### dict -- 字典    
+### Dict -- 字典
 ```
 SCORE = {'Liarlee': 95, 'TEST': 75, 'WTF': 85, ‘LOL‘：54}       \\定义字典
 d['Liarlee'] = 67                                                \\字典赋值
@@ -113,7 +108,7 @@ d.get('Liarlee')                                                 \\确定Key是�
 d.pop('Liarlee')                                                 \\删除Key
 ```
 
-### set  
+### Set
 set和dict类似，也是一组key的集合，但不存储value。    
 ```
 s = set([1, 2, 3])                      \\创建一个set然后将list传入

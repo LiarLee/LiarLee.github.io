@@ -7,11 +7,11 @@ categories: Linux
 
 关于制作RPM包的笔记～
 
-## 一. 制作RPM包教程  
+## 一. 制作RPM包教程
 
 源码包的制作教程基于RHEL 5 & 6,当我写这个的时候还没有7版本, 我会在后续更新新版本的路数（大半夜翻到这个破防了， 来自18年的flag ， 现在是时间是 2023 - 08 - 18 ， 过了。
 
-### 1. rpm包的制作流程简述
+### 1. Rpm包的制作流程简述
 
 1. 放置源码进入SOURCES文件夹
 1. 写好SPEC文件
@@ -47,7 +47,7 @@ categories: Linux
 1. 是一个二进制还是源码，当时都有。例如:src.rpm,里面包括了 source.tar.gz 和 spec,需要使用者安装完成之后编译再安装。
 
 ### 4. 制作过程
-#### 1. 设计目录结构(set up the directory structure)  
+#### 1. 设计目录结构(set Up the Directory structure)
 **制作RPM过程中千万不能用root用户**    
 每个版本对于目录的要求不同，五个不同的目录：  
 
@@ -62,7 +62,7 @@ categories: Linux
     [LiarLee@localhost ~] tree /usr/src/redhat
     ```
 
-#### 2. 放置文件到正确的指定的目录(Place the sources in the right dirctory)。  
+#### 2. 放置文件到正确的指定的目录(Place The Sources in the Right dirctory)。
   我们首先需要自己制定自己的制作源码目录，在不使用root用户的前提下进行制作,需要修改系统的宏，来制定新的工作目录。修改工作目录的过程如下：
   1. 使用命令查看默认的宏：
       ```
@@ -88,7 +88,7 @@ categories: Linux
       [LiarLee@localhost ~] rpmbuild --showrc | grep _topdir      \\ Review the Result  
       ```
 
-#### 3. 创建一个spec文件(Create a spec file that tells the rpmbuild command what to do)。
+#### 3. 创建一个spec文件(Create A Spec File that Tells the Rpmbuild Command what to do)。
   1. spec文件使用软件的名字版本作为文件名；.spec作为扩展名。  
   1. rpm -qi mysql & rpm -qpi mysql,命令查看rpm信息，信息从spec文件中定义，软件包信息说明段落定义。
   1. spec文件有如下几个段落：
@@ -161,7 +161,7 @@ categories: Linux
         - Comments
         ```
      
-#### 4. 开始编译(Build the source and binary RPMs)
+#### 4. 开始编译(Build The Source and Binary RPMs)
 1. rpmbuild命令说明:  
   ```
   rpmbuild -bp        \\ 执行到prep section
@@ -190,20 +190,19 @@ categories: Linux
     rpmfind.net  
     rpm.pbone.net  
 
-
-## 二. 从头开始写新的SPEC files
+## 二. 从头开始写新的SPEC Files
 制作RPM包的核心是写SPEC files，难以掌握的地方
 介绍SPEC文件的基本语法和简单用法
 
-### 1. Spec files overview
+### 1. Spec Files Overview
 SPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编译，做成不同的RPM包，依赖关系。  Macro是指的变量  
 大多数的字段由tag+value组成,tag是标签--Directives,不区分大小写;value是区分大小写的.    
 
-#### 1.1 宏的自定义  
+#### 1.1 宏的自定义
 **用户自定义宏** : %define macro_name value  
 **引用方式** : %{macro_name} OR %macro_name  
 
-#### 1.2 注释的方式  
+#### 1.2 注释的方式
 使用#来进行注释  
 %--不能在注释中使用,如果必须使用需要双写%%  
 ```
@@ -211,7 +210,7 @@ SPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编
 \#this is a comment for %%prep  
 ```
 
-### 2. Defining package infomation
+### 2. Defining Package Infomation
 如何定义SPEC文件内的字段  
 
 #### 2.1 软件包的信息
@@ -235,7 +234,7 @@ SPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编
 - Provides : Capability - 定义对外提供的能力  
 - BuildRequires : Capability - 可以出现多次,直接写出需要的软件包名  
 
-#### 2.5 设定Build目录  
+#### 2.5 设定Build目录
 - build - 用于解压安装源码  
 - buildroot : ${_tmppath}/%{name}-%{version}-root  
   使用$RPM_BUILD_ROOT 或者 %{buildroot}  
@@ -250,7 +249,7 @@ SPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编
 - Patch3: patchfiles_name  
 补丁定义后可以直接使用patch命令进行补丁的安装,所以使用patch字段  
 
-### 3. Controlling the build
+### 3. Controlling the Build
 如何控制编译
 ```
 %prep                 \\ 把Source内的解压源码包到BUILD目录,cd到源码目录,配置环境  
@@ -294,14 +293,13 @@ $1            \\ 第一次安装
 $2 OR $2+     \\ 升级  
 $0            \\ 卸载  
 ```
-### 4. Filling the list of files
+### 4. Filling the List of Files
 填充文件列表
 
-### 5. adding change log entries
+### 5. Adding Change Log Entries
 添加更新日志
 
-
-## 三. CentOS7打包Nginx过程记录 
+## 三. CentOS7打包Nginx过程记录
 1. useradd rpmbuilder -p rpmbuilder
 2. yum install -y rpmdevtools rpmbuild
 3. cd /home/rpmbuilder/

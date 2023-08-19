@@ -4,12 +4,8 @@ date: 2019-05-17 22:21:08
 tags: Python 
 category: Python
 ---
-
 实在是肝不动了，自己写了个脚本帮我点点点。  
-
-<!-- more -->
-
-# pyautogui说明  
+# Pyautogui说明
 pyautogui.position()  #  获取鼠标位置  
 pyautogui.locateOnScreen()  #  对屏幕截图，获取图片文件所对应的屏幕坐标  
 pyautogui.click()   #  模拟鼠标点击  
@@ -18,7 +14,7 @@ pyautogui.moveTo()  #  移动到屏幕坐标位置
 pyautogui.moveRel()     #  移动固定的坐标距离  
 pyautogui.dragRel()     #  按住鼠标拖拽  
 
-# 代码如下：  
+# 代码如下：
 ```python
 #!/usr/bin/python
 # -*- coding:UTF-8 -*-
@@ -116,33 +112,4 @@ for turns in range(1, 999):
     print('Starting Waiting for Refresh:')
     time.sleep(200)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

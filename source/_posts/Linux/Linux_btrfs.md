@@ -8,7 +8,6 @@ category: Linux
 ## 创建BTRFS卷
 
     mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 
-<!-- more -->
 
 ## 更改btrfs的元数据冗余
 
@@ -21,8 +20,7 @@ category: Linux
 1. 如果是 -d raid0 -m raid1 可以直接将三个EBS IO1 3000IOPS的卷吃满， 直接到9000
 2. 如果是 -d raid1 -m raid1 只能达到3000IOPS， 但是容量会有冗余。
 
-
-## randread
+## Randread
 ```ini
 [global]
 directory=/mnt
@@ -42,7 +40,7 @@ thread
 iodepth=2
 ```
 
-## result
+## Result
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1
 job1: (g=0): rw=randread, bs=16M-16M/16M-16M/16M-16M, ioengine=libaio, iodepth=2
@@ -74,7 +72,7 @@ Run status group 0 (all jobs):
    READ: io=5232.0MB, aggrb=266744KB/s, minb=266744KB/s, maxb=266744KB/s, mint=20085msec, maxt=20085msec
 ```
 
-## randwrite 
+## Randwrite
 ```ini
 [global]
 directory=/mnt
@@ -93,7 +91,7 @@ thread
 [job1]
 iodepth=2
 ```
-## result
+## Result
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1
 job1: (g=0): rw=randwrite, bs=16M-16M/16M-16M/16M-16M, ioengine=libaio, iodepth=2
@@ -123,7 +121,7 @@ Run status group 0 (all jobs):
   WRITE: io=5248.0MB, aggrb=267987KB/s, minb=267987KB/s, maxb=267987KB/s, mint=20053msec, maxt=20053msec
 ```
 
-## xfs 单独磁盘
+## Xfs 单独磁盘
 ### Randwrite
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1

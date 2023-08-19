@@ -1,15 +1,13 @@
 ---
-title: ElasticSearch 02
+title: ElasticSearch 安装记录
 date: 2020-06-27 21:05:02
-tags: ELK
+tags: ElasticSearch
 categories: Linux
 ---
 
 记录一下自己的集群安装过程和常见的命令。
 
-
-
-## Elastic search三节点的安装
+## Elastic Search三节点的安装
 
 1. 节点的名称和相关参数：
 

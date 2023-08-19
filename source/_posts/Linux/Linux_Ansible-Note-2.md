@@ -1,14 +1,10 @@
 ---
-title: Ansible笔记-2
-date: 2019-07-07 21:57:06
+title: Ansible笔记-2 date: 2019-07-07 21:57:06
 tags: Ansible
 categories: Linux
 ---
 
 这份笔记介绍的是Ansible playbook的格式及相关的内容。
-
-<!-- more -->
-
 # Ansible笔记
 ## Ansible Playbook
 ### YAML
@@ -32,7 +28,7 @@ house:
     city: Nowheretown
     zipcode: 12345
 ```
-### Ansible Playbook的关键字 
+### Ansible Playbook的关键字
 内容与命令的内容基本一致，有如下的几个关键字：
 1. **\- hosts**  用来指定控制主机的范围,**注意短横线后空格接字符**
 1. **remote_user** 用来指定使用的用户
@@ -102,7 +98,7 @@ house:
         name: httpd
         state: restarted
 ```
-### Ansible playbook执行命令
+### Ansible Playbook执行命令
 ```sh
 使用格式：
 	ansible-playbook [options] playbook.yml [playbook2 ...]

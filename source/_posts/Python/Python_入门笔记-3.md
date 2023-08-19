@@ -4,7 +4,6 @@ date: 2018-01-10 10:20:49
 tags: Python
 categories: Python
 ---
-![bg.jpg](https://i.loli.net/2018/01/11/5a572d992f8a2.jpg)
 
 python进行系统管理的模块。系统管理模块的介绍和使用。  
 系统管理的四个模块:
@@ -12,10 +11,7 @@ python进行系统管理的模块。系统管理模块的介绍和使用。
 2. os.path
 3. glob
 4. fnmatch
-
-<!-- more-->
-
-## 1.OS
+## 1. OS
 OS模块中包含了普遍的操作系统功能，如果希望程序与平台没有强关联的情况下这个模块很重要，这个模块可以在不改动程序的基础上，使程序运行在Linux和Windows之间。
 ### 可移植性说明
 ```python
@@ -43,7 +39,7 @@ os.access('/etc/fstab', os.R_OK)      #access是判断是否具有对某一个�
 ## os.path模块
 os.path模块主要是用来拆分路径，构建新的路径，获取文件属性和判断文件的类型使用。
 
-### 拆分路径  
+### 拆分路径
 ```python
 os.path.split()           #返回一个二元数组，包括文件路径和文件名称
 os.path.dirname()         #返回文件路径
@@ -74,5 +70,5 @@ os.path.isdir         #路径存在，并且是一个文件夹
 os.path.islink        #路径存在，并且是一个链接
 ```
 
-## fnmatch模块
-## glob模块
+## Fnmatch模块
+## Glob模块

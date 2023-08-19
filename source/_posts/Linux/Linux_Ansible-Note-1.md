@@ -7,9 +7,6 @@ categories: Linux
 
 Ansible的学习笔记。  
 Ansible管理方式是资源在目标主机上，定义所期望的目标状态的方式；每一个操作必须是幂等的（可重复操作但结果不变的）。ansible采用ssh链接所管理的服务器，因此具有agentless的优势。
-
-<!-- more -->
-
 # Ansible的安装
 Ansible在Redhat的仓库中就有二进制包，直接dnf或yum安装就可以了。
 ```bash
@@ -54,22 +51,22 @@ ansible支持使用ssh用户命名密码的认证方式，也支持使用ssh密�
     [root@localhost Liarlee]$ ansible all -m ping -C        # 进行测试，但是不对控制的主机作更改
     ```
 
-## ansible使用示例
+## Ansible使用示例
 Ansible默认将所有的操作通过模块的方式定义，这里列举了一些常用的模块：
 
-### ansible管理查询命令
+### Ansible管理查询命令
 使用ansible-doc命令来进行模块的文档查看, */var/log/messages* 中会记录操作日志。
 ```bash
 [root@localhost Liarlee]$ ansible-doc -l      # 列举所有当前可用的模块和简单说明
 [root@localhost Liarlee]$ ansible-doc -s [MODULES_NAME]     # 查看指定模块的使用方法和说明
 ```
-### user模块
+### User模块
 设定主机的用户状态，对用户进行创建删除，更改信息以及参数。
 ```bash
 # 设置所有主机创建用户user,设置内容有uid,groups,shell
     [root@localhost Liarlee]$ ansible all -m user -a "name=user1 uid=3000 state=present groups=testgrp shell=/bin/zsh"
 ```
-### group模块
+### Group模块
 设置主机的组状态，对组状态进行编辑。
 ```bash
 # 控制所有主机创建组testgrp,设置内容有gid,非系统组
@@ -77,7 +74,7 @@ Ansible默认将所有的操作通过模块的方式定义，这里列举了一�
 # 控制所有主机删除testgrp
     [root@localhost Liarlee]$ ansible all -m group -a "gid=3000 name=testgrp state=absent"
 ```
-### copy模块
+### Copy模块
 从本地复制内容到控制的所有主机,指定源地址和目的地址。
 ```bash
 # 复制本地/etc/fstab到所有主机的/tmp/fstab.ansible,同时设置权限为755
@@ -91,25 +88,25 @@ Ansible默认将所有的操作通过模块的方式定义，这里列举了一�
 # 在所有主机的目录下新建一个空文件
     [root@localhost Liarlee]$ ansible all -m copy -a "content='' dest=/tmp/testfile"
 ```
-### fetch模块
+### Fetch模块
 可从远程主机复制文件到本地。
 ```bash
 # 从某个主机复制文件到本地目录，文件不存在退出
     [root@localhost Liarlee]$ ansible [HOST1] -m fetch -a "src=/etc/fstab dest=/tmp/fstab.host1 fail-on-missing=yes"
 ```
-### command模块
+### Command模块
 command模块不调用shell去解析命令，仅仅读取第一个命令进行简单执行,因此不支持管道传递参数。
 ```bash
 # 在所有主机上执行ifconfig
     [root@localhost Liarlee]$ ansible all -m command -a "ifconfig"
 ```
-### shell模块
+### Shell模块
 使用shell执行传递的命令，支持管道传递参数
 ```bash
 # 执行shell命令修改用户的密码
     [root@localhost Liarlee]$ ansible all -m shell -a "echo PASSWORD | passwd --stdin user1"
 ```
-### file模块
+### File模块
 用于设定文件的状态以及属性
 ```bash
 # 在所有主机上建立目录
@@ -119,7 +116,7 @@ command模块不调用shell去解析命令，仅仅读取第一个命令进行�
 # 在所有主机上设置文件或目录的权限
     [root@localhost Liarlee]$ ansible all -m file -a "path=/tmp/testfile mode=0755"
 ```
-### cron模块
+### Cron模块
 用于设置计划任务
 ```bash
 # 设置每三分钟运行一次同步时间的脚本
@@ -127,13 +124,13 @@ command模块不调用shell去解析命令，仅仅读取第一个命令进行�
 # 删除设置的计划任务
     [root@localhost Liarlee]$ ansible all -m cron -a "miniute=*/3 name=synctime job='usr/sbin/update 172.16.0.1 &> /dev/null'state=absent"
 ```
-### yum模块
+### Yum模块
 用于调用yum进行软件包的安装卸载等，定义主机安装软件包的状态
 ```bash
 # 在所有主机安装nginx
     [root@localhost Liarlee]$ ansible all -m yum -a "name=nginx state=install"
 ```
-### service模块
+### Service模块
 用于定义管理目标主机的服务状态
 ```bash
 # 在所有的主机上启动nginx服务
@@ -147,7 +144,7 @@ command模块不调用shell去解析命令，仅仅读取第一个命令进行�
 # 在所有主机上重启nginx服务
     [root@localhost Liarlee]$ ansible all -m service -a "name=nginx state=restarted"
 ```
-### scripts模块
+### Scripts模块
 用于在所有主机上执行设置好的脚本
 ```bash
 # 在所有的主机上执行test.sh

@@ -6,8 +6,6 @@ tags: Personal
 
 这个月还是发生了不少事情了，面试，换房子，真快。
 
-<!-- more -->
-
 ---
 
 ## 面试题
@@ -19,8 +17,10 @@ tags: Personal
 	```
 2. 数据库问题，增删改查。基本上都没答上来。select语句对数据库内容Where做一个筛选。
 3. 提取b.txt中的所有域名，awk我写的grep。
+```bash
 grep -E -o "www.[[:alpha:]]*.com" ./b.txt | sort | uniq -c | sort -nr
 awk -F / '{print $3}' b.txt | sort | uniq -c | sort -nr
+```
 我写的这个唯一个不好的地方就是不能匹配数字的部分，如果域名有数字就提取不出了。其实中间如果全部用正则也可以，但是正则会特别的长。
 1. nginx的反向代理配置文件是不是能看懂，考了一个upstream模块，考了一个weight的分配，考了一个 proxy_pass模块的调用。
 1. 描述Raid0 ， 1 ，5的区别，但是没让说raid10。
@@ -120,6 +120,3 @@ awk -F / '{print $3}' b.txt | sort | uniq -c | sort -nr
 	
 2. 如何观察网卡的流量及tcpdump的使用
 
-	
-	
-	

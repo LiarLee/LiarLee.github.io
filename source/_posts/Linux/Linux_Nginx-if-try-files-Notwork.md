@@ -42,7 +42,7 @@ server {
 ## 表现
 在访问请求来的同时，判断是不是手机访问，如果是PC使用默认的PC_WEB_ROOT,  如果是手机的话，访问到MOBILE_WEB_ROOT。本身逻辑和使用是没有问题的，但是需要使用try_files字段的时候，会导致PC站点的tryfiles可以正常生效；但是手机不会有tryfile的效果。
 
-## 可行的方式 -  proxypass
+## 可行的方式 - Proxypass
 看到了一篇文章说到nginx的IF语句，可以正常不出奇怪问题的只有`Proxy_pass`,`Rewrite`两个，因为项目无法用rewrite所以选择了Proxypass。
 配置文件分为两个部分，每个网站放在一个Server下。
 ### PC配置文件

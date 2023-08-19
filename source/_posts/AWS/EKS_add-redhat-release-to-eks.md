@@ -5,8 +5,6 @@ date: 2023-07-11 11:29:53
 tags: Kubernetes
 ---
 
-
-
 Copy From zhojiew 的私有仓库文档， 已经经过授权  ~ 
 
 ---
@@ -19,7 +17,7 @@ Copy From zhojiew 的私有仓库文档， 已经经过授权  ~
 
 拉仓库
 
-```shell
+```bash
 cd /home/ec2-suer
 sudo yum install git -y
 git clone https://github.com/awslabs/amazon-eks-ami.git
@@ -27,7 +25,7 @@ git clone https://github.com/awslabs/amazon-eks-ami.git
 
 配置环境变量
 
-```shell
+```ini
 KUBERNETES_VERSION=1.26.4 
 KUBERNETES_BUILD_DATE=2023-05-11 
 BINARY_BUCKET_NAME=amazon-eks
@@ -46,7 +44,7 @@ TEMPLATE_DIR=/home/ec2-user/amazon-eks-ami
 
 复制文件更新内核（可以跳过）
 
-```shell
+```bash
 mkdir -p $WORKING_DIR
 mkdir -p $WORKING_DIR/log-collector-script
 mkdir -p $WORKING_DIR/bin
@@ -71,7 +69,7 @@ sudo reboot
 
 构建的主要逻辑在脚本`install-worker.sh`中
 
-```
+```bash
 # sudo bash $TEMPLATE_DIR/scripts/install-worker.sh
 export AWS_DEFAULT_OUTPUT="json"
 ARCH="amd64"
@@ -118,7 +116,7 @@ sudo mv "${WORKING_DIR}/runtime.slice" /etc/systemd/system/runtime.slice
 ```
 编译安装runc
 
-```shell
+```bash
 # install runc and lock version
 # sudo yum install -y runc-${RUNC_VERSION}
 sudo yum install libseccomp-devel.x86_64 golang -y
@@ -131,7 +129,7 @@ sudo make install
 
 安装containerd
 
-```
+```bash
 # install containerd and lock version
 
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -140,9 +138,9 @@ yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/d
 sudo yum install -y containerd # 1.6.21
 ```
 
-配置icontainerd
+配置containerd
 
-```
+```bash
 sudo mkdir -p /etc/eks/containerd
 sudo mv $WORKING_DIR/containerd-config.toml /etc/eks/containerd/containerd-config.toml
 
@@ -176,7 +174,7 @@ EOF
 ```
 日志轮换配置
 
-```shell
+```bash
 # logrotate
 sudo mv $WORKING_DIR/logrotate-kube-proxy /etc/logrotate.d/kube-proxy
 sudo mv $WORKING_DIR/logrotate.conf /etc/logrotate.conf
@@ -187,7 +185,7 @@ sudo mkdir -p /var/log/journal
 
 下载kubelet和aws-iam-authenticator
 
-```
+```bash
 ## download bin in china region
 S3_DOMAIN="amazonaws.com.cn"
 
@@ -208,7 +206,7 @@ done
 
 继续配置服务
 
-```
+```bash
 # kubernetes
 sudo mkdir -p /etc/kubernetes/manifests
 sudo mkdir -p /var/lib/kubernetes
@@ -237,7 +235,7 @@ sudo systemctl disable kubelet
 
 配置各种脚本
 
-```
+```bash
 sudo mkdir -p /etc/eks
 sudo mv $WORKING_DIR/get-ecr-uri.sh /etc/eks/get-ecr-uri.sh
 sudo chmod +x /etc/eks/get-ecr-uri.sh
@@ -251,7 +249,7 @@ sudo chmod +x /etc/eks/max-pods-calculator.sh
 
 配置ecr助手
 
-```
+```bash
 # ECR CREDENTIAL PROVIDER
 ECR_CREDENTIAL_PROVIDER_BINARY="ecr-credential-provider"
 echo "AWS cli present - using it to copy ${ECR_CREDENTIAL_PROVIDER_BINARY} from s3."
@@ -266,7 +264,7 @@ sudo mv $WORKING_DIR/ecr-credential-provider-config.json /etc/eks/image-credenti
 
 安装ssm（可选）
 
-```
+```bash
 # ssm-agent
 # sudo yum install -y amazon-ssm-agent
 sudo dnf install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
@@ -274,7 +272,7 @@ sudo dnf install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/late
 
 标记发行信息
 
-```shell
+```bash
 # AMI Metadata
 BASE_AMI_ID=$(imds /latest/meta-data/ami-id)
 cat << EOF > "${WORKING_DIR}/release"
@@ -289,7 +287,7 @@ sudo chown -R root:root /etc/eks
 
 额外配置
 
-```shell
+```bash
 # Stuff required by "protectKernelDefaults=true"
 cat << EOF | sudo tee -a /etc/sysctl.d/99-amazon.conf
 vm.overcommit_memory=1
@@ -318,7 +316,7 @@ sudo sed -i \
 
 提前手动拉取pause镜像
 
-```shell
+```bash
 sudo ctr --namespace k8s.io image pull 918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn/eks/pause:3.5 --user AWS:`aws ecr get-login-password --region cn-north-1`
 ```
 
@@ -326,7 +324,7 @@ sudo ctr --namespace k8s.io image pull 918309763551.dkr.ecr.cn-north-1.amazonaws
 
 干脆手动启动kubelet
 
-```shell
+```bash
 /usr/bin/kubelet \
     --config /etc/kubernetes/kubelet/kubelet-config.json \
     --kubeconfig /var/lib/kubelet/kubeconfig \
@@ -342,6 +340,4 @@ sudo ctr --namespace k8s.io image pull 918309763551.dkr.ecr.cn-north-1.amazonaws
 ```
 
 加入成功
-
-![4e5afa0e769dda2fdbd2d6eb024a290](assets/4e5afa0e769dda2fdbd2d6eb024a290.png)
 

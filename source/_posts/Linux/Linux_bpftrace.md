@@ -10,7 +10,7 @@ tags: Linux
 
 ## 记录基础的bpftrace使用方法
 
-单行程序的使用方法； 
+单行程序的使用方法
 
 ```bash
 [root@localhost-live ~]# bpftrace -e 'tracepoint:syscalls:sys_enter_execve { printf("%s %s\n", comm, str(args->filename));}'
@@ -40,8 +40,6 @@ filter:none
 id:742
 enable:0
 ```
-
-
 
 ## 记录尝试追踪tcp状态变化的方法
 

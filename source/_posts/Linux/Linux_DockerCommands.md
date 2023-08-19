@@ -11,7 +11,7 @@ docker基础命令的说明。
 
 ## Docker常用命令的说明
 
-### docker pull   			
+### Docker Pull
 \\ 下载一个Image  
 ```
 [root@localhost ~]# docker pull nginx:lastest  
@@ -22,25 +22,25 @@ Digest: sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884
 Status: Image is up to date for docker.io/nginx:latest
 ```
 
-### docker push 			
+### Docker Push
 \\ 上传一个Image  
 
-### docker run 				
+### Docker Run
 \\ 启动一个Container  
 ```
 [root@localhost ~]# docker run nginx
 ```
 
-### docker kill 			
+### Docker Kill
 \\ 结束一个Container  
 ```
 [root@localhost ~]# docker kill flamboyant_thompson  
 ```
 
-### docker system prune 	
+### Docker System Prune
 \\ 清理Docker的无用文件,包括未使用的容器和不具有Dangling的镜像(不具有启动能力的Image)  
 
-### docker images 			
+### Docker Images
 \\ 列出所有的docker images
 ```
 [root@localhost ~]# docker images
@@ -50,7 +50,7 @@ ONTAINER ID        IMAGE                      COMMAND                  CREATED  
 93431e5f2f66        achabill/lh-mysql:latest   "docker-entrypoint..."   3 hours ago         Up 3 hours          0.0.0.0:3308->3306/tcp   brave_mcclintock
 ```
 
-### docker search 			
+### Docker search
 \\ 搜索特定名称的image  
 ```
 [root@localhost ~]# docker search nginx
@@ -118,7 +118,7 @@ redhat.com   registry.access.redhat.com/rhscl/nginx-16-rhel7                  Ng
 redhat.com   registry.access.redhat.com/rhscl/nginx-18-rhel7                  Nginx 1.8 server and a reverse proxy server     0                    
 ```
 
-### docker ps 				
+### Docker Ps
 \\ 列出docker正在运行的Container  
 ```
 [root@localhost ~]# docker ps 
@@ -128,7 +128,7 @@ CONTAINER ID        IMAGE                      COMMAND                  CREATED 
 93431e5f2f66        achabill/lh-mysql:latest   "docker-entrypoint..."   3 hours ago         Up 3 hours          0.0.0.0:3308->3306/tcp   brave_mcclintock
 ```
 
-### docker container ls 	
+### Docker Container Ls
 \\ 列出所有存在的Container,包括为运行的和未使用的  
 ```
 [root@localhost ~]# docker container ls
@@ -138,32 +138,32 @@ CONTAINER ID        IMAGE                      COMMAND                  CREATED 
 93431e5f2f66        achabill/lh-mysql:latest   "docker-entrypoint..."   3 hours ago         Up 3 hours          0.0.0.0:3308->3306/tcp   brave_mcclintock
 ```
 
-### docker run -dt  		
+### Docker Run -dt
 \\ 运行一个image,给予一个Terminal,放入后台,返回一个ContainerID  
 ```
 [root@localhost ~]# docker run -dt -p 80:80 nginx
 1cca834eb80cd8467dec6d103bf9072adfb55d8cfb2fdc257af548dc25917868
 ```
 
-### docker run -it 			
+### Docker Run -it
 \\ 运行一个image,给予一个Terminal,直接进入Container  
 ```
 [root@localhost ~]# docker run -it -p 80:80 nginx
 ```
 
-### docker run 				
+### Docker Run
 \\ 运行一个image,如果本地没有自动到docker仓库检索  
 ```
 [root@localhost ~]# docker run nginx
 ```
 
-### docker run -p   		
+### Docker Run -p
 \\ 运行一个image,指定port的映射关系  
 ```
 [root@localhost ~]# docker run -p 80:80 nginx 
 ```
 
-### docker attach 			
+### Docker Attach
 \\ 进入到某一个Container内部,如果没有shell,无法操作, 输出一片空白  
 ```
 [root@localhost ~]# docker attach flamboyant_thompson
