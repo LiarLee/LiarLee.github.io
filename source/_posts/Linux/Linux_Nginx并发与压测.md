@@ -1,10 +1,11 @@
 ---
 title: Nginx Performance Test
 date: 2022-04-19 17:45:39
-tags: Linux
 category: Linux
+tags: Nginx
 ---
 
+写在最前面， 这个问题还在研究中， 我目前还没有合适的模型用来研究这个问题， Pending....
 ## Nginx 性能测试与压力计算
 
 使用al2023  + 默认的yum仓库软件版本， 具体信息记录如下： 
@@ -50,7 +51,7 @@ category: Linux
 
 5. 尝试给点压力， 做个基准测试。
 
-### 测试1  单线程计算QPS
+### 测试1 单线程计算QPS
 
 > 公式：  1000ms/RT = QPS 
 >
@@ -60,9 +61,7 @@ category: Linux
 
 获取 RT，HTTP请求从发出到响应的时间 ： 
 
-
 ![2023-04-27_10-38.png](https://s2.loli.net/2023/04/27/pf2Z5erTzcayPFJ.png)
-
 
 基于当前获取到的RT就可以计算出单线程的QPS ： 
 
@@ -99,6 +98,4 @@ Transfer/sec:      1.13MB
 所以最大的线程数量是变化的， 与CPU time 相关 或者说 与RT相关， 对于一些特定的请求，控制了大部分变量的场景下， 可以计算一个最佳的线程数量。 计算公式： 
 
 > 最佳线程数： CPU TIme + Wait Time / CPU Time = 2 + 42 / 2 = 22  
-
-
 

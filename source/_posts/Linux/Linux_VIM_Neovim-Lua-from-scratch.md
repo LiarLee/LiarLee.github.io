@@ -1,15 +1,13 @@
 ---
 title: Neovim 全 Lua 配置 
-category: Linux
 date: 2023-08-05 00:36:04
-tags: VIM
+category: Linux
+tags: VIM, Linux
 ---
 
 写这个是为了记录一下我新的VIM配置和VIM的快捷键，看起来lua的版本比之前的scripts要好的多， 无论是使用的方式还是启动的速度， 都比之前快。 
 
-
-
-## 我的需求： 
+## 我的需求：
 
 - 打开代码， 会显示代码高亮。 
 - vim可以默认满足的要求， 尽可能少的使用鼠标。
@@ -17,8 +15,6 @@ tags: VIM
 - 主题， 目前使用的是 catppuccin-frappe
 - Markdown Preview （ Pending....
 - 代码补全（Already Done.
-
-
 
 ## 我的快捷键清单：
 
@@ -55,7 +51,6 @@ tags: VIM
 
 其他的还在配置和学习中， 先这样把。。 之前用的功能不太多， 有时间继续看。。。。
 
-
-## About NerdFonts. 
+## About NerdFonts.
 Nerd 类型的字体实际代表了 带有Icon字符集的字体。
 https://www.nerdfonts.com/#home

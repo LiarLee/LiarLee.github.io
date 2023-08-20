@@ -1,13 +1,11 @@
 ---
-title: 命令碎片 - NMI crash and dracut add driver
-category: Linux
+title: 发送一个NMI unknown 时间给操作系统
 date: 2023-06-28 17:12:22
-tags: Linux
+category: Linux
+tags: Linux, EC2 
 ---
 
 ## 在ec2触发linux的crash
-
-
 
 发送一个诊断请求给EC2， 触发os本身NMI Unknown事件，这个时间会触发Kdump记录当时的现场。
 
@@ -41,7 +39,7 @@ drwxr-xr-x. 2 root root 67 Jun  9 09:39 127.0.0.1-2023-06-09-09:39:56
 
 主要的问题是怎么解读这个结果， 目前我的理解是 找大佬。
 
-## Other
+## Cscope 查看内核源代码
 
 ```bash
 # 下载源代码
@@ -57,7 +55,7 @@ make tags ARCH=x86
 cscope -d
 ```
 
-## dracut的使用和命令
+## Dracut的使用和命令
 
 ```bash
 # 添加驱动程序到ramfs
@@ -66,7 +64,7 @@ cscope -d
 ]$ lsinitrd /boot/initramfs-$(uname -r).img | grep -E "nvme|ena"
 ```
 
-### 安全软件引起的用户空间进程失去响应： 
+## 安全软件引起的用户空间进程失去响应：
 
 Redhat关于这个问题的文档说明： 
 
@@ -98,7 +96,7 @@ drwxr-xr-x. 2 root root 67 Aug 11 20:56 badstop
 drwxr-xr-x. 2 root root 41 Aug 11 20:46 crash
 ```
 
-### grubby 命令简单的用法
+## Grubby 命令简单的用法
 
 设置内核参数： 
 

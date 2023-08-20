@@ -1,8 +1,8 @@
 ---
 title: serviceAccount 获取 Token 以及权限的方式 
-category: Linux
+category: Kubernetes
 date: 2023-08-05 23:42:22
-tags: Kubernetes
+tags: Kubernetes, EKS
 ---
 
 手动获取Token 并发送请求给容器接口。
@@ -18,8 +18,6 @@ export TOKEN="Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImE3N2JhOGMwY2Fj
 
 curl -k -H "$TOKEN" https://127.0.0.1:10250/metrics
 ```
-
-
 
 Kubernetes 创建一个DEBUG 容器来查看容器内部的信息： 
 

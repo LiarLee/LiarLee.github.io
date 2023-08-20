@@ -1,14 +1,11 @@
 ---
 title: K8S将loop-lvm改为direct-lvm说明
 date: 2019-09-24 11:10:36
+categories: Kubernetes
 tags: Kubernetes
-category: Linux
 ---
 
 对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。
-
-<!-- more -->
-
 ## k8s的几种不同的存储驱动
 1. AUFS - 这是一个经过时间检验的存储驱动
 2. DeviceMapper - Redhat系默认的驱动，有loop和direct两种不同配置
@@ -21,7 +18,7 @@ category: Linux
 > [Docker引擎 - 选择存储驱动](https://www.jianshu.com/p/6bf1bc011ade)  
 > [Docker五种存储驱动原理及应用场景和性能测试对比](http://dockone.io/article/1513)  
 > [Docker系统八：Docker的存储驱动](https://www.cnblogs.com/Terry-Wu/p/7471476.html) 
-## loop-lvm
+## Loop-lvm
 这是docker默认安装之后的选择，因为这样可以out-of-box，但是据说稳定性不佳，我没遇到稳定性的问题，但是遇到了IO高导致的整个虚拟机运行缓慢。  
 Loop-LVM其实使用了linux中的使用loop设备
 我之前安装的一套k8s默认是使用overlay2的存储，可能是内核的版本过低导致无法使用其他的存储驱动，所以我觉得默认使用了loop-lvm。
@@ -29,7 +26,7 @@ Loop-LVM其实使用了linux中的使用loop设备
 > loop-lvm的工作模式是，默认在/var/lib/docker/devicemapper/devicemapper/目录下生成data&metadata两个**稀疏文件**（我目前还不知道什么叫做稀疏文件），并将两个文件挂载为loop设备做为块设备来使用。
 按照这个说法的话确实如果直接对裸设备的想能和稳定性都应该更强。所以下面可以动手啦~
 
-## direct-lvm
+## Direct-lvm
 这里直接放一个官方文档的链接好了。
 [Device-Mapper-driver](https://docs.docker.com/storage/storagedriver/device-mapper-driver/)
 ### 切换loop-lvm到direct-lvm

@@ -1,15 +1,13 @@
 ---
 title: IO重定向笔记
 date: 2019-06-25 15:43:33
-tags: Linux
 categories: Linux
+tags: Linux, IO
 ---
 
 输出重定向部分的复习笔记  
 
-<!-- more -->  
-
-## 标准输入输出  
+## 标准输入输出
 ### 文件描述符的概念
 可以通过命令查看以及绑定文件描述符FD。  
 ```
@@ -35,7 +33,7 @@ Linux系统提供的IO设备，共有三种：
     [CMD] [lOPERATION_SYMBOL] [FILENAME]  
     命令    操作符号    文件名
 
-### 操作符号包括： 
+### 操作符号包括：
 - \> 把STDOUT重定向到文件 
 - 2> 把STDERR重定向到文件
 - &> 把所有结果输出重定向到文件

@@ -1,8 +1,8 @@
 ---
 title: 通过systemd管理软件和服务
 date: 2019-09-17 14:30:30
-tags: Linux
 categories: Linux
+tags: Linux
 ---
 
 通过systemctl 来管理系统的服务和软件，但是如果是自己安装的软件就没有办法使用了。其实是可以自己定义systemd的管理脚本的，类似与之前的SysV风格的管理脚本。
@@ -17,7 +17,7 @@ Systemd默认的文件配置路径有：
 	- /run/systemd/system/*
 	- /usr/lib/systemd/system/*
 
-## Systemd Unit File 的模板 
+## Systemd Unit File 的模板
 有这样的几个模块：
 1. [Unit]
 2. [Service]

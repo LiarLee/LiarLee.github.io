@@ -1,6 +1,6 @@
 ---
 title: rime的配置
-tags: RIME, InputMethod, Linux, Windows
+tags: RIME, Linux, Windows
 category: Other
 date: 2023-08-13 10:39:06
 ---

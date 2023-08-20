@@ -1,20 +1,14 @@
 ---
 title: Linux内存管理笔记
-category: Linux
 date: 2023-07-11 14:37:43
-tags: Linux
-
+category: Linux
+tags: Linux, Memory
 ---
 
-
-
 ---
-
 ## 内存管理部分的笔记
 
-### crash命令的使用
-
-
+### Crash命令的使用
 
 使用这个命令需要有debuginfo 以及kernel debug 的数据包， 同时可能需要gdb。 
 
@@ -146,10 +140,6 @@ rd: invalid user virtual address: 55d54879d000  type: "64-bit UVADDR"
 
 这个报错不是立刻发生的，可能确实会溢出一部分。
 
-
-
 匿名页面 实际上是 mmap with MAP_ANONYMOUS flag映射出来的虚拟内存地址， 当需要第一次去写匿名页面的时候， 会将物理内存的地址映射到虚拟内存并将其中填0.
-
-
 
 overcommit 0 可以所有的地址，   1 无限制，虚拟内存没有限制， 2  按照一定的比例进行计算， 最终的结果。 

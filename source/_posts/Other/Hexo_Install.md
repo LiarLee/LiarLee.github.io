@@ -1,14 +1,12 @@
 ---
 title: Hexo+Github建立个人博客记录
 date: 2017-12-27 16:07:34
-tags: Hexo
 categories: Linux
+tags: Linux, Hexo
 ---
 
 建立Blog，记录过程  
 所有的配置都是在[Fedora 27 Workstation](https://getfedora.org/en/workstation/)版本下进行，Windows配置环境恶心了我很久所以不做介绍。
-
-<!-- more-->
 
 # Hexo部署环境
 Hexo运行在Linux环境中的配置及其简单，只需要确认系统中安装了git和Nodejs就好，在Fedora27中已经默认有Git软件包，如果需要安装git使用`dnf install -y git`就好。目前我们只需要添加nodejs就可以了，准备工作开始～  

@@ -1,14 +1,12 @@
 ---
 title: Fio 命令使用的说明
 date: 2022-04-19 17:45:39
-tags: Linux
 category: Linux
+tags: Linux, EBS, IO 
 ---
 
 Fio 一些测试和思考， fio ，blktrace等等。
-
-### github地址
-
+### Github地址
   https://github.com/axboe/fio
   https://tobert.github.io/post/2014-04-17-fio-output-explained.html
   http://xiaqunfeng.cc/2017/07/12/fio-test-ceph/
@@ -48,7 +46,7 @@ rw=randrw
 ; -- end job file --
 ```
 
-## 关于硬盘性能 iostat
+## 关于硬盘性能 Iostat
 首先， 在man iostat的时候已经明确的提示了，iostat 的 svctm （也就是硬盘的servicetime）是一个不准确的值， 会在后续的版本中移除， 因为他所依赖的数据来源（/proc/diskstats）中，是从Block Level 出发来进行计算的， 所以svctm其实并不是IO控制器所需要的准确时间， 那么出现了两个问题， 我们能观察的数据是那个？ 以及背后的含义是什么?  
 
 ### 调度算法 和 读写请求的合并
@@ -59,7 +57,7 @@ iostat中的await一列， 表示请求的等待时间，正常的情况下应�
 await 每个I/O的平均耗时是用await表示(blktrace command results: Q2C – 整个IO请求所消耗的时间(Q2I + I2D + D2C = Q2C)，相当于iostat的await。)，包括了 IO请求在Kernel中的等待时间 + IO请求从内核出发处理完成回到内核的时间，也就是IO time + Service Time。  
 await 一般情况下应该小于10ms ， 如果没有或者比较大的情况下 ， 应该考虑负载的类型， 来衡量硬盘的负载水平。  
 
-### blktrace
+### Blktrace
 一个I/O请求进入block layer之后，可能会经历下面的过程：
 
     Q Remap: 可能被DM(Device Mapper)或MD(Multiple Device, Software RAID) remap到其它设备
@@ -82,7 +80,6 @@ await 一般情况下应该小于10ms ， 如果没有或者比较大的情况�
 259,2    0       11     0.001689880  7135  C   W 757368 + 288 [0]
 # 主，从设备号 ， 起始Sector 为0 ， 写几个， 时间 ， pid ， 状态 ， R/W ， 未知
 ```
-
 
 保留blktrace的结果为bin文件
 ```r
@@ -110,7 +107,6 @@ root@ip-172-31-11-235:/home/ec2-user|⇒  blkparse -i nvme0n1p1 -d nvme0n1p1.blk
 root@ip-172-31-11-235:/home/ec2-user|⇒  btt -i nvme0n1p1.blktrace.bin
 ```
 
-
 ## 历史背景
 > mdadm 已经不怎么更新和开发了
 > 默认推荐使用LVM
@@ -118,12 +114,11 @@ root@ip-172-31-11-235:/home/ec2-user|⇒  btt -i nvme0n1p1.blktrace.bin
 >
 > 其实也是可以使用btrfs ， 这个测试的结果是 btrfs 的性能确实是比LVM更好。
 
-
 ## 相关的问题
 如果说有一个性能的问题， IOPS达不到指定的数值， 思路？ 
-首先查看队列深度是不是足够，看svctm时间长不长，看队列的长度 
+首先查看队列深度是不是足够，看svctm时间长不长，看队列长度 
 
-## iostat命令的理解
+## Iostat命令的理解
 iostat -xkt 1
 rrqm/s wrqm/s  - 读写请求的合并数量
 r/s w/s - 读写请求数量
@@ -133,9 +128,7 @@ util - 时间度量 ， 时间周期之内进行IO操作所占的比例。例如
 
 一个例子 ， 如果采样的周期为1s， 那么采样的范围之内 ， 前面的0.5秒有执行IO的操作， 后面的0.5秒没有执行任何的操作， 那么 最后 Util 现在的结果就是50% 。avgrq也是一直平均值， 在采样周期之内如果前后的状况不一致 也会进行平均。
 
-一般情况下这个参数是准确的，但是大部分的性能问题都是取决数值的取样周期的。
-
-
+一般情况下这个参数是准确的，但是大部分指标都是取决于监控取样周期的。
 
 操作系统默认输出的块大小是 ： 256 ， 参数可见 ： 
 ╰─# cat /sys/block/sda/queue/max_sectors_kb
@@ -144,8 +137,4 @@ util - 时间度量 ， 时间周期之内进行IO操作所占的比例。例如
 max_segments表示设备能够允许的最大段的数目。    -- 这应该是一个内存或者buffer的分段指标。 （待定）
 max_sectors_kb表示设备允许的最大请求大小。      -- 可改 。 
 max_hw_sectors_kb表示单个请求所能处理的最大KB（硬约束） -- 这个是上一个参数的Limit。  
-
-
-
-
 

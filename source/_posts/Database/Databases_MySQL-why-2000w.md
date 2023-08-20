@@ -1,13 +1,13 @@
 ---
 title: 数据库单表的测试
-category: Linux
+category: Database
 date: 2023-05-19 18:10:52
-tags: MySQL
+tags: MySQL, Database
 ---
 
 基于这个问题的测试[为什么MySQL单表不要超过2000w行？](https://articles.zsxq.com/id_szzdrtss5t7o.html)
 
-## 测试过程： 
+## 测试过程：
 
 ```
 CREATE TABLE test(
@@ -144,8 +144,6 @@ Max_data_length: 0
 1 row in set (0.00 sec)
 ```
 
-
-
 ---
 
 ## 换个方案（ 从大佬那边伸手拿来的
@@ -235,10 +233,6 @@ hexdump -s 49216 -n 10 ./tt1.ibd
 create table tt2 as select * from tt1;
 ```
 
-
-
-
-
 > 对于MySQL的内存使用，在数据库启动后，不会立即将buffer pool对应的内存占用，而是随着使用逐步占用。
 >
 > 在5月19日看到您的实例有连接数达到1200，并持续了一段时间，内存随之下降。您可以通过查看 Innodb_buffer_pool_size 的值来确定 buffer pool 的最大值。
@@ -258,8 +252,6 @@ create table tt2 as select * from tt1;
 >
 > 因此目前可用内存状况符合预期，如果您希望回收 MySQL 占用的内存，可以考虑重启数据库，但之后业务量较大时，还会重新占用这些内存。
 
-
-
 ### Mysql80重置密码
 
 ```mysql
@@ -275,7 +267,7 @@ rename user 'root'@'localhost'  to 'root'@'%';
 select user,host from mysql.user;
 ```
 
-### MySQLVersion 8.0 修改密码策略： 
+### MySQLVersion 8.0 修改密码策略：
 
 ```
 mysql -u wordpress -p -h mysql.liarlee.site
@@ -336,6 +328,4 @@ ERROR 1133 (42000): Can't find any matching row in the user table
 mysql> alter user 'root'@'localhost' identified by '123123';
 Query OK, 0 rows affected (0.00 sec)
 ```
-
-
 

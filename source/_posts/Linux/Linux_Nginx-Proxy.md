@@ -1,14 +1,11 @@
 ---
 title: Nginx反向代理笔记
 date: 2019-07-13 17:50:39
-tags: Nginx
 categories: Linux
+tags: Nginx
 ---
 
 Nginx的反向代理笔记。
-
-<!-- more -->
-
 ## Nginx程序的主要功能
 1. load configuration
 1. launch workers
@@ -37,7 +34,7 @@ Nginx需要支持相关的协议需要有相关协议的对应模块
     从远程服务器取得数据进行nginx服务器本地的缓存，然后响应给客户端.
 可修改或具有修改意义的报文有两种：第一种是发到后面处理服务器的报文；第二种是发给客户端的响应报文。
 
-## Nginx的代理模块 
+## Nginx的代理模块
 1. ngx_http_proxy_module -- Nginx的反向代理模块官方说明：[Module ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)  
     添加新的反向代理服务配置文件：
     vim /etc/nginx/conf.d/proxy.conf

@@ -1,13 +1,11 @@
 ---
 title: Java连接数据库报错No subject alternative names present
 date: 2020-11-16 21:28:41
-tags: Linux, JAVA
-categories: Linux
+tags: MongoDB, JAVA
+categories: Database
 ---
 
 配置监控的时候需要配置和获取MongoDB的信息，使用华为云的MongoDBPaaS服务，如果开启了SSL就无法正常连接。
-
-<!-- more -->
 
 报错如下： 
 

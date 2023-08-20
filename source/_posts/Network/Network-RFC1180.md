@@ -13,7 +13,7 @@ http://arthurchiao.art/blog/rfc1180-a-tcp-ip-tutorial-zh/
 
 ---
 
-Tuning initcwnd for optimum performance: 
+Tuning initcwnd for optimum Performance: 
 
 https://www.cdnplanet.com/blog/tune-tcp-initcwnd-for-optimum-performance/
 

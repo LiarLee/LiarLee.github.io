@@ -1,11 +1,10 @@
 ---
 title: Ceph Cluster 01 - Installation
 date: 2021-08-21 23:09:06
-tags: Ceph
 categories: Linux
+tags: Ceph, IO
 ---
-
-Ceph Installation Record.
+Ceph 的学习笔记和记录。
 # 开始
 ## 部署信息
 OS Version: Fedora 34 Server
@@ -39,7 +38,7 @@ vim /etc/hosts
 [root@ceph01 ~]$ vim /etc/config/selinux # change it to disabled
 ```
 
-## CONFIG Dnf Repo
+### CONFIG Dnf Repo
 ```bash
 # config docker
 [root@ceph01 ~]$ wget -O /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -51,7 +50,7 @@ vim /etc/hosts
 [root@ceph01 ~]$ dnf install cephadm -y
 ```
 
-## INSTALL Docker
+### INSTALL Docker
 ```bash
 [root@ceph01 ~]$ sudo dnf remove docker \
                   docker-client \
@@ -75,9 +74,9 @@ vim /etc/hosts
   Environment="HTTPS_PROXY=http://192.168.31.199:7890/"
 ```
 
-# INSTALL CEPH
+## INSTALL CEPH
 Cephadm tools were default in Fedora Repo, No need to change the repo to tsinghua or aliyun. Just install. WOW ~ Fedora YYDS.
-## BOOTSTRAP Ceph
+### 启动一个ceph集群
 ```bash
 [root@ceph01 ~]$ cephadm bootstrap --mon-ip 192.168.122.121 --allow-fqdn-hostname
 ```
@@ -95,7 +94,7 @@ You can access the Ceph CLI with:
 	sudo /usr/sbin/cephadm shell --fsid e8997974-029f-11ec-a59a-525400c06f36 -c /etc/ceph/ceph.conf -k /etc/ceph/ceph.client.admin.keyring
 ```
 
-## USE Ceph Shell
+### 使用 Ceph Shell 命令来管理集群节点
 ```bash
 # temprary use
 [root@ceph01 ~]$ cephadm shell -- ceph -s
@@ -118,8 +117,8 @@ You can access the Ceph CLI with:
 [ceph: root@ceph01 ceph]$ ssh-copy-id -f -i /etc/ceph/ceph.pub root@192.168.122.124
 ```
 
-# MAINTAIN Hosts
-## ADD Hosts
+## 维护集群
+### ADD Hosts
 ```bash
 [ceph: root@ceph01 ceph]$ ceph orch host add ceph02.liarlee.site 192.168.122.122
 [ceph: root@ceph01 ceph]$ ceph orch host add ceph03.liarlee.site 192.168.122.123
@@ -129,7 +128,7 @@ You can access the Ceph CLI with:
 [ceph: root@ceph01 /]$ ceph config set mon public_network 192.168.122.0/24
 ```
 
-## ADD Osd
+### ADD Osd
 ```bash
 # auto-detect available devices (need time to sync the status 1 by 1)
 # NOTE: Strangely enough, the command automatically recognizes all devices, including the ZRAM!  QAQ.....
@@ -188,7 +187,7 @@ OSD_ID  HOST                 STATE                    PG_COUNT  REPLACE  FORCE  
 [ceph: root@ceph01 /]$ ceph orch apply osd --all-available-devices --unmanaged=false
 ```
 
-## MANAGE Services
+### MANAGE 服务
 ```shell
 # reduce mon instance to 3
 [ceph: root@ceph01 /]$ ceph orch ls mon
@@ -207,7 +206,7 @@ Scheduled to redeploy mon.ceph02 on host 'ceph02.liarlee.site'
 Scheduled to redeploy mon.ceph03 on host 'ceph03.liarlee.site'
 ```
 
-# COMPLETED
+## 完成
 ```bash
 [ceph: root@ceph01 /]$ ceph orch ls
 NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT
@@ -239,7 +238,7 @@ ID  HOST                  USED  AVAIL  WR OPS  WR DATA  RD OPS  RD DATA  STATE
 11  ceph03.liarlee.site  7172k  19.9G      0        0       0        0   exists,up
 ```
 
-# IMAGE
+## 成果截图
 
 ![2021-08-22_12-05_2.png](https://i.loli.net/2021/08/22/qViGPvDdZ8wco6U.png)
 ![2021-08-22_12-05_1.png](https://i.loli.net/2021/08/22/d5RtTisZ9X86uKF.png)

@@ -1,14 +1,11 @@
 ---
 title: Gnome快捷键
 date: 2019-09-19 16:02:35
-tags: Linux
 categories: Linux
+tags: Linux
 ---
 
 Gnome桌面环境的快捷键。
-
-<!-- more -->
-
 ## 快速启动一个应用
 - Super 
 - Hot Corner
@@ -18,7 +15,7 @@ Gnome桌面环境的快捷键。
 - Alt+F2
 最常用的就是重启Gnome环境，通过Alt+F2 调出的命令窗口，使用r命令重启Gnome。
 
-## 应用的切换 
+## 应用的切换
 - Super+TAB
 使用Super+TAB可以在应用之间快速切换。如果Cover-alt-tab的插件，还有三维动画。
 - Super+`
@@ -51,7 +48,6 @@ Gnome桌面环境的快捷键。
   截取选择的区域，保存到文件。
 
 **NOTE： 最方便的就是，使用Ctrl+Shift PrintScreen和Ctrl+PrintScreen 可以直接选取的区域截图，将截图保存在剪贴板，截图完成直接粘贴即可。**
-
 
 ## 最大化最小化和分屏
 - Super+UP

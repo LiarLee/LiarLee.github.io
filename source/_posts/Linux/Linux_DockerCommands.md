@@ -1,8 +1,8 @@
 ---
 title: Docker基本命令说明
 date: 2018-05-28 12:38:06
+categories: Docker
 tags: Docker
-categories: Linux
 ---
 
 docker基础命令的说明。

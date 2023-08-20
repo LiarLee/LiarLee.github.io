@@ -1,8 +1,8 @@
 ---
 title: bpftrace 使用tracepoint 追踪 tcp 状态变化
-category: Linux
 date: 2023-03-19 00:08:52
-tags: Linux
+category: Linux
+tags: Linux, BPF
 ---
 ## 入门教程
 

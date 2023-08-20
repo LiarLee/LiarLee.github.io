@@ -1,12 +1,10 @@
 ---
 title: 关于内核Config中的参数 CONFIG_NO_HZ
 date: 2022-04-19 17:45:39
-tags: Kubernetes
 category: Linux
+tags: Linux
 ---
 关于Tick， Tickless的研究。
-
-<!-- more -->
 
 > https://www.kernel.org/doc/html/latest/timers/no_hz.html
 

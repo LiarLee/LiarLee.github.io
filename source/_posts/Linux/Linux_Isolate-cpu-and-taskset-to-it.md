@@ -1,7 +1,8 @@
 ---
 title: 完全隔离CPU的方法 
 date: 2022-10-11 13:05:26
-tags: Linux
+categories: Linux
+tags: Linux, CPU
 ---
 
 完全隔离CPU， 并排空CPU所有的进程，分配指定的任务到CPU上。

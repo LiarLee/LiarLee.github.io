@@ -1,16 +1,13 @@
 ---
 title: 如何配置kubelet的节点自动回收资源
 date: 2022-04-19 17:45:39
-tags: Kubernetes
-category: Linux
+category: Kubernetes
+tags: Kubernetes, EKS
 ---
-
 
 # 配置Node节点按照磁盘阈值回收空间
 
 > https://aws.amazon.com/cn/premiumsupport/knowledge-center/eks-worker-nodes-image-cache/
-
-
 
 <!-- more -->
 

@@ -2,12 +2,10 @@
 title: Kubernetes day1
 date: 2021-09-11 10:41:37
 tags: Kubernetes
-categories: Linux
+categories: Kubernetes
 ---
 
 [云原生的定义](https://github.com/cncf/toc/blob/main/DEFINITION.md#%E4%B8%AD%E6%96%87%E7%89%88%E6%9C%AC)
-
-<!-- more -->
 
 ## 云原生一些概念
 ### 十二因素应用

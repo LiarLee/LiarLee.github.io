@@ -1,13 +1,11 @@
 ---
 title: Kubernetes集群的学习笔记(5)
 date: 2019-10-18 11:48:48
+categories: Kubernetes
 tags: Kubernetes
-categories: Linux
 ---
 
 K8S集群的存储卷笔记。
-
-<!-- more -->
 
 整体的存储卷调用结构：
 
@@ -35,7 +33,7 @@ PVC属于名称空间级别，PV属于集群资源。
 
 PVC被定义在Pods的配置中，一个 PVC可以被多个Pod同时访问。
 
-## PV 
+## PV
 
 存储类： Gold Storage Class, Sliver Storage Class, Bronze Stroage Class.三个不同级别的存储类。存储类直接接受PVC的内容并对PVC定义的容量等信息进行分配。
 
@@ -107,7 +105,7 @@ configmap是明文资源，secret是base64的编码资源，因此安全程度�
    2. 通过EntryPoint脚本预处理环境变量作为配置问文件中的信息
 5. docker config命令行方式
 
-## configmap的创建
+## Configmap的创建
 
 configmap为了将配置文件中镜像中解耦，configmap可以直接注入到容器中直接使用，注入的方式可以使用存储卷，或者使用EntryPoint来处理。
 
@@ -305,32 +303,4 @@ spec:
 Pod的dns命名规则：
 
 Pod_Name+Service_Name+NameSpace_Name.svc.cluster.local
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

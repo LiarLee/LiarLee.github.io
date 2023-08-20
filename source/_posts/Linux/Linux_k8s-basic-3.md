@@ -1,8 +1,8 @@
 ---
 title: Kubernetes集群的学习笔记(3)
 date: 2019-09-24 17:30:50
+categories: Kubernetes
 tags: Kubernetes
-categories: Linux
 ---
 
 k8s笔记YAML格式定义资源。
@@ -10,24 +10,24 @@ k8s笔记YAML格式定义资源。
 <!-- more -->
 
 # 通过YAML定义Pods
-## apiVersion 
+## apiVersion
 kubectl api-versions
 查看所有可用的组名
 apiVersion:[Group/Version]
-## kind 资源类别 
-## metadata 元数据
+## Kind 资源类别
+## Metadata 元数据
 1. name: uniq Key
 2. namespace
 3. labels Key-Value
    1. annotations 
    2. SelfLink: 资源引用的链接API格式：/api/group/verison/namespaces/namespace/type/name
-## spec
+## Spec
 `kubectl explain pods.spec`  
 可使用命令查看：定义用户期望的目标状态。
-## status 
+## Status
 自动维护即可 ，不需要更改。
 
-# 简单的YAML实例 
+# 简单的YAML实例
 ```
 apiVersion: v1 
 kind: Pod
@@ -44,7 +44,7 @@ spec:
       image: php-fpm
 ```
 
-## 对Pods进行标签操作 
+## 对Pods进行标签操作
 1. 查看标签
    kubectl get pods --show-labels
    kubectl get pods -l LABEL_NAME --show-labels
@@ -60,7 +60,7 @@ spec:
 
    许多资源支持内嵌字段，matchLabels(直接给定键值) ， matchExporession(基于给出的表达式进行选择)。常用的操作符号，In ; Notin ； Exists；NotExists；
 
-## Pod的生命周期 
+## Pod的生命周期
 - 初始化容器init c(初始化主容器的执行环境)，可以有多个，串行执行，直到最后一个init c执行结束。
 - main c在所有的初始化完成之后开始启动，在容器的运行时间与main c的执行时间基本一致；main c刚刚启动之后，可以手动执行Poststart；结束之前可以进行Prestop；
 - 在Pod运行的过程中，提供Pod的Liveness probe； 提供Pod的Readiness probe。

@@ -1,13 +1,11 @@
 ---
 title: Kubernetes集群的学习笔记(2)
 date: 2019-07-23 21:00:03
+categories: Kubernetes
 tags: Kubernetes
-categories: Linux
 ---
 
 Kubernetes的基本使用命令。
-
-<!-- more -->
 
 对控制命令进行分类整理：
 # 查看k8s整体状态的命令

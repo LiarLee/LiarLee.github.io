@@ -1,8 +1,8 @@
 ---
 title: RDS QPS 下降引发的网络流控分析记录
 date: 2023-05-09 01:34:00
-tags: Linux
 categories: Linux
+tags: Linux, Database, Kernel, Network
 ---
 
 ### Topic 1 现象
@@ -92,7 +92,7 @@ t系列的实例都是突增类型， 可以允许一定的时间使用超过实
 
    引用一个描述比较清晰的中文文章，其中也介绍了常见的几种**拥塞控制算法**的模式， 帮我大概理解了下网络的部分： 
 
-   >TCP 连接建立后先经过 Slow Start 阶段，每收到一个 ACK，CWND 翻倍，数据发送率以指数形式增长，等出现丢包，或达到 ssthresh，或到达接收方 RWND 限制后进入 Congestion Avoidance 阶段。[[1]](https://zhuanlan.zhihu.com/p/142618130?utm_id=0)
+   >TCP 连接建立后先经过 Slow Start 阶段，每收到一个 ACK，CWND 翻倍，数据发送率以指数形式增长，等出现丢包，或达到 ssthresh，或到达接收方 RWND 限制后进入 Congestion Avoidance 阶段。[1](https://zhuanlan.zhihu.com/p/142618130?utm_id=0)
 
    从另一个文章中找到了如下的一个公式： 
 
@@ -106,21 +106,19 @@ t系列的实例都是突增类型， 可以允许一定的时间使用超过实
    >     131072 / 0.1 = 1310720 bits/s
    >     1310720 bits/s = 1310720 / 1000000 = 1.31 Mbps
    >
-   > 因此，无论发送端和接收端的实际带宽为多大，当窗口大小为 16 KB 时，传输速率最大只能为 1.31 Mbps 。[[2]](https://blog.csdn.net/lingshengxiyou/article/details/130210354)
+   > 因此，无论发送端和接收端的实际带宽为多大，当窗口大小为 16 KB 时，传输速率最大只能为 1.31 Mbps 。[2](https://blog.csdn.net/lingshengxiyou/article/details/130210354)
 
    可以看到上面的公式中的第一个， 在计算的时候会在cwnd， rwnd 两个指标中**选取最小**的生效， 那么基于上面的变动， 我们已经把wmem ， rmem 都改到了较大的值， 那么这个时候较小 的就是 cwnd 了， 这个值增加不上去就无法充分的利用带宽。
 
    那么现在的问题变成了为什么 cwnd 无法继续增长？
 
-   > Cubic 在 BIC 的基础上，一个是通过三次函数去平滑 CWND 增长曲线，让它在接近上一个  CWND 最大值时保持的时间更长一些，再有就是让 CWND 的增长和 RTT 长短无关，即不是每次 ACK 后就去增大 CWND，而是让  CWND 增长的三次函数跟时间相关，不管 RTT 多大，一定时间后 CWND 一定增长到某个值，从而让网络更公平，RTT 小的连接不能挤占  RTT 大的连接的资源。[[1]](https://zhuanlan.zhihu.com/p/142618130?utm_id=0)
+   > Cubic 在 BIC 的基础上，一个是通过三次函数去平滑 CWND 增长曲线，让它在接近上一个  CWND 最大值时保持的时间更长一些，再有就是让 CWND 的增长和 RTT 长短无关，即不是每次 ACK 后就去增大 CWND，而是让  CWND 增长的三次函数跟时间相关，不管 RTT 多大，一定时间后 CWND 一定增长到某个值，从而让网络更公平，RTT 小的连接不能挤占  RTT 大的连接的资源。[1](https://zhuanlan.zhihu.com/p/142618130?utm_id=0)
 
    如果cwnd的大小在拥塞避免之后是基于时间来进行增长的，那么就可以结合上面我观察到的现象， 基本上过一段时间就会出现一定量的快速重传（抓包结果）， 周期性的RTT 与 cwnd的变化（命令输出结果）比较吻合了。
 
    基于上面的命令输出结果可以认为确实是通过RTT的增加 + 丢包控制 CWND， 压着CWND的值上不去的原因就是快速重传， 让cwnd随时间增大之后快速重传， 然后触发拥塞避免， 回退到较低的值， 然后开始循环。
 
 ---
-
-
 
 感谢[Shuo Chen 和 Hao Chen 大佬的测试分析思路以及工具](https://twitter.com/bnu_chenshuo/status/1654867295452397569)，反复的理解这个Thread里面的说法， 现在基本上可以抓住这个问题的逻辑了。 
 
@@ -132,16 +130,12 @@ t系列的实例都是突增类型， 可以允许一定的时间使用超过实
 
 ？？？对于测试的结果， 我这边确实不同，我读取到的RTT 60ms 明显要比大佬测试的时候的RTT 10ms 更高. 我把这个理解为 中国区AWS 与 Global的差异， 这个问题也许还能继续分析?
 
-
-
 调整 rmem ， wmem 的大小到 MTU * CWND = 9001 * 60 = 540600 ，这个数值x2 设置到发送和接收的窗口， 重新抓包， 理论上应该看不到快速重传了。并且拥塞窗口应该是稳定在 60 左右。 
 
 测试的过程中观察， 设置 rmem wmem 最终的值为 1000000， ss命令中的 CWND稳定在 57 ， 抓包的结果中没有快速重传， RTT也比较稳定了， 不再有跳跃和突然增加到 100+ 的RTT， 速度还是被限制了， 这时候较小的是 RWND， 所以也是为什么 CWND 可以比较稳定不再变化的原因。
 
 ![2023-05-09_15-04_1.png](https://s2.loli.net/2023/05/09/B9y1vpEAQ7nDUrc.png)
 ![2023-05-09_15-04.png](https://s2.loli.net/2023/05/09/o4SgzJrtXf5wixe.png)
-
-
 
 ### Topic 2 如何使用wireshark查看丢包率？
 
@@ -156,8 +150,6 @@ s窗口中统计的 Percent Filter 里面的百分比就是重传率， 丢包�
 如图：
 
 ![2023-05-10_16-23.png](https://s2.loli.net/2023/05/10/yZ5uCSnvYXi73Be.png)
-
-
 
 基于这个抓包结果里面的基本上是乱序和快速重传，Server是发送数据的源头， 客户端没有收到认为这个是丢包。
 

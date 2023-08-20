@@ -2,15 +2,12 @@
 title: Kubernetes day2 
 date: 2021-10-02 10:49:55
 tags: Kubernetes
-categories: Linux
+categories: Kubernetes
 ---
 
 对于etcd的操作和备份 
-
-<!-- more -->
-
-# etcd的操作 - etcdctl
-## etcd的规划 
+# Etcd的操作 - Etcdctl
+## Etcd的规划
 1. 最好用 固态盘， Pod数量比较多的情况下会非常非常慢， 内存要大.
 1. 类似于redis 或者 Zookeeper， KV的存储.
 1. 支持watch机制，可以通知给node节点的数据变化.
@@ -23,7 +20,7 @@ categories: Linux
 | etcd      | 1.简单易用，不需要集成sdk<br/>2.可配置性强                   | 1.没有健康检查<br/>2.需配合第三方工具一起完成服务发现<br/>3.不支持多数据中心 | http     | Raft       |
 |           |                                                              |                                                              |          |            |
 
-## etcdctl 的命令
+## Etcdctl 的命令
 - 查看etcd的成员清单
 ```bash 
 ]$ etcdctl --cacert=/etc/kubernetes/ssl/ca.pem --cert=/etc/kubernetes/ssl/kubernetes.pem --key=/etc/kubernetes/ssl/kubernetes-key.pem --write-out=table --endpoints="192.168.31.21:2379,192.168.31.22:2379,192.168.31.23:2379" member list
@@ -46,7 +43,7 @@ categories: Linux
 - 其他的操作
 1. get / put / del 等基础操作 
 
-## watch机制
+## Watch机制
 watch机制是通过不断的查看数据，发生变化就主动的通知客户端，v3支持watch固定的key,也可以watch一个范围的数据。
 ```bash
 # watch 一个pod的信息， 然后手动delete这个pod ， 查看etcd 的watch行为和输出的结果。
@@ -91,10 +88,9 @@ member
 1. 启动Kubernetes的相关集群和组件。
 1. 查看恢复的结果，验证各个组件的相关服务是否已经正常恢复。
 
-## etcd节点的维护 
+## Etcd节点的维护
 - etcdctl add-etcd  
 - etcdctl del-etcd
-
 
 # 资源清单以及API
 ## 相关的外部服务接口
@@ -104,7 +100,7 @@ member
 1. Container Storage Interface - CSI
 1. Container Network Interface - CNI
 
-## node的相关操作
+## Node的相关操作
 1. cordon
 1. uncordon
 1. drain

@@ -1,13 +1,11 @@
 ---
 title: Perf 命令的Performance分析
 date: 2022-04-19 17:45:39
-tags: Linux
 category: Linux
+tags: Linux, Perf
 ---
 
-
-
-https://blog.gmem.cc/perf  一个非常详细的博客， 太牛逼了。
+https://blog.gmem.cc/perf  一个非常详细的博客， 太强啦。
 
 ## 使用perf进行性能的简单输出
 ```bash
@@ -40,7 +38,6 @@ PID/TID switch overriding SYSTEM
 root@ip-172-31-11-235:~|⇒  sudo perf script > out.perf
 ```
 
-
 ## 生成火焰图
 通常的做法是将 out.perf 拷贝到本地机器，在本地生成火焰图：
 ```bash
@@ -71,7 +68,6 @@ echo THAWED > /sys/fs/cgroup/freezer/frozen/freezer.state
 
 To put again to interruptible sleep, just change cgroup state to THAWED.
 
-
 ## 动态追踪
 1. 添加一个动态追踪的Tracepoint Event
 ```
@@ -100,7 +96,7 @@ perf probe --add 'tcp_sendmsg size' # 追踪这个变量
 perf probe 'tcp_sendmsg%return $retval'
 ```
 
-## 关于Off-cpu进程的分析 
+## 关于Off-cpu进程的分析
 1. 按步骤生成
    ```sh
     ]$ /usr/share/bcc/tools/offcputime -df -p `pgrep -nx mysqld` 30 > out.stacks
@@ -114,7 +110,7 @@ perf probe 'tcp_sendmsg%return $retval'
    ]$ grep do_command < out.stacks | ./flamegraph.pl --color=io --title="Off-CPU Time Flame Graph" --countname=us > out.svg
    ```
 
-## perf命令的常见参数
+## Perf命令的常见参数
 1. 内核设置
 要启用内核动态追踪，需要使用内核编译参数CONFIG_KPROBES=y、CONFIG_KPROBE_EVENTS=y。
 要追踪基于帧指针的内核栈，需要内核编译参数CONFIG_FRAME_POINTER=y。
@@ -152,8 +148,6 @@ probe 	定义新的动态追踪点
 -T 	记录样本时间戳
 -s 	记录每个线程的事件计数器，配合 perf report -T使用
 ```
-
-
 
 # 微基准测试
 

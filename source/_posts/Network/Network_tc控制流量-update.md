@@ -2,26 +2,27 @@
 title: Linux OS 网络流量控制测试
 category: Linux
 date: 2023-04-14 17:41:03
-tags: Linux
+tags: Linux, Network 
 ---
+
 ## 内核参数的说明
 
-对于 #TCP 来说，会遇到如下的几个参数。
+对于 TCP 来说，会遇到如下的几个参数。
 
-如果我们需要查看一下当前OS的TCP参数， 命令如下：
+如果我们需要查看一下当前OS内与tcp相关的 KernelParam， 命令如下：
 
 ```bash
 ]$ sysctl -a | egrep "rmem|wmem|tcp_mem|adv_win|moderate"
 ```
 
-其中主要需要关注的是： 
+其中主要需要关注的是:
 
 ```
 net.ipv4.tcp_rmem = 4096	131072	6291456
 net.ipv4.tcp_wmem = 4096	16384	4194304
 ```
 
-这两个参数其实表示的是当前内核预留的 Socket Buffer， 单位是 Bytes， 也是具体指 #内存 的大小。具体的说明我找到[Kernel文档的说明](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt)如下：
+这两个参数其实表示的是当前内核预留的 Socket Buffer， 单位是Bytes， 也是具体指 内存 的大小。具体的说明我找到 [Kernel文档的说明](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt)如下：
 
 > ```
 > tcp_rmem - vector of 3 INTEGERs: min, default, max
@@ -64,14 +65,14 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 
 这文档中的说明，默认的三个值分别是： 最小， 默认， 最大。测试了一下， 如果只是需要实际调整的话， 调整那个最大值即可， 在高延迟的链路中， 调整默认值或者最大值就可以生效。 在测试的过程中， 将三个值都固定到预期，控制变量。
 
-对于TCP协议的接收与发送两方， 各自有自己的RecvBuffer 和 SendBuffer， 发送方会考虑链路上面可以承载的数据量（带宽）， 以及 对方可以承载的数据量（rmem）。
+对于TCP协议的接收与发送两方， 各自有自己的 RecvBuffer 和 SendBuffer， 发送方会考虑链路上面可以承载的数据量（带宽）， 以及 对方可以承载的数据量（rmem）。
 
 实际上， 只是更新 max 的值， 并不会更新 Recvbuffer. 
 如果想增大 receive buffer 的大小, 可以增加 tcp_rmem 的 default 的值大小.
 
 ## 测试环境
 
-两个EC2 c5.2xlarge， 其中一个部署Nginx， 并使用如下配置文件部分设置 ,  发布一个 Fedora ISO， 大小大约 2G。另一个上面只是客户端， 使用的访问客户端是Curl。
+两个 EC2 c5.2xlarge， 其中一个部署 Nginx ， 并使用如下配置文件部分设置 ,  发布一个 Fedora ISO， 大小大约 2G。另一个上面只是客户端， 使用的访问客户端是Curl。
 
 ```nginx
 http {
@@ -86,7 +87,7 @@ http {
 
 ## 测试准备
 
-测试的过程其实涉及了四个部分的延迟问题:
+测试的过程其实涉及了四个部分的 延迟 问题:
 
 - 发送方的应用程序性能。
 - 发送方的发送缓冲区大小， SendBuffer
@@ -97,7 +98,7 @@ http {
 
 ### 基准
 
-两个机器的内核参数使用默认值， 先通过tc流量控制注入一些延迟， 查看并分析RTT对于传输速度的影响。
+两个机器的内核参数使用默认值， 先通过 tc 流量控制注入一些延迟， 查看并分析RTT对于传输速度的影响。
 
 两个server之间默认的内核参数：
 
@@ -115,7 +116,7 @@ http {
   net.ipv4.tcp_rmem = 4096	16384	4194304
   ```
 
-curl 的测试命令如下：（更新版本， 之前的测试版本少了一些参数 
+curl 的 测试命令 如下：（更新版本， 之前的测试版本少了一些参数 
 
 ```bash
 ~]$ curl -o /dev/null -s -w "time_namelookup:%{time_namelookup}\ntime_connect: %{time_connect}\ntime_appconnect: %{time_appconnect}\ntime_redirect:  %{time_redirect}\ntime_pretransfer:  %{time_pretransfer}\ntime_starttransfer: %{time_starttransfer}\ntime_total: %{time_total}\n"  http://nginx.liarlee.site/Fedora-Workstation-Live-x86_64-38_Beta-1.3.iso 
@@ -139,7 +140,7 @@ time_total: 1.762040
 
 ### 仅控制带宽
 
-在添加了带宽控制， 带宽控制在 1000Mbps， 带宽监控结果： 
+在添加了带宽 控制， 带宽控制在 1000Mbps， 带宽监控结果： 
 
 ![2023-04-12_17-03.png](https://s2.loli.net/2023/04/14/ZVxCb43c2Wynaze.png)
 

@@ -1,8 +1,8 @@
 ---
 title: Linux启动流程简述
 date: 2019-07-13 17:18:40
-tags: Linux
 categories: Linux
+tags: Linux
 ---
 
 记录Linux启动流程。

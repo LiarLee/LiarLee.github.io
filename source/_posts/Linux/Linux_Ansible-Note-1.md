@@ -1,8 +1,8 @@
 ---
 title: Ansible笔记-1
 date: 2019-06-26 12:32:52
-tags: Ansible
 categories: Linux
+tags: Ansible
 ---
 
 Ansible的学习笔记。  

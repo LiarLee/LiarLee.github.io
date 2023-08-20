@@ -1,8 +1,8 @@
 ---
 title: buffer/cache 无法释放
-category: Linux
 date: 2023-05-12 22:15:35
-tags: Linux
+category: Linux
+tags: Linux, Memory
 ---
 
 ## 问题
@@ -27,8 +27,6 @@ Mem:         7833520     1376608     3917368     2160524     2539544     4059944
 Swap:              0           0           0
 ```
 
-
-
 ## 分析和答案
 
 **分析：** 开始的时候我并没有发现具体有什么问题， 认为是应用程序确实无法回收cache的空间，因为正在使用。
@@ -41,7 +39,7 @@ Swap:              0           0           0
 
 初见这个结论是有些震惊的， 我一直都认为 shared 字段里面统计的内存是独立的， 仔细看看上面的命令， 确实 shared空间基本上与 buffer/cache的空间是差不多的。  
 
-## 测试   
+## 测试
 
 一部分信息：   
 
@@ -155,19 +153,11 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
 
 这是上面的邮件链接中的一部分， 解释了为什么将 shmem 计算到 Cached 中的原因，看起来现在应该由一个新的指标数值来处理这个了。
 
-
-
 更多的部分看参考链接吧，我顺便看了讲解，大佬讲的清楚。
-
-
 
 ## 参考链接
 
 https://zhuanlan.zhihu.com/p/586107891
 
 https://www.cnblogs.com/tsecer/p/16290025.html
-
-
-
-
 

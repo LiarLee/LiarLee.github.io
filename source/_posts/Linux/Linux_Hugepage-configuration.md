@@ -1,29 +1,23 @@
 ---
-title: 为虚拟机开启内存大页
+title: KVM虚拟机开启内存大页
 date: 2020-05-02 15:09:50
-tags: Linux
 categories: Linux
+tags: Linux, Memory
 ---
 
-Huge Pages是从Linux Kernel 2.6后被引入的。目的是使用更大的内存页面（memory page size） 以适应越来越大的系统内存，让操作系统可以支持现代硬件架构的大页面容量功能。透明大页（Transparent Huge Pages）缩写为THP，这个是RHEL 6（其它分支版本SUSE Linux Enterprise Server 11, and Oracle Linux 6 with earlier releases of Oracle Linux Unbreakable Enterprise Kernel 2 (UEK2)）开始引入的一个功能。具体可以参考官方文档。
+Huge Pages是从Linux Kernel 2.6后被引入的。目的是使用更大的内存页面（memory page size） 以适应越来越大的系统内存，让操作系统可以支持现代硬件架构的大页面容量功能。
+透明大页（Transparent Huge Pages）缩写为THP，这个是RHEL 6（其它分支版本SUSE Linux Enterprise Server 11, and Oracle Linux 6 with earlier releases of Oracle Linux Unbreakable Enterprise Kernel 2 (UEK2)）开始引入的一个功能。具体可以参考官方文档。
 
-<!-- more -->
-
+## 概念
 这两者有啥区别呢？
-
 - 这两者的区别在于大页的分配机制，标准大页管理是**预分配的方式**，而透明大页管理则是**动态分配**的方式。  
 
 使用大页的目的：
-
 - 增加内存寻址的命中率，如果使用旧的内存分页方式，操作系统需要管理很多很多的小的内存页面，查找和命中的效率比较低。
 - 想象一下， 你有一本1000页的书，你需要找到其中的第782页的第20行中的一个“我”字，那么计算机会从第一页开始翻动一页一页的看是否符合要求；现在我将书藉的每100页合成1页，那我们只需要顺序查看10次就可以找到这个字符所在的范围了，之后再去查看这个字符所在的具体位置，速度就会比之前一页一页找快得多。
 
-
-
-------
-
-如何启用Hugepage：
-
+----
+## 配置启用手动分配的HugePage
 1. 设置操作系统可用的最大内存值
 
    ```
@@ -70,7 +64,6 @@ Hugetlb:         8388608 kB
 ```
 
 之后重启虚拟机即可。
-
 可以观察到如下改变说明已经在使用了。
 
 ```
@@ -85,3 +78,28 @@ HugePages_Surp:        0
 Hugepagesize:       2048 kB
 Hugetlb:         8388608 kB
 ```
+
+## 在某些场景下完全关闭THP
+
+查看当前的状态
+```bash
+[root@localhost ~]# cat /sys/kernel/mm/transparent_hugepage/defrag
+[always] madvise never
+[root@localhost ~]# cat /sys/kernel/mm/transparent_hugepage/enabled
+[always] madvise never
+```
+
+禁用THP
+```bash
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+```
+
+完全禁用 THP
+```bash
+grubby --update-kernel=ALL --args="transparent_hugepage=never"
+
+---
+sudo systemctl reboot
+```
+

@@ -1,8 +1,8 @@
 ---
 title: 虚拟机制作模板的步骤及设置
 date: 2019-09-18 16:41:11
-tags: Linux
 categories: ESXi
+tags: Linux
 ---
 
 换了工作之后接管了这边旧的ESXi和上面的虚拟机，之前的模板不是特别的合适，自己开始动手做模板。最终期望的目标是：
@@ -48,7 +48,7 @@ iptables -F
 iptables -X
 iptables -Z
 ```
-### 更改[[Grub]]的等待时间
+### 更改Grub的等待时间
 虚拟机中的模板大部分是不需要等待grub给出的操作选单时间的，等待操作的时间是5秒，我们给出1秒就够了。
 ```
 vim /etc/default/grub

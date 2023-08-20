@@ -1,13 +1,11 @@
 ---
 title: Kubernetes集群的学习笔记(6) 
 date: 2019-11-06 14:45:20
+categories: Kubernetes
 tags: Kubernetes
-categories: Linux
 ---
 
 K8S的认证部分， ServiceAccount以及RBAC 。
-
-<!-- more -->
 
 # 授权插件
 
@@ -75,8 +73,4 @@ ClusterRole -- RoleBinding
 3. service account
 
 创建Pod的过程中可以指定一个值叫做ServiceAccountName，如果授权ServiceAccount高等级的权限，那么，Pod会以这个Account运行，那么Pod中的应用程序也会有ServiceAccount的权限。也就是提高了Pod应用程序的等级，使得Pod可以对K8S的相关资源进行管理和配置。
-
-
-
-
 

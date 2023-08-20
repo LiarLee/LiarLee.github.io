@@ -2,16 +2,12 @@
 title: Hexo备份和恢复
 date: 2018-07-03 16:39:23
 tags: Hexo
-category: Linux
+category: Linux, Application
 ---
 
 hexo项目的备份和还原方法。
-
-<!-- more -->
-
-## 问题 
+## 问题
 一个特别无奈的问题，我尝试在我写博客的虚拟机里面使用了一个破坏性的命令，dnf autoremove, 就是这个命令导致我的虚拟机彻底坏了。所以我恢复了快照，但是是两个月前的记录了。发现自己的blog无法恢复，找到了这样一个解决方案。
-
 ## 思路
 1. 在github上设置一个新的分支hexo。
 2. 在这个分支上放置自己工作目录下的原始文件。
@@ -22,10 +18,9 @@ Note: 之前的思路是去hexo的工作目录下面找blog的项目，编译之
 
 ### 1. 准备一个新的工作目录
 在目录下git clone 自己的Blog项目。
-···
+```bash
 git clone https://github.com/xxxx/xxxx.github.io.git
-···
-
+```
 ### 2. 目录的构建
 1. 到xxxx.github.io目录下面，保留下面的.git目录，删除所有的其余目录。  
 1. 将之前的hexo工作目录的所有文件复制到xxxx.github.io下。  
@@ -72,5 +67,4 @@ git push --set-upstream origin hexo
 1. sudo cnpm install hexo-deployer-git
 1. 去Github上面添加机器的ssh public key 
 1. 尝试使用hexo d , 查看是否可以成功。
-
 

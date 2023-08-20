@@ -1,8 +1,8 @@
 ---
 title: 记一次旧LVM硬盘挂载失败
 date: 2020-05-30 17:54:47
-tags: Linux
 categories: Linux
+tags: Linux, LVM, Filesystem, IO
 ---
 
 我之前的硬盘上是fedora默认的LVM分区，我换了硬盘之后，弄了一个硬盘盒，把旧的硬盘放进去，连到电脑上试图把旧的数据取出来。发现系统已经正确的识别了PV，VG，LV，但是不能挂载， 提示无法读取硬盘的Superblock 和提示 mount: unknown filesystem type 'LVM2_member（这个提示说明你是直接挂载的/dev/sdx，LVM需要你挂载的应该是逻辑卷，不是物理设备）。

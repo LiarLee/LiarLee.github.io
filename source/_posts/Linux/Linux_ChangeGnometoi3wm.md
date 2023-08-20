@@ -196,7 +196,6 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 
    结合上面的**i3配置进行开机自动运行**即可。我觉得默认的这个还行，可以日常使用了，不调整了，太费劲了。
 
-
 # 目前还未解决的问题
 
 ## 无法在terminal中输入中文

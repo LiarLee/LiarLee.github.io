@@ -1,12 +1,13 @@
 ---
 title: Nginx性能调整（不一定对
 date: 2022-12-27 12:53:02
-tags: Linux
+categories: Linux
+tags: Nginx, Linux
 ---
 
 # Nginx 性能优化
 看了不少的文档和说明， 尝试调整一下Nginx，看看与默认的设置性能表现能有多大的差距,顺便记录一下步骤，不记录的话自己会忘记的。 
-## sysctl 参数
+## Sysctl 参数
 ```bash
 ~]$ cat /etc/sysctl.d/99-hayden.cof
 net.ipv4.tcp_wmem = 8192 4194304 8388608
@@ -93,7 +94,7 @@ LOC:     119785      15755   Local timer interrupts
 ~]$ echo 0 > /proc/irq/27/smp_affinity_list
 ```
 
-## 关闭 irqbalance
+## 关闭 Irqbalance
 ```bash
 ~]$ sudo systemctl stop irqbalance.service
 ~]$ sudo systemctl disable irqbalance.service

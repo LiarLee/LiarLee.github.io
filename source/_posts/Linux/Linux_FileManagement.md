@@ -1,13 +1,13 @@
 ---
 title: 文件系统及文件管理
 date: 2019-07-24 15:07:34
-tags: Linux
 categories: Linux
+tags: Linux, FileSystem
 ---
+
 Linux文件管理笔记
 
 文件系统默认的规定是遵守FHS规定的。
-[[EBS-performance-tuning-advise]]
 > FHS(Filesystem Hierarchy Standard) defines the directory structure and directory contents in Linux distributions.    
 > [FHS_Website](https://refpecs.linuxfoundation.org/fhs.shtml)
 

@@ -1,17 +1,17 @@
 ---
 title: Cacti的安装教程
 date: 2018-04-01 16:01:48
-tags: Cacti
 categories: Linux 
+tags: Application, Cacti
 ---
 
 当时记录Cacti的安装记录。
 
-## 安装环境  
+## 安装环境
 OS : CentOS 7 Server Everything -- Minimal Version  
 Required Packages : LAMP, RRDTool
 
-## 部署基础组件  
+## 部署基础组件
 1. 安装Apache   
 命令如下：
 ```
@@ -109,7 +109,7 @@ yum makecache
 安装完毕。  
 **所有的安装内容已经部署完毕。**
 
-## 进行配置  
+## 进行配置
 1. 配置MySQL的root密码  
 ```
 mysqladmin -u root password YOURSELF_PASSWORD
@@ -190,7 +190,6 @@ vim /etc/cron.d/cacti
 
 Default Username : **admin**
 Default Password : **admin**
-
 
 ## 补充安装SPINE过程
 1. 下载源文件，安装程序。   

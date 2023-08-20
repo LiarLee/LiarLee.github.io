@@ -1,8 +1,8 @@
 ---
 title: ElasticSearch 安装记录
 date: 2020-06-27 21:05:02
-tags: ElasticSearch
-categories: Linux
+categories: ElasticSearch
+tags: Application, ElasticSearch
 ---
 
 记录一下自己的集群安装过程和常见的命令。

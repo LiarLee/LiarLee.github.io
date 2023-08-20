@@ -1,13 +1,11 @@
 ---
 title: Fedora开机启动速度的优化
 date: 2019-01-13 17:02:11
-tags: Fedora
 categories: Linux
+tags: Linux, Fedora
 ---
 
-一直认为我的虚拟机性能不够所以导致自己的机器开桌面环境，开机慢慢慢慢慢慢.......今天终于发现了原因......是自己的傻(╯‵□′)╯︵┻━┻ ......
-
-<!-- more -->
+一直认为我的虚拟机性能不够所以导致自己的机器开桌面环境，开机慢慢慢慢慢慢.......今天终于发现了原因.....
 
 ## 过程
 使用systemd-analyze 命令  
@@ -17,22 +15,21 @@ categories: Linux
 1. dnf-makecache.service 占用了 1min 8.124s；  
 1. plymouth-quit-wait.service 占用了 1min 744ms 
 
-
-### 重点来了
+### 配置
 所以关闭它，阻止今后开机的时候启动
 ```
 systemctl disable dnf-makecache.service
 systemctl disable dnf-makecache.timer
-OR
+```
+或者就直接把这个服务指向 /dev/null 也是可以的， 总体来说就是让他开机的时候不要继续启动。
+```
 systemctl mask dnf-makecache.service
 systemctl mask dnf-makecache.timer
 systemctl mask plymouth-quit-wait.service
 systemctl mask firewalld.service
 ```
-
 尽量不使用DHCP使用固定的IP可以提高启动速度，其他的不需要服务可以自行关闭即可  
-
-## 优化后的结果  
+## 优化后的结果
 ```
 [root@localhost ~]# systemd-analyze 
 Startup finished in 3.091s (kernel) + 1.669s (initrd) + 5.211s (userspace) = 9.971s
@@ -118,9 +115,14 @@ Startup finished in 3.091s (kernel) + 1.669s (initrd) + 5.211s (userspace) = 9.9
              5ms tmp.mount
              2ms sys-kernel-config.mount
 ```
+可以通过命令查看systemd的一些信息： 
+```bash
+systemctl --failed # 查看所有启动或者运行失败的服务
 
+systemctl status # 查看系统启动之后的所有Service 以及状态
+```
 ### Mark Tips
 1. axel  dnf可用的多线程更新
 1. yum-fastestmirror  自动挑选最快的服务器更新
 1. **附加一个systemd的使用教程：[- ClickThisLink](https://itxx00.github.io/blog/2014/04/08/systemd-basic-usage/)**    
-1. **在附加一个plymouth的教程：[- ClickThisLink](https://blog.csdn.net/qq_25773973/article/details/50786174)**
+1. **附加一个plymouth的教程：[- ClickThisLink](https://blog.csdn.net/qq_25773973/article/details/50786174)**

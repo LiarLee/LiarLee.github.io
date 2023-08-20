@@ -1,9 +1,9 @@
 ---
 title: Cilium 踩坑总结
 date: 2022-08-19 22:21:48
-tags: Kubernetes
+category: Kubernetes
+tags: Kubernetes, Cilium, EKS
 ---
-
 # 测试环境
 
 - **KVM**  - hayden@HaydenArchDesktop ~> virsh version
@@ -30,8 +30,6 @@ tags: Kubernetes
 > NOTE: (尝试使用Containerd， 但是翻车了， 控制平面的Pod启动不了， 所以放弃了，遂使用CRI-Dockerd，配置了Docker runtime， Containerd使用默认的参数无法正常的启动， 看起来即使真的升级到了1.24 迁移还是一个问题)
 
 - **Kernel Version**: 5.17.5-300.fc36.x86_64
-
-  
 
 # Helm参数
 如果是在KVM启动的虚拟机，可以通过这个安装参数来开启更多功能，但是受限于我的KVM虚拟网卡驱动不能attach xdp 程序， 所以。。。。xdp 加速无法启用，但是其他的高级特性均可开启， 集群状态正常。
@@ -254,8 +252,6 @@ Nodes:
 1. EKS：AWS CNI替换掉之后有自己的问题， 不能开启完全的Iptables Bypass， 由于启用了ENI MODE 就会提供 EndpointRoute， 感觉这已经是BypassIptables， 但是没能验证，不确定。
 
 2. EC2 部署的 Kubernetes： 集群不能开启HostRouting， 开启之后cilium-health status 无法完成对端节点上面Endpoint的检查， Connection Timeout。也不能完全work。
-
-
 
 # 其他资料
 

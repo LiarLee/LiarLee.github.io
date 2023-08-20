@@ -1,18 +1,18 @@
 ---
 title: Git常见的命令
-category: Linux
 date: 2023-07-12 06:52:18
-tags: Linux
+category: Linux
+tags: Linux, Git
 ---
 
-## 远端创建， clone本地
+## 远端创建， Clone本地
 ### Step 1
 Github上面创建一个新的仓库， 页面创建即可， 然后记录下URL。
 ```bash
 https://github.com/LiarLee/vps-init.git
 ```
 
-### step 2
+### Step 2
 本地创建目录， 并初始化本地的仓库路径。
 ```bash
 mkdir vps-init
@@ -20,7 +20,7 @@ cd ./vps-init
 git clone https://github.com/LiarLee/vps-init.git
 ```
 
-### 关联远端仓库 
+### 关联远端仓库
 创建一个本地仓库。
 ```bash
 mkdir vps-init
@@ -55,6 +55,4 @@ git rm -r -n --cached ./plugin
 git rm -r --cached ./plugin
 
 ```
-
-
 

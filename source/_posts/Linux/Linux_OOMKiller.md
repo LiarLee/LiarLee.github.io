@@ -1,16 +1,13 @@
 ---
-title: OOM行为
+title: OOM行为 
 date: 2022-04-19 17:45:39
-tags: Linux
 category: Linux
+tags: Linux, Memory
 ---
-
-
 
 关于OOM行为的思考 以及Kswapd的动作和行为。
 http://evertrain.blogspot.com/2018/04/oom.html
 更详细的打分算法见源码  https://github.com/torvalds/linux/blob/master/mm/oom_kill.c
-
 
 ## 发生之后
 OOM killer会将kill的信息记录到系统日志/var/log/messages，检索相关信息就能匹配到是否触发。
@@ -102,7 +99,6 @@ sudo systemctl daemon-reload && sudo systemctl restart mariadb
 3. 开启OverCommit， 调整进程的优先级： 对于特定的进程进行保护。OOM会按照设置的积分计算需要Kill的进程。
 4. 开启OverCommit， 调整OOMkiller的行为方式： 计算积分后Kill 或者 直接Kill当前新申请内存的进程。这个方式感觉和默认的关闭OverCommit的行为类型，都是拒绝新的进程以保证旧的进程可以存活。
 
-
 ## 更可靠的方式
 ### Faceboook的oomd
 https://github.com/facebookincubator/oomd
@@ -112,11 +108,9 @@ oomd使用的是 PSI接口来评估内存的压力，可以通过自定义规则
 https://github.com/rfjakob/earlyoom  
 EarlyOOM的作用是提前OOM，这样可以保障用户空间的图形桌面不会到交换空间去， 主要解决的问题是内存压力过大的交换动作会将桌面环境换出导致响应变慢。
 
-
-
 ## 输出结果记录
 
-### Cgroup - pod
+### Cgroup - Pod
 - 首先是哪个程序超过了cgroup的limit， 触发了cgroup 的oom， 这里是 xray 这个进程自己。
     ```
     kern  :warn  : [Thu Aug 17 17:29:27 2023] xray invoked oom-killer: gfp_mask=0x100cca(GFP_HIGHUSER_MOVABLE), order=0, oom_score_adj=-997

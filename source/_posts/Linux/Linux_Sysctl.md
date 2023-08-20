@@ -1,14 +1,11 @@
 ---
 title: Sysctl 云平台参数的收集以及一部分解释
 date: 2022-04-19 17:45:39
-tags: Linux
 category: Linux
+tags: Linux, Kernel 
 ---
 
 一些关于sysctl参数设置的收集和解释。
-
-<!-- more -->
-
 # /etc/sysctl.d/00-defaults.conf
 
 ## kernel.printk
@@ -85,7 +82,7 @@ kernel.sched_autogroup_enabled=0
 ```
 
 # /usr/lib/sysctl.d/00-system.conf
-## bridge-nf-call-iptables
+## Bridge-nf-call-iptables
 网桥设备关闭netfilter模块，开关需要按需求来指定。
 关闭这个模块会在网桥2层可以转发的时候直接转发， 不会走三层进行数据传输，也就是说不会过Iptables。  
 Kubernetes需要开启这个参数的原因是： https://imroc.cc/post/202105/why-enable-bridge-nf-call-iptables/， 修复了Coredns不定期解析失败的问题。
@@ -97,7 +94,7 @@ net.bridge.bridge-nf-call-arptables = 0
 ```
 
 # /usr/lib/sysctl.d/10-default-yama-scope.conf
-## yama
+## Yama
 Yama is a Linux Security Module that collects system-wide DAC security protections that are not handled by the core kernel itself. This is selectable at build-time with CONFIG_SECURITY_YAMA, and can be controlled at run-time through sysctls in /proc/sys/kernel/yama  
 
 https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html 
@@ -140,7 +137,7 @@ kernel.yama.ptrace_scope = 0
 ```
 
 # /usr/lib/sysctl.d/50-default.conf
-## sysrq
+## Sysrq
 是一个Magic Key的设置，无论内核当前在做什么都会立刻响应这个MagicKey。
 ```bash
 
@@ -241,7 +238,6 @@ fs.protected_symlinks 	用于限制普通用户建立软链接
 fs.protected_hardlinks = 1
 fs.protected_symlinks = 1
 ```
-
 # /usr/lib/sysctl.d/9-ipv6.conf
 关于IPv6地址重复的问题。  
 In case DAD does find a duplicate address, the address we tried to set is deleted (and in the syslog you see a message like this: "eth0: duplicate address detected!"). In such a case, a sysadmin needs to configure an address manually.
@@ -250,13 +246,8 @@ net.ipv6.conf.all.accept_dad=0
 net.ipv6.conf.default.accept_dad=0
 net.ipv6.conf.eth0.accept_dad=0
 ```
-
-
-
-
-
 ## Case Update
-1. tcp_tw_recycle（Before 4.12 available）
+1. [[Linux_内核参数笔记#net.ipv4.tcp_tw_recycle|tcp_tw_recycle（Before 4.12 available)]]
    net.ipv4.tcp_timestamps 这个参数开启的时候， 才会生效，可以快速回收处于TIME_WAIT状态的socket。当tcp_tw_recycle开启时（tcp_timestamps同时开启，快速回收socket的效果达到），对于位于NAT设备后面的Client来说，是一场灾难。
    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4396e46187ca5070219b81773c4e65088dac50cc 
    这个参数在2017年之后的内核已经不存在了， 开发者的Blog https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux
@@ -265,15 +256,11 @@ net.ipv6.conf.eth0.accept_dad=0
    实是因为时间的原因， 并且这个请求是一个新的请求，由于时间的原因被识别成了旧的请求。
    这个配置对 Incomming 和 Outgoing的tcp连接都会生效。由于网络的设计是默认不相信可靠的， 所以在TCP的最后进行等待，这样会导致大量的TIME_WAIT， 而这些TIME_WAIT其实是已经不用的， 但是由于无法获得ACK因此无法释放。
 
-2. tcp_tw_reuse 
+2. [[Linux_内核参数笔记#net.ipv4.tcp_tw_reuse|tcp_tw_reuse]]
     http://lxr.linux.no/#linux+v3.2.8/Documentation/networking/ip-sysctl.txt#L464
-     这个配置只是对客户端生效。也就是说， 客户端发起了FIN之后， 只要客户端收到服务端的FIN， 后续的网络报文已经不再继续关注了。 这样客户端的TIME_WAIT就会下降， 提高了客户端的Timewait的利用率，减少了客户端TW连接的数量。可以提高客户端的并发请求数量。 
+    这个配置只是对客户端生效。也就是说， 客户端发起了FIN之后， 只要客户端收到服务端的FIN， 后续的网络报文已经不再继续关注了。 这样客户端的TIME_WAIT就会下降， 提高了客户端的Timewait的利用率，减少了客户端TW连接的数量。可以提高客户端的并发请求数量。 
     这个配置参数只对 Outgoing 的参数生效。
     NOTE： 现在这个选项支持3个参数，0 关闭， 1 开启 ，2 只对回环开启。
-
-
-
-
 
 ### Other Memory and OOM Controll
 

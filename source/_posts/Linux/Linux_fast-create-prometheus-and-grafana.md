@@ -1,8 +1,8 @@
 ---
 title: 快速启动一个 prometheus 和 grafana 
-category: Linux
 date: 2023-05-25 15:52:20
-tags: Docker
+category: Docker
+tags: Docker, Application, Prometheus, Grafana
 ---
 
 快速创建一个可用的 prometheus 和 grafana 进行测试， 并将数据保留在当前的目录中， 在重启之后数据不会丢失： 
@@ -92,8 +92,4 @@ tags: Docker
    ```bash
    docker compose down --remove-orphans && docker compose up -d
    ```
-
-   
-
-
 

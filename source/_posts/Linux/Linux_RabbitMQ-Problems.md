@@ -1,14 +1,11 @@
 ---
 title: RabbitMQ_SysV风格管理脚本模板
 date: 2019-09-23 15:48:52
-tags: RabbitMQ 
 category: Linux
+tags: Application, RabbitMQ 
 ---
 
 需要自己写一个RabbitMQ的SysV脚本，所以找了一个模板，如果需要的时候可以改改就用了。
-
-<!-- more -->
-
 ## SysV脚本
 ```shell
 #!/bin/sh
@@ -224,6 +221,6 @@ Current node details:
 
 因为RabbitMQ的认证是通过文件 ： `.erlang.cookie`这个文件，但是这个文件不是在系统的一个位置有，如果使用find命令查找的话会发现两个目录都有这个文件，我的查找结果一个是在root的家目录下，还有一个是在安装目录，也就是程序的$HOME下。  
 需要自行判断程序使用的是那个目录下在Erlangcookie文件进行的认证及通信，在SysV脚本中，export $HOME到正确的文件目录下，就可以正常使用service命令了。  
-### 错误2 
+### 错误2
 使用service rabbitmq-server status 的时候， 提示$HOME 需要被设置，就在SysV脚本里面直接export就可以了。
 

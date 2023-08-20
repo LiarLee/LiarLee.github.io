@@ -1,14 +1,11 @@
 ---
 title: Harbor Http 安装部署
 date: 2021-09-27 11:21:47
-tags: Harbor
 categories: Linux
+tags: Application, Harbor
 ---
 
  Harbor的部署记录。
-
-<!-- more -->
-
 # Harbor Info
 - [Harbor 项目地址](https://github.com/goharbor/harbor/releases/tag/v2.3.2)
 
@@ -39,7 +36,7 @@ data_volume: /opt/harbor/image_store
 # DO NOT use localhost or 127.0.0.1, because Harbor needs to be accessed by external clients.
 hostname: harbor.local
 ```
-## 设置harbor admin的密码
+## 设置harbor Admin的密码
 可以登录Dashboard 或者 Pull镜像
 ```yaml
 # Remember Change the admin password from UI after launching Harbor.
@@ -51,7 +48,6 @@ harbor_admin_password: Harbor12345
 # 创建Harbor的存储目录， 可以远程指定到Cephfs上面
 ~]$ mkdir /opt/harbor/image_store
 ```
-
 
 ## 配置Docker-ce 清华的镜像源
 这个配置是给Centos / RHEL来使用的，来自清华的Repo Help
@@ -80,7 +76,7 @@ harbor_admin_password: Harbor12345
 /opt/harbor]$ ./install.sh
 ```
 
-# 启动Harbor 
+# 启动Harbor
 直接使用Docker-compose启动即可，如果需要的话可以在配置文件中指定镜像扫描器，来进行镜像的漏洞扫描。
 ```bash
 # 进入Harbor运行所在的目录
@@ -103,7 +99,6 @@ harbor_admin_password: Harbor12345
 3. 在所有podman节点上配置不安全的私有仓库，podman login [HARBORIP:PORT]
 4. 提示Login Successed， 登录成功，可以正常pull镜像了
 
-
 # Cephadm Bootstrap
 ## 编辑cephadm文件，修改如下的镜像名称，和仓库的前缀
 这里其实还是需要再测试的， 按照这个脚本的逻辑， 应该会把所有的镜像都从指定的仓库Pull下来，但是我执行的时候只有ceph/ceph:v16一个镜像下来了， 感觉还是有点儿问题的。
@@ -120,7 +115,7 @@ DEFAULT_KEEPALIVED_IMAGE = 'harbor.local/ceph/keepalived'
 DEFAULT_REGISTRY = 'harbor.local'   # normalize unqualified digests to this
 ```
 
-## cephadm 使用私有仓库bootstrap
+## Cephadm 使用私有仓库bootstrap
 ```bash
 ~]$ cephadm bootstrap --mon-ip 192.168.1.211 --allow-overwrite \
   --registry-url harbor.local \
@@ -137,13 +132,4 @@ DEFAULT_REGISTRY = 'harbor.local'   # normalize unqualified digests to this
 ~]$ rm -rf /usr/lib/systemd/system/ceph*
 ~]$ docker stop `docker ps -a -q`  
 ```
-
-
-
-
-
-
-
-
-
 

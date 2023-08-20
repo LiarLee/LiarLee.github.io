@@ -1,8 +1,8 @@
 ---
 title: RPM制作的笔记
 date: 2018-07-03 11:46:36
-tags: Linux
 categories: Linux
+tags: Linux, RPM
 ---
 
 关于制作RPM包的笔记～

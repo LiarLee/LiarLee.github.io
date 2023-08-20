@@ -1,14 +1,11 @@
 ---
 title: Nginx配置文件中if判断与try_files
 date: 2019-09-19 09:52:13
-tags: Nginx
 category: Linux
+tags: Nginx
 ---
 
 Nginx的if判断问题，导致try_files字段未能正常生效。
-
-<!-- more -->
-
 ## 配置文件
 ```
 server {

@@ -1,11 +1,9 @@
 ---
 title: Linux配置网卡策略路由
-category: Linux
 date: 2023-07-25 16:41:36
-tags: Linux
+category: Linux
+tags: Linux, EC2, Network
 ---
-
-
 
 会遇到Linux多个网卡的时候， 网络并不会保证源地址进网卡 ， 源地址出网卡。 
 
@@ -70,8 +68,6 @@ network:
                 table: 1001
     version: 2
 ```
-
-
 
 ## Redhat/CentOS/Fedora/AmazonLinux2
 

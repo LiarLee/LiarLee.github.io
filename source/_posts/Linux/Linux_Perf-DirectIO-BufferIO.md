@@ -2,7 +2,7 @@
 title: BufferIO与DirectIO的比较
 category: Linux
 date: 2023-07-10 11:34:36
-tags: Linux
+tags: Linux, Perf, IO
 ---
 
 ## 测试方法
@@ -22,8 +22,6 @@ perf record -T -C 0 -- taskset -c 0 dd if=/dev/zero of=./a.dat bs=4k count=16384
 
 perf record -T -C 0 -- taskset -c 0 dd if=/dev/zero of=./a.dat bs=4k count=16384 oflag=direct
 ```
-
-
 
 ## 运行结果
 
@@ -86,6 +84,4 @@ BufferIO：
 DirectIO：
 
 ![directio.png](https://s2.loli.net/2023/06/01/VMW9lwpgnFQ34DB.png)
-
-
 

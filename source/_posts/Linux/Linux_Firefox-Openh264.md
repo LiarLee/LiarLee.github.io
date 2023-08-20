@@ -1,8 +1,8 @@
 ---
 title: Firefox-Openh264的问题
 date: 2017-12-28 17:24:52
-tags: Firefox
 categories: Linux
+tags: Application, Firefox
 ---
 
 fedora27中Firefox插件OpenH264不启用  

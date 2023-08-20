@@ -1,15 +1,13 @@
 ---
 title: k8s所有的NS删除的时候都进入Terminating状态
 date: 2019-10-09 11:17:05
+categories: Kubernetes
 tags: Kubernetes
-categories: Linux
 ---
 
 集群无法删除Namespace解决方式。
 
-<!-- more -->
-
-## namespace 无法删除  始终处于Teminating
+## Namespace 无法删除 始终处于Teminating
 ### 强制删除的方法，临时方案。
 1. 将名称空间的配置文件导出。  
    `kubectl get namespace testtest -o json > tmp.json`
@@ -31,7 +29,7 @@ categories: Linux
 	这里面http的**调用路径**在 ： tmp.json的 api 字段中。
 6. 运行结果返回NameSpace的相关信息应该就是删除了。
 
-## Namespace删除卡住的原因 
+## Namespace删除卡住的原因
 > Solution From Github: https://github.com/kubernetes/kubernetes/issues/60807
 
 是某些服务的问题导致了无法删除掉相关的NS

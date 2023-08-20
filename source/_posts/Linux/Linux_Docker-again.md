@@ -1,13 +1,11 @@
 ---
 title: Docker基础知识二周目
 date: 2021-09-04 23:43:42
-tags: Linux
-categories: Linux
+categories: Docker
+tags: Docker
 ---
 
 Docker Container 基础 。 again ..... 
-
-<!-- more --> 
 
 ## Docker使用的六个名称空间
 1. MNT Namespace - 提供文件的挂载和文件系统的隔离
@@ -34,8 +32,6 @@ docker.service 里面指定了调用Containerd的socket
 生成容器的过程钟，API调用过程使用的是grpc。
 无论dockerd还是containerd最终使用的都是runc（container runtime） ，一个基于Go语言的容器创建工具， 根据OCI标准来创建容器。
 
-
-
 docker-daemon 限制可以限制生成日志的大小
 
 - 限制日志的大小使用的是 docker的daemon config， 针对的日志的范围，是docker Container 里面的标准输入输出的日志， 这部分日志的存储是在机器的硬盘上， 位置是（/opt/docker-storage/containers ， 也就是/var/lib/docker/containers/[CONTAINER_ID]/*.json），
@@ -44,7 +40,7 @@ docker-daemon 限制可以限制生成日志的大小
 
 压测镜像： lorel/docker-stress-ng 
 
-## docker的网络结构
+## Docker的网络结构
 使用的是宿主机的docker0桥，同时在Host上面生成虚拟网卡veth多个接口 ， 在容器中生成eth0的虚拟网卡对， 虚拟机中的两个容器之间使用的是物理地址进行寻址访问，所以这个部分可以通过arp命令来进行验证。
 
 ## Docker容器的资源限制 - Cgroup
@@ -101,15 +97,9 @@ MEM 不建议OverCommit
 2. oom_score 一般是自动计算出来的结果，**综合计算的结果, 参考 ： CPU时间，存活时间，oom_adj计算之后的结果。**
 3. oom_score_adj OOM分数的偏移量，-1000 to +1000, 可以设置-1000表示永远不会被Kill
 
-
-
 ### DISKIO
 
 Disk OverCommit : 1:1.2
 
 ### PAUSE\RESUME
-
-
-
-
 

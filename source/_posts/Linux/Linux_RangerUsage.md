@@ -1,13 +1,11 @@
 ---
 title: Linux_Ranger_Usage
 date: 2021-08-26 01:49:46
-tags: Ranger
 categories: Linux
+tags: Linux, Ranger
 ---
 
 ranger 备忘
-
-<!-- more -->
 
 ```bash
 g/ Go root 

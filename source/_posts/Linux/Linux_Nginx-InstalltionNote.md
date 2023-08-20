@@ -1,15 +1,13 @@
 ---
 title: Nginx编译安装
 date: 2018-01-22 18:03:58
-tags: Nginx
 categories: Linux
+tags: Nginx
 ---
 
 很久之前的笔记了，发出来，做编译安装Nginx的时候记录的……包括安装命令和脚本……
 
-<!-- more-->
-
-## 安装nginx服务器  
+## 安装nginx服务器
 1. 下载[zlib](http://zlib.net/)，[pcre](http://www.pcre.org/)，[nginx](http://nginx.org/en/download.html)  
 1. 安装zlib  
 `[root@localhost Liarlee]# cd zlib-[version]`  
@@ -134,7 +132,7 @@ categories: Linux
                 exit 2
         esac
 ```
-#  补充一些 
+# 补充一些
 
 1. 在编译安装的nginx中，可能没有conf.d目录，只要自己的nginx的配置文件中， http字段下添加include /etc/nginx/conf.d/*.conf 就可以使用conf.d目录进行不同站点独立配置文件的配置了。
 1. Nginx可以支持同样使用80端口， 但是使用不同域名进行站点的发布。之前没有确切的试过，今天确实碰到了这个问题，记录下来。 在配置文件中，使用不同的server {}字段，定义不同的server_name ， 两个站点可以同时listen在80 端口上。访问的时候不同的域名会直接访问到不同的目录。Over.

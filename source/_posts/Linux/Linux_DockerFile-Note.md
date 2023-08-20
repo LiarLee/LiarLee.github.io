@@ -1,13 +1,11 @@
 ---
 title: DockerFile笔记
 date: 2019-04-24 14:27:38
+categories: Docker
 tags: Docker
-categories: Linux
 ---
 
 Dockerfile的书写规则及Dockerfile的指令说明。
-
-<!-- more-->
 
 Docker的镜像存储到Overlay2  
 
@@ -18,7 +16,7 @@ Docker exec -it Container_Name /bin/sh
     # 将容器启动并执行shell命令行  
 ```
 
-# Docker Images  
+# Docker Images
 1. Docker Images中有启动容器所需要的文件系统及内容，用于启动并创建Docker容器,采用分层机制，最底层为bootfs，之上是rootfs  
     - rootfs:Docker的根文件系统，由Kernel挂载为“ReadOnly”模式，而后通过联合挂载技术额外挂在一个可写层 
     - bootfs:用于系统引导的文件系统，包括bootloader及kernel，容器启动之后自动卸载  
@@ -37,7 +35,7 @@ Docker exec -it Container_Name /bin/sh
 9. Quay.io 除了DockerHub其他的镜像仓库  
     - docker pull quay.io/coreos/flannel:latest 
 
-## Docker镜像的保存与恢复  
+## Docker镜像的保存与恢复
 ```
 docker save -o myimages.gz IMAGE_NAME1 IMAGE_NAME2 
     # 将多个镜像保存到本地压缩文件  
@@ -46,13 +44,13 @@ scp myimages.gz
 docker load -i myimages.gz  
     # 在新的节点加载镜像  
 ```
-# Docker File 
-## DockerFile存在的意义 
+# Docker File
+## DockerFile存在的意义
 docker exec CONTAINER --> vi --> RELOAD  
 Docker的容器不利于我们对需要反复调试的服务进行更改，通过Dockerfile的修改可快速调整容器的配置。
 
-## 自定义镜像的方法  
-### 基于Docker容器制作镜像  
+## 自定义镜像的方法
+### 基于Docker容器制作镜像
 1. 创建你需要的容器，Docker commit命令进行镜像的制作 
 2. docker run --name b1 -it busybox  
 3. mkdir -p /data/html  
@@ -67,10 +65,7 @@ Docker的容器不利于我们对需要反复调试的服务进行更改，通�
 12. docker login -u USERNAME 登录到服务器  
 13. docker push Liarlee/httpd  
 
-
-
-
-### 基于DockerFile制作DockerImage 
+### 基于DockerFile制作DockerImage
 Dockerfile Format  
 1. \# 开头的为注释文字   
 2. INSTRUCTION arguments，采用指令+参数的格式   
@@ -83,7 +78,7 @@ BASH SHELL:
 echo ${NAME:-tom} 给一个变量设置一个默认值    
 echo ${NAME:+tom} 如果变量有数值，强行改为默认值   
 
-### - FROM  
+### - FROM
 FROM指定的镜像将自动拉取作为底层的镜像进行制作;  
 
 ```  
@@ -95,21 +90,20 @@ FROM centos:latest
     # 使用Centos的最新发行镜像作为底层镜像
 ```
 
-### - MAINTAINER  
+### - MAINTAINER
 提供制作人的信息，废弃不用了，现在使用LABEL  
 
 ```
 MAINTAINER "LiarLee<Test@LiarLee.com>"
 ```
 
-### - LABEL  
+### - LABEL
 LABEL是给镜像指定元数据的命令  
 ```
 LABEL maintainer="LiarLee<Test@LiarLee.com>"
 ```
 
-
-### - COPY  
+### - COPY
 复制本地文件或目录到镜像文件系统中。  
 ```
 COPY \<src> ... \<dest>  
@@ -127,7 +121,7 @@ COPY /usr/local/src/nginx/* /usr/local/src/nginx/
     # 如果目标目录不存在需要先行创建
 ```
 
-### docker build命令  
+### Docker Build命令
 
 ```bash
 [root@Hayden test]# docker build -h
@@ -196,7 +190,7 @@ busybox             latest              d8233ab899d4        6 weeks ago         
 <h1>Busybox httpd server.</h1>
 ```
 
-### - ADD  
+### - ADD
 用于添加URL链接或本地文件到镜像中，支持tar包的自动解压。  
 ```
 ADD <src> ... <dest>  
@@ -229,7 +223,7 @@ VOLUME指定挂载的卷
 只能设置容器中的卷目录，不能制定宿主机的目录，只能使用Docker自动管理的卷 
 ```
 
-### - EXPOSE  
+### - EXPOSE
 ```
 EXPOSE <port>[/<protocol>]   
 指定的协议为tcp or udp , defaults option is TCP  

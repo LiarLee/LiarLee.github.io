@@ -1,19 +1,14 @@
 ---
 title: Ubuntu 18.04 内核编译初试
 date: 2021-07-01 12:48:29
-tags: Linux
+categories: Linux
+tags: Linux, Kernel
 ---
 
 Ubuntu 18.04 上编译内核，生成deb安装包的过程和遇到的问题。 
-
 使用工具： Linux-tkg 
-
 系统版本： Ubuntu18.04 
-
 内核版本： 5.12-muqss-6ms-skylake
-
-<!-- more -->
-
 # 背景说明
 
 看到B站大佬的教学视频， 使用Linuxtkg进行内核的编译打包和添加muqssCPU调度器， 想自己尝试一下， 同时熟悉一下Ubuntu常见的工具链，所以就开始做了这个事情。
