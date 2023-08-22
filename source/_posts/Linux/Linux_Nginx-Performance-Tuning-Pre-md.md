@@ -2,7 +2,7 @@
 title: Nginx性能调整（不一定对
 date: 2022-12-27 12:53:02
 categories: Linux
-tags: Nginx, Linux
+tags: Nginx, Application
 ---
 
 # Nginx 性能优化

@@ -2,7 +2,7 @@
 title: Nginx Performance Test
 date: 2022-04-19 17:45:39
 category: Linux
-tags: Nginx
+tags: Nginx, Application
 ---
 
 写在最前面， 这个问题还在研究中， 我目前还没有合适的模型用来研究这个问题， Pending....

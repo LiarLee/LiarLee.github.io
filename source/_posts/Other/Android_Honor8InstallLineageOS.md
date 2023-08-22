@@ -17,7 +17,7 @@ category: Linux
 1. 解锁状态： Phone Unlocked  
 
 ---
-## 二 需要准备的原料  
+## 二 需要准备的原料
 1. 手机  
 1. SD卡  
 1. 电脑一台，USB线一根  
@@ -36,7 +36,7 @@ category: Linux
 
 ---
 ## 三 流程
-### 1 解锁手机  
+### 1 解锁手机
 1. 首先需要进行华为手机的解锁，百度一下有很多，所以不再过多的介绍。
 1. 需要知道是我大华为要关闭后续的解锁服务了，所以今后即便是刷如果你没有解锁码也只能作罢。
 
@@ -47,7 +47,7 @@ category: Linux
 1. 将SD卡放入手机。
 
 ---
-### 3 写入TWRP  
+### 3 写入TWRP
 1. 解锁之后可以使用命令来写入TWRP Recovery。 Recovery使用的openkirin项目组的版本。请自行确保驱动及手机的连接处于正常状态即可。
 1. 打开adb工具目录，在工具目录中使用Shift+鼠标右键，将文件夹在命令行或Powershell中打开。
 1. adb.exe devices   ------  ## 查看是否识别手机成功。
@@ -57,9 +57,8 @@ category: Linux
 1. fastboot.exe reboot ------  ## 重启手机。  
 ![HomeScreenTWRP.png](https://i.loli.net/2018/08/02/5b628c9962113.png)
 
-
 ---
-### 4 安装海外版ROM 
+### 4 安装海外版ROM
 1. XDA原帖 -- [HERE](https://forum.xda-developers.com/honor-8/how-to/to-emui5-custom-roms-tested-openkirin-t3638445)
 1. 拔掉数据线，关机，长按 *音量+* 和 *开机* ， 直到出现 *解锁警告* 和 *Your device is booting now ...*
 1. 进入Recovery，一次进入Install -- Select Storage -- Micro SDCard -- OK -- Packages。
@@ -106,7 +105,6 @@ category: Linux
 1. 重启可以在系统应用中直接看到。可以开启或者关闭。  
 1. 可以选择使用Viper或者Dolby，看自己的喜好了。
 **NOTE** -- 这种应用，我觉得有一个就够了，其实只是优化一下外放的效果。
-
 
 ---
 ## 四 结尾
