@@ -54,3 +54,25 @@ tags: VIM, Linux
 ## About NerdFonts.
 Nerd 类型的字体实际代表了 带有Icon字符集的字体。
 https://www.nerdfonts.com/#home
+
+## 其他技巧
+1. 不换行显示文本或者代码
+   ```vim
+   set nowrap
+   ```
+2. 直接grep文本的内容并替换当前buffer中的内容.   
+   是的，当前打开的文件在VIM里面其实是叫buffer， 因为并未完成实际的写入。
+   ```vim 
+   :%! grep KEYWORD 
+   ```
+3. 粘贴的时候保留格式。 
+   ```vim
+   set paste
+   set nopaste
+   ```
+   或者是关闭autoindent
+   ```vim
+   set ai
+   set noai
+   ```
+
