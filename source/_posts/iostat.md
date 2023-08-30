@@ -44,7 +44,7 @@ nvme0n1p1        0.00      0.00     0.00   0.00    0.00     0.00    1.60     10.
 
 监控数据来源： `cat /proc/diskstats` 
 这些所有的指标都是By Device的， 与进程的部分无关，统计的是发送到设备或者发送到设备分区的请求。 
-基于manpage 中的描述， 这四个参数分别是： 
+基于man page 中的描述， 这四个参数分别是： 
      r/s    The number (after merges) of read requests completed per second for the device.
      w/s    The number (after merges) of write requests completed per second for the device.
      d/s    The number (after merges) of discard requests completed per second for the device.
@@ -60,6 +60,8 @@ nvme0n1p1        0.00      0.00     0.00   0.00    0.00     0.00    1.60     10.
 使用这个命令的思路： 
 1. 看设备， 具体是那个设备上面有IO请求。
 2. 看await，等待的时间长不长， 这里面的等待时间是从请求进入设备队列到请求返回成功的时间 ， 通常情况下应该是在10ms以内， 尤其是 ssd。
-3. 看 q-sz， 按照EBS的规则，说法， 应该是每 1000 IOPS 队列数为1。 
+3. 看 q-sz， 按照EBS的规则，说法， 应该是每 1000 IOPS 队列数为 1。 
 4. 综合看 IOPS， 块大小， 吞吐量，  使用率， 确认设备是不是达到了瓶颈。 
 5. 最后切换工具定位具体是那个进程在大量的发送IO请求 ，大概可能的工具是 pidstat， htop ， atop ， sar 等等， 感觉工具还可能有 pm 的这部分工具。
+
+通常可以直接使用命令 ： `iostat -xz 1` 
