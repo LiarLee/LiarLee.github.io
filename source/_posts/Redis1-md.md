@@ -5,7 +5,7 @@ category: Linux
 tags: Linux, Redis, Memory
 ---
 
-## 主題
+## ElastiCache主要概念
 1. ElastiCache nodes
    A node is the smallest building block of an ElastiCache deployment. 
    node is a fixed-size chunk of secure, network-attached RAM.
@@ -17,8 +17,7 @@ tags: Linux, Redis, Memory
    Redis (cluster mode enabled) clusters can have up to 500 shards, with your data partitioned across the shards.
 
    Shard 是多个 Nodes 的集合， 或者叫作节点组. 一个Shard包括的节点有不同的角色， 一个Primary 和 最多5个 Replica.
-   
-   
+
 1. ElastiCache for Redis clusters
    A Redis cluster is a logical grouping of one or more ElastiCache for Redis shards. Data is partitioned across the shards in a Redis (cluster mode enabled) cluster.
    集群模式关闭， 1 Cluster -- 1 Shard -- 1 - 6 Nodes: 1 Primary and 5 Nodes
@@ -78,3 +77,31 @@ tags: Linux, Redis, Memory
 
 1. ElastiCache events
    PENDING... Maybe follow offical guide.
+
+## Redis 缓存穿透， 击穿 和 雪崩
+### 穿透
+主要是指异常的查询请求， 缓存未命中的场景下直接访问后端， 后端承载了大量请求导致的崩溃。
+目前看到需要两个条件： 
+- 数据在缓存层未命中。 
+- 大量的请求转移到了后端。
+- 请求的数据可能在缓存层 以及 后端都不存在。 
+
+避免的方法可能有：
+- 在redis 前面添加一个 BloomFilter， 在请求进来的时候进行过滤， 对于异常的请求直接拒绝或者返回一个NULL。
+- 提前缓存一部分数值为 NULL 的数据， 在缓存层直接接下这些请求。这个本身是有点问题的。
+
+### 击穿
+这个概念是指的 **少部分热点数据**被大量的查询时候，  数据突然从缓存中消失， 可能是过期也可能删除等等， 这样有大量的**相同请求**发送到后端。
+解决方案： 
+- 设置部分数据永远不过期。 
+- 后端进行加分布式锁。 
+
+### 雪崩
+**批量的热数据过期**， 这时候大部分的请求可能还在继续尝试查询不同的数据，直接将这些请求发送到了后端的数据库， 数据库崩了。
+解决方案： 
+- 创建多个实例， 和副本来提高可用性。 
+- 后端加锁限流。
+- 调整过期时间， 让不同的数据过期的时间错开，防止批量的key 相同的时间过期。
+
+> 总结起来就是， 避免缓存在特定的场景下失效， 想各种方法保护缓存的可用性。 
+

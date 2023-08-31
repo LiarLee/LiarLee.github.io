@@ -193,3 +193,5 @@ clat 是提交IO请求给内核之后到IO完成之间的时间，不包括submi
 bw Bandwidth  带宽
 READ: 读取的速率
 
+关于fio 几个参数的测试， 这是我目前见到测试最完整的一个： 
+https://blog.csdn.net/get_set/article/details/108001674
