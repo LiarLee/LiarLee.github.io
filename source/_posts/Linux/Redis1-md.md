@@ -1,5 +1,5 @@
 ---
-title: Redis 1
+title: Redis概念
 date: 2023-08-30 23:31:09
 category: Linux
 tags: Linux, Redis, Memory
