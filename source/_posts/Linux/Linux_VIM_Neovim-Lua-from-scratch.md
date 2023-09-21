@@ -76,3 +76,11 @@ https://www.nerdfonts.com/#home
    set noai
    ```
 
+4. 压缩多个空格为一个
+```
+:%s@  *@ @g
+```
+5. 替换所有的空格 为 tab 
+```
+:% s@ @\t@g
+```

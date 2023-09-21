@@ -10,7 +10,7 @@ vim的常用的命令速记。
 可在~/.vimrc中进行vim的的默认配置，echo ‘:set nu’ > ~/.vimrc即可设置vim默认显示行号。  
 [30分钟正则表达式入门教程](https://www.w3cschool.cn/regex_rmjc/)
 
-# vim 
+# Vim
 一种模式化的编辑器，具有多种不同的模式。  
 1. 编辑模式，命令模式
 1. 插入模式

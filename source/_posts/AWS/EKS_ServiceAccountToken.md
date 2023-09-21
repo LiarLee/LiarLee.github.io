@@ -19,10 +19,3 @@ export TOKEN="Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImE3N2JhOGMwY2Fj
 curl -k -H "$TOKEN" https://127.0.0.1:10250/metrics
 ```
 
-Kubernetes 创建一个DEBUG 容器来查看容器内部的信息： 
-
-```
-kubectl debug -it --image=busybox:latest aws-node-8lv9d -n kube-system
-# 这命令本身没啥问题， 问题是， 如果命令没有正确的退出， 那么这个Debug容器一直都在， 可以describe到。
-```
-

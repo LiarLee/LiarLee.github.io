@@ -105,3 +105,23 @@ tags: Linux, Redis, Memory
 
 > 总结起来就是， 避免缓存在特定的场景下失效， 想各种方法保护缓存的可用性。 
 
+## More Note
+COB: Client Output Buffer,   Primary 向 Replica 同步数据使用， Max Memory 没有计算这部分的内存， 使用的是Redis引擎之外的内存（os管理的内存）。 
+
+Policy ： LRU 不严格， 随机选择三个。maxmemory-sample: 3， 可以调大。 sample越大， 信号的时间越长。 
+
+Reclaim策略里面， 每秒扫描200个key， 如果数据量比较大的话， Redis会进入loop阶段， 反复尝试Reclaim到25% 以下。 
+
+可以尝试使用 scan 命令扫描全部的数据， 遍历所有的key，这样会触发lazyway主动进行回收。 
+扫描的指令： 
+```
+scan 0 match * count 20000
+```
+
+LRU vs LFU
+
+---
+为了保持主从一致， primary 上过期或者删除的key， 会同步发送一个显式的 delete 指令，  这个会统计在replica的settypecmd。
+
+snapshot里面的数据在恢复的时候，会检查key 的ttl ， 如果超过会直接删除。
+

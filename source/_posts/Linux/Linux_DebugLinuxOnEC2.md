@@ -1,5 +1,5 @@
 ---
-title: 发送一个NMI unknown 时间给操作系统
+title: 发送一个NMI unknown 事件给OS
 date: 2023-06-28 17:12:22
 category: Linux
 tags: Linux, EC2 
@@ -43,6 +43,8 @@ drwxr-xr-x. 2 root root 67 Jun  9 09:39 127.0.0.1-2023-06-09-09:39:56
 
 ```bash
 # 下载源代码
+yum install -y yum-utils
+yum 
 yum download --source kernel
 # 解压代码包
 rpm2cpio ./kernel-5.14.0-284.11.1.el9_2.src.rpm | cpio -div
