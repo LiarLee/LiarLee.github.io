@@ -89,6 +89,8 @@ or
 iptables -t raw -A PREROUTING -p tcp -d 172.31.71.167 --dport 8090 -j TRACE
 
 modprobe ipt_LOG ip6t_LOG nfnetlink_log
+modprobe nf_log_ipv4
+xtables-monitor  --trace
 ```
 完成之后就可以在 message 里面看到记录了。 
 ```bash

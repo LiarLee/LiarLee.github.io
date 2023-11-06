@@ -28,7 +28,6 @@ Environment="NO_PROXY=localhost,127.0.0.1"
 ]$ sudo systemctl daemon-reload && sudo systemctl restart docker
 ```
 
-
 # Containerd
 ## 创建环境变量文件
 ```bash
@@ -44,7 +43,7 @@ Environment="HTTPS_PROXY=socks5://<-->:<-->/"
 Environment="NO_PROXY=localhost,127.0.0.1"
 ```
 
-## 重启 containerd
+## 重启 Containerd
 ```bash
 ]$ sudo systemctl daemon-reload && sudo systemctl restart docker
 ```
@@ -99,11 +98,12 @@ harbor我是直接使用docker-compose 的方式部署的， 这样简单一些�
    | 提供者     | 目标名          | 目标URL                 |
    | :--------- | --------------- | ----------------------- |
    | Quay       | registry.k8s.io | https://registry.k8s.io |
-   | Quay       | ghcr.io         | https://ghcr.io         |
-   | Quay       | k8s.gcr.io      | https://k8s.gcr.io      |
+   | GtihubGHCR       | ghcr.io         | https://ghcr.io         |
+   | Quay       | k8s.gcr.io (Archived)     | https://k8s.gcr.io      |
    | Quay       | gcr.io          | https://gcr.io          |
    | Quay       | quay.io         | https://quay.io         |
    | Docker Hub | docker.io       | https://hub.docker.com  |
+   | DockerRegistry | public.ecr.aws       | https://public.ecr.aws  |
 
 所有仓库的健康检查是通过的， 然后去创建项目， 就行了。 
 
@@ -112,5 +112,9 @@ harbor我是直接使用docker-compose 的方式部署的， 这样简单一些�
 ```bash
 docker pull reg.liarlee.site/docker.io/library/nginx:latest
 docker pull reg.liarlee.site/registry.k8s.io/metrics-server/metrics-server@sha256:1ab8d2722ce57979eb05ec0594cb9173e07ace16a253c747bb94c31b138a07dc
+docker pull reg.liarlee.site/public.ecr.aws/amazonlinux/amazonlinux:minimal
+docker pull reg.liarlee.site/quay.io/prometheus/prometheus
+docker pull reg.liarlee.site/quay.io/argoproj/argocd
+docker pull reg.liarlee.site/ghcr.io/dexidp/dex
 ```
 
