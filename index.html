@@ -56,7 +56,7 @@
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2023-11-06 12:20:48'
+  postUpdate: '2023-11-06 12:22:37'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -3024,7 +3024,18 @@ CNI Chaining:           none
 Cilium:                 Ok   1.12.0 (v1.12.0-9447cd1)
 NodeMonitor:            Listening for events on 4 CPUs with 64x4096 of shared memory
 Cilium health daemon:   Ok
-IPAM:                   IPv4: 3/254 allocated from 10 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_CalcStealtime/" title="由 CPU Steal Time 指标解释">由 CPU Steal Time 指标解释</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.461Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">观察vmstat命令输出的内容， 或者 top 命令 最上面输出的内容。可以看到Stealtime增加，大部分时候都是因为虚拟机的超卖， 总结来说st指示了vCPU的繁忙程度。
+IPAM:                   IPv4: 3/254 allocated from 10 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/AWS/EKS_ConfigureNodeGC/" title="如何配置kubelet的节点自动回收资源">如何配置kubelet的节点自动回收资源</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.457Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">配置Node节点按照磁盘阈值回收空间
+https://aws.amazon.com/cn/premiumsupport/knowledge-center/eks-worker-nodes-image-cache/
+
+
+
+修改Kubelet参数
+Kubelet默认提供了GC的参数  --image-gc-high-threshold 参数用于定义触发映像垃圾收集的磁盘使用百分比。默认值为 85%。
+--image-gc-low-threshold 参数用于定义映像垃圾收集尝试释放的磁盘使用百分比。默认值为 80%。  
+如果是自己管理的Node，最好的方式是直接配置kubelet命令行的参数，将上面的参数指定需要的阈值，然后重启kubelet即可。配置文件一般在 ： &#x2F;etc&#x2F;kubernetes&#x2F;kubelet.config"imageGCHighThresholdPercent": 70, 
+"imageGCLowThresholdPercent": 50,  
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_CalcStealtime/" title="由 CPU Steal Time 指标解释">由 CPU Steal Time 指标解释</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.461Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">观察vmstat命令输出的内容， 或者 top 命令 最上面输出的内容。可以看到Stealtime增加，大部分时候都是因为虚拟机的超卖， 总结来说st指示了vCPU的繁忙程度。
 进程相关参数的说明https://www.kernel.org/doc/html/latest/scheduler/sched-stats.html
 
 schedstats also adds a new &#x2F;proc&#x2F;&#x2F;schedstat file to include some of the same information on a per-process level. There are three fields in this file correlating for that process to:1 time spent on the cpu2 time spent waiting on a runqueue3 # of timeslices run on this cpu  
@@ -3051,7 +3062,154 @@ https://www.kernel.org/doc/html/latest/timers/no_hz.html
 
 git:&#x2F;&#x2F;git.kernel.org&#x2F;pub&#x2F;scm&#x2F;linux&#x2F;kernel&#x2F;git&#x2F;frederic&#x2F;dynticks-testing.git
 
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_OOMKiller/" title="OOM行为">OOM行为</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.474Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">关于OOM行为的思考 以及Kswapd的动作和行为。http://evertrain.blogspot.com/2018/04/oom.html更详细的打分算法见源码  https://github.com/torvalds/linux/blob/master/mm/oom_kill.c
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_Nginx%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%8E%8B%E6%B5%8B/" title="Nginx Performance Test">Nginx Performance Test</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.571Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">写在最前面， 这个问题还在研究中， 我目前还没有合适的模型用来研究这个问题， Pending….
+Nginx 性能测试与压力计算使用al2023  + 默认的yum仓库软件版本， 具体信息记录如下： 
+按照下面的配置， 在Nginx上面发布一个目录， 其中放了一个Fedora镜像， 大小大约2.3GB， 固定Nginx处理请求的大小， 控制大部分的因素来尝试获取精确的结果。
+
+OS Version
+[root@ip-172-31-53-146 ~]# cat /etc/os-release
+NAME="Amazon Linux"
+VERSION="2023"
+ID="amzn"
+ID_LIKE="fedora"
+VERSION_ID="2023"
+PLATFORM_ID="platform:al2023"
+PRETTY_NAME="Amazon Linux 2023"
+ANSI_COLOR="0;33"
+CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2023"
+HOME_URL="https://aws.amazon.com/linux/"
+BUG_REPORT_URL="https://github.com/amazonlinux/amazon-linux-2023"
+SUPPORT_END="2028-03-01"
+
+在一个机器上面部署MySQL 然后初始化配置一个密码和用户。
+[root@ip-172-31-53-200 ~]# mysql --version
+mysql  Ver 8.0.32 for Linux on x86_64 (MySQL Community Server - GPL)
+
+直接使用bitnami的wordpress， 仅部署wordpress在另一个机器上面，然后配置连接到上面的那台数据库。 
+
+额外配置一下Docker-compose 的CPU affinity， 绑到cpu0上面， 让这个Container只能用cpu0, 模拟只有一个核心， 后面应该还会给他放开。
+   ---
+   version: '2'
+   services:
+     wordpress:
+       cpuset: "0"
+       network_mode: host
+
+5. 尝试给点压力， 做个基准测试。
+
+### 测试1 单线程计算QPS
+
+> 公式：  1000ms/RT = QPS 
+>
+> 这个是单线程的QPS 与 RT 的关系， 试图走一把流程验证这个。 
+
+运行命令 wrk 配置 1connection 1thread 进行测试， 测试时间5分钟。
+
+获取 RT，HTTP请求从发出到响应的时间 ： 
+
+![2023-04-27_10-38.png](https://s2.loli.net/2023/04/27/pf2Z5erTzcayPFJ.png)
+
+基于当前获取到的RT就可以计算出单线程的QPS ： 
+
+```bash
+RT：45ms # 这个时候获取的RT是客户端从发出数据包 到 收到完整的请求的页面返回的时间， 基于上面的抓包结果计算。
+1000ms/45ms = 22 QPS
+
+实际命令返回的结果： 
+~ ❯❯❯ wrk -t1 -c1 -d5m --latency http://nginx.liarlee.site:8080
+Running 5m test @ http://nginx.liarlee.site:8080
+  1 threads and 1 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    45.00ms    3.60ms 169.02ms   88.75%
+    Req/Sec    22.24      4.27    30.00     76.72%
+  Latency Distribution
+     50%   44.28ms
+     75%   46.23ms
+     90%   48.51ms
+     99%   54.40ms
+  6668 requests in 5.00m, 337.69MB read
+Requests/sec:     22.23 # 确实是 22左右， 基本上和计算得出的结果一致。
+Transfer/sec:      1.13MB
+
+测试2 计算服务当前的最佳线程数量默认的情况下， 当一个进程处理的时候， 线程接收到请求， OnCPU处理这个请求， 发出数据库查询，切换到Sleep状态，数据库处理完成，线程回到CPU继续运算，发送结果给客户端，这样完成一个Request。
+计算服务的最佳线程数量其实是 需要多少个线程占用CPU，最终可以填满 CPU 1s 的时间， 让CPU尽可能都用来处理业务请求。
+所以最大的线程数量是变化的， 与CPU time 相关 或者说 与RT相关， 对于一些特定的请求，控制了大部分变量的场景下， 可以计算一个最佳的线程数量。 计算公式： 
+
+最佳线程数： CPU TIme + Wait Time &#x2F; CPU Time &#x3D; 2 + 42 &#x2F; 2 &#x3D; 22  
+
+打开文件数限制可能的并发数量测试 conntrack 的问题， 发现连接数不太高， 试图通过wrk 提高并发的连接数量。使用命令： 
+wrk -t2 -c30000 -d30s http://reg.liarlee.site:80
+如果我的理解没有问题， 那么我应该可以创建30000个连接 在 客户端 和 服务端 之间。但是结果： 
+# 客户端尝试建立 8000c
+ec2-user@arch ~> wrk -t1 -c8000 -d30s http://reg.liarlee.site:80
+Running 30s test @ http://reg.liarlee.site:80
+  1 threads and 8000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    49.94ms   42.36ms 428.68ms   92.65%
+    Req/Sec    21.15k     8.19k   41.30k    66.08%
+  608596 requests in 30.04s, 218.23MB read
+  Socket errors: connect 6980, read 0, write 0, timeout 0
+Requests/sec:  20260.60
+Transfer/sec:      7.27MB
+
+# 服务端看到的是： 
+[root@reg tools]# ss -s
+Total: 282
+TCP:   1103 (estab 28, closed 1063, orphaned 0, timewait 2)
+
+Transport Total     IP        IPv6
+RAW	  0         0         0
+UDP	  8         4         4
+TCP	  40        36        4
+INET	  48        40        8
+FRAG	  0         0         0
+这和预期的差距挺大的， 1103 让我非常容易的想到了 1024 的文件描述符限制。 于是 
+ec2-user@arch ~> ulimit -n
+1024
+客户端  wrk 的文件描述符可用调大到 100000 。
+# 客户端
+ec2-user@arch ~ [127]> ulimit -n
+100000
+ec2-user@arch ~> wrk -t2 -c30000 -d30s http://reg.liarlee.site:80
+Running 30s test @ http://reg.liarlee.site:80
+  2 threads and 30000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   515.29ms  411.20ms   2.00s    78.35%
+    Req/Sec     1.76k     2.70k   11.96k    85.71%
+  39021 requests in 30.28s, 13.99MB read
+  Socket errors: connect 0, read 298852, write 16, timeout 3115
+Requests/sec:   1288.65
+Transfer/sec:    473.17KB
+
+# 服务端
+[root@reg tools]# ss -s
+Total: 282
+TCP:   7544 (estab 28, closed 7504, orphaned 1641, timewait 2)
+
+Transport Total     IP        IPv6
+RAW	  0         0         0
+UDP	  8         4         4
+TCP	  40        36        4
+INET	  48        40        8
+FRAG	  0         0         0
+如果从上面的角度来看， 那么客户端的打开文件数是限制， 现在打开文件数调大了， 服务端还是无法建立更多的连接， 这个还得继续看看 ， 我感觉是cpu的问题， 毕竟我访问的页面的是有内容的， 不是一个空请求。
+# 尝试看了以下服务端的ss 命令
+ec2-user@arch ~> ss -s
+Total: 31669
+TCP:   31268 (estab 7959, closed 1182, orphaned 1250, timewait 1)
+
+Transport Total     IP        IPv6
+RAW	  1         0         1
+UDP	  4         2         2
+TCP	  30086     30080     6
+INET	  30091     30082     9
+FRAG	  0         0         0
+确实发起了30000 但是 进入estab状态的连接只有 8000 左右。这基本上可以确定是服务端的限制了，具体是什么地方限制了待查。客户端 ： c5 实例类型上面的 wrk服务端 ： t3.micro  - docker compose 部署的 harbor
+连接异常导致的orphans一个遗憾的事情， 最近遇到了一个可能是 cilium 的一个问题， 在小规模集群的场景下， Cilium 会错误的处理FIN ， FIN ACK， 导致安全组的 Connection Track 数量被打满。 之前没有注意过这个行为，在Docker的环境中测试下， 尝试使用 iptables 屏蔽容器发送出来的FIN， 记录步骤和命令： 
+dnf install -y docker
+systemctl enable --now docker
+docker pull reg.liarlee.site&#x2F;docker.io&#x2F;library&#x2F;nginx&#x2F;nginx:latest
+docker run -dt --rm --name nginx -p 81:80 reg.liarlee.site&#x2F;docker.io&#x2F;library&#x2F;nginx:l ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_OOMKiller/" title="OOM行为">OOM行为</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.474Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">关于OOM行为的思考 以及Kswapd的动作和行为。http://evertrain.blogspot.com/2018/04/oom.html更详细的打分算法见源码  https://github.com/torvalds/linux/blob/master/mm/oom_kill.c
 发生之后OOM killer会将kill的信息记录到系统日志&#x2F;var&#x2F;log&#x2F;messages，检索相关信息就能匹配到是否触发。
 grep 'Out of memory' /var/log/messages
 也可以通过dmesg
@@ -3545,165 +3703,7 @@ Iostat命令的理解iostat -xkt 1rrqm&#x2F;s wrqm&#x2F;s  - 读写请求的合�
 一般情况下这个参数是准确的，但是大部分指标都是取决于监控取样周期的。
 操作系统默认输出的块大小是 ： 256 ， 参数可见 ：╰─# cat &#x2F;sys&#x2F;block&#x2F;sda&#x2F;queue&#x2F;max_sectors_kb256
 max_segments表示设备能够允许的最大段的数目。    – 这应该是一个内存或者buffer的分段指标。 （待定）max_sectors_kb表示设备允许的最大请求大小。      – 可改 。max_hw_sectors_kb表示单个请求所能处理的最大KB（硬约束） – 这个是上一个参数的Limit。  
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/AWS/EKS_ConfigureNodeGC/" title="如何配置kubelet的节点自动回收资源">如何配置kubelet的节点自动回收资源</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.457Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">配置Node节点按照磁盘阈值回收空间
-https://aws.amazon.com/cn/premiumsupport/knowledge-center/eks-worker-nodes-image-cache/
-
-
-
-修改Kubelet参数
-Kubelet默认提供了GC的参数  --image-gc-high-threshold 参数用于定义触发映像垃圾收集的磁盘使用百分比。默认值为 85%。
---image-gc-low-threshold 参数用于定义映像垃圾收集尝试释放的磁盘使用百分比。默认值为 80%。  
-如果是自己管理的Node，最好的方式是直接配置kubelet命令行的参数，将上面的参数指定需要的阈值，然后重启kubelet即可。配置文件一般在 ： &#x2F;etc&#x2F;kubernetes&#x2F;kubelet.config"imageGCHighThresholdPercent": 70, 
-"imageGCLowThresholdPercent": 50,  
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_Nginx%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%8E%8B%E6%B5%8B/" title="Nginx Performance Test">Nginx Performance Test</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.571Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">写在最前面， 这个问题还在研究中， 我目前还没有合适的模型用来研究这个问题， Pending….
-Nginx 性能测试与压力计算使用al2023  + 默认的yum仓库软件版本， 具体信息记录如下： 
-按照下面的配置， 在Nginx上面发布一个目录， 其中放了一个Fedora镜像， 大小大约2.3GB， 固定Nginx处理请求的大小， 控制大部分的因素来尝试获取精确的结果。
-
-OS Version
-[root@ip-172-31-53-146 ~]# cat /etc/os-release
-NAME="Amazon Linux"
-VERSION="2023"
-ID="amzn"
-ID_LIKE="fedora"
-VERSION_ID="2023"
-PLATFORM_ID="platform:al2023"
-PRETTY_NAME="Amazon Linux 2023"
-ANSI_COLOR="0;33"
-CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2023"
-HOME_URL="https://aws.amazon.com/linux/"
-BUG_REPORT_URL="https://github.com/amazonlinux/amazon-linux-2023"
-SUPPORT_END="2028-03-01"
-
-在一个机器上面部署MySQL 然后初始化配置一个密码和用户。
-[root@ip-172-31-53-200 ~]# mysql --version
-mysql  Ver 8.0.32 for Linux on x86_64 (MySQL Community Server - GPL)
-
-直接使用bitnami的wordpress， 仅部署wordpress在另一个机器上面，然后配置连接到上面的那台数据库。 
-
-额外配置一下Docker-compose 的CPU affinity， 绑到cpu0上面， 让这个Container只能用cpu0, 模拟只有一个核心， 后面应该还会给他放开。
-   ---
-   version: '2'
-   services:
-     wordpress:
-       cpuset: "0"
-       network_mode: host
-
-5. 尝试给点压力， 做个基准测试。
-
-### 测试1 单线程计算QPS
-
-> 公式：  1000ms/RT = QPS 
->
-> 这个是单线程的QPS 与 RT 的关系， 试图走一把流程验证这个。 
-
-运行命令 wrk 配置 1connection 1thread 进行测试， 测试时间5分钟。
-
-获取 RT，HTTP请求从发出到响应的时间 ： 
-
-![2023-04-27_10-38.png](https://s2.loli.net/2023/04/27/pf2Z5erTzcayPFJ.png)
-
-基于当前获取到的RT就可以计算出单线程的QPS ： 
-
-```bash
-RT：45ms # 这个时候获取的RT是客户端从发出数据包 到 收到完整的请求的页面返回的时间， 基于上面的抓包结果计算。
-1000ms/45ms = 22 QPS
-
-实际命令返回的结果： 
-~ ❯❯❯ wrk -t1 -c1 -d5m --latency http://nginx.liarlee.site:8080
-Running 5m test @ http://nginx.liarlee.site:8080
-  1 threads and 1 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    45.00ms    3.60ms 169.02ms   88.75%
-    Req/Sec    22.24      4.27    30.00     76.72%
-  Latency Distribution
-     50%   44.28ms
-     75%   46.23ms
-     90%   48.51ms
-     99%   54.40ms
-  6668 requests in 5.00m, 337.69MB read
-Requests/sec:     22.23 # 确实是 22左右， 基本上和计算得出的结果一致。
-Transfer/sec:      1.13MB
-
-测试2 计算服务当前的最佳线程数量默认的情况下， 当一个进程处理的时候， 线程接收到请求， OnCPU处理这个请求， 发出数据库查询，切换到Sleep状态，数据库处理完成，线程回到CPU继续运算，发送结果给客户端，这样完成一个Request。
-计算服务的最佳线程数量其实是 需要多少个线程占用CPU，最终可以填满 CPU 1s 的时间， 让CPU尽可能都用来处理业务请求。
-所以最大的线程数量是变化的， 与CPU time 相关 或者说 与RT相关， 对于一些特定的请求，控制了大部分变量的场景下， 可以计算一个最佳的线程数量。 计算公式： 
-
-最佳线程数： CPU TIme + Wait Time &#x2F; CPU Time &#x3D; 2 + 42 &#x2F; 2 &#x3D; 22  
-
-打开文件数限制可能的并发数量测试 conntrack 的问题， 发现连接数不太高， 试图通过wrk 提高并发的连接数量。使用命令： 
-wrk -t2 -c30000 -d30s http://reg.liarlee.site:80
-如果我的理解没有问题， 那么我应该可以创建30000个连接 在 客户端 和 服务端 之间。但是结果： 
-# 客户端尝试建立 8000c
-ec2-user@arch ~> wrk -t1 -c8000 -d30s http://reg.liarlee.site:80
-Running 30s test @ http://reg.liarlee.site:80
-  1 threads and 8000 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    49.94ms   42.36ms 428.68ms   92.65%
-    Req/Sec    21.15k     8.19k   41.30k    66.08%
-  608596 requests in 30.04s, 218.23MB read
-  Socket errors: connect 6980, read 0, write 0, timeout 0
-Requests/sec:  20260.60
-Transfer/sec:      7.27MB
-
-# 服务端看到的是： 
-[root@reg tools]# ss -s
-Total: 282
-TCP:   1103 (estab 28, closed 1063, orphaned 0, timewait 2)
-
-Transport Total     IP        IPv6
-RAW	  0         0         0
-UDP	  8         4         4
-TCP	  40        36        4
-INET	  48        40        8
-FRAG	  0         0         0
-这和预期的差距挺大的， 1103 让我非常容易的想到了 1024 的文件描述符限制。 于是 
-ec2-user@arch ~> ulimit -n
-1024
-客户端  wrk 的文件描述符可用调大到 100000 。
-# 客户端
-ec2-user@arch ~ [127]> ulimit -n
-100000
-ec2-user@arch ~> wrk -t2 -c30000 -d30s http://reg.liarlee.site:80
-Running 30s test @ http://reg.liarlee.site:80
-  2 threads and 30000 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   515.29ms  411.20ms   2.00s    78.35%
-    Req/Sec     1.76k     2.70k   11.96k    85.71%
-  39021 requests in 30.28s, 13.99MB read
-  Socket errors: connect 0, read 298852, write 16, timeout 3115
-Requests/sec:   1288.65
-Transfer/sec:    473.17KB
-
-# 服务端
-[root@reg tools]# ss -s
-Total: 282
-TCP:   7544 (estab 28, closed 7504, orphaned 1641, timewait 2)
-
-Transport Total     IP        IPv6
-RAW	  0         0         0
-UDP	  8         4         4
-TCP	  40        36        4
-INET	  48        40        8
-FRAG	  0         0         0
-如果从上面的角度来看， 那么客户端的打开文件数是限制， 现在打开文件数调大了， 服务端还是无法建立更多的连接， 这个还得继续看看 ， 我感觉是cpu的问题， 毕竟我访问的页面的是有内容的， 不是一个空请求。
-# 尝试看了以下服务端的ss 命令
-ec2-user@arch ~> ss -s
-Total: 31669
-TCP:   31268 (estab 7959, closed 1182, orphaned 1250, timewait 1)
-
-Transport Total     IP        IPv6
-RAW	  1         0         1
-UDP	  4         2         2
-TCP	  30086     30080     6
-INET	  30091     30082     9
-FRAG	  0         0         0
-确实发起了30000 但是 进入estab状态的连接只有 8000 左右。这基本上可以确定是服务端的限制了，具体是什么地方限制了待查。客户端 ： c5 实例类型上面的 wrk服务端 ： t3.micro  - docker compose 部署的 harbor
-连接异常导致的orphans一个遗憾的事情， 最近遇到了一个可能是 cilium 的一个问题， 在小规模集群的场景下， Cilium 会错误的处理FIN ， FIN ACK， 导致安全组的 Connection Track 数量被打满。 之前没有注意过这个行为，在Docker的环境中测试下， 尝试使用 iptables 屏蔽容器发送出来的FIN， 记录步骤和命令： 
-dnf install -y docker
-systemctl enable --now docker
-docker pull reg.liarlee.site&#x2F;docker.io&#x2F;library&#x2F;nginx&#x2F;nginx:latest
-docker run -dt --rm --name nginx -p 81:80 reg.liarlee.site&#x2F;docker.io&#x2F;library&#x2F;nginx:l ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/15/Linux/Linux_Shell-Script-Process-Space/" title="Shell脚本处理目录或者文件名中的空格">Shell脚本处理目录或者文件名中的空格</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-15T06:10:54.000Z" title="发表于 2022-04-15 14:10:54">2022-04-15</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.479Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">问题：问题是： 罗列指定的目录下面的文件， 符合要求的文件保留， 未匹配的删除。
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/15/Linux/Linux_Shell-Script-Process-Space/" title="Shell脚本处理目录或者文件名中的空格">Shell脚本处理目录或者文件名中的空格</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-15T06:10:54.000Z" title="发表于 2022-04-15 14:10:54">2022-04-15</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.479Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">问题：问题是： 罗列指定的目录下面的文件， 符合要求的文件保留， 未匹配的删除。
 解决：简单的Bash脚本， 使用ls拿文件名， 使用For + IF判断即可。但是文件的目录中有的文件名是带有空格的， 而Shell 使用空格做分隔符，因此无法正确的处理完整的文件名。解决方案有特别多， 只记录一个我最后使用的方案：使用IFS变量来定义Shell 的默认分隔符， 将空格替换成\n\b. 
 #!/bin/bash
 #
@@ -6880,5 +6880,5 @@ Linux输入输出重定向重定向说明STDOUT和STDERR可以被重定向到文
             </div>
             <ul class="card-category-list" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AWS/"><span class="card-category-list-name">AWS</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Books/"><span class="card-category-list-name">Books</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Database/"><span class="card-category-list-name">Database</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ESXi/"><span class="card-category-list-name">ESXi</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ElasticSearch/"><span class="card-category-list-name">ElasticSearch</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Healthcare-IT/"><span class="card-category-list-name">Healthcare-IT</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Kubernetes/"><span class="card-category-list-name">Kubernetes</span><span class="card-category-list-count">17</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.5em; color: #99a9bf">Linux</a> <a href="/tags/Application-ElasticSearch/" style="font-size: 1.17em; color: #999c9f">Application, ElasticSearch</a> <a href="/tags/Hexo/" style="font-size: 1.1em; color: #999">Hexo</a> <a href="/tags/Docker-Application-Prometheus-Grafana/" style="font-size: 1.1em; color: #999">Docker, Application, Prometheus, Grafana</a> <a href="/tags/%E4%B9%A6/" style="font-size: 1.23em; color: #999ea6">书</a> <a href="/tags/VIM-Linux/" style="font-size: 1.1em; color: #999">VIM, Linux</a> <a href="/tags/Linux-Memory-Kernel/" style="font-size: 1.1em; color: #999">Linux, Memory, Kernel</a> <a href="/tags/Linux-Git/" style="font-size: 1.1em; color: #999">Linux, Git</a> <a href="/tags/Linux-Ansible/" style="font-size: 1.1em; color: #999">Linux, Ansible</a> <a href="/tags/Linux-EC2-Network/" style="font-size: 1.1em; color: #999">Linux, EC2, Network</a> <a href="/tags/Windows-Office/" style="font-size: 1.1em; color: #999">Windows, Office</a> <a href="/tags/Kubernetes/" style="font-size: 1.43em; color: #99a6b9">Kubernetes</a> <a href="/tags/Linux-Hexo/" style="font-size: 1.1em; color: #999">Linux, Hexo</a> <a href="/tags/Linux-IO-FileSystem/" style="font-size: 1.1em; color: #999">Linux, IO, FileSystem</a> <a href="/tags/Nginx-Application/" style="font-size: 1.37em; color: #99a4b2">Nginx, Application</a> <a href="/tags/Linux-Ranger/" style="font-size: 1.1em; color: #999">Linux, Ranger</a> <a href="/tags/Linux-Network/" style="font-size: 1.1em; color: #999">Linux, Network</a> <a href="/tags/Vim/" style="font-size: 1.1em; color: #999">Vim</a> <a href="/tags/Linux-Kernel/" style="font-size: 1.3em; color: #99a1ac">Linux, Kernel</a> <a href="/tags/Linux-Perf/" style="font-size: 1.17em; color: #999c9f">Linux, Perf</a> <a href="/tags/Kubernetes-Cilium-EKS/" style="font-size: 1.1em; color: #999">Kubernetes, Cilium, EKS</a> <a href="/tags/AWS-VPC-FLowLog/" style="font-size: 1.1em; color: #999">AWS, VPC, FLowLog</a> <a href="/tags/Linux-Perf-Strace/" style="font-size: 1.1em; color: #999">Linux, Perf, Strace</a> <a href="/tags/Orthanc-Docker/" style="font-size: 1.1em; color: #999">Orthanc, Docker</a> <a href="/tags/Linux-LVM-Filesystem-IO/" style="font-size: 1.1em; color: #999">Linux, LVM, Filesystem, IO</a> <a href="/tags/Ansible/" style="font-size: 1.1em; color: #999">Ansible</a> <a href="/tags/Bash/" style="font-size: 1.1em; color: #999">Bash</a> <a href="/tags/Linux-CPU-EC2/" style="font-size: 1.1em; color: #999">Linux, CPU, EC2</a> <a href="/tags/Application-RabbitMQ/" style="font-size: 1.1em; color: #999">Application, RabbitMQ</a> <a href="/tags/Windows/" style="font-size: 1.23em; color: #999ea6">Windows</a> <a href="/tags/Linux-Fedora/" style="font-size: 1.23em; color: #999ea6">Linux, Fedora</a> <a href="/tags/Linux-EC2/" style="font-size: 1.1em; color: #999">Linux, EC2</a> <a href="/tags/MongoDB-JAVA/" style="font-size: 1.1em; color: #999">MongoDB, JAVA</a> <a href="/tags/Linux-BPF/" style="font-size: 1.1em; color: #999">Linux, BPF</a> <a href="/tags/Application-Harbor/" style="font-size: 1.1em; color: #999">Application, Harbor</a> <a href="/tags/Docker/" style="font-size: 1.37em; color: #99a4b2">Docker</a> <a href="/tags/Linux-JAVA/" style="font-size: 1.1em; color: #999">Linux, JAVA</a> <a href="/tags/docker/" style="font-size: 1.1em; color: #999">docker</a> <a href="/tags/Linux-Kubernetes/" style="font-size: 1.1em; color: #999">Linux, Kubernetes</a> <a href="/tags/Repo-Linux/" style="font-size: 1.1em; color: #999">Repo, Linux</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/11/"><span class="card-archive-list-date">十一月 2023</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">9</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">四月 2023</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">128</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">143k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-11-06T04:20:45.802Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Kubernetes-EKS/" style="font-size: 1.5em; color: #99a9bf">Kubernetes, EKS</a> <a href="/tags/Linux-Ansible/" style="font-size: 1.1em; color: #999">Linux, Ansible</a> <a href="/tags/MongoDB-JAVA/" style="font-size: 1.1em; color: #999">MongoDB, JAVA</a> <a href="/tags/MySQL-Database/" style="font-size: 1.1em; color: #999">MySQL, Database</a> <a href="/tags/Windows/" style="font-size: 1.3em; color: #99a1ac">Windows</a> <a href="/tags/Linux-CPU/" style="font-size: 1.1em; color: #999">Linux, CPU</a> <a href="/tags/Linux-KVM/" style="font-size: 1.1em; color: #999">Linux, KVM</a> <a href="/tags/Bash/" style="font-size: 1.1em; color: #999">Bash</a> <a href="/tags/Python/" style="font-size: 1.4em; color: #99a5b6">Python</a> <a href="/tags/Linux-Bash/" style="font-size: 1.1em; color: #999">Linux, Bash</a> <a href="/tags/Linux-CPU-EC2/" style="font-size: 1.1em; color: #999">Linux, CPU, EC2</a> <a href="/tags/%E8%AF%97/" style="font-size: 1.1em; color: #999">诗</a> <a href="/tags/Linux-Ranger/" style="font-size: 1.1em; color: #999">Linux, Ranger</a> <a href="/tags/Linux-Git/" style="font-size: 1.1em; color: #999">Linux, Git</a> <a href="/tags/Linux-LVM-Filesystem-IO/" style="font-size: 1.1em; color: #999">Linux, LVM, Filesystem, IO</a> <a href="/tags/Ceph-IO/" style="font-size: 1.4em; color: #99a5b6">Ceph, IO</a> <a href="/tags/Linux-JAVA/" style="font-size: 1.1em; color: #999">Linux, JAVA</a> <a href="/tags/Linux-Network/" style="font-size: 1.1em; color: #999">Linux, Network</a> <a href="/tags/AWS-VPC-FLowLog/" style="font-size: 1.1em; color: #999">AWS, VPC, FLowLog</a> <a href="/tags/Linux-Memory/" style="font-size: 1.4em; color: #99a5b6">Linux, Memory</a> <a href="/tags/Linux-FileSystem/" style="font-size: 1.1em; color: #999">Linux, FileSystem</a> <a href="/tags/Vim/" style="font-size: 1.1em; color: #999">Vim</a> <a href="/tags/Linux-RPM/" style="font-size: 1.1em; color: #999">Linux, RPM</a> <a href="/tags/Docker/" style="font-size: 1.5em; color: #99a9bf">Docker</a> <a href="/tags/docker/" style="font-size: 1.1em; color: #999">docker</a> <a href="/tags/Linux-Kernel/" style="font-size: 1.4em; color: #99a5b6">Linux, Kernel</a> <a href="/tags/Application-ElasticSearch/" style="font-size: 1.2em; color: #999da3">Application, ElasticSearch</a> <a href="/tags/Ansible/" style="font-size: 1.1em; color: #999">Ansible</a> <a href="/tags/Network/" style="font-size: 1.1em; color: #999">Network</a> <a href="/tags/Nginx-Application/" style="font-size: 1.5em; color: #99a9bf">Nginx, Application</a> <a href="/tags/Kubernetes-Cilium-EKS/" style="font-size: 1.1em; color: #999">Kubernetes, Cilium, EKS</a> <a href="/tags/Application-Firefox/" style="font-size: 1.1em; color: #999">Application, Firefox</a> <a href="/tags/Linux-Network-EC2/" style="font-size: 1.1em; color: #999">Linux, Network, EC2</a> <a href="/tags/Linux-Hexo/" style="font-size: 1.1em; color: #999">Linux, Hexo</a> <a href="/tags/Linux-IO/" style="font-size: 1.1em; color: #999">Linux, IO</a> <a href="/tags/RIME-Linux-Windows/" style="font-size: 1.1em; color: #999">RIME, Linux, Windows</a> <a href="/tags/Application-Cacti/" style="font-size: 1.1em; color: #999">Application, Cacti</a> <a href="/tags/Android/" style="font-size: 1.1em; color: #999">Android</a> <a href="/tags/%E4%B9%A6/" style="font-size: 1.3em; color: #99a1ac">书</a> <a href="/tags/Windows-Office/" style="font-size: 1.1em; color: #999">Windows, Office</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/11/"><span class="card-archive-list-date">十一月 2023</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">9</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">四月 2023</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">128</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">143k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-11-06T04:22:34.716Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
