@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>面试记录 | Liarlee's Notebook</title><meta name="author" content="Liarlee"><meta name="copyright" content="Liarlee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这个月还是发生了不少事情了，面试，换房子，真快。  面试题 有一个字符串s&#x3D;“kjdfdsfevsdf”,使用python单独输出每个字符并在后面加上”th”.  s &#x3D; &quot;asdfaurhgauh&quot; for i in s:   print(i+&#39;th&#39;)	 数据库问题，增删改查。基本上都没答上来。select语句对数据库内容Where做一个筛选。  提取b.txt中的所有域名，awk我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试记录">
+<meta property="og:url" content="https://liarlee.site/2019/07/18/Other/Interview_2019/index.html">
+<meta property="og:site_name" content="Liarlee&#39;s Notebook">
+<meta property="og:description" content="这个月还是发生了不少事情了，面试，换房子，真快。  面试题 有一个字符串s&#x3D;“kjdfdsfevsdf”,使用python单独输出每个字符并在后面加上”th”.  s &#x3D; &quot;asdfaurhgauh&quot; for i in s:   print(i+&#39;th&#39;)	 数据库问题，增删改查。基本上都没答上来。select语句对数据库内容Where做一个筛选。  提取b.txt中的所有域名，awk我">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png">
+<meta property="article:published_time" content="2019-07-18T05:12:33.000Z">
+<meta property="article:modified_time" content="2023-08-20T15:01:42.489Z">
+<meta property="article:author" content="Liarlee">
+<meta property="article:tag" content="Personal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://liarlee.site/2019/07/18/Other/Interview_2019/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '面试记录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-20 23:01:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">65</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">面试记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-07-18T05:12:33.000Z" title="发表于 2019-07-18 13:12:33">2019-07-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.489Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="面试记录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><p>这个月还是发生了不少事情了，面试，换房子，真快。</p>
+<hr>
+<h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><ol>
+<li><p>有一个字符串s&#x3D;“kjdfdsfevsdf”,使用python单独输出每个字符并在后面加上”th”.</p>
+ <pre class="language-python" data-language="python"><code class="language-python">s <span class="token operator">=</span> <span class="token string">"asdfaurhgauh"</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> s<span class="token punctuation">:</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token operator">+</span><span class="token string">'th'</span><span class="token punctuation">)</span>	</code></pre></li>
+<li><p>数据库问题，增删改查。基本上都没答上来。select语句对数据库内容Where做一个筛选。</p>
+</li>
+<li><p>提取b.txt中的所有域名，awk我写的grep。</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">grep</span> <span class="token parameter variable">-E</span> <span class="token parameter variable">-o</span> <span class="token string">"www.[[:alpha:]]*.com"</span> ./b.txt <span class="token operator">|</span> <span class="token function">sort</span> <span class="token operator">|</span> <span class="token function">uniq</span> <span class="token parameter variable">-c</span> <span class="token operator">|</span> <span class="token function">sort</span> <span class="token parameter variable">-nr</span>
+<span class="token function">awk</span> <span class="token parameter variable">-F</span> / <span class="token string">'&#123;print $3&#125;'</span> b.txt <span class="token operator">|</span> <span class="token function">sort</span> <span class="token operator">|</span> <span class="token function">uniq</span> <span class="token parameter variable">-c</span> <span class="token operator">|</span> <span class="token function">sort</span> <span class="token parameter variable">-nr</span></code></pre>
+<p>我写的这个唯一个不好的地方就是不能匹配数字的部分，如果域名有数字就提取不出了。其实中间如果全部用正则也可以，但是正则会特别的长。</p>
+</li>
+<li><p>nginx的反向代理配置文件是不是能看懂，考了一个upstream模块，考了一个weight的分配，考了一个 proxy_pass模块的调用。</p>
+</li>
+<li><p>描述Raid0 ， 1 ，5的区别，但是没让说raid10。</p>
+</li>
+<li><p>描述如果你有多的资源如何搭建高可用和高并发，这种题目其实还挺无聊的，高并发靠负载均衡分流，四层转发七层代理。高可用靠的冗余和故障的快速切换。没什么特别的架构，web服务也就是keepalived + lvs。硬件的话F5直接搞，虽然我没见过，但是也听说过。</p>
+</li>
+<li><p>容器问了一个私有的register,不记得叫什么名字，但是我知道Docker官方有文档。<strong>软件名称是Harbor</strong></p>
+</li>
+<li><p>k8s没什么可说了，昨天晚上听了一堆的k8s的理论，一个集群简单而要三个网络，要不是设计思路清晰，网络就已经是一锅粥了。软件的架构真的是越来越复杂了，现在的网络里面不是桥桥桥，就是NAT转换。</p>
+</li>
+<li><p>查看Linux系统CPU，MEM，NET-IO，DISK-IO的命令。top | htop | free -m | iostat -a</p>
+</li>
+<li><p>ext4如果分区超过2T如何操作。这题估计本来是问Ext3文件系统的，改的。Ext4随便分了已经。</p>
+</li>
+<li><p>如何理解top命令中的load average的含义<br> 这个问题本来是聊到了服务器性能的观察，我说到了top命令查看系统的当前状况，所以后续有了这个问题，其实在系统中，这三个数值的计算方式是通过CPU进程队列的长度来进行计算的，具体的数值及计算公式网上有很多,等我不记得了我在去找资料吧，这种东西已经是死知识了，到处都是。<br> 我说说我的理解，这三个数值其实是system load average,是系统的负载状态，其实是描述了<strong>系统的压力变化趋势</strong>，计算的CPU参数主要是Running Process &amp; uninterreptable Process , 其实就是<strong>正在运行</strong>和<strong>不可中断运行</strong>的进程，这些是<strong>CPU的工作量</strong>。还有一个衡量的参数实际上是<strong>IO</strong>，IO的指标也会体现在三个不同时间点的计算中。<br> 如何查看或者分析是我一直理解的不透彻的点，记录一下。单项指标的观察不足以解决系统的问题，需要搭配其他的工具进行分析才可以。<br> 看三个参数的<strong>变化趋势</strong>，1，5，15三个时间点：  </p>
+<ul>
+<li>如果<strong>1分钟高</strong>，但是后面两个都低，说明系统当前的状态是压力高的，但是是暂时的。</li>
+<li>如果是<strong>三个数值都高</strong>，可以说明可能是系统的性能不足或者有问题需要解决。</li>
+<li>如果<strong>1分钟的数值低</strong>，但是<strong>15分钟的数值高</strong>，说明系统的压力会慢慢平稳下来，不会持续太久。</li>
+</ul>
+</li>
+<li><p>ps命令的使用</p>
+<ul>
+<li>ps aux <ul>
+<li>To see every process on the system using BSD syntax <pre class="language-none"><code class="language-none">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.1  0.0 186736 10160 ?        Ss   09:32   0:03 &#x2F;sbin&#x2F;init
+root         2  0.0  0.0      0     0 ?        S    09:32   0:00 [kthreadd]
+root         3  0.0  0.0      0     0 ?        I&lt;   09:32   0:00 [rcu_gp]
+root         4  0.0  0.0      0     0 ?        I&lt;   09:32   0:00 [rcu_par_gp]
+root         6  0.0  0.0      0     0 ?        I&lt;   09:32   0:00 [kworker&#x2F;0:0H-kblockd]
+root         8  0.0  0.0      0     0 ?        I&lt;   09:32   0:00 [mm_percpu_wq]
+root         9  0.0  0.0      0     0 ?        S    09:32   0:00 [ksoftirqd&#x2F;0]
+root        10  0.0  0.0      0     0 ?        I    09:32   0:00 [rcu_preempt]
+root        11  0.0  0.0      0     0 ?        I    09:32   0:00 [rcu_sched]
+root        12  0.0  0.0      0     0 ?        I    09:32   0:00 [rcu_bh]</code></pre></li>
+</ul>
+</li>
+<li>ps axjf &#x2F; ps -ejH<ul>
+<li>To print a process tree  <pre class="language-none"><code class="language-none">PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
+1   555   555   555 ?           -1 Ssl      0   0:00 &#x2F;usr&#x2F;bin&#x2F;gdm
+555   585   555   555 ?           -1 Sl       0   0:00  \_ gdm-session-worker [pam&#x2F;gdm-launch-environment]
+585   789   789   789 tty1       789 Ssl+   120   0:00  |   \_ &#x2F;usr&#x2F;lib&#x2F;gdm-x-session gnome-session --autostart &#x2F;usr&#x2F;share&#x2F;gdm&#x2F;g
+789   791   789   789 tty1       789 Sl+    120   0:01  |       \_ &#x2F;usr&#x2F;lib&#x2F;Xorg vt1 -displayfd 3 -auth &#x2F;run&#x2F;user&#x2F;120&#x2F;gdm&#x2F;Xautho
+791   848   789   789 tty1       789 S+       0   0:00  |       |   \_ xf86-video-intel-backlight-helper intel_backlight
+789   939   789   789 tty1       789 Sl+    120   0:00  |       \_ &#x2F;usr&#x2F;lib&#x2F;gnome-session-binary --autostart &#x2F;usr&#x2F;share&#x2F;gdm&#x2F;gree
+939   970   789   789 tty1       789 Sl+    120   0:04  |           \_ &#x2F;usr&#x2F;bin&#x2F;gnome-shell
+970  1032  1032   789 tty1       789 Sl     120   0:00  |           |   \_ ibus-daemon --xim --panel disable
+1032  1035  1032   789 tty1       789 Sl     120   0:00  |           |       \_ &#x2F;usr&#x2F;lib&#x2F;ibus&#x2F;ibus-dconf
+1032  1200  1032   789 tty1       789 Sl     120   0:00  |           |       \_ &#x2F;usr&#x2F;lib&#x2F;ibus&#x2F;ibus-engine-simple
+939  1086   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-rfkill
+939  1088   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-smartcard
+939  1089   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-clipboard
+939  1090   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-xsettings
+939  1091   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-housekeeping
+939  1092   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-mouse
+939  1093   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-power
+939  1094   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-screensaver-proxy
+939  1095   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-sound
+939  1099   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-color
+939  1101   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-keyboard
+939  1103   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-print-notifications
+939  1104   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-sharing
+939  1105   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-a11y-settings
+939  1106   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-wacom
+939  1107   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-datetime
+939  1108   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-media-keys</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Buffer 和 Cache的区别 </p>
+<ul>
+<li>Buffer：A buffer is somthing that has yet to be “written” to disk.</li>
+<li>Cache：A Cache is something that has been “read” from the disk and stored for later use.</li>
+</ul>
+<p>free 或者 top 命令中的buffer 和 cache：  </p>
+<ul>
+<li>Buffer： 作为Buffer-cache的一部分内存，是块设备的读写缓冲区。</li>
+<li>Cache： 作为Page-cache的一部分内存，是缓冲文件系统的cache。</li>
+<li>Buffer（缓冲区）是系统两端处理速度平衡（从长时间尺度上看）时使用的。它的引入是为了减小短期内突发I&#x2F;O的影响，起到流量整形的作用。比如生产者——消费者问题，他们产生和消耗资源的速度大体接近，加一个buffer可以抵消掉资源刚产生&#x2F;消耗时的突然变化。</li>
+<li>Cache（缓存）则是系统两端处理速度不匹配时的一种折衷策略。因为CPU和memory之间的速度差异越来越大，所以人们充分利用数据的局部性（locality）特征，通过使用存储系统分级（memory hierarchy）的策略来减小这种差异带来的影响。<br>答案来源链接:<br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/26190832/answer/32387918">知乎</a></li>
+</ul>
+</li>
+<li><p>iptables的链表结构：<br> 表：   </p>
+<ul>
+<li>Filter   			一般的过滤功能  </li>
+<li>NAT  			NAT功能的相关设置  </li>
+<li>Mangle  			用于对特定数据包的修改  </li>
+<li>Raw  			一般设置不需要iptables过滤及监控的流量，提高性能使用。  <ul>
+<li>Raw表的使用:<pre><code>iptables -t raw -A PREROUTING -d 1.2.3.4 -p tcp --dport 80 -j NOTRACK
+iptables -t raw -A PREROUTING -s 1.2.3.4 -p tcp --sport 80 -j NOTRACK
+iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<p> 链：  </p>
+<ul>
+<li>PREROUTING 数据包进入路由表之前的Hook函数  </li>
+<li>INPUT 数据包经过路由表后进入本机的数据  </li>
+<li>FORWARD  	数据包经过路由表后不是本机的数据  <ul>
+<li>前面三个经过路由表的选择，后面两个不会再次经过路由表</li>
+</ul>
+</li>
+<li>OUTPUT 数据包是本机产生的，向外发送</li>
+<li>POSTROUTING 发送到网卡接口之前</li>
+</ul>
+</li>
+<li><p>如何观察网卡的流量及tcpdump的使用</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://liarlee.site">Liarlee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://liarlee.site/2019/07/18/Other/Interview_2019/">https://liarlee.site/2019/07/18/Other/Interview_2019/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://liarlee.site" target="_blank">Liarlee's Notebook</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Personal/">Personal</a></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/07/21/Linux/Linux_k8s-basic-1/" title="Kubernetes集群的学习笔记(1)"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Kubernetes集群的学习笔记(1)</div></div></a></div><div class="next-post pull-right"><a href="/2019/07/13/Linux/Linux_Nginx-Proxy/" title="Nginx反向代理笔记"><img class="cover" src="https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Nginx反向代理笔记</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">65</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">面试题</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/Redis%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/%E5%85%B3%E4%BA%8ETrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.158Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/CFS%20Schedler/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.157Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/30/iostat/" title="无题">无题</a><time datetime="2023-10-30T05:30:17.573Z" title="发表于 2023-10-30 13:30:17">2023-10-30</time></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

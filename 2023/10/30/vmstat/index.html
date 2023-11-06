@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Liarlee's Notebook | Liarlee's Notebook</title><meta name="author" content="Liarlee"><meta name="copyright" content="Liarlee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="命令说明vmstat 提供的信息是从硬件和物理参数的角度。vmstat 第一次的数据显示的是从上一次重启到现在的平均值，所以只能用来参考。标题内容就不在解释了，分别是 进程 ， 内存， 交换 ， IO， 系统 ， 和 CPU。 详细参数如下：  r - 等待运行的进程数量,  多少个进程在R状态， 并一直取得并占用CPU时间片。  b - Uninterreptable Sleep的进程数量， 有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Liarlee&#39;s Notebook">
+<meta property="og:url" content="https://liarlee.site/2023/10/30/vmstat/index.html">
+<meta property="og:site_name" content="Liarlee&#39;s Notebook">
+<meta property="og:description" content="命令说明vmstat 提供的信息是从硬件和物理参数的角度。vmstat 第一次的数据显示的是从上一次重启到现在的平均值，所以只能用来参考。标题内容就不在解释了，分别是 进程 ， 内存， 交换 ， IO， 系统 ， 和 CPU。 详细参数如下：  r - 等待运行的进程数量,  多少个进程在R状态， 并一直取得并占用CPU时间片。  b - Uninterreptable Sleep的进程数量， 有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png">
+<meta property="article:published_time" content="2023-10-30T05:30:17.573Z">
+<meta property="article:modified_time" content="2023-10-30T05:30:17.573Z">
+<meta property="article:author" content="Liarlee">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://liarlee.site/2023/10/30/vmstat/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Liarlee\'s Notebook',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-30 13:30:17'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">65</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">无题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-30T05:30:17.573Z" title="发表于 2023-10-30 13:30:17">2023-10-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.573Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h3 id="命令说明"><a href="#命令说明" class="headerlink" title="命令说明"></a>命令说明</h3><p>vmstat 提供的信息是从硬件和物理参数的角度。<strong>vmstat 第一次的数据显示的是从上一次重启到现在的平均值，所以只能用来参考。</strong><br>标题内容就不在解释了，分别是 <strong>进程 ， 内存， 交换 ， IO， 系统 ， 和 CPU</strong>。</p>
+<p>详细参数如下：<br>  r - 等待运行的进程数量,  多少个进程在R状态， 并一直取得并占用CPU时间片。<br>  b - Uninterreptable Sleep的进程数量， 有多少个处于D状态显示的进程， 通常代表有多少个进程正常等待IO资源。<br>  swpd： VirtualMemory的值 （KB）, 交换的使用量，如果未开启交换分区就会显示是 0。 这个指标和后面的 si so 是整体的， swpd 有用量， 那么si&#x2F;so 就有数据， swpd 是 0， 那么永远不会有 si&#x2F;so。<br>  free： IdleMemory的值（KB), 完全可用的内存，  这里free的内存是 完全没有被分配的。total - buffer - cache - used 计算完了之后剩下的, 与 free 命令中的 free 字段是同样的含义。<br>  buff： 被buffer使用的内存量（KB），被 buff 使用的内存空间。<br>  cache： 被cache使用的内存量（KB）， 被 cache 占用的内存空间， 这部分和buffer 一样， 是临时数据，在落盘后buffer 会被释放， cache可以直接被释放。<br>  si： Swapin 内存从硬盘换入的数据量 （KB&#x2F;s)， <strong>读取交换分区（disk）到 内存</strong> 的数据量 。<br>  so：Swapout 内存交换到硬盘的数据量 （KB&#x2F;s）， <strong>写入磁盘交换分区</strong>的数据量。<br>  bi： blockin， 发送到块设备的块数量（blocks&#x2F;s),   系统收到disk发送来的数据量， 也就是通常说的<strong>读磁盘数据。</strong><br>  bo： blockout ， 从块设备接收的块数量（blocks&#x2F;s）， 系统写入disk的数据量， 也就是通常说的<strong>写磁盘数据</strong>。<br>  in： 包括时钟在内的那<strong>每秒中断数</strong>。<br>  cs： <strong>进程上下文每秒切换</strong>的次数。<br>  us：非内核代码使用的CPU百分比， 包括<strong>用户时间和Nice时间</strong>。<br>  sy：<strong>内核代码</strong>使用的CPU时间百分比。<br>  id： CPU的<strong>空闲时间</strong>百分比。<br>  wa：<strong>等待IO操作</strong>花费的时间百分比。 这个容易误解的是， wa 其实cpu 是空闲的， 统计的方式是， 在收集数据的时候有多少个进程处于需要处理io或者等待处理io的状态， 当时那个时刻的百分比， 而实际上等待io的时间其实CPU没有做事， 所以在CPU的度量上， 这个时间的CPU是可以做其他事情的， 可以被其他需要进行计算的进程使用掉这部分时间。<br>  st：<strong>虚拟化层</strong>操作花费的时间百分比。这个通常是指虚拟化层的限制。 这个指标如果有， 那么表示虚拟化层对cpu的使用进行了限制（EC2 T系列实例） 或者是 底层的资源并不完全满足需求而导致的争抢。<br>  gu： Time spent running KVM guest code (guest time, including guest nice). ， 这个是新添加的指标， 之前没有见过。 如果是KVM host os 上面这个指标还是比较有用的。  </p>
+<h2 id="输出结果如下："><a href="#输出结果如下：" class="headerlink" title="输出结果如下：   "></a>输出结果如下：<br>   <pre class="language-bash" data-language="bash"><code class="language-bash">hayden@HaydenArchRPi4 ~ <span class="token function">vmstat</span> <span class="token parameter variable">-w</span> <span class="token number">1</span>
+--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
+   r    b         swpd         <span class="token function">free</span>         buff        cache   si   so    bi    bo   <span class="token keyword">in</span>   cs  us  sy  <span class="token function">id</span>  wa  st  gu
+   <span class="token number">2</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">42600</span>         <span class="token number">1328</span>      <span class="token number">1973356</span>    <span class="token number">4</span>    <span class="token number">7</span>    <span class="token number">77</span>   <span class="token number">312</span> <span class="token number">1767</span>    <span class="token number">6</span>   <span class="token number">2</span>   <span class="token number">2</span>  <span class="token number">95</span>   <span class="token number">1</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">42652</span>         <span class="token number">1328</span>      <span class="token number">1973360</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span> <span class="token number">2519</span> <span class="token number">3373</span>   <span class="token number">1</span>   <span class="token number">2</span>  <span class="token number">97</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">42652</span>         <span class="token number">1328</span>      <span class="token number">1973360</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">8</span> <span class="token number">1001</span> <span class="token number">1844</span>   <span class="token number">0</span>   <span class="token number">1</span>  <span class="token number">99</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">42652</span>         <span class="token number">1328</span>      <span class="token number">1973360</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>    <span class="token number">12</span> <span class="token number">1056</span> <span class="token number">1822</span>   <span class="token number">1</span>   <span class="token number">0</span>  <span class="token number">99</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">42652</span>         <span class="token number">1328</span>      <span class="token number">1973368</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span> <span class="token number">1308</span> <span class="token number">2150</span>   <span class="token number">1</span>   <span class="token number">1</span>  <span class="token number">98</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">43156</span>         <span class="token number">1328</span>      <span class="token number">1973376</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span> <span class="token number">1394</span> <span class="token number">2245</span>   <span class="token number">3</span>   <span class="token number">1</span>  <span class="token number">97</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">43156</span>         <span class="token number">1328</span>      <span class="token number">1973376</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span> <span class="token number">1125</span> <span class="token number">1898</span>   <span class="token number">1</span>   <span class="token number">1</span>  <span class="token number">99</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">43408</span>         <span class="token number">1328</span>      <span class="token number">1973376</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>    <span class="token number">55</span> <span class="token number">1229</span> <span class="token number">2218</span>   <span class="token number">1</span>   <span class="token number">1</span>  <span class="token number">99</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">44948</span>         <span class="token number">1328</span>      <span class="token number">1973392</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span> <span class="token number">3544</span> <span class="token number">5490</span>   <span class="token number">7</span>   <span class="token number">4</span>  <span class="token number">89</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span>
+   <span class="token number">1</span>    <span class="token number">0</span>      <span class="token number">1005492</span>        <span class="token number">45228</span>         <span class="token number">1328</span>      <span class="token number">1973428</span>    <span class="token number">0</span>    <span class="token number">0</span>     <span class="token number">0</span>     <span class="token number">0</span> <span class="token number">1410</span> <span class="token number">2082</span>   <span class="token number">3</span>   <span class="token number">4</span>  <span class="token number">93</span>   <span class="token number">0</span>   <span class="token number">0</span>   <span class="token number">0</span></code></pre></h2><h3 id="分析指标的逻辑"><a href="#分析指标的逻辑" class="headerlink" title="分析指标的逻辑"></a>分析指标的逻辑</h3><p>输出之后 先看前几次输出的 r 和 b。<br>  r 有没有超过核心数；<br>  b 这里是不是有数据， 数据在运行命令的周期是不是一直存在， 数量有没有超过CPU核心数。变化的频率的幅度是什么样的。<br>    例子：<br>    总共观察10s ， 每秒输出一次数据， 每秒都有 超过cpu 核心数的 不可中断进程， 那么这代表当前的操作系统可能存在大量io进程，被阻塞的IO进程比较多 。 </p>
+<p>然后看最后一列的CPU情况， id的数据是多少，如果这个时候id 比较小， 看 us&#x2F;sy&#x2F;wa ，cpu 把时间花费在了什么地方。<br>通常的场景下， cpu 应该把时间尽可能的使用在 us 这个部分。 如果其他而部分比较多的就需要关注较多的那个部分了。 </p>
+<p>有交换就看看交换， 没有交换直接看内存相关， cache + free 总共有多少。如果内存用量是不是在oom 的边缘 ，然后再看 in&#x2F;cs，  一个是硬中断次数， 一个是进程上下文切换次数， 这两个一个可能代表潜在的cpu被硬件事件终止， 另一个cpu忙于在进程之间反复横跳。 这些都可能指向当前系统的效率并不高， 或者潜在的问题。 </p>
+<h3 id="命令示例"><a href="#命令示例" class="headerlink" title="命令示例"></a>命令示例</h3><p>   vmstat -m – 显示内核占用内存的分配情况。<br>   vmstat -a – 将内存的使用量分为<strong>活动内存</strong>和<strong>非活动内存</strong>。<br>   vmstat -n 2 10 – 展示vmstat的结果10次， 每两秒一次。</p>
+<h3 id="更多参考"><a href="#更多参考" class="headerlink" title="更多参考"></a>更多参考</h3><p><a target="_blank" rel="noopener" href="https://docs.oracle.com/cd/E19455-01/805-7229/6j6q8svh5/index.html">https://docs.oracle.com/cd/E19455-01/805-7229/6j6q8svh5/index.html</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://liarlee.site">Liarlee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://liarlee.site/2023/10/30/vmstat/">https://liarlee.site/2023/10/30/vmstat/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://liarlee.site" target="_blank">Liarlee's Notebook</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/10/30/iostat/" title=""><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info"></div></div></a></div><div class="next-post pull-right"><a href="/2023/10/30/AWS%20CLI%20Quick%20ref/" title=""><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">65</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%AF%B4%E6%98%8E"><span class="toc-number">1.</span> <span class="toc-text">命令说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-number"></span> <span class="toc-text">输出结果如下：   hayden@HaydenArchRPi4 ~ vmstat -w 1
+--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
+   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu
+   2    0      1005492        42600         1328      1973356    4    7    77   312 1767    6   2   2  95   1   0   0
+   1    0      1005492        42652         1328      1973360    0    0     0     0 2519 3373   1   2  97   0   0   0
+   1    0      1005492        42652         1328      1973360    0    0     0     8 1001 1844   0   1  99   0   0   0
+   1    0      1005492        42652         1328      1973360    0    0     0    12 1056 1822   1   0  99   0   0   0
+   1    0      1005492        42652         1328      1973368    0    0     0     0 1308 2150   1   1  98   0   0   0
+   1    0      1005492        43156         1328      1973376    0    0     0     0 1394 2245   3   1  97   0   0   0
+   1    0      1005492        43156         1328      1973376    0    0     0     0 1125 1898   1   1  99   0   0   0
+   1    0      1005492        43408         1328      1973376    0    0     0    55 1229 2218   1   1  99   0   0   0
+   1    0      1005492        44948         1328      1973392    0    0     0     0 3544 5490   7   4  89   0   0   0
+   1    0      1005492        45228         1328      1973428    0    0     0     0 1410 2082   3   4  93   0   0   0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E6%8C%87%E6%A0%87%E7%9A%84%E9%80%BB%E8%BE%91"><span class="toc-number">1.</span> <span class="toc-text">分析指标的逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.</span> <span class="toc-text">命令示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">更多参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/Redis%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/%E5%85%B3%E4%BA%8ETrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.158Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/CFS%20Schedler/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.157Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/30/iostat/" title="无题">无题</a><time datetime="2023-10-30T05:30:17.573Z" title="发表于 2023-10-30 13:30:17">2023-10-30</time></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

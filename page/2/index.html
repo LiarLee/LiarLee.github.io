@@ -1,2055 +1,2154 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-  <meta charset="UTF-8">
-  <meta 
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <meta 
-    http-equiv="X-UA-Compatible" 
-    content="ie=edge">
-  <meta 
-    name="theme-color" 
-    content="#fff" 
-    id="theme-color">
-  <meta 
-    name="description" 
-    content="Archlinux User, Kubernetes, Support Engineer">
-  <link 
-    rel="icon" 
-    href="/img/logo.png">
-  <title>Liarlee's Notebook</title>
-  
-    
-      <meta 
-        property="og:title" 
-        content="Liarlee&#39;s Notebook">
-    
-    
-      <meta 
-        property="og:url" 
-        content="https://liarlee.site/page/2/index.html">
-    
-    
-      <meta 
-        property="og:img" 
-        content="/img/avatar.jpg">
-    
-    
-      <meta 
-        property="og:img" 
-        content="Archlinux User, Kubernetes, Support Engineer">
-    
-    
-  
-  
-  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
-  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
-  <link rel="preload" href="/css/main.css" as="style" >
-  
-  
-  <link rel="stylesheet" href="/css/main.css">
-  
-  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
-  
-  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
-  
-  
-  
-  <script>
-    function loadScript(url, cb) {
-      var script = document.createElement('script');
-      script.src = url;
-      if (cb) script.onload = cb;
-      script.async = true;
-      document.body.appendChild(script);
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Liarlee's Notebook - Writing Down ...</title><meta name="author" content="Liarlee"><meta name="copyright" content="Liarlee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Archlinux User, Support Engineer">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Liarlee&#39;s Notebook">
+<meta property="og:url" content="https://liarlee.site/page/2/index.html">
+<meta property="og:site_name" content="Liarlee&#39;s Notebook">
+<meta property="og:description" content="Archlinux User, Support Engineer">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://liarlee.site/img/avatar.jpg">
+<meta property="article:author" content="Liarlee">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://liarlee.site/img/avatar.jpg"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://liarlee.site/page/2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
     }
-    function loadCSS(href, data, attr) {
-      var sheet = document.createElement('link');
-      sheet.ref = 'stylesheet';
-      sheet.href = href;
-      sheet.dataset[data] = attr;
-      document.head.appendChild(sheet);
-    }
-    function changeCSS(cssFile, data, attr) {
-      var oldlink = document.querySelector(data);
-      var newlink = document.createElement("link");
-      newlink.setAttribute("rel", "stylesheet");
-      newlink.setAttribute("href", cssFile);
-      newlink.dataset.prism = attr;
-      document.head.replaceChild(newlink, oldlink);
-    }
-  </script>
-  
-    
-      
-      
-      
-      
-        
-        
-        
-        <script>
-          function prismThemeChange() {
-            if(document.getElementById('theme-color').dataset.mode === 'dark') {
-              if(document.querySelector('[data-prism]')) {
-                changeCSS('/js/lib/prism/prism-tomorrow.min.css', '[data-prism]', 'prism-tomorrow');
-              } else {
-                loadCSS('/js/lib/prism/prism-tomorrow.min.css', 'prism', 'prism-tomorrow');
-              }
-            } else {
-              if(document.querySelector('[data-prism]')) {
-                changeCSS('/js/lib/prism/prism-tomorrow.min.css', '[data-prism]', 'prism-tomorrow');
-              } else {
-                loadCSS('/js/lib/prism/prism-tomorrow.min.css', 'prism', 'prism-tomorrow');
-              }
-            }
-          }
-          prismThemeChange()
-        </script>
-      
-      
-        
-        <link rel="stylesheet" href="/js/lib/prism/prism-line-numbers.min.css">
-      
-    
-  
-  <script>
-    // control reverse button
-    var reverseDarkList = {
-      dark: 'light',
-      light: 'dark'
-    };
-    var themeColor = {
-      dark: '#1c1c1e',
-      light: '#fff'
-    }
-    // get the data of css prefers-color-scheme
-    var getCssMediaQuery = function() {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    };
-    // reverse current darkmode setting function
-    var reverseDarkModeSetting = function() {
-      var setting = localStorage.getItem('user-color-scheme');
-      if(reverseDarkList[setting]) {
-        setting = reverseDarkList[setting];
-      } else if(setting === null) {
-        setting = reverseDarkList[getCssMediaQuery()];
-      } else {
-        return;
-      }
-      localStorage.setItem('user-color-scheme', setting);
-      return setting;
-    };
-    // apply current darkmode setting
-  </script>
-  
-    <script>
-      var setDarkmode = function(mode) {
-      var setting = mode || localStorage.getItem('user-color-scheme');
-      if(setting === getCssMediaQuery()) {
-        document.documentElement.removeAttribute('data-user-color-scheme');
-        localStorage.removeItem('user-color-scheme');
-        document.getElementById('theme-color').content = themeColor[setting];
-        document.getElementById('theme-color').dataset.mode = setting;
-        prismThemeChange();
-      } else if(reverseDarkList[setting]) {
-        document.documentElement.setAttribute('data-user-color-scheme', setting);
-        document.getElementById('theme-color').content = themeColor[setting];
-        document.getElementById('theme-color').dataset.mode = setting;
-        prismThemeChange();
-      } else {
-        document.documentElement.removeAttribute('data-user-color-scheme');
-        localStorage.removeItem('user-color-scheme');
-        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
-        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
-        prismThemeChange();
-      }
-    };
-    setDarkmode();
-    </script>
-  
-  
-  
-    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
-    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
-  
-  
-    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
-  
-  
-  
-  
-  
-  
-<meta name="generator" content="Hexo 6.2.0"></head>
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Liarlee\'s Notebook',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-11-06 12:20:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
 
-  <body>
-    <div class="wrapper">
-       
-      <nav class="navbar">
-  <div class="navbar-logo">
-    <a class="navbar-logo-main" href="/">
-      
-        <img 
-          class="navbar-logo-img"
-          width="32"
-          height="32"
-          src="/img/logo.png" 
-          alt="blog logo">
-      
-      <span class="navbar-logo-dsc">Liarlee's Notebook</span>
-      </a>
-  </div>
-  <div class="navbar-menu">
-    
-      <a 
-        href="/" 
-        class="navbar-menu-item">
-        
-          首页
-        
-      </a>
-    
-      <a 
-        href="/archives" 
-        class="navbar-menu-item">
-        
-          归档
-        
-      </a>
-    
-      <a 
-        href="/tags" 
-        class="navbar-menu-item">
-        
-          标签
-        
-      </a>
-    
-      <a 
-        href="/categories" 
-        class="navbar-menu-item">
-        
-          分类
-        
-      </a>
-    
-      <a 
-        href="/about" 
-        class="navbar-menu-item">
-        
-          关于
-        
-      </a>
-    
-      <a 
-        href="/links" 
-        class="navbar-menu-item">
-        
-          友链
-        
-      </a>
-    
-    <a 
-      class="navbar-menu-item darknavbar" 
-      id="dark">
-      <i class="iconfont icon-weather"></i>
-    </a>
-    <a 
-      class="navbar-menu-item searchnavbar" 
-      id="search">
-      <i 
-        class="iconfont icon-search" 
-        style="font-size: 1.2rem; font-weight: 400;">
-      </i>
-    </a>
-  </div>
-</nav> 
-      
-      <div 
-        id="local-search" 
-        style="display: none">
-        <input
-          class="navbar-menu-item"
-          id="search-input"
-          placeholder="请输入搜索内容..." />
-        <div id="search-content"></div>
-      </div>
-      
-      <div class="section-wrap">
-        <div class="container">
-          <div class="columns">
-            <div class="left-holder"></div>
-            <main class="main-column">
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/10/11/isolate-cpu-and-taskset-to-it/">
-        <h1 class="post-title">
-          完全隔离CPU的方法
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          完全隔离CPU， 并排空CPU所有的进程，分配指定的任务到CPU上。
-
-当前的情况下， 我有CPU 0 - 3， 我希望隔离出CPU3 来进行指定的任务运行（方法是传递内核参数并重启）
-
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-10-11T05:05:26.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-10-11</span>
-          </time>
-          
-        </div>
-        <a href="/2022/10/11/isolate-cpu-and-taskset-to-it/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/08/19/CiliumInstallation&amp;Summary/">
-        <h1 class="post-title">
-          Cilium 踩坑总结
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          测试环境
-KVM  - hayden...
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-08-19T14:21:48.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-08-19</span>
-          </time>
-          
-        </div>
-        <a href="/2022/08/19/CiliumInstallation&amp;Summary/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/04/19/Linux/EKS_ConfigureNodeGC/">
-        <h1 class="post-title">
-          如何配置kubelet的节点自动回收资源
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          配置Node节点按照磁盘阈值回收空间
-https://aws.amazon.com/cn/premiumsupport/knowledge-center/eks-worker-nodes-image-cache/
-
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-04-19T09:45:39.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-04-19</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2022/04/19/Linux/EKS_ConfigureNodeGC/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/04/19/Linux/Linux_CalcStealtime/">
-        <h1 class="post-title">
-          由 CPU Steal Time 想到的问题以及验证
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          我们在观察虚拟化的时候，可以看到Stealtime增加，大部分时候都是因为虚拟机的超卖， 总结来说st指示了vCPU的繁忙程度。
-
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-04-19T09:45:39.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-04-19</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2022/04/19/Linux/Linux_CalcStealtime/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/04/19/Linux/Linux_Epoll/">
-        <h1 class="post-title">
-          Epoll vs select vs poll vs io_uring
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          select方式：使用fd_set结构体告诉内核同时监控那些文件句柄，使用逐个排查方式去检查是否有文件句柄就绪或者超时。该方式有以下缺点：文件句柄数量是有上限的，逐个检查吞吐量低，每次调用都要重复初始化fd_set。po...
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-04-19T09:45:39.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-04-19</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2022/04/19/Linux/Linux_Epoll/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/04/19/Linux/Linux_KernelParam_NOHZ/">
-        <h1 class="post-title">
-          关于内核Config中的参数 CONFIG_NO_HZ
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          关于Tick， Tickless的研究。
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-04-19T09:45:39.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-04-19</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2022/04/19/Linux/Linux_KernelParam_NOHZ/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/04/19/Linux/Linux_OOMKiller/">
-        <h1 class="post-title">
-          OOM行为
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          关于OOM行为的思考 以及Kswapd的动作和行为。http://evertrain.blogspot.com/2018/04/oom.html更详细的打分算法见源码  https://github.com/torvalds/linux/blob/master/mm/oom_kill.c
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-04-19T09:45:39.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-04-19</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2022/04/19/Linux/Linux_OOMKiller/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/04/19/Linux/Linux_Perf/">
-        <h1 class="post-title">
-          Perf 命令的Performance分析
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          https://blog.gmem.cc/perf  一个非常详细的博客， 太牛逼了。
-
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-04-19T09:45:39.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-04-19</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2022/04/19/Linux/Linux_Perf/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/04/19/Linux/Linux_Sysctl/">
-        <h1 class="post-title">
-          Sysctl 云平台参数的收集以及一部分解释
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          一些关于sysctl参数设置的收集和解释。
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-04-19T09:45:39.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-04-19</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2022/04/19/Linux/Linux_Sysctl/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-  <div class="card">
-    
-    <article class="card card-content">
-      <a href="/2022/04/19/Linux/Linux_X11Forward/">
-        <h1 class="post-title">
-          SSH转发X11
-        </h1>
-      </a>
-      <div class="card-excerpt">
-        
-          记录转发的配置和步骤
-        
-      </div>
-      <div class="card-post-footer">
-        <div class="post-meta">
-          <time datetime="2022-04-19T09:45:39.000Z">
-            <i 
-              class="iconfont icon-calendar" 
-              style="margin-right: 2px;">
-            </i>
-            <span>2022-04-19</span>
-          </time>
-          
-            
-            
-              
-            
-            <span class="dot"></span>
-            
-              
-              <a 
-                href="/categories/Linux/" 
-                class="post-meta-link">
-                Linux
-              </a>
-            
-          
-        </div>
-        <a href="/2022/04/19/Linux/Linux_X11Forward/">继续阅读 </a>
-      </div>
-    </article>
-  </div>
-
-
-  <div class="nav">
-  
-    <div class="nav-item-prev">
-      <a 
-        href="/" 
-        class="nav-link">
-        <i class="iconfont icon-left nav-prev-icon"></i>
-        <div>
-          <div class="nav-label">上一页</div>
-          
-        </div>
-      </a>
-    </div>
-  
-  
-    <div class="nav-item-next">
-      <a 
-        href="/page/3/" 
-        class="nav-link">
-        <div>
-          <div class="nav-label">下一页</div>
-          
-        </div>
-        <i class="iconfont icon-right nav-next-icon"></i>
-      </a>
-    </div>
-  
-</div>
-</main>
-            <aside class="left-column">
-              
-              <div class="card card-author">
-                
-  <img 
-    src="/img/avatar.jpg" 
-    class="author-img"
-    width="88"
-    height="88"
-    alt="author avatar">
-
-<p class="author-name">Liarlee</p>
-<p class="author-description">designed by theme-kaze</p>
-<div class="author-message">
-  <a 
-    class="author-posts-count" 
-    href="/archives">
-    <span>99</span>
-    <span>文章</span>
-  </a>
-  <a 
-    class="author-categories-count" 
-    href="/categories">
-    <span>6</span>
-    <span>分类</span>
-  </a>
-  <a 
-    class="author-tags-count" 
-    href="/tags">
-    <span>33</span>
-    <span>标签</span>
-  </a>
-</div>
-
-              </div>
-               <div class="sticky-tablet">
-  
-  
-  
-  <article class="card card-content categories-widget">
-    <div class="categories-card">
-  <div class="categories-header">
-    <i 
-      class="iconfont icon-fenlei" 
-      style="padding-right: 2px;">
-    </i>分类
-  </div>
-  <div class="categories-list">
-    
-      <a href="/categories/Linux/">
-        <div class="categories-list-item">
-          Linux
-          <span class="categories-list-item-badge">78</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Books/">
-        <div class="categories-list-item">
-          Books
-          <span class="categories-list-item-badge">3</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Healthcare-IT/">
-        <div class="categories-list-item">
-          Healthcare-IT
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Windows/">
-        <div class="categories-list-item">
-          Windows
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-      <a href="/categories/ESXi/">
-        <div class="categories-list-item">
-          ESXi
-          <span class="categories-list-item-badge">1</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Python/">
-        <div class="categories-list-item">
-          Python
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-  </div>
-</div>
-  </article>
-  
-  <article class="card card-content tags-widget">
-    <div class="tags-card">
-  <div class="tags-header">
-    <i 
-      class="iconfont icon-biaoqian" 
-      style="padding-right: 2px;">
-    </i>热门标签
-  </div>
-  <div class="tags-list">
-    
-      <a 
-        href="/tags/Linux/" 
-        title="Linux">
-        <div class="tags-list-item">Linux</div>
-      </a>
-    
-      <a 
-        href="/tags/Kubernetes/" 
-        title="Kubernetes">
-        <div class="tags-list-item">Kubernetes</div>
-      </a>
-    
-      <a 
-        href="/tags/Python/" 
-        title="Python">
-        <div class="tags-list-item">Python</div>
-      </a>
-    
-      <a 
-        href="/tags/Fedora/" 
-        title="Fedora">
-        <div class="tags-list-item">Fedora</div>
-      </a>
-    
-      <a 
-        href="/tags/Ceph/" 
-        title="Ceph">
-        <div class="tags-list-item">Ceph</div>
-      </a>
-    
-      <a 
-        href="/tags/Nginx/" 
-        title="Nginx">
-        <div class="tags-list-item">Nginx</div>
-      </a>
-    
-      <a 
-        href="/tags/Windows/" 
-        title="Windows">
-        <div class="tags-list-item">Windows</div>
-      </a>
-    
-      <a 
-        href="/tags/Docker/" 
-        title="Docker">
-        <div class="tags-list-item">Docker</div>
-      </a>
-    
-      <a 
-        href="/tags/Ansible/" 
-        title="Ansible">
-        <div class="tags-list-item">Ansible</div>
-      </a>
-    
-      <a 
-        href="/tags/Hexo/" 
-        title="Hexo">
-        <div class="tags-list-item">Hexo</div>
-      </a>
-    
-      <a 
-        href="/tags/KVM/" 
-        title="KVM">
-        <div class="tags-list-item">KVM</div>
-      </a>
-    
-      <a 
-        href="/tags/Vim/" 
-        title="Vim">
-        <div class="tags-list-item">Vim</div>
-      </a>
-    
-      <a 
-        href="/tags/Shell/" 
-        title="Shell">
-        <div class="tags-list-item">Shell</div>
-      </a>
-    
-      <a 
-        href="/tags/Ranger/" 
-        title="Ranger">
-        <div class="tags-list-item">Ranger</div>
-      </a>
-    
-      <a 
-        href="/tags/RabbitMQ/" 
-        title="RabbitMQ">
-        <div class="tags-list-item">RabbitMQ</div>
-      </a>
-    
-      <a 
-        href="/tags/Orthanc/" 
-        title="Orthanc">
-        <div class="tags-list-item">Orthanc</div>
-      </a>
-    
-  </div>
-</div>
-  </article>
-  
-  
-    <article class="card card-content widescreen-archive archive-widget">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2023" 
-            class="archive-card-list-item">
-            2023
-            <span class="archive-card-list-item-badge">6</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2022" 
-            class="archive-card-list-item">
-            2022
-            <span class="archive-card-list-item-badge">17</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2021" 
-            class="archive-card-list-item">
-            2021
-            <span class="archive-card-list-item-badge">11</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2020" 
-            class="archive-card-list-item">
-            2020
-            <span class="archive-card-list-item-badge">7</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2019" 
-            class="archive-card-list-item">
-            2019
-            <span class="archive-card-list-item-badge">33</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2018" 
-            class="archive-card-list-item">
-            2018
-            <span class="archive-card-list-item-badge">23</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2017" 
-        class="archive-card-list-item">
-        2017
-        <span class="archive-card-list-item-badge">2</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
-  
-</div>
-            </aside>
-            <aside class="right-column">
-              <div class="sticky-widescreen">
-  
-  
-  
-  <article class="card card-content">
-    <div class="recent-posts-card">
-  <div class="recent-posts-header">
-    <i 
-      class="iconfont icon-wenzhang_huaban" 
-      style="padding-right: 2px;">
-    </i>最近文章
-  </div>
-  <div class="recent-posts-list">
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2023-04-14</div>
-        <a href="/2023/04/14/Linux_tc%E6%8E%A7%E5%88%B6%E6%B5%81%E9%87%8F-update/"><div class="recent-posts-item-content">网络流量控制测试</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2023-04-02</div>
-        <a href="/2023/04/02/Linux/Linux_tc%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/"><div class="recent-posts-item-content">Linux 使用内核tc流量控制</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2023-03-23</div>
-        <a href="/2023/03/23/EKS_%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/"><div class="recent-posts-item-content">删除所有非Running状态的Pod</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2023-03-19</div>
-        <a href="/2023/03/19/bpftrace-md/"><div class="recent-posts-item-content">关于内核追踪的一点点认识</div></a>
-      </div>
-    
-  </div>
-</div>
-  </article>
-  
-  
-    <article class="card card-content">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2023" 
-            class="archive-card-list-item">
-            2023
-            <span class="archive-card-list-item-badge">6</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2022" 
-            class="archive-card-list-item">
-            2022
-            <span class="archive-card-list-item-badge">17</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2021" 
-            class="archive-card-list-item">
-            2021
-            <span class="archive-card-list-item-badge">11</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2020" 
-            class="archive-card-list-item">
-            2020
-            <span class="archive-card-list-item-badge">7</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2019" 
-            class="archive-card-list-item">
-            2019
-            <span class="archive-card-list-item-badge">33</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-          <a 
-            href="/archives/2018" 
-            class="archive-card-list-item">
-            2018
-            <span class="archive-card-list-item-badge">23</span>
-          </a>
-        
-        
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2017" 
-        class="archive-card-list-item">
-        2017
-        <span class="archive-card-list-item-badge">2</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
-  
-</div>
-            </aside>
-          </div>
-        </div>
-      </div>
-    </div>
-     
-    <footer class="footer">
-  <div class="footer-container">
-    <div>
-      <div class="footer-dsc">
-        <span>
-          Copyright ©
-          
-            2017
-          
-          
-                - 
-                2023
-          
-        </span>
-        &nbsp;
-        <a 
-          href="/" 
-          class="footer-link">
-          Liarlee's Notebook
-        </a>
-      </div>
-    </div>
-
-    
-      <div class="footer-dsc">
-        
-          Powered by
-          <a 
-            href="https://hexo.io/" 
-            class="footer-link" 
-            target="_blank" 
-            rel="nofollow noopener noreferrer">
-            &nbsp;Hexo
-          </a>
-        
-        
-          <span>&nbsp;|&nbsp;</span>
-        
-        
-          Theme -
-          <a 
-            href="https://github.com/theme-kaze" 
-            class="footer-link" 
-            target="_blank"
-            rel="nofollow noopener noreferrer">
-            &nbsp;Kaze
-          </a>
-        
-      </div>
-    
-    
-    
-    
-</footer>
- 
-    
-  <a 
-    role="button" 
-    id="scrollbutton" 
-    class="basebutton" 
-    aria-label="回到顶部">
-    <i class="iconfont icon-arrowleft button-icon"></i>
-  </a>
-
-<a 
-  role="button" 
-  id="menubutton"
-  aria-label="menu button"
-  class="basebutton">
-  <i class="iconfont icon-menu button-icon"></i>
-</a>
-<a 
-  role="button" 
-  id="popbutton" 
-  class="basebutton" 
-  aria-label="控制中心">
-  <i class="iconfont icon-expand button-icon"></i>
-</a>
-<a 
-  role="button" 
-  id="darkbutton" 
-  class="basebutton darkwidget" 
-  aria-label="夜色模式">
-  <i class="iconfont icon-weather button-icon"></i>
-</a>
-<a 
-  role="button" 
-  id="searchbutton" 
-  class="basebutton searchwidget" 
-  aria-label="搜索">
-  <i class="iconfont icon-search button-icon"></i>
-</a> 
-     
-     
-     
-     
-    <script src="/js/main.js"></script> 
-     
-    
-      <script>
-        var addLazyload = function () {
-          var observer = lozad('.lozad', {
-            load: function (el) {
-              el.srcset = el.getAttribute('data-src')
-            },
-            loaded: function (el) {
-              el.classList.add('loaded')
-            },
-          })
-          observer.observe()
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
         }
-      </script>
-      <script>
-        loadScript('/js/lib/lozad.min.js', addLazyload)
-      </script>
-     
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
     
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
     
-      <script>
-        setTimeout(() => {localSearch("search.json")}, 0)
-      </script>
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">65</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/05/17/Python/Python_Script-ForGame/" title="pyautogui自动脚本">pyautogui自动脚本</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-05-17T14:21:08.000Z" title="发表于 2019-05-17 22:21:08">2019-05-17</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.489Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">实在是肝不动了，自己写了个脚本帮我点点点。  
+Pyautogui说明pyautogui.position()  #  获取鼠标位置pyautogui.locateOnScreen()  #  对屏幕截图，获取图片文件所对应的屏幕坐标pyautogui.click()   #  模拟鼠标点击pyautogui.doubleclick()  #  模拟鼠标双击pyautogui.moveTo()  #  移动到屏幕坐标位置pyautogui.moveRel()     #  移动固定的坐标距离pyautogui.dragRel()     #  按住鼠标拖拽  
+代码如下：#!/usr/bin/python
+# -*- coding:UTF-8 -*-
+
+import pyautogui
+import time
+import os
+
+def MOTIONMOUSE(lines):
+    if lines &lt; 9:
+        # 检测是否有书本或食物
+        results_food = pyautogui.locateOnScreen('./food.png', grayscale=True)   # 检测食物图片是否存在
+        print('- 食物检测结果：', results_food)
+        results_book = pyautogui.locateOnScreen('./book.png', grayscale=True)   # 检测书籍图片是否存在
+        print('- 书本检测结果：', results_book)
+        pyautogui.click(1900, 60, duration=0.1) # 点击换线
+        if results_book is not None:    
+            pyautogui.click(1700, 325) # 点击学习
+            pyautogui.click(1600, 645) # 点击确定
+        elif results_food is not None:
+            pyautogui.click(1700, 325)  # 点击食用
+        else:
+            pass
+
+        pyautogui.moveTo(1700, 60, duration=0.1)    # 移动到对应一线的位置
+        pyautogui.moveRel(0, 65 * lines, duration=0.1)  # 移动到对应的线路位置
+        time.sleep(1)
+        pyautogui.click()   # 触发一次点击
+    else:
+        pyautogui.click(1900, 60, duration=0.3) #  
+        # 检测是否有书本或食物
+        results_food = pyautogui.locateOnScreen('./food.png', grayscale=True)
+        print('- 食物检测结果：', results_food)
+        results_book = pyautogui.locateOnScreen('./book.png', grayscale=True)
+        print('- 书本检测结果：', results_book)
+        if results_book is not None:
+            pyautogui.click(1700, 325)
+            pyautogui.click(1600, 645)
+        elif results_food is not None:
+            pyautogui.click(1700, 325)
+        else:
+            pass
+
+        for t in range(0, lines-8):
+            pyautogui.moveTo(1700, 90, duration=0.1)
+            pyautogui.dragRel(0, -65, duration=0.3)
+        if t &lt; 14:
+            time.sleep(3)
+        else:
+            pass
+
+        pyautogui.click(1700, 480, duration=0.1)
+
+# starting .....
+
+Count = 0
+replace_times = 0
+Energy = input('please input value of energy: ')        # 输入体力
+All_lines = input('please input the number of lines: ') # 输入所有线路的数字
+
+for turns in range(1, 999):
+    print('** 这是第 ' + str(turns) + ' 轮采集。')
+    for line in range (1, int(All_lines) + 1):
+        print('* 这是第 ' + str(line) + ' 条线路。')
+        clock = time.strftime('%H:%M:%S', time.localtime(time.time()))
+        print('* 开始时间 = ' + clock + ' ')
+        MOTIONMOUSE(int(line))
+        time.sleep(2)
+        pyautogui.click(1600, 770, duration=1.5)
+        pyautogui.moveTo(1310, 800)
+
+        #检测是否有树木
+        results_click = pyautogui.locateOnScreen('./level4_usable.png', grayscale=True)  # 计算斧子在不在
+        print('- 斧子检测结果：', results_click)
+        results_replace = pyautogui.locateOnScreen('./level4_replace.png', grayscale=True)  # 计算可替换的斧子在不在
+        print('- 更换检测结果：', results_replace)
+
+        # 判断是否有物品
+        if results_click is not None:  # 判断是否有按键，有等待，没有按键换线；
+            print('* 第 ' + str(Count) + ' 次采集。')
+            Count = Count +1
+            energy = int(Energy) - 15
+        elif results_replace is not None:   # 判断是否有可更换的斧子 
+            pyautogui.click(1510, 720, duration=0.2)
+            pyautogui.click(1310, 880, duration=0.2)
+            Count = Count + 1
+            replace_times = replace_times + 1
+            print('这是第 ' + str(Count) + ' 次采集。') 
+            print('这是第 ' + str(replace_times) + ' 次换斧子。')
+            energy = int(Energy) - 15
+            time.sleep(4)
+        else:
+            print('-- 采集物或斧子未存在，跳过。') 
+            pass            # 啥也没有，跳过
+    print('Starting Waiting for Refresh:')
+    time.sleep(200)
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/05/17/Linux/Linux_Archlinux-Installation/" title="Archlinux安装过程记录">Archlinux安装过程记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-05-17T06:03:08.000Z" title="发表于 2019-05-17 14:03:08">2019-05-17</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.459Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">自己尝试安装了archlinux在虚拟机里，记录安装过程，不过现在archlinux的WIKI是描述清晰的，直接查看和参考即可。  
+Pacman常用命令pacman命令的常用说明：  
+[root@LiarLee ~]# pacman -Sg gnome  查看gnome软件包组下面的所有软件包  
+[root@LiarLee ~]# pacman -Qe openssh  查询已经安装的软件包  
+[root@LiarLee ~]# pacman -Qs openssh  正则查询软件包
+[root@LiarLee ~]# pacman -Rs $(pacman -Qtdq) 递归删除孤立软件包
+[root@LiarLee ~]# pacman -Ss 关键字：在仓库中搜索含关键字的包
+[root@LiarLee ~]# pacman -Qs 关键字： 搜索已安装的包
+[root@LiarLee ~]# pacman -Qi 包名：查看有关包的详尽信息
+[root@LiarLee ~]# pacman -Ql 包名：列出该包的文件
+[root@LiarLee ~]# pacman -Syyu 下载已经更新本地的所有软件包
+
+安装Archlinux1. 获取Archlinux镜像从这个页面获取镜像： LINK HERE
+2. 启动到Archlinux Live环境在VMware中使用镜像文件直接引导Archlinux Live环境。  
+3. 设置Archlinux的键盘布局默认为US键盘布局，此处未作修改。    
+4. 连接到Internet使用ip link命令查看目前网卡的状态  
+root@archiso ~ # ip link show
+  1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link&#x2F;loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+  2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; dmtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link&#x2F;ether 00:0c:29:5e:ea:d5 brd ff:ff:ff:ff:ff:ff
+  
+root@archiso ~ # ifconfig
+  ens33: flags&#x3D;4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+      inet 192.168.229.129  netmask 255.255.255.0  broadcast 192.168.229.255
+      inet6 fe80::9888:f57a:5c25:9cf9  prefixlen 64  scopeid 0x20&lt;link&gt;
+      inet6 fd15:4ba5:5a2b:1008:6e02:ff6:feeb:c250  prefixlen 64  scopeid 0x0&lt;global&gt;
+      ether 00:0c:29:5e:ea:d5  txqueuelen 1000  (Ethernet)
+      RX packets 199  bytes 18652 (18.2 KiB)
+      RX errors 0  dropped 0  overruns 0  frame 0
+      TX packets 186  bytes 23144 (22.6 KiB)
+      TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+  lo: flags&#x3D;73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536
+      inet 127.0.0.1  netmask 255.0.0.0
+      inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;
+      loop  txqueuelen 1000  (Local Loopback)
+      RX packets 0  bytes 0 (0.0 B)
+      RX errors 0  dropped 0  overruns 0  frame 0
+      TX packets 0  bytes 0 (0.0 B)
+      TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
     
-  </body>
-</html>
+root@archiso ~ # ping baidu.com   
+  PING baidu.com (123.125.114.144) 56(84) bytes of data.
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;1 ttl&#x3D;128 time&#x3D;14.8 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;2 ttl&#x3D;128 time&#x3D;13.6 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;3 ttl&#x3D;128 time&#x3D;17.1 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;4 ttl&#x3D;128 time&#x3D;14.1 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;5 ttl&#x3D;128 time&#x3D;13.9 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;6 ttl&#x3D;128 time&#x3D;14.7 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;7 ttl&#x3D;128 time&#x3D;13.5 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;8 ttl&#x3D;128 time&#x3D;16.2 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;9 ttl&#x3D;128 time&#x3D;16.9 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;10 ttl&#x3D;128 time&#x3D;14.1 ms
+  ^C
+  --- baidu.com ping statistics ---
+  10 packets transmitted, 10 received, 0% packet loss, time 26ms
+  rtt min&#x2F;avg&#x2F;max&#x2F;mdev &#x3D; 13.543&#x2F;14.895&#x2F;17.105&#x2F;1.278 ms
+网络连接到此为止无需配置，可以正常访问网络。
+5. 更新系统时间，硬件时间同步使用命令查看系统时间以及硬件时间，将同步的当前时间写入硬件：  
+root@archiso ~ # timedatectl status
+      Local time: Wed 2019-04-24 08:55:39 UTC
+    Universal time: Wed 2019-04-24 08:55:39 UTC
+        RTC time: Wed 2019-04-24 08:55:40
+        Time zone: UTC (UTC, +0000)
+System clock synchronized: yes
+      NTP service: active
+    RTC in local TZ: no
+
+root@archiso ~ # timedatectl set-ntp true
+
+6. 建立系统的硬盘分区建立硬盘分区，我建立了两个分区，一个根分区和一个交换分区。  
+root@archiso ~ # fdisk -l 
+  Disk &#x2F;dev&#x2F;sda: 50 GiB, 53687091200 bytes, 104857600 sectors
+  Disk model: VMware Virtual S
+  Units: sectors of 1 * 512 &#x3D; 512 bytes
+  Sector size (logical&#x2F;physical): 512 bytes &#x2F; 512 bytes
+  I&#x2F;O size (minimum&#x2F;optimal): 512 bytes &#x2F; 512 bytes
+  Disklabel type: dos
+  Disk identifier: 0xba00941d
+
+  Device     Boot   Start       End   Sectors  Size Id Type
+  &#x2F;dev&#x2F;sda1          2048   1050623   1048576  512M 82 Linux swap &#x2F; Solaris
+  &#x2F;dev&#x2F;sda2       1050624 104857599 103806976 49.5G 83 Linux
+
+
+  Disk &#x2F;dev&#x2F;loop0: 491.2 MiB, 515084288 bytes, 1006024 sectors
+  Units: sectors of 1 * 512 &#x3D; 512 bytes
+  Sector size (logical&#x2F;physical): 512 bytes &#x2F; 512 bytes
+  I&#x2F;O size (minimum&#x2F;optimal): 512 bytes &#x2F; 512 bytes
+7. 已经建立分区的格式化
+格式化ext4分区root@archiso ~ # mkfs.ext4 &#x2F;dev&#x2F;sda2
+格式化swap分区root@archiso ~ # mkswap &#x2F;dev&#x2F;sda1  # 将&#x2F;dev&#x2F;sda1格式化为swap分区
+root@archiso ~ # swapon &#x2F;dev&#x2F;sda1  # 将&#x2F;dev&#x2F;sda1启用为swap分区
+
+8. 挂载分区使用系统挂载点&#x2F;mnt，将&#x2F;dev&#x2F;sda2作为系统的根目录挂载到&#x2F;mnt上。 
+root@archiso ~ # mount &#x2F;dev&#x2F;s ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/04/24/Linux/Linux_DockerFile-Note/" title="DockerFile笔记">DockerFile笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-04-24T06:27:38.000Z" title="发表于 2019-04-24 14:27:38">2019-04-24</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.464Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Docker/">Docker</a></span></div><div class="content">Dockerfile的书写规则及Dockerfile的指令说明。
+Docker的镜像存储到Overlay2  
+Docker images ls
+    # 查看所有的Docker Images  
+Docker exec -it Container_Name &#x2F;bin&#x2F;sh  
+    # 将容器启动并执行shell命令行  
+
+Docker Images
+Docker Images中有启动容器所需要的文件系统及内容，用于启动并创建Docker容器,采用分层机制，最底层为bootfs，之上是rootfs  
+rootfs:Docker的根文件系统，由Kernel挂载为“ReadOnly”模式，而后通过联合挂载技术额外挂在一个可写层 
+bootfs:用于系统引导的文件系统，包括bootloader及kernel，容器启动之后自动卸载
+
+
+Docker Images Layer下层的镜像称为父镜像，最底层的叫做Base Images  
+Aufs - Advanced multi-layered unification filesystem  
+Overlayfs - 3.18版本被合并到Linux内核   
+Docker的分层镜像，除了Aufs，还支持btrfs，devicemapper和vfs  
+Docker Registry - Docker daemon自动视图从DockerHub拉取镜像文件  
+Docker Registry的分类 
+Sponsor Registry：第三方，提供给客户或Docker社区  
+Mirror Registry：第三方，只给客户使用 
+Vendor Registry：由发布Docker镜像的供应商提供  
+Private Regisry：通过设有防火墙及额外的安全层的私有实体提供
+
+
+云原生 - 面向云环境的运行了云系统本身的调用的程序。通过环境变量进行配置  
+Webhooks - 自动创建镜像  
+Quay.io 除了DockerHub其他的镜像仓库  
+docker pull quay.io&#x2F;coreos&#x2F;flannel:latest
+
+
+
+Docker镜像的保存与恢复docker save -o myimages.gz IMAGE_NAME1 IMAGE_NAME2 
+    # 将多个镜像保存到本地压缩文件  
+scp myimages.gz 
+    # 传输镜像到其他节点  
+docker load -i myimages.gz  
+    # 在新的节点加载镜像  
+Docker FileDockerFile存在的意义docker exec CONTAINER –&gt; vi –&gt; RELOADDocker的容器不利于我们对需要反复调试的服务进行更改，通过Dockerfile的修改可快速调整容器的配置。
+自定义镜像的方法基于Docker容器制作镜像
+创建你需要的容器，Docker commit命令进行镜像的制作 
+docker run –name b1 -it busybox  
+mkdir -p &#x2F;data&#x2F;html  
+vi &#x2F;data&#x2F;html&#x2F;index.html  
+docker commit -p b1 
+docker tag IMAGE_ID REPOSITORY:TAG  
+docker image ls  
+docker image rm IMAGE_TAG
+docker imspect – cmd字段自动标志启动自动运行的命令  
+更改docker的默认运行命令  
+docker commit -p -a ‘Liarlee’ -c ‘CMD [“&#x2F;bin&#x2F;httpd”,”-f”,”-h”,”&#x2F;data&#x2F;html”]’ b1 hayden&#x2F;httpd:v0.2 
+docker login -u USERNAME 登录到服务器  
+docker push Liarlee&#x2F;httpd
+
+基于DockerFile制作DockerImageDockerfile Format  
+
+# 开头的为注释文字   
+INSTRUCTION arguments，采用指令+参数的格式   
+Dockerfile执行的时候是从上至下执行的  
+第一个非注释行必须是FROM指令
+
+.dockerignore文件路径记录，可以通配，打包时忽略list中的文件可以使用环境变量替换BASH SHELL:echo ${NAME:-tom} 给一个变量设置一个默认值echo ${NAME:+tom} 如果变量有数值，强行改为默认值   
+- FROMFROM指定的镜像将自动拉取作为底层的镜像进行制作;  
+FROM &lt;repository&gt;[:tag]  
+FROM &lt;repository&gt;@&lt;HASH number&gt;  
+
+EXAMPLE:   
+FROM centos:latest
+    # 使用Centos的最新发行镜像作为底层镜像
+
+- MAINTAINER提供制作人的信息，废弃不用了，现在使用LABEL  
+MAINTAINER &quot;LiarLee&lt;Test@LiarLee.com&gt;&quot;
+
+- LABELLABEL是给镜像指定元数据的命令  
+LABEL maintainer&#x3D;&quot;LiarLee&lt;Test@LiarLee.com&gt;&quot;
+
+- COPY复制本地文件或目录到镜像文件系统中。  
+COPY \&lt;src&gt; ... \&lt;dest&gt;  
+COPY [&quot;\&lt;src&gt;&quot; ... &quot;\&lt;dest&gt;&quot;]  
+\&lt;src&gt; -- 相对路径    
+\&lt;dest&gt; -- 绝对路径   
+
+- 指定的src目录，会将目录下的所有文件复制到目的地，但是不会将src复制。
+- 如果使用了多个src，或者src使用了通配，目的必须是个目录  
+- 如果dest不存在会被自动创建  
+
+COPY &#x2F;etc&#x2F;passwd &#x2F;etc&#x2F;passwd
+    # 与cp命令相似，复制本地目标文件到容器文件系统中
+COPY &#x2F;usr&#x2F;local&#x2F;src&#x2F;nginx&#x2F;* &#x2F;usr&#x2F;local&#x2F;src&#x2F;nginx&#x2F;
+    # 如果目标目录不存在需要先行创建
+
+Docker Build命令[root@Hayden test]# docker build -h
+Flag shorthand -h has been deprecated, please use --help
+Usage:	docker build [OPTIONS] PATH | URL | -
+Build an image from a Dockerfile
+Options:
+      --add-host list           Add a custom host-to-IP mapping (host:ip)
+      --build-arg list          Set build-time variables
+      --cache-from strings      Images to consider as cache sources
+      --cgroup-parent string    Optional parent cgroup for the container
+      --compress                Compress the build context using gzip
+      --cpu-period int          Limit the CPU CFS (Completely Fair Scheduler) period
+      --cpu-quota int           Limit the CPU CFS (Completely Fair Scheduler) quota
+  -c, --cpu-shares int          CPU shares (relative weight)
+      --cpuset-cpus string      CPUs in which to allow execution (0-3, 0,1)
+      --cpuset-mems string      MEMs in which to allow execution (0-3, 0,1)
+      --disable-content-trust   Skip image verification (default true)
+  -f, --file string             Name of the Dockerfile (Default is 'PATH/Dockerfile')
+      --force-rm                Always remove intermediate containers
+      --iidfile string          Write the image ID to the file
+      --isolation string        Container isolation technology
+      --label list              Set metadata for an image
+  -m, --memory bytes            Memory limit
+      --memory-swap bytes       Swap limit equal to memory plus swap: '-1' to enable
+                                unlimited swap
+      --network string          Set the networking mode for the RUN instructions
+                                during build (default "default")
+      --no-cache                Do not use cache when building the image
+      --pull                    Always attempt to pull a newer version of the image
+  -q, --quiet                   Suppress the build output and print image ID on success
+      --rm                      Remove intermediate containers after a successful
+                                build (default true)
+      --security-opt strings    Security options
+      --shm-size bytes          Size of /dev/shm
+  -t, --tag list          ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/01/13/Linux/Linux_Fedora-bootspeedup/" title="Fedora开机启动速度的优化">Fedora开机启动速度的优化</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-01-13T09:02:11.000Z" title="发表于 2019-01-13 17:02:11">2019-01-13</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.468Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">一直认为我的虚拟机性能不够所以导致自己的机器开桌面环境，开机慢慢慢慢慢慢…….今天终于发现了原因…..
+过程使用systemd-analyze 命令使用systemd-analyze blame 命令罗列所有的启动的服务和耗时
+我的机器耗时间最长的是 
+
+dnf-makecache.service 占用了 1min 8.124s；  
+plymouth-quit-wait.service 占用了 1min 744ms
+
+配置所以关闭它，阻止今后开机的时候启动
+systemctl disable dnf-makecache.service
+systemctl disable dnf-makecache.timer
+或者就直接把这个服务指向 &#x2F;dev&#x2F;null 也是可以的， 总体来说就是让他开机的时候不要继续启动。
+systemctl mask dnf-makecache.service
+systemctl mask dnf-makecache.timer
+systemctl mask plymouth-quit-wait.service
+systemctl mask firewalld.service
+尽量不使用DHCP使用固定的IP可以提高启动速度，其他的不需要服务可以自行关闭即可  
+优化后的结果[root@localhost ~]# systemd-analyze 
+Startup finished in 3.091s (kernel) + 1.669s (initrd) + 5.211s (userspace) &#x3D; 9.971s
+
+[root@localhost ~]# systemd-analyze blame
+          2.868s vmware-tools.service
+          1.317s lvm2-monitor.service
+          1.115s dev-mapper-fedora\x2droot.device
+          1.044s fwupd.service
+           865ms NetworkManager-wait-online.service
+           834ms systemd-udev-settle.service
+           794ms dracut-initqueue.service
+           715ms udisks2.service
+           566ms sssd.service
+           533ms initrd-switch-root.service
+           443ms abrtd.service
+           404ms systemd-udev-trigger.service
+           326ms systemd-journal-flush.service
+           280ms ModemManager.service
+           259ms libvirtd.service
+           251ms polkit.service
+           209ms chronyd.service
+           199ms NetworkManager.service
+           192ms systemd-vconsole-setup.service
+           164ms accounts-daemon.service
+           149ms user@42.service
+           146ms systemd-udevd.service
+           143ms dracut-cmdline.service
+           137ms dracut-pre-pivot.service
+           137ms systemd-tmpfiles-setup-dev.service
+           134ms systemd-sysctl.service
+           131ms packagekit.service
+           124ms gssproxy.service
+           119ms fedora-readonly.service
+           116ms lvm2-pvscan@8:2.service
+           111ms user@0.service
+           110ms avahi-daemon.service
+           105ms auditd.service
+           105ms dmraid-activation.service
+           101ms gdm.service
+            86ms systemd-user-sessions.service
+            71ms fedora-import-state.service
+            65ms initrd-parse-etc.service
+            58ms upower.service
+            51ms systemd-logind.service
+            47ms var-lib-nfs-rpc_pipefs.mount
+            47ms systemd-fsck@dev-disk-by\x2duuid-e37f7ce7\x2d367b\x2d4e28\x2d8c1e\x2d3b98d1e4d441.service
+            46ms systemd-journald.service
+            45ms systemd-tmpfiles-setup.service
+            44ms boot.mount
+            41ms home.mount
+            41ms wpa_supplicant.service
+            40ms dev-hugepages.mount
+            37ms nfs-config.service
+            35ms plymouth-read-write.service
+            33ms rpc-statd-notify.service
+            30ms systemd-remount-fs.service
+            30ms systemd-fsck@dev-mapper-fedora\x2dhome.service
+            27ms geoclue.service
+            27ms cups.service
+            26ms colord.service
+            24ms livesys.service
+            23ms rtkit-daemon.service
+            22ms dracut-pre-udev.service
+            21ms dev-mqueue.mount
+            21ms dracut-shutdown.service
+            20ms sysroot.mount
+            20ms switcheroo-control.service
+            20ms plymouth-start.service
+            19ms plymouth-switch-root.service
+            19ms kmod-static-nodes.service
+            16ms dev-mapper-fedora\x2dswap.swap
+            16ms initrd-cleanup.service
+            15ms systemd-fsck-root.service
+            13ms livesys-late.service
+            10ms sys-kernel-debug.mount
+             6ms systemd-update-utmp-runlevel.service
+             6ms initrd-udevadm-cleanup-db.service
+             6ms systemd-update-utmp.service
+             6ms systemd-random-seed.service
+             5ms tmp.mount
+             2ms sys-kernel-config.mount
+可以通过命令查看systemd的一些信息： 
+systemctl --failed # 查看所有启动或者运行失败的服务
+
+systemctl status # 查看系统启动之后的所有Service 以及状态
+Mark Tips
+axel  dnf可用的多线程更新
+yum-fastestmirror  自动挑选最快的服务器更新
+附加一个systemd的使用教程：- ClickThisLink    
+附加一个plymouth的教程：- ClickThisLink
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/01/08/Linux/Linux_Fedora-InstallVMwareTools/" title="VMwareTools共享文件夹方案">VMwareTools共享文件夹方案</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-01-08T06:13:00.000Z" title="发表于 2019-01-08 14:13:00">2019-01-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.468Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">升级了VMware Workstation 15, 迁移过来Fedora 27的虚拟机里面不能共享剪贴板，不能拖拽复制，共享文件夹设置之后不会挂载在&#x2F;mnt&#x2F;hgfs目录下，找到的解决方案如下：  
+
+
+解决共享剪贴板
+fedora 27下，直接安装  dnf update -y   
+dnf install -y open-vm-tools-desktop   
+OR  
+dnf install -y open-vm-*
+重启虚拟机即可
+
+解决挂载VMware共享文件不显示
+这个问题我的解决办法是： 卸载这个机器上的open-vm-tools所有包，安装VMware提供的Tools，才可以正常使用  
+那么步骤如下： dnf remove -y opem-vm-*
+reboot  
+------------
+在VMware中，选择安装VMwareTools，然后提示推荐使用Open-VM-Toools工具，输入YES，强制安装  
+一路回车，直到出现Enjoy.
+reboot
+重启之后可以在&#x2F;mnt&#x2F;hgfs目录下看见共享的目录了，完美  
+如果需要可以添加一条指令在&#x2F;etc&#x2F;fstab条目，vim /etc/fstab
+-   .host:/SHAREDFOLDERNAME     /mnt/hgfs   vmhgfs   defaults    0 0 
+
+
+收工
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/07/08/Other/Android_Honor8InstallLineageOS/" title="荣耀8-刷LineageOS14.1简述">荣耀8-刷LineageOS14.1简述</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-07-08T09:47:39.000Z" title="发表于 2018-07-08 17:47:39">2018-07-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-26T11:25:39.480Z" title="更新于 2023-08-26 19:25:39">2023-08-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">荣耀8刷LineageOS 14.1 , 感谢XDA的大神们。用到的刷机包我转存了一份到微云，链接在末尾。  
+  
+
+
+一 基本情况
+设备： 华为荣耀8 FRD-AL10 国行  
+初始系统版本： B396   EMUI 5.0.1   
+解锁状态： Phone Unlocked
+
+
+二 需要准备的原料
+手机  
+SD卡  
+电脑一台，USB线一根  
+荣耀8海外版安装包 Name:update.zip &amp; update_data_full_hw_usa.zip
+OpenKirin TWRP 3.1.1.1 Name:twrp-3.1.1-1-frd.img 
+LineageOS ROM From XDA Name:lineage-14.1-20170812-Unofficial.zip
+OpenGAPPS Name:open_gapps-arm64-7.1-stock-20180705.zip 
+SuperSU Name:SuperSU-v2.82-201705271822.zip
+Dolby ATOM安装包
+
+
+三 流程1 解锁手机
+首先需要进行华为手机的解锁，百度一下有很多，所以不再过多的介绍。
+需要知道是我大华为要关闭后续的解锁服务了，所以今后即便是刷如果你没有解锁码也只能作罢。
+
+
+2 复制安装包到SD卡
+在SD卡上新建一个文件夹，名字叫做packages , 或者其他也可以。
+复制4-9项文件到SD卡
+将SD卡放入手机。
+
+
+3 写入TWRP
+解锁之后可以使用命令来写入TWRP Recovery。 Recovery使用的openkirin项目组的版本。请自行确保驱动及手机的连接处于正常状态即可。
+打开adb工具目录，在工具目录中使用Shift+鼠标右键，将文件夹在命令行或Powershell中打开。
+adb.exe devices   ——  ## 查看是否识别手机成功。
+adb.exe reboot fastboot ——— ## 将手机重启至fastboot模式. NOTE – 进入fastboot的方式，除了adb reboot fastboot之外还可以，关机，手机连接电脑，开机键加*音量-*，直到出现fastboot界面为止。
+fastboot.exe flash recovery .&#x2F;twrp-3.1.1.1-frd.img ——  ## 写入Recovery
+fastboot.exe reboot ——  ## 重启手机。
+
+
+4 安装海外版ROM
+XDA原帖 – HERE
+拔掉数据线，关机，长按 音量+ 和 开机 ， 直到出现 解锁警告 和 Your device is booting now …
+进入Recovery，一次进入Install – Select Storage – Micro SDCard – OK – Packages。
+点击update.zip – Swipt to confirm Flash. 
+等待写入成功后会自动重启。
+自动进入eRecovery安装更新，这个是正常的，不用管他就好。
+安装更新之后会自动重启，这个时候TWRP会被覆盖，也就是说你的TWRP手机上已经没有了，被替换成了ROM里面华为默认的recovery，需要重新进入fastboot再写入一次TWRP。
+按照写入TWRP的步骤再来一次即可。 NOTE – 如果提示写入TWRP失败，需要再使用解锁码解锁一次手机，不要需要管fastboot界面的那个提示。我的手机当时显示的是已经解锁，但是其实是没有的，需要2次解锁手机才可以写入TWRP。
+再次进入TWRP之后，重复第2步，找到update_data_full_hw_usa.zip – Swipt to confirm Flash.
+自动写入成功后会自动重启，进入系统后查看关于手机，其中名称变为NRD90M。说明我们已经可以写入LineageOS了。
+
+
+5 卡刷LineageOS
+XDA原帖 – HERE
+我用的是US Model – FRD-L14C567 – B360 ，可以使用。
+重启手机，进入TWRP， 双清，格式化data分区。
+选择lineage-14.1-20170812-Unofficial.zip – Swipt to confirm Flash.
+等待写入成功之后重启。NOTE – 如果写入之后一直卡在开机动画，解决方法是进入TWRP – 格式化data分区即可。
+第一次开机的过程可能有些慢，但是只要第一进入了系统就可以了，后面不会再出现问题了。
+刷入LineageOS完成。
+
+
+6 安装SuperSU
+SuperSU官网 – HERE
+选择SuperSU-v2.82-201705271822.zip – Swipt to confirm Flash.
+进入系统就可以看到了，可以直接使用。
+如果不是用SuperSU，可以使用Magisk，好像这个好用一些。
+
+
+7 安装OpenGAPPS
+OpenGAPPS官网 – HERE
+进入TWRP， 选择open_gapps-arm64-7.1-stock-20180705.zip – Swipt to confirm Flash.
+重启之后就可以在系统里面看到了，我选择的这个版本是替换系统应用的版本，所以可以提供一个近乎于原生的体验。
+
+
+8 安装杜比ATOMS
+XDA原帖 – HERE
+选择dax_lemax2_v1.6.3.zip – Swipe to confirm Flash.NOTE – 帖子中给出了五个安装包，我基本上是尝试到第二个的时候成功了，所以我在这个把原帖放出来是说，可能这个需要不同的机型去尝试。
+重启可以在系统应用中直接看到。可以开启或者关闭。  
+可以选择使用Viper或者Dolby，看自己的喜好了。NOTE – 这种应用，我觉得有一个就够了，其实只是优化一下外放的效果。
+
+
+四 结尾只是不习惯如此多的ROM里面内置了很多我不使用的应用，还不能删除。其实还是那句话，不建议刷机，如果你知道自己在做什么。
+
+五 共享下载资源包括我所有文中使用到的安装包及文件，我上传到了微云，下载链接如下。NOTE – opengapps的安装包我替换成了pico，这样不需要翻墙，只有Google的框架和基础应用，也不会替换系统应用。下载地址 – HERE密码：9yn57o
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/07/03/Other/Hexo_backup-restore/" title="Hexo备份和恢复">Hexo备份和恢复</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-07-03T08:39:23.000Z" title="发表于 2018-07-03 16:39:23">2018-07-03</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.489Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux-Application/">Linux, Application</a></span></div><div class="content">hexo项目的备份和还原方法。
+问题一个特别无奈的问题，我尝试在我写博客的虚拟机里面使用了一个破坏性的命令，dnf autoremove, 就是这个命令导致我的虚拟机彻底坏了。所以我恢复了快照，但是是两个月前的记录了。发现自己的blog无法恢复，找到了这样一个解决方案。
+思路
+在github上设置一个新的分支hexo。
+在这个分支上放置自己工作目录下的原始文件。
+每次推送Blog到github的时候同时推送自己的工作目录到github。
+当需要恢复自己的本地环境的时候，直接从github上面Clone下来就可以了。
+
+Note: 之前的思路是去hexo的工作目录下面找blog的项目，编译之后推送静态页面到gtihub。现在是直接把工作目录传上去，用的时候下载下来。  
+1. 准备一个新的工作目录在目录下git clone 自己的Blog项目。
+git clone https://github.com/xxxx/xxxx.github.io.git
+2. 目录的构建
+到xxxx.github.io目录下面，保留下面的.git目录，删除所有的其余目录。  
+将之前的hexo工作目录的所有文件复制到xxxx.github.io下。  
+在lxxxx.github.io目录下放置.gitignore文件，内容如下：  .DS_Store  
+Thumbs.db  
+db.json  
+*.log  
+node_modules&#x2F;  
+public&#x2F;  
+.deploy*&#x2F;   
+cd 到xxxx.liarlee.io目录下，使用命令新建分支：  git checkout -b hexo
+将hexo工作目提交到缓存  git add --all
+提交到github的hexo分支  git commit -m &quot;Some statement...&quot;
+推送到自己博客项目的hexo分支下    git push --set-upstream origin hexo
+结束
+
+3. 更新文章
+git add –all
+git commit -m “SaySomethingHERE”
+git push origin hexo 
+hexo clean &amp;&amp; hexo g -d
+
+4. 恢复hexo的工作目录
+sudo cnpm install -g hexo-cli
+dnf install -y npm
+sudo npm install -g cnpm –registry&#x3D;https://registry.npm.taobao.org
+cd Liarlee.github.io&#x2F;Liarlee
+sudo cnpm install -no-bin-links
+sudo cnpm install hexo-deployer-git
+去Github上面添加机器的ssh public key 
+尝试使用hexo d , 查看是否可以成功。
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/07/03/Linux/Linux_BuildRPMs/" title="RPM制作的笔记">RPM制作的笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-07-03T03:46:36.000Z" title="发表于 2018-07-03 11:46:36">2018-07-03</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.460Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">关于制作RPM包的笔记～
+一. 制作RPM包教程源码包的制作教程基于RHEL 5 &amp; 6,当我写这个的时候还没有7版本, 我会在后续更新新版本的路数（大半夜翻到这个破防了， 来自18年的flag ， 现在是时间是 2023 - 08 - 18 ， 过了。
+1. Rpm包的制作流程简述
+放置源码进入SOURCES文件夹
+写好SPEC文件
+运行rpmbuild命令,自动执行安装和清理
+自动将所有的源码解压到BUILD目录
+自动安装所有的源码程序到BUILDROOT目录
+自动根据SPEC文件里面的file程序段打包到rpm包中
+自动进行后续的清理
+生成完整的RPM包
+手动进行安装测试
+
+2. 如何做准备需要明确的几个问题：
+
+我们需要做一个什么样的RPM包，这个RPM包使用来做什么的，RPMs不一定包含的是二进制的内容，不一定需要编译。
+至少我们需要源码，注意原材料的收集。
+官方建议使用干净的源码，如果有补丁需要在制作的过程中打上补丁。
+同一个软件，不同版本的RPM，新版本是否可以支持升级旧版本。需不需要清理旧版本的文件。升级是否会造成冲突。
+依赖关系。
+每一个PRM包都提供一种功能，Capability，可以被其他的PRM包依赖。RPM包的名字和所安装的文件都可以给其他的软件提供依赖。
+自身名字的意义，提供的每一文件也可以被依赖，
+他的安装和运行需要依赖于其他的RPM包本身或者所具有的文件，叫做依赖关系。  
+两类依赖关系，编译依赖和安装依赖。
+规划依赖关系，写SPEC文件。
+制作RPMs。
+简单测试RPMs。
+
+3. RPMs的规划
+是否是应用程序，是否需要补丁，是否需要新的功能。
+是一个程序的库文件
+是一个系统配置文件集
+是一个文档文件包
+是否拆分完整的软件，例如：MySQL-5.5.22.tar.gz，在制作RPM包的时候被拆分为MySQL，mysql-server，mysql-devel，等等。
+是一个二进制还是源码，当时都有。例如:src.rpm,里面包括了 source.tar.gz 和 spec,需要使用者安装完成之后编译再安装。
+
+4. 制作过程1. 设计目录结构(set Up the Directory structure)制作RPM过程中千万不能用root用户每个版本对于目录的要求不同，五个不同的目录：  
+
+BUILD：不需要放任何的内容，这个目录是真正工作的目录。用于解压编译源码。  
+RPMS：制作完成的RPM包放在这个里面，里面的目录的名字和结构与特定平台架构有关，可以交叉平台编译。  
+SOURCES:所有收集的源码都在这个目录里面。  
+SPECS:放置SPEC文件，作为制作过程的指导说明。以软件包的名字命名，以.spec结尾。  
+SRPMS:放置了SRC(source)格式的RPM包。红帽提供了默认的制作目录，在&#x2F;usr&#x2F;src&#x2F;redhat.
+
+[LiarLee@localhost ~] tree &#x2F;usr&#x2F;src&#x2F;redhat
+
+2. 放置文件到正确的指定的目录(Place The Sources in the Right dirctory)。  我们首先需要自己制定自己的制作源码目录，在不使用root用户的前提下进行制作,需要修改系统的宏，来制定新的工作目录。修改工作目录的过程如下：
+
+使用命令查看默认的宏： [LiarLee@localhost ~] rpmbuild --showrc   \\ 显示所有的相关宏定义
+_build——表示目录; __rm——表示命令
+使用命令查看默认的配置文件： [LiarLee@localhost ~] rpmbuild --showrc | grep macrofiles    \\ 显示配置文件的全局路径和文件名  
+\\ 权限由小到大，后一个文件的参数覆盖前面所有的定义  
+\\ 所以我们在家目录下创建隐藏文件.rpmmacros可以直接配置自定义的设置。
+使用命令查看默认的工作目录定义： [LiarLee@localhost ~] rpmbuild --showrc | grep _topdir   \\ 显示默认的工作目录宏定义  
+\\ 以相同的模式在.rpmmacros中直接覆盖配置，可以更改工作目录  
+更改topdir的宏，使用rpmbuilder的用户，创建.rpmmacros,添加内容配置宏:   [LiarLee@localhost ~] vim .rpmmacros         \\ Create .rpmmacros file  
+    %_topdir    &#x2F;home&#x2F;rpmbuilder&#x2F;rpmbild&#x2F;  
+[LiarLee@localhost ~] mkdir -pv rpmbuild&#x2F;&#123;BUILD,RPMS,SOURCES,SPEC,SRPMS&#125;  
+[LiarLee@localhost ~] rpmbuild --showrc | grep _topdir      \\ Review the Result  
+
+3. 创建一个spec文件(Create A Spec File that Tells the Rpmbuild Command what to do)。
+spec文件使用软件的名字版本作为文件名；.spec作为扩展名。  
+rpm -qi mysql &amp; rpm -qpi mysql,命令查看rpm信息，信息从spec文件中定义，软件包信息说明段落定义。
+spec文件有如下几个段落：
+The introduction section设置软件包的基本信息Summary:  \\ 简单描述
+Name:     \\ 软件名字
+Version:  \\ 版本号
+Release:  \\ 发行号
+License:  \\ 协议
+Group:    \\ GROUP范围在这个文件中描述 &#x2F;usr&#x2F;share&#x2F;doc&#x2F;rpm-*&#x2F;GROUPS
+URL:      \\ 从何处获取的站点链接，下载路径
+Packager:  \\ 制作者&lt;制作者邮箱&gt;
+Vendor：   \\ 制作者的公司或者本人名字      
+Source:      \\ 源文件地址，一个链接地址
+BuildRoot:   \\ 制作RPM包的时候的虚拟Root目录
+BuildRequires:   \\ 制作过程依赖于哪些软件包的名字
+
+The prep section解压源码包到BUILD目录的段，cd到需要的目录，设置环境变量。%prep
+%setup
+The build section这是源码包安装的make过程.%build
+.&#x2F;configure  OR   %configure
+.&#x2F;make       OR   %&#123;__make&#125;
+make % &#123;?_smp_mflags&#125;    \\ 多对称处理器加速编译
+The install section这里是安装make install过程。系统中有install命令,install方式类似于COPY模式.%install
+%&#123;__rm&#125;
+%&#123;__make&#125; install DESTDIR&#x3D;&quot;%&#123;buildroot&#125;&quot;
+%find_lang %&#123;name&#125;
+
+
+
+
+
+5. The script section
+     这里是定义执行需要的脚本，用来配置环境。例如:添加Apache用户.    
+        %pre        Note:安装前执行
+        %post       Note:安装后执行
+        %preun      Note:卸载前执行
+        %postun     Note:卸载后执行
+ 
+6. The clean section
+    清理之前所用到的BuildRoot目录的。
+    %clean
+%&#123;__rm&#125;
+7. The files section
+    对安装的软件的程序进行规划,哪些文件安装到那个文件夹,**BUILDROOT下的所有文件必须在这个段中存在**
+    %files
+%config(noreplace)  \\ 不替换旧的配置
+ 
+ 8. The changelog section  
+     记录版本迭代  
+ 
+    * Wed Apr 11 2012 Liarlee.site &lt;Liarlee@site.com&gt; - ReleaseNumber 更改时间
+
+- Comments
+- Comments
+ 
+
+4. 开始编译(Build The Source and Binary RPMs)
+rpmbuild命令说明:    rpmbuild -bp        \\ 执行到prep section
+rpmbuild -bc        \\ 执行到build section
+rpmbuild -bi        \\ 执行到install section
+
+rpmbuild -bs        \\ 制作源码格式的制作
+rpmbuild -bb        \\ 制作二进制格式的rpm包
+rpmbuild -ba        \\ 执行全部格式,BOTH二进制和源码
+
+rpmbuild -bl        \\ BUILDROOT存在但是没有在FILES段中为包含进去的文件的CHECK命令
+关于安装错误的说明:在执行过程中如果有报错我们只需要去按照提示修正错误即可,在执行结束之后会在RPMS目录下生成需要的RPM包和RPM-DEBUG包.我们只需要RPM包即可,使用rpm -ivh进行安装测试.[LiarLee@localhost ~] rpmbuild -ba SoftwareName.spec   \\开始制作的命令
+
+rpm2cpio命令的说明  src-rpm包只是将源码打包成RPM格式,当我们安装src.rpm格式的安装包的时候会把包含的文件,解压到用户默认的工作目录下,所以这种格式的RPM包我们不用安装,直接制作RPM包即可.进行rebuild OR recompile.  [LiarLee@localhost ~] rpm2cpio mysql.src.rpm &gt; mysql.cpio  
+[LiarLee@localhost ~] rpm2cpio mysql.src.rpm | cpio -t    两个网站的推荐(搜索SRC-RPM包的站点):    rpmfind.net    rpm.pbone.net  
+二. 从头开始写新的SPEC Files制作RPM包的核心是写SPEC files，难以掌握的地方介绍SPEC文件的基本语法和简单用法
+1. Spec Files OverviewSPEC file里面都是指令，告诉RPMBuild命令如何一步一步解压，编译，做成不同的RPM包，依赖关系。  Macro是指的变量大多数的字段由tag+value组成,tag是标签–Directives,不区分大小写;value是区分大小写的.    
+1.1 宏的自定义用户自定义宏 : %define macro_name value引用方式 : %{macro_name} OR %macro_name  
+1.2 注释的方式使用#来进行注释%–不能在注释中使用,如果必须使用需要双写%%  
+%prep  
+\#this is a comment for %%prep  
+
+2. Defining Package Infomatio ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/07/02/Other/Other_DCM4CHEE_RunDocker/" title="Docker中运行DCM4CHEE-arc-light">Docker中运行DCM4CHEE-arc-light</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-07-02T12:34:52.000Z" title="发表于 2018-07-02 20:34:52">2018-07-02</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-12T06:44:55.806Z" title="更新于 2023-08-12 14:44:55">2023-08-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Healthcare-IT/">Healthcare-IT</a></span></div><div class="content">在Docker中安装DCM4CHEE-arc-light项目。
+
+
+因为需要进行测试所以使用了DCM4CHEE， 但是DCM4CHEE现在的版本已经很古老了， 从而我接触了两个古老的PACS程序， 一个是Windows平台上有名的ClearCanvas, 还有一个就是DCM4CHEE。在安装的过程中遇到了很多的麻烦。 看到官方有把项目放在docker上， 所以决定直接使用。直接记录了所有的组件启动的方式和命令， 方便今后的查阅。
+DCM4CHEE-arc-light是目前比较新项目了，我这里写下了最小的安装模式， 基本上足够我日常测试使用了。
+这几个Docker容器是：
+
+Docker
+docker网桥
+DAOCloud加速器
+OpenLDAP
+PostgreSQL数据库
+DCM4CHEE-arc-light本体
+
+DCM4CHEE_Docker_Command
+Install Docker component:   
+ dnf install -y docker  
+
+Create the dcm4chee bridge network:  
+ docker network create dcm4chee_default  
+DAOCloud加速器配置docker：
+ curl -sSL https:&#x2F;&#x2F;get.daocloud.io&#x2F;daotools&#x2F;set_mirror.sh | sh -s http:&#x2F;&#x2F;f1dac9f0.m.daocloud.io
+
+Start OpenLDAP Server: 
+ docker run --network&#x3D;dcm4chee_default --name ldap \
+       -p 389:389 \
+       -v &#x2F;etc&#x2F;localtime:&#x2F;etc&#x2F;localtime:ro \
+       -v &#x2F;var&#x2F;local&#x2F;dcm4chee-arc&#x2F;ldap:&#x2F;var&#x2F;lib&#x2F;ldap \
+       -v &#x2F;var&#x2F;local&#x2F;dcm4chee-arc&#x2F;slapd.d:&#x2F;etc&#x2F;ldap&#x2F;slapd.d \
+       -d dcm4che&#x2F;slapd-dcm4chee:2.4.44-13.2  
+
+Start PostgreSQL:   
+ docker run --network&#x3D;dcm4chee_default --name db \
+       -p 5432:5432 \
+       -e POSTGRES_DB&#x3D;pacsdb \
+       -e POSTGRES_USER&#x3D;pacs \
+       -e POSTGRES_PASSWORD&#x3D;pacs \
+       -v &#x2F;etc&#x2F;localtime:&#x2F;etc&#x2F;localtime:ro \
+       -v &#x2F;var&#x2F;local&#x2F;dcm4chee-arc&#x2F;db:&#x2F;var&#x2F;lib&#x2F;postgresql&#x2F;data \
+       -d dcm4che&#x2F;postgres-dcm4chee:10.0-13  
+
+Start Wildfly With DCM4CHEE Archive 5:  
+ docker run --network&#x3D;dcm4chee_default --name arc \
+       -p 8080:8080 \
+       -p 8443:8443 \
+       -p 9990:9990 \
+       -p 11112:11112 \
+       -p 2575:2575 \
+       -e POSTGRES_DB&#x3D;pacsdb \
+       -e POSTGRES_USER&#x3D;pacs \
+       -e POSTGRES_PASSWORD&#x3D;pacs \
+       -e WILDFLY_WAIT_FOR&#x3D;&quot;ldap:389 db:5432&quot; \
+       -v &#x2F;etc&#x2F;localtime:&#x2F;etc&#x2F;localtime:ro \
+       -v &#x2F;var&#x2F;local&#x2F;dcm4chee-arc&#x2F;wildfly:&#x2F;opt&#x2F;wildfly&#x2F;standalone \
+       -d dcm4che&#x2F;dcm4chee-arc-psql:5.13.2  
+
+Start the three applications use on command:  
+ docker start ldap db arc  
+
+Stop the three application:  
+ docker stop ldap db arc  
+
+附加说明：Host 说明：dcm4chee_docker: 11.11.11.209/dcm4chee-arc/ui2
+
+github project DCM4CHEE-arc-light Note
+HL7 Relative Features
+Weasis Integrationhttps://github.com/dcm4che/dcm4chee-arc-light/wiki/Weasis-Viewer-Integration
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/06/25/Linux/Linux_Install-Maven-Guide/" title="安装Maven教程">安装Maven教程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-06-25T13:05:26.000Z" title="发表于 2018-06-25 21:05:26">2018-06-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.470Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">安装Maven过程，备忘。
+下载安装包
+Maven Download Links  
+
+解压安装包：tar xzvf apache-maven-3.5.4-bin.tar.gz 
+
+设置环境变量： vim &#x2F;etc&#x2F;profile export M2_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;apache-maven&#x2F;apache-maven-3.2.5 export M2&#x3D;$M2_HOME&#x2F;bin export MAVEN_OPTS&#x3D;-Xms256m -Xmx512m
+
+添加环境变量到PATH： export PATH&#x3D;M2:PATH
+
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/05/28/Linux/Linux_DockerCommands/" title="Docker基本命令说明">Docker基本命令说明</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-05-28T04:38:06.000Z" title="发表于 2018-05-28 12:38:06">2018-05-28</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.464Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Docker/">Docker</a></span></div><div class="content">docker基础命令的说明。
+
+
+Docker常用命令的说明Docker Pull\ 下载一个Image  
+[root@localhost ~]# docker pull nginx:lastest  
+Using default tag: latest  
+Trying to pull repository docker.io&#x2F;library&#x2F;nginx ...   
+sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884: Pulling from docker.io&#x2F;library&#x2F;nginx
+Digest: sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884
+Status: Image is up to date for docker.io&#x2F;nginx:latest
+
+Docker Push\ 上传一个Image  
+Docker Run\ 启动一个Container  
+[root@localhost ~]# docker run nginx
+
+Docker Kill\ 结束一个Container  
+[root@localhost ~]# docker kill flamboyant_thompson  
+
+Docker System Prune\ 清理Docker的无用文件,包括未使用的容器和不具有Dangling的镜像(不具有启动能力的Image)  
+Docker Images\ 列出所有的docker images
+[root@localhost ~]# docker images
+ONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1cca834eb80c        nginx                      &quot;nginx -g &#39;daemon ...&quot;   57 seconds ago      Up 56 seconds       80&#x2F;tcp                   flamboyant_thompson
+769aefe85e29        achabill&#x2F;lh-toolkit        &quot;dockerize -wait t...&quot;   3 hours ago         Up 3 hours          0.0.0.0:8080-&gt;8080&#x2F;tcp   sad_payne
+93431e5f2f66        achabill&#x2F;lh-mysql:latest   &quot;docker-entrypoint...&quot;   3 hours ago         Up 3 hours          0.0.0.0:3308-&gt;3306&#x2F;tcp   brave_mcclintock
+
+Docker search\ 搜索特定名称的image  
+[root@localhost ~]# docker search nginx
+INDEX        NAME                                                             DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+docker.io    docker.io&#x2F;nginx                                                  Official build of Nginx.                        8564      [OK]       
+docker.io    docker.io&#x2F;nginx                                                  Official build of Nginx.                        8564      [OK]       
+docker.io    docker.io&#x2F;jwilder&#x2F;nginx-proxy                                    Automated Nginx reverse proxy for docker c...   1334                 [OK]
+docker.io    docker.io&#x2F;jwilder&#x2F;nginx-proxy                                    Automated Nginx reverse proxy for docker c...   1334                 [OK]
+docker.io    docker.io&#x2F;richarvey&#x2F;nginx-php-fpm                                Container running Nginx + PHP-FPM capable ...   547                  [OK]
+docker.io    docker.io&#x2F;richarvey&#x2F;nginx-php-fpm                                Container running Nginx + PHP-FPM capable ...   547                  [OK]
+docker.io    docker.io&#x2F;jrcs&#x2F;letsencrypt-nginx-proxy-companion                 LetsEncrypt container to use with nginx as...   367                  [OK]
+docker.io    docker.io&#x2F;jrcs&#x2F;letsencrypt-nginx-proxy-companion                 LetsEncrypt container to use with nginx as...   367                  [OK]
+docker.io    docker.io&#x2F;kong                                                   Open-source Microservice &amp; API Management ...   187       [OK]       
+docker.io    docker.io&#x2F;kong                                                   Open-source Microservice &amp; API Management ...   187       [OK]       
+docker.io    docker.io&#x2F;webdevops&#x2F;php-nginx                                    Nginx with PHP-FPM                              103                  [OK]
+docker.io    docker.io&#x2F;webdevops&#x2F;php-nginx                                    Nginx with PHP-FPM                              103                  [OK]
+docker.io    docker.io&#x2F;kitematic&#x2F;hello-world-nginx                            A light-weight nginx container that demons...   98                   
+docker.io    docker.io&#x2F;kitematic&#x2F;hello-world-nginx                            A light-weight nginx container that demons...   98                   
+docker.io    docker.io&#x2F;bitnami&#x2F;nginx                                          Bitnami nginx Docker Image                      50                   [OK]
+docker.io    docker.io&#x2F;bitnami&#x2F;nginx                                          Bitnami nginx Docker Image                      50                   [OK]
+docker.io    docker.io&#x2F;zabbix&#x2F;zabbix-web-nginx-mysql                          Zabbix frontend based on Nginx web-server ...   50                   [OK]
+docker.io    docker.io&#x2F;zabbix&#x2F;zabbix-web-nginx-mysql                          Zabbix frontend based on Nginx web-server ...   50                   [OK]
+docker.io    docker.io&#x2F;1and1internet&#x2F;ubuntu-16-nginx-php-phpmyadmin-mysql-5   ubuntu-16-nginx-php-phpmyadmin-mysql-5          35                   [OK]
+docker.io    docker.io&#x2F;1and1internet&#x2F;ubuntu-16-nginx-php-phpmyadmin-mysql-5   ubuntu-16-nginx-php-phpmyadmin-mysql-5          35                   [OK]
+docker.io    docker.io&#x2F;linuxserver&#x2F;nginx                                      An Nginx container, brought to you by ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/05/11/Linux/Linux_%E5%85%B3%E9%97%ADFedora%E9%98%B2%E7%81%AB%E5%A2%99/" title="Fedora防火墙关闭，如何开机运行脚本">Fedora防火墙关闭，如何开机运行脚本</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-05-11T06:21:36.000Z" title="发表于 2018-05-11 14:21:36">2018-05-11</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.486Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">这次的内容是两个部分，关闭Firewalld 和 启动rc.local的服务。  
+如何彻底关闭Fedora27的Firewalld，防止每次重启自动开启。我们都知道在很早之前就已经关闭了rc.local的使用，开机启动的内容完全由systemd进行管理，如果要使用rc.local需要自己配置。
+如何彻底关闭Fedora27的FirewalldFedora的Firewalld,每次重启都会自动启动，不会彻底关闭，我们需要特殊的方式来关闭。  
+
+直接移除   dnf remove firewalld
+指向不存在的设备   systemctl mask firewalld  -- 表示直接将这个服务指向了&#x2F;dev&#x2F;null,无法启动也无法被其他的程序直接调用。
+systemctl disable firewalld -- 开机的时候不会自动启动，但是接受其他的服务调用并启动。
+
+配置rc.local服务
+新建rc.local文件。   vim &#x2F;etc&#x2F;rc.d&#x2F;rc.local
+写入内容。   #!&#x2F;bin&#x2F;bash
+&#x2F;usr&#x2F;sbin&#x2F;Orthanc
+&#x2F;etc&#x2F;orthanc&#x2F;orthanc.json
+启动服务,配置开机自启。 systemctl start rc-local.service
+systemctl enable rc-local.service
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/04/25/Linux/Linux_Orthanc_InstallationNote/" title="Orthanc的安装">Orthanc的安装</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-04-25T09:02:01.000Z" title="发表于 2018-04-25 17:02:01">2018-04-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.474Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Healthcare-IT/">Healthcare-IT</a></span></div><div class="content">记录了Orthanc的安装过程。只有简单的安装，复杂没研究，待补全。Orthanc是一个开源的DICOM Server，支持RESTful API，是轻量级的DICOM Server，默认基于数据库SQLlite，同时也支持PostgreSQL。
+准备工作  平台：Fedora OR Windows  
+安装Orthanc快速部署Fedora集成的RPM包Fedora提供的BuildVersion下载到本地之后：执行  
+dnf install -y orthanc*
+systemctl enable orthanc
+systemctl start orthanc
+iptables -A INPUT -p tcp --dport 8042 -j ACCEPT
+iptables -A INPUT -p tcp --dport 4242 -j ACCEPT
+iptables-save
+安装结束。  
+Windows一键安装包Windows安装包下载地址直接下载之后运行即可。
+插件部分</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/04/19/Windows/Windows_DISM%E5%91%BD%E4%BB%A4/" title="DISM的备份与还原">DISM的备份与还原</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-04-19T10:43:50.000Z" title="发表于 2018-04-19 18:43:50">2018-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-12T06:44:55.811Z" title="更新于 2023-08-12 14:44:55">2023-08-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Windows/">Windows</a></span></div><div class="content">DISM的备份与还原主要是用了Win8之后微软同步发行的系统映像管理工具，全称是：部署映像服务和管理。  
+
+
+DISM命令行选项：
+/Append-Image      
+    进行映像的附加，更新，对比原有的文件内容进行增量更新。
+    *示例：*
+    对映像的增量更新	 Dism /Append-Image /ImageFile:install.wim /CaptureDir:D:\ /Name:Drive-D
+
+/Apply-Image       
+    将映像应用于指定的驱动器。
+    *示例：*
+    单一wim文件的恢复	Dism /apply-image /imagefile:install.wim /index:1 /ApplyDir:D:\
+    拆分多个映像文件的恢复	Dism /apply-image /imagefile:install.swm /swmfile:install*.swm /index:1 /applydir:D:\
+
+/Capture-Image   
+    将某个驱动器的映像捕捉到新的 .wim 文件。捕捉的目录包括所有子文件夹和数据。不能捕捉空目录。目录必须至少包含一个文件。
+    *示例：*
+    生成.wim备份文件到当前目录下	Dism /Capture-Image /ImageFile:install.wim /CaptureDir:D:\ /Name:Drive-D
+
+/Commit-Image
+    对已经装载的映像进行确认提交。
+    *示例：*
+    对已经挂载的镜像文件进行确认	Dism /Commit-Image /MountDir:C:\test\offline
+
+/Delete-Image
+    从包含多个映像卷的.wim文件中删除指定的映像。
+    *示例：*
+    删除指定的映像卷	Dism /Delete-Image /ImageFile:install.wim /Index:1
+
+/List-Image
+    显示指定卷映像中的文件和文件夹列表。
+    *示例：*
+    列出镜像中文件夹列表	Dism /List-Image /ImageFile:install.wim /Index:1
+
+/Split-Image
+    将现有的 .wim 文件拆分为多个只读的拆分 .wim 文件。
+    *示例：*
+    分割并指定分卷大小	Dism /Split-Image /ImageFile:install.wim /SWMFile:split.swm /FileSize:650
+
+/Mount-Image
+    将wim映像挂载到某个目录下
+    *示例：*
+    可读写模式	Dism /Mount-Image /ImageFile:C:\test\images\myimage.wim /index:1 /MountDir:C:\test\offline
+    只读模式	Dism /Mount-Image /ImageFile:C:\test\images\myimage.vhd /index:1 /MountDir:C:\test\offline /ReadOnly
+    只读更改为可读写	Dism /Remount-Image /MountDir:C:\test\offline
+
+
+常规处理流程：
+1.捕捉影像并且保存为.wim文件
+2.列出.wim .vhd .vhdx文件中的所有文件
+3.准备一个winPE
+4.进行备份镜像的还原
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/04/01/Linux/Linux_Cacti-installation/" title="Cacti的安装教程">Cacti的安装教程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-04-01T08:01:48.000Z" title="发表于 2018-04-01 16:01:48">2018-04-01</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.461Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">当时记录Cacti的安装记录。
+安装环境OS : CentOS 7 Server Everything – Minimal VersionRequired Packages : LAMP, RRDTool
+部署基础组件
+安装Apache命令如下：
+yum install -y httpd httpd-devel  
+dnf install -y httpd httpd-devel  
+安装完毕。  
+
+安装MySQL命令如下：
+yum install -y mysql mysql-server   
+dnf install -y mysql mysql-server  
+OR
+
+
+yum install -y Mariadb-server  
+dnf install -y Mariadb-server
+安装完毕。  
+
+安装PHP命令如下：  
+yum install -y php-mysql php-pear php-common php-gd php-devel php php-mbstring php-cli  
+dnf install -y php-mysql php-pear php-common php-gd php-devel php php-mbstring php-cli  
+安装完毕。  
+
+安装PHP-SNMP命令如下：
+yum install -y php-snmp  
+dnf install -y php-snmp  
+安装完毕。  
+
+安装NET-SNMP命令如下：
+yum install -y net-snmp-utils net-snmp-libs net-snmp   
+dnf install -y net-snmp-utils net-snmp-libs net-snmp  
+如果需要安装Spine，需要安装net-snmp-devel  
+yum install -y net-snmp-devel
+dnf install -y net-snmp-devel
+安装完毕。
+
+安装RRDTool命令如下：
+yum install -y rrdtool  
+dnf install -y rrdtool  
+安装完毕。  
+
+开始所有的服务：命令如下：
+service httpd start  
+service mysqld start OR service mariadb start
+service snmpd start
+OR
+systemctl start httpd.service
+systemctl start mariadb.service
+systemctl start snmpd.service
+安装完毕。  
+
+调整服务开机启动：
+chkconfig httpd on  
+chkconfig mysqld on
+chkconfig snmpd on
+OR
+systemctl enable httpd.service
+systemctl enable mariadb.service
+systemctl enable snmpd.service
+安装完毕。
+
+开启EPEL REPO &amp; 安装Cacti
+wget http:&#x2F;&#x2F;dl.fedoraproject.org&#x2F;pub&#x2F;epel&#x2F;epel-release-latest-7.noarch.rpm  
+rpm -ivh epel-release-latest-7.noarch.rpm
+yum makecache
+安装完毕。所有的安装内容已经部署完毕。
+
+
+进行配置
+配置MySQL的root密码  
+mysqladmin -u root password YOURSELF_PASSWORD
+
+创建Cacti的数据库  
+mysql -u root -p
+mysql&gt; create database cacti;
+mysql&gt; GRANT ALL ON cacti.* TO cacti@localhost IDENTITFIED BY &#39;YOURSELF_PASSWORD&#39;;
+mysql&gt; FLUSH PRIVILEGES;
+mysql&gt; quit;
+安装完毕。
+
+MySQL-数据库初始化  
+rpm -ql cacti | grep cacti.sql
+mysql -u cacti -p cacti &lt; &#x2F;usr&#x2F;share&#x2F;doc&#x2F;cacti&#x2F;cacti.sql
+命令发起后需要进行密码的输入
+
+Cacti-读取数据库配置
+vim &#x2F;etc&#x2F;cacti&#x2F;db.php
+需要编辑的内容如下：
+$database_type &#x3D; &quot;mysql&quot;;
+$database_default &#x3D; &quot;cacti&quot;;
+$database_hostname &#x3D; &quot;localhost&quot;;
+$database_username &#x3D; &quot;cacti&quot;;
+$database_password &#x3D; &quot;YOURSELF_PASSWORD&quot;;
+$database_port &#x3D; &quot;3306&quot;;
+$database_ssl &#x3D; false;
+
+Firewall-配置放行防火墙
+iptables -A INPUT -p udp -m state --state NEW --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp -m state --state NEW --dport 80 -j ACCEPT
+iptables save
+OR  
+firewall-cmd --permanent --zone&#x3D;public --add-service&#x3D;http
+firewall-cmd --reload
+
+Apache- 配置Cacti根目录
+vim &#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;cacti.conf
+配置文件内的内容修改如下：  
+&lt;Directory &#x2F;usr&#x2F;share&#x2F;cacti&#x2F;&gt;
+Order Deny,Allow
+Deny from all
+Allow from all
+&lt;&#x2F;Directory&gt;
+重启服务：
+service httpd restart
+OR
+systemctl restart httpd.service
+
+Crond-配置Poller的计划任务  
+vim &#x2F;etc&#x2F;cron.d&#x2F;cacti
+*&#x2F;5 * * * *    cacti   &#x2F;usr&#x2F;bin&#x2F;php &#x2F;usr&#x2F;share&#x2F;cacti&#x2F;poller.php &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1      \\ 去掉注释
+
+启动Broswer，进入Cacti安装界面，http://IPADDRESS/Cacti, 之后按照说明继续即可。
+
+
+Default Username : adminDefault Password : admin
+补充安装SPINE过程
+下载源文件，安装程序。   
+安装CentOS,Development Tool，yum group install。   
+在Spine的目录下，执行.&#x2F;configure &amp;&amp; make &amp;&amp; make install。NOTE： 这里出现了的问题，提示找不到net-snmp header file—&gt;没有安装net-snmp-devel
+进入控制台进行Spine是否安装成功。
+
+待续</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/29/Other/Interview_%E7%94%B5%E8%AF%9D%E9%9D%A2%E8%AF%95/" title="Linux-电话面试">Linux-电话面试</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-29T11:14:57.000Z" title="发表于 2018-01-29 19:14:57">2018-01-29</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-12T06:44:55.806Z" title="更新于 2023-08-12 14:44:55">2023-08-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">就在刚刚经历了电话面试，快速回忆问我的问题，记下：  
+
+
+linux中top命令的用途？top命令中load参数的详细概念问题问的我当时没反应过来，说的是top命令中第一行的那个load average,一共有三个值，三个值分别显示了一分钟，五分钟，十五分钟的系统负载情况，一般不会超过1，超过5认为是超负荷运转。  
+邮件服务器使用的协议？使用SMTP协议，IMAP协议
+
+发送邮件的协议和端口号：SMTP协议端口号为：25和465
+接受邮件的协议和端口号：POP3协议端口号为：110和995IMAP协议端口号为：143和993
+
+windows的故障转移集群是否用过？keepalived使用什么协议实现检测心跳？keepalived是以VRRP协议为实现基础的，VRRP全称Virtual Router Redundancy Protocol，即虚拟路由冗余协议。
+keepalived主从服务器的选举细节？Keepalived是一个基于VRRP协议来实现的WEB 服务高可用方案，可以利用其来避免单点故障。一个WEB服务至少会有2台服务器运行Keepalived，一台为主服务器（MASTER），一台为备份服务器（BACKUP），但是对外表现为一个虚拟IP，主服务器会发送特定的消息给备份服务器，当备份服务器收不到这个消息的时候，即主服务器宕机的时候，备份服务器就会接管虚拟IP，继续提供服务，从而保证了高可用性。
+keepalived原理？脑裂问题使用ping网关的方式不能完美解决？设置主从ping网关，如果没有ping通认为自己的网络出问题，重启服务。面试官提示我正确的处理方式应该是，如果ping不通应该主服务器重启服务，从服务器直接关闭自己的对外服务。
+LVS的负载均衡模式，和转发请求模式？目前有三种IP负载均衡技术（VS&#x2F;NAT、VS&#x2F;TUN和VS&#x2F;DR）八种调度算法（rr,wrr,lc,wlc,lblc,lblcr,dh,sh）。
+web服务器如何将不同站点配置在同一个IP上？虚拟主机配置多个站点的区分方式？ip和端口
+free命令中cache和buffer的区别？
+A buffer is something that has yet to be “written” to disk. A cache is something that has been “read” from the disk and stored for later use.  
+
+对于计算机来讲cache 和 buffer的区别：
+
+Cache：高速缓存，是位于CPU与主内存间的一种容量较小但速度很高的存储器。由于CPU的速度远高于主内存，CPU直接从内存中存取数据要等待一定时间周期，Cache中保存着CPU刚用过或循环使用的一部分数据，当CPU再次使用该部分数据时可从Cache中直接调用，这样就减少了CPU的等待时间，提高了系统的效率。Cache又分为一级Cache（L1 Cache）和二级Cache（L2 Cache），L1 Cache集成在CPU内部，L2 Cache早期一般是焊在主板上，现在也都集成在CPU内部，常见的容量有256KB或512KB L2 Cache。
+
+Buffer：缓冲区，一个用于存储速度不同步的设备或优先级不同的设备之间传输数据的区域。通过缓冲区，可以使进程之间的相互等待变少，从而使从速度慢的设备读入数据时，速度快的设备的操作进程不发生间断。
+
+
+*Free中的buffer和cache：（它们都是占用内存）   
+
+buffer: 作为buffer cache的内存，是块设备的读写缓冲区  
+cache: 作为page cache的内存， 文件系统的cache如果 cache 的值很大，说明cache住的文件数很多。如果频繁访问到的文件都能被cache住，那么磁盘的读IO 必会非常小。
+
+windows中手动计算的内存使用值，和任务管理器中显示出来的值相差巨大？windows隐藏了类似linux中的cache和buffer，windows10在任务管理器中已经开始显示cache了
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/29/Linux/Linux_%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B0/" title="Linux-进程管理笔记">Linux-进程管理笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-29T03:27:14.000Z" title="发表于 2018-01-29 11:27:14">2018-01-29</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.487Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">进程的优先级说明
+优先级越高的进程就能够获得更多的CPU运行时间
+能够更优先的获得运行的机会
+
+优先级的调整
+用户可以调整的优先级(priority)范围是100-139每一个进程都有一个nice值, nice值是从-20到19，分别对应100-139
+
+可以调整进程自己的nice值，来调整优先级  
+
+nice值越小，优先级越高  
+默认情况下每个进程的优先级都是0
+
+如果有进程的优先级是3，就说明该进程降低了自己的优先级，普通用户只能调大nice值，管理员可以随意调整
+PID（process ID）:进程号Init进程每一个进程都有父进程，除了init，init是所有进程的父进程init的进程号永远为1   
+其他进程进程的相关属性信息在&#x2F;proc目录下，每一个目录对应一个进程每一个进程的进程号都是唯一的，即使进程退出了，进程的号码一般不会被占用访问到的都是内核的映射。不是文件，是内核参数进程号文件夹中的文件记载了进程运行的命令，内存，使用的cpu等等  
+进程的分类
+与终端有关的进程
+与终端无关的进程
+
+进程状态表
+
+
+标识符
+描述
+
+
+
+D
+不可中断的睡眠
+
+
+R
+运行或就绪
+
+
+S
+可中断的睡眠
+
+
+T
+停止
+
+
+Z
+僵死
+
+
+&lt;
+高优先级的进程
+
+
+N
+低优先级的进程
+
+
++
+前台进程组中的进程
+
+
+l
+表示多线程进程
+
+
+s
+会话进程的首进程(领导者进程)
+
+
+进程查看命令ps命令 显示进程状态，多种使用风格，unix的两大阵营，BSD风格（不加-），SYSV风格（加-)
+Example： ps -aux  
+参数说明-BSD风格a：BSD风格，显示所有与终端有关的进程，与x一起用显示所有u：能够显示详细的信息x：BSD风格，显示所有与终端无关的进程  
+Ps命令输出信息的说明单独查看Firefox进程的例子  
+[root@localhost Liarlee]# ps -aux | grep firefox  
+USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND  
+root       1915  5.7  6.9 9324108 570096 tty2   Sl+  11:23   2:00 &#x2F;usr&#x2F;lib64&#x2F;firefox&#x2F;firefox  
+
+说明表格  
+
+
+
+USER
+PID
+%CPU
+%MEM
+RSS
+VSZ
+TTY
+START
+STAT
+TIME
+COMMAND
+
+
+
+进程发起者
+进程号
+使用cpu百分比
+使用内存的百分比
+常驻内存集
+虚拟内存集
+控制台关联
+启动时间
+状态
+运行时间
+哪一个命令启动的进程
+
+
+[]表示是一个内核线程，不是一个用户进程
+
+
+
+
+
+
+
+
+
+
+
+
+另一个风格-SYSV风格-e SYSV风格，显示所有的进程-F 额外的完全格式，显示更多的字段-l 长格式  
+PRI：优先级NI：nice值SZ：sizePSR：正在运行在那个CPU  
+ps -o 指定显示的字段,ps 不加参数只显示前台进程，一般使用ps -axo例：ps -axo comm,pid,niman文档中有单独的说明-o可以指定那些字段  
+Pstree进程树pgrep  查找符合某种特性的进程    例： pgrep bash   pgrep -u root bash  以root用户为属主运行的bash进程   只显示进程号，不显示进程的名称   -u euid        有效ID   -U uid         进程发起者ID  
+pidof     查看某一个进程名字对应得进程号   pidof init    |   pidof sshd    |    pidof crond
+Top关于top显示信息的说明   当前系统时间 ， up运行时长，登陆用户，平均负载（平均队列长度，队列长度越小cpu负载越低）。
+   所有的进程数量，正在运行的进程数量，多少个睡眠进程，多少个僵尸进程
+   每个cpu负载，默认是多颗cpu平均负载，数字1，表示展开查看。
+       us ： 用户空间占用的
+       sy： 运行在系统占据了多少
+       ni：nice值影响的cpu比例
+       id： 空闲的百分比
+       wa： 等待IO完成的百分比，占据的时间
+       hi ：中断占据的百分比
+       si ： 软中断的时间
+       st ： 被偷走的时间
+   内存的使用
+   交换的使用
+   默认使用cpu百分比排序
+
+Top交互式的子命令   M：使用内存百分比排序
+   P： 使用cpu百分比排序
+   T： 占用cpu时间排序
+
+   l：不显示平均负载启动时间  
+   t：不显示进程和cpu负载   
+   m：不显示关于内存和交换的信息
+
+   c：  是否显示完整的命令行
+   q： 退出top
+   k：  杀死某个进程
+
+更改top命令的选项：   -d    更改刷新是时常
+   -b   批处理模式   会刷新一次，刷新出一屏
+   -n  3 ： 批处理模式只显示多少次
+
+进程间通信：进程之间彼此不能感受到彼此的存在，因此进程间的通信有几种机制：  
+IPC进程间通信，unix中非常常用的机制，inter process Communication               共享内存               信号：signal               semaphore  
+手动控制进程间通信： Kill       kill -l  显示所有的kill信号
+       1 sighup        让一个进程不重启，重读配置文件，让文件的新配置生效
+       2 sigint          中断一个进程，ctrl c 就是发送了 2 信号
+       9 sigkill            杀死一个进程  ， 强行关闭  ， 没有任何余地
+       15 sigterm        中止一个进程
+
+指定发送信号：   kill -1   kill -sigkill   kill -kill
+杀死所有某个名字的进程：killall  command
+调整运行中进程的优先级     renice    进程优先级   进程号
+       renice   3   3704
+
+nice -n nice值 命令
+其他vmstat   vmstat 1   每一秒显示一次
+pkill 类似于 pgrep
+bg  把前台的作业放入后台   bg 【%】jobid  可以指定执行某一个作业  默认执行+ 作业jobs  查看后台的所有作业  作业号不同于进程号   如果进程上有+ 号 说明接下来将要继续操作的作业    如果进程上有-好  说明执行完+的作业之后再执行-号作业  
+fg 将后台的作业放入前台 ，用法类似于bg  
+如果杀死某些作业 ， kill  %2   杀死作业2  
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/22/Linux/Linux_Nginx-InstalltionNote/" title="Nginx编译安装">Nginx编译安装</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-22T10:03:58.000Z" title="发表于 2018-01-22 18:03:58">2018-01-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-26T11:25:39.476Z" title="更新于 2023-08-26 19:25:39">2023-08-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">很久之前的笔记了，发出来，做编译安装Nginx的时候记录的……包括安装命令和脚本……
+安装nginx服务器
+下载zlib，pcre，nginx  
+安装zlib[root@localhost Liarlee]# cd zlib-[version][root@localhost Liarlee]# ./configure --prefix=/usr/local/zlib
+安装pcre[root@localhost Liarlee]# cd pcre-[version][root@localhost Liarlee]# ./configure --prefix=/usr/local/pcre
+安装nginx[root@localhost Liarlee]# cd nginx-[version][root@localhost Liarlee]# ./configure --prefix=/usr/local/nginx
+安装完成
+
+
+配置Sys V 脚本：#!/bin/sh
+#
+# nginx - this script starts and stops the nginx daemon
+#
+# chkconfig:   - 85 15
+# description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
+#               proxy and IMAP/POP3 proxy server
+# processname: nginx
+# config:      /etc/nginx/nginx.conf
+# config:      /etc/sysconfig/nginx
+# pidfile:     /var/run/nginx.pid
+# Source function library.
+. /etc/rc.d/init.d/functions
+# Source networking configuration.
+. /etc/sysconfig/network
+# Check that networking is up.
+[ "$NETWORKING" = "no" ] &amp;&amp; exit 0
+nginx="/usr/sbin/nginx"
+prog=$(basename $nginx)
+NGINX_CONF_FILE="/etc/nginx/nginx.conf"
+[ -f /etc/sysconfig/nginx ] &amp;&amp; . /etc/sysconfig/nginx
+lockfile=/var/lock/subsys/nginx
+make_dirs() &#123;
+   # make required directories
+   user=`nginx -V 2>&amp;1 | grep "configure arguments:" | sed 's/[^*]*--user=\([^ ]*\).*/\1/g' -`
+   options=`$nginx -V 2>&amp;1 | grep 'configure arguments:'`
+   for opt in $options; do
+       if [ `echo $opt | grep '.*-temp-path'` ]; then
+           value=`echo $opt | cut -d "=" -f 2`
+           if [ ! -d "$value" ]; then
+               # echo "creating" $value
+               mkdir -p $value &amp;&amp; chown -R $user $value
+           fi
+       fi
+   done
+&#125;
+start() &#123;
+    [ -x $nginx ] || exit 5
+    [ -f $NGINX_CONF_FILE ] || exit 6
+    make_dirs
+    echo -n $"Starting $prog: "
+    daemon $nginx -c $NGINX_CONF_FILE
+    retval=$?
+    echo
+    [ $retval -eq 0 ] &amp;&amp; touch $lockfile
+    return $retval
+&#125;
+stop() &#123;
+    echo -n $"Stopping $prog: "
+    killproc $prog -QUIT
+    retval=$?
+    echo
+    [ $retval -eq 0 ] &amp;&amp; rm -f $lockfile
+    return $retval
+&#125;
+restart() &#123;
+    configtest || return $?
+    stop
+    sleep 1
+    start
+&#125;
+reload() &#123;
+    configtest || return $?
+    echo -n $"Reloading $prog: "
+    killproc $nginx -HUP
+    RETVAL=$?
+    echo
+&#125;
+force_reload() &#123;
+    restart
+&#125;
+configtest() &#123;
+  $nginx -t -c $NGINX_CONF_FILE
+&#125;
+rh_status() &#123;
+    status $prog
+&#125;
+rh_status_q() &#123;
+    rh_status >/dev/null 2>&amp;1
+&#125;
+case "$1" in
+    start)
+        rh_status_q &amp;&amp; exit 0
+        $1
+        ;;
+    stop)
+        rh_status_q || exit 0
+        $1
+        ;;
+    restart|configtest)
+        $1
+        ;;
+    reload)
+        rh_status_q || exit 7
+        $1
+        ;;
+    force-reload)
+        force_reload
+        ;;
+    status)
+        rh_status
+        ;;
+    condrestart|try-restart)
+        rh_status_q || exit 0
+            ;;
+    *)
+        echo $"Usage: $0 &#123;start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest&#125;"
+        exit 2
+esac
+补充一些
+在编译安装的nginx中，可能没有conf.d目录，只要自己的nginx的配置文件中， http字段下添加include &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;*.conf 就可以使用conf.d目录进行不同站点独立配置文件的配置了。
+Nginx可以支持同样使用80端口， 但是使用不同域名进行站点的发布。之前没有确切的试过，今天确实碰到了这个问题，记录下来。 在配置文件中，使用不同的server {}字段，定义不同的server_name ， 两个站点可以同时listen在80 端口上。访问的时候不同的域名会直接访问到不同的目录。Over.
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/22/Linux/Linux_%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0%E7%AC%94%E8%AE%B0/" title="Linux-内核参数笔记">Linux-内核参数笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-22T08:05:47.000Z" title="发表于 2018-01-22 16:05:47">2018-01-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.486Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">记录内核参数的含义和调整的效果, 主要是记录这些参数的含义或者使用它们的方法， 什么场景下需要调整这个。
+
+开始net.ipv4.tcp_max_tw_buckets  对于tcp连接，服务端和客户端通信完后状态变为timewait，假如某台服务器非常忙，连接数特别多的话，那么这个timewait数量就会越来越大。毕竟它也是会占用一定的资源，所以应该有一个最大值，当超过这个值，系统就会删除最早的连接，这样始终保持在一个数量级。  这个数值就是由net.ipv4.tcp_max_tw_buckets这个参数来决定的。CentOS7系统，你可以使用sysctl -a |grep tw_buckets来查看它的值，默认为32768，你可以适当把它调低，比如调整到8000，毕竟这个状态的连接太多也是会消耗资源的。  但你不要把它调到几十、几百这样，因为这种状态的tcp连接也是有用的，如果同样的客户端再次和服务端通信，就不用再次建立新的连接了，用这个旧的通道，省时省力。  
+net.ipv4.tcp_tw_recycle  在最新版本的内核中， 这个已经被移除， 这个参数在具有nat网络结构和行为的时候会导致出现异常。
+net.ipv4.tcp_tw_reuse  该参数设置为1，将timewait状态的连接重新用于新的TCP连接，这个参数本身其实开开启就可以了， 他可以快速的回收处于timewait的socket， 生效在客户端。
+net.ipv4.tcp_syncookies  tcp三次握手中，客户端向服务端发起syn请求，服务端收到后，也会向客户端发起syn请求同时连带ack确认，假如客户端发送请求后直接断开和服务端的连接，不接收服务端发起的这个请求，服务端会重试多次。  这个重试的过程会持续一段时间，当这种状态的连接数量非常大时，服务器会消耗很大的资源，从而造成瘫痪，正常的连接进不来，这种恶意的半连接行为其实叫做syn flood攻击。  设置为1，是开启SYN Cookies，开启后可以避免发生上述的syn flood攻击。开启该参数后，服务端接收客户端的ack后，再向客户端发送ack+syn之前会要求client在短时间内回应一个序号，如果客户端不能提供序号或者提供的序号不对则认为该客户端不合法，于是不会发ack+syn给客户端，更涉及不到重试。  
+net.ipv4.tcp_max_syn_backlog  该参数定义系统能接受的最大半连接状态的tcp连接数。客户端向服务端发送了syn包，服务端收到后，会记录一下，该参数决定最多能记录几个这样的连接。我的CentOS7系统，默认是256，当有syn flood攻击时，这个数值太小则很容易导致服务器瘫痪，实际上此时服务器并没有消耗太多资源（cpu、内存等），所以可以适当调大它，比如调整到30000。  
+net.ipv4.tcp_syn_retries  该参数适用于客户端，它定义发起syn的最大重试次数，默认为5，建议改为2。  
+net.ipv4.tcp_synack_retries  该参数适用于服务端，它定义发起syn+ack的最大重试次数，默认为5，建议改为2，可以适当预防syn flood攻击。  
+net.ipv4.ip_local_port_range  该参数定义端口范围，系统默认保留端口为1024及以下，以上部分为自定义端口。这个参数适用于客户端，当客户端和服务端建立连接时，比如说访问服务端的80端口，客户端随机开启了一个端口和服务端发起连接，这个参数定义随机端口的范围。默认为32768    61000，建议调整为1025 61000。  
+net.ipv4.tcp_fin_timeout  tcp连接的状态中，客户端上有一个是FIN-WAIT-2状态，它是状态变迁为timewait前一个状态。该参数定义不属于任何进程的该连接状态的超时时间，默认值为60，建议调整为6。  
+net.ipv4.tcp_keepalive_time  tcp连接状态里，有一个是keepalived状态，只有在这个状态下，客户端和服务端才能通信。正常情况下，当通信完毕，客户端或服务端会告诉对方要关闭连接，此时状态就会变为timewait，如果客户端没有告诉服务端，并且服务端也没有告诉客户端关闭的话（例如，客户端那边断网了），此时需要该参数来判定。    比如客户端已经断网了，但服务端上本次连接的状态依然是keepalived，服务端为了确认客户端是否断网，就需要每隔一段时间去发一个探测包去确认一下看看对方是否在线。这个时间就由该参数决定。它的默认值为7200（单位为秒），建议设置为30。
+net.ipv4.tcp_keepalive_intvl  该参数和上面的参数是一起的，服务端在规定时间内发起了探测，查看客户端是否在线，如果客户端并没有确认，此时服务端还不能认定为对方不在线，而是要尝试多次。该参数定义重新发送探测的时间，即第一次发现对方有问题后，过多久再次发起探测。    默认值为75秒（单位为秒），可以改为3。
+net.ipv4.tcp_keepalive_probes  第10和第11个参数规定了何时发起探测和探测失败后再过多久再发起探测，但并没有定义一共探测几次才算结束。该参数定义发起探测的包的数量。默认为9，建议设置2。
+net.ipv4.tcp_slow_start_after_idl  这个推荐直接设置为0 ， 在tcp连接多而且数据交互频繁的时候， 这个参数没有特别大的影响， 但是对于间隔一段时间这类的网络请求， 确实是会有影响的， 会导致走 慢启动 拉长延迟  sysctl -w  net.ipv4.tcp_slow_start_after_idle = 0 
+echo "net.ipv4.tcp_slow_start_after_idle = 0" >> /etc/sysctl.conf
+  更多tcp协议的网络流量控制 [[..&#x2F;Network&#x2F;Network_tc控制流量-update|Network_tc控制流量-update]]Amazon Linux 2 完整的sysctl参数 [[Linux_Sysctl]]Linux操作系统触发NMI中断调试和Kdump [[Linux_DebugLinuxOnEC2]]
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/22/Windows/Windows_%E6%9C%AC%E5%9C%B0%E6%96%B9%E5%BC%8F%E5%AE%89%E8%A3%85-Net3-5%E6%95%99%E7%A8%8B/" title="本地方式安装.Net3.5笔记">本地方式安装.Net3.5笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-22T03:55:01.000Z" title="发表于 2018-01-22 11:55:01">2018-01-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.492Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Windows/">Windows</a></span></div><div class="content">windows新版本淘汰了.net 3.5，默认不安装。但是在没有网络的时候需要安装就很尴尬，我平时也没有备份这种安装包的习惯。所以找到了如下的解决方案，使用微软的映像部署工具进行安装，步骤如下：  
+步骤：
+挂载微软的官方镜像，或者放入安装光盘。
+打开cmd或者Powershell
+输入命令: dism.exe /online /enable-feature /all /featurename:NetFX3 Source:Z:\sources\sxs
+等待系统处理命令，完成。
+
+Note:命令中可以不添加&#x2F;all，最后一条参数中的Z盘符改为镜像挂载所在的盘符即可  
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/15/Windows/Windows_PPTConvertTOWORD/" title="PPT转换WORD">PPT转换WORD</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-15T03:53:42.000Z" title="发表于 2018-01-15 11:53:42">2018-01-15</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.491Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Windows/">Windows</a></span></div><div class="content">前一段时间赶上期末考试，老师放出了一个学期的PPT，于是大家开始疯狂的复制讲义，把关键的知识进行提炼，方便考试。但是老师放出来的PPT，文字量实在是太大了，如果手动复制就会很麻烦，最后自己都快崩溃了
+
+
+解决方式PPT作为微软OFFCIE套件中的一员，在PPT和Word之间都会提供一个相互转换的方式，保证内容可以快捷的在不同的软件中使用。甚至是与Adobe的PDF之间，其实都可以快捷的进行转换。教程开始了~   
+开始战斗！PPT创建讲义
+选择左上角的文件选项卡
+选择导出选项
+点击创建讲义
+选择只使用大纲
+我们会直接得到一份PPT的Word文件，但是排版是混乱的，文字的大小都是不同的
+
+去掉文字格式和空格
+首先全选文档中的文字，快捷键：Ctrl+A  
+将文本全部复制到Notepad++中
+进入notepad++的文本就会自动变成无格式文本，这是notepad++和Word软件的不同。notepad++是纯文本编辑软件，而Word是字处理软件。  
+之后，选择编辑–&gt;行操作–&gt; 移除空行(包括空白字符)，这样文本中的空行和奇怪的空白字符就完全去掉，变成了完全的纯文本
+再把最后的文本复制回到Word中就好了~
+
+去掉不需要的内容最后就是根据每个人的不同需要进行文档中内容的删除，精简，大功告成~  
+总结经过这样的处理，省去了每个PPT的文字都手动复制的麻烦，其中最最消耗时间的部分就是最后的内容精简，但是这部分是我们必须要进行思考和手动操作的部分，只有我们自己知道自己需要什么内容。  
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/10/Python/Python_%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-3/" title="Python入门笔记 (三)">Python入门笔记 (三)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-10T02:20:49.000Z" title="发表于 2018-01-10 10:20:49">2018-01-10</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.491Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">python进行系统管理的模块。系统管理模块的介绍和使用。系统管理的四个模块:
+
+os
+os.path
+glob
+fnmatch
+
+1. OSOS模块中包含了普遍的操作系统功能，如果希望程序与平台没有强关联的情况下这个模块很重要，这个模块可以在不改动程序的基础上，使程序运行在Linux和Windows之间。
+可移植性说明os.name   #获取当前的操作系统信息
+os.getcwd()   #获取当前的工作目录
+os.listdir()    #返回目录下的所有文件和目录名称
+os.remove()     #删除指定的文件
+os.linesep      #通过字符串的方式给出当前平台的换行符号
+
+OS模块操作文件os.unlink       #删除路径所指向的文件
+os.remove       #删除路径所指向的文件
+os.rmdir        #删除path路径指向的空文件夹，必须是空的
+os.mkdir        #创建一个文件夹
+os.rename       #重命名一个文件或者文件夹
+
+OS模块操作权限os.access('/etc/fstab', os.R_OK)      #access是判断是否具有对某一个文件的相关权限，Linux中的 chmod/rwx---对应OS模块中的R_OK,W_OK，X_OK
+
+os.path模块os.path模块主要是用来拆分路径，构建新的路径，获取文件属性和判断文件的类型使用。
+拆分路径os.path.split()           #返回一个二元数组，包括文件路径和文件名称
+os.path.dirname()         #返回文件路径
+os.path.basename()        #返回文件的文件名
+os.path.splitext()        #一个文件名和扩展名组成的二元组
+
+构建路径os.path.expanduser('~/Liarlee')
+os.path.abspath('Liarlee.txt')
+os.path.join(os.path.expanduser('~mysql', 't', 'Liarlee.py'))
+
+获取文件属性os.path.getatime()        #获取文件的访问时间
+os.path.getmtime()        #获取文件的修改时间
+os.path.getctime()        #获取文件的创建时间
+os.path.getsize()         #获取文件的大小
+
+判断文件类型os.path.exists        #参数path指向的路径是否存在
+os.path.isfile        #参数path指向的路径存在，并且是一个文件
+os.path.isdir         #路径存在，并且是一个文件夹
+os.path.islink        #路径存在，并且是一个链接
+
+Fnmatch模块Glob模块</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/09/Python/Python_%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-2/" title="Python入门笔记 (二)">Python入门笔记 (二)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-09T05:34:26.000Z" title="发表于 2018-01-09 13:34:26">2018-01-09</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.491Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">Def定义函数def fact(n):                    #定义求阶乘函数
+    if n &#x3D;&#x3D; 1:
+        return 1
+    return n * fact(n - 1)
+
+result &#x3D; fact(5)                #计算结果
+print(result)                   #输出计算结果
+
+递归函数 – 尾递归优化用递归函数需要注意防止栈溢出。解决递归调用栈溢出的方法是通过尾递归优化，
+def fact(n):                                #尾递归优化
+    return fact_iter(n, 1)                  #函数返回值是之前定义的递归函数
+
+def fact_iter(num, product):
+    if num &#x3D;&#x3D; 1:
+        return product
+    return fact_iter(num - 1, num * product)
+    print(num, product)
+
+
+result &#x3D; fact(1000)
+print(result)
+
+迷之递归 – 汉诺塔 (没懂)def move(n, a, b, c):
+    if n &#x3D;&#x3D; 1:                          #只有一个盘子，所以从a到c
+        print(a, &#39;--&gt;&#39;, c)
+    else:
+        move(n-1, a, c, b)              #有N个盘子，移动N-1个盘子，a-b
+        move(1, a, b, c)                #将最大的盘子从a--c
+        move(n-1, b, a, c)              #剩下的N-1从b--c
+
+move(3, &#39;A&#39;, &#39;B&#39;, &#39;C&#39;)                      # 总共三个盘子，ABC三个柱子
+
+高级特性切片L &#x3D; [&#39;aaa&#39;, &#39;bbb&#39;, &#39;ccc&#39;]
+
+# 取出前两个元素
+
+# Method 1
+[L[0],L[1]]
+
+# Method 2 -- For
+r &#x3D; []
+n &#x3D; 2
+for i in range(n):
+    r.append(L[i])
+
+print(r)
+
+# Method 3 -- Slice
+print(L[0:2])               #取出 0--2
+
+print(L[:2])                #取出 0--2
+
+print(L[-2:])               #取出倒数两个元素
+
+print(L[-2:-1])             #取出倒数第二个
+
+L[a:b:c]                    #a----索引开始序号
+                            #b----索引结束序号
+                            #c----步长
+切片练习def trim(s):
+    if not len(s):        #非空
+        return s
+    if s[0] &#x3D;&#x3D; &#39; &#39;:       #起始位置位置为空
+        s &#x3D; s[1:]
+        return trim(s)        #返回处理后的字符串
+    elif s[-1] &#x3D;&#x3D; &#39; &#39;:        #末尾为空
+        s &#x3D; s[:-1]
+        return trim(s)
+    return s              #返回s
+
+if trim(&#39;hello  &#39;) !&#x3D; &#39;hello&#39;:
+    print(&#39;测试失败!&#39;)
+elif trim(&#39;  hello&#39;) !&#x3D; &#39;hello&#39;:
+    print(&#39;测试失败!&#39;)
+elif trim(&#39;  hello  &#39;) !&#x3D; &#39;hello&#39;:
+    print(&#39;测试失败!&#39;)
+elif trim(&#39;  hello  world  &#39;) !&#x3D; &#39;hello  world&#39;:
+    print(&#39;测试失败!&#39;)
+elif trim(&#39;&#39;) !&#x3D; &#39;&#39;:
+    print(&#39;测试失败!&#39;)
+elif trim(&#39;    &#39;) !&#x3D; &#39;&#39;:
+    print(&#39;测试失败!&#39;)
+else:
+    print(&#39;测试成功!&#39;)
+
+For循环迭代 练习def findMinAndMax(L):
+    if 0 &#x3D;&#x3D; len(L):
+        return None, None
+
+    min &#x3D; L[0]
+    max &#x3D; L[0]
+    i &#x3D; 0
+    for i in L:
+        if i &gt; max:
+            max &#x3D; i
+        if i &lt; min:
+            min &#x3D; i
+    return min, max
+
+# 测试
+if findMinAndMax([]) !&#x3D; (None, None):
+    print(&#39;测试失败!&#39;)
+elif findMinAndMax([7]) !&#x3D; (7, 7):
+    print(&#39;测试失败!&#39;)
+elif findMinAndMax([7, 1]) !&#x3D; (1, 7):
+    print(&#39;测试失败!&#39;)
+elif findMinAndMax([7, 1, 3, 9, 5]) !&#x3D; (1, 9):
+    print(&#39;测试失败!&#39;)
+else:
+    print(&#39;测试成功!&#39;)
+
+
+列表生成式list(range(1,11))
+
+M &#x3D; [x * x for x in range(1, 11)]     #列表生成式
+print(M)
+
+list &#x3D; [s.lower() for s in L1]
+
+# 练习
+L1 &#x3D; [&#39;Hello&#39;,&#39;World&#39;, 18, &#39;Apple&#39;, None]
+test &#x3D; isinstance(L1, str)
+print(test)
+
+L2 &#x3D; [s.lower() for s in L1 if isinstance(s, str) &#x3D;&#x3D; True]
+
+
+# 测试:
+print(L2)
+if L2 &#x3D;&#x3D; [&#39;hello&#39;, &#39;world&#39;, &#39;apple&#39;]:
+    print(&#39;测试通过!&#39;)
+else:
+    print(&#39;测试失败!&#39;)
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/09/Linux/Linux_Grub2repair/" title="grub2手动修复引导错误">grub2手动修复引导错误</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-09T05:27:57.000Z" title="发表于 2018-01-09 13:27:57">2018-01-09</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.469Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">grub2引导错误的手动解决方法
+Grub是什么
+引用百度百科    
+
+GNU GRUB（简称“GRUB”）是一个来自GNU项目的启动引导程序。GRUB是多启动规范的实现，它允许用户可以在计算机内同时拥有多个操作系统，并在计算机启动时选择希望运行的操作系统。GRUB可用于选择操作系统分区上的不同内核，也可用于向这些内核传递启动参数。GNU GRUB的前身为Grand Unified Bootloader。它主要用于类Unix系统；同大多Linux发行版一样，GNU系统也采用GNU GRUB作为它的启动器。Solaris从10 1&#x2F;06版开始在x86系统上也采用GNU GRUB作为启动器。  
+
+
+引用fedora官方wiki  
+
+GRUB 2 is the latest version of GNU GRUB, the GRand Unified Bootloader. A bootloader is the first software program that runs when a computer starts. It is responsible for loading and transferring control to the operating system kernel, (Linux, in the case of Fedora). The kernel, in turn, initializes the rest of the operating system.GRUB 2 has replaced what was formerly known as GRUB (i.e. version 0.9x), which has, in turn, become GRUB Legacy.Starting with Fedora 16, GRUB 2 is the default bootloader on x86 BIOS systems. For upgrades of BIOS systems the default is also to install GRUB 2, but you can opt to skip bootloader configuration entirely.
+
+
+
+修复grub2引导程序开机失败一般情况下系统的grub文件不会丢失，但是有的时候比如我们进行了系统设置的更改或者文件的误删除会导致系统无法正常启动，这个时候我们需要对grub进行手动的配置，才能是计算机正确的进入系统之中，进入系统之后只要重新生成grub引导文件，就可以让系统重启自动完成引导进入系统了。  
+指出&#x2F;boot位置
+指定grub的硬盘引导分区，也就是&#x2F;boot所在的硬盘分区grub&gt; root (hd0,0)
+
+指出vmlinuz内核文件
+指出kernel所在的分区，主要是vmlinuz内核文件所在的位置grub&gt; kernel /vmlinuz
+指出initrd所在的分区，指定初始化文件所在的位置grub&gt; initrd /initrd
+
+启动
+文件锁定成功之后，就可以启动系统grub&gt; boot
+
+在系统中重新安装和更改grub2安装或者重新安装grub2（非必须-如果有需要的时候执行）安装grub2到硬盘分区，一般为硬盘的第一个分区的开始位置  
+
+传统引导方式安装grub2[root@localhost /]# grub2-install /dev/sda  
+EFI引导安装grub2[root@localhost /]# dnf reinstall grub2-efi shim
+
+重新生成grub配置文件使用grub2-mkconfig生成新的grub2配置文件，同时指定引导时读取该文件不同的安装方式有不同的命令  
+
+标准的传统引导安装方式[root@localhost /]# grub2-mkconfig -o /boot/grub2/grub.cfg
+EFI引导方式[root@localhost /]# grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+
+Windows&amp;Linux双系统修复windows和linux的双系统请注意安装顺序，可以减少很多麻烦  
+
+先安装windows - 然后安装linux
+
+如果先安装了linux，那么在安装windows之后，系统的MBR会被windows覆写，导致linux系统无法正常引导，这个时候需要使用livecd进行修复grub2，让grub2重新安装并且控制引导系统的分区  
+
+删除系统更新之后多余的启动项系统更新之后总是会多很多的旧版本内核的启动项，每次启动的时候看起来都很乱，简单操作就可以去掉多余的启动项，如下：  
+暴力方式
+在boot目录下面强制删除内核文件，然后重新生成grub2.cfg即可  
+[root@localhost boot]# rm -rf vmlinuz-4.13.9-300.fc27.x86_64   
+[root@localhost boot]# rm -rf vmlinuz-4.14.5-300.fc27.x86_64  
+
+重新生成配置文件：  
+[root@localhost boot]# grub2-mkconfig -o &#x2F;boot&#x2F;efi&#x2F;EFI&#x2F;fedora&#x2F;grub.cfg
+Generating grub configuration file ...
+Found linux image: &#x2F;boot&#x2F;vmlinuz-4.14.11-300.fc27.x86_64
+Found initrd image: &#x2F;boot&#x2F;initramfs-4.14.11-300.fc27.x86_64.img
+Found linux image: &#x2F;boot&#x2F;vmlinuz-0-rescue-2fbfdacc99ad4255953ae8b2ec521e9d
+Found initrd image: &#x2F;boot&#x2F;initramfs-0-rescue-2fbfdacc99ad4255953ae8b2ec521e9d.img
+done
+
+正确方式
+使用dnf命令卸载旧内核：  [root@localhost &#x2F;]# dnf remove kernel-4.13.9-300.fc27.x86_64  
+[root@localhost &#x2F;]# dnf remove kernel-4.14.5-300.fc27.x86_64  
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/08/Python/Python_%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0-1/" title="Python入门笔记 (一)">Python入门笔记 (一)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-08T07:16:21.000Z" title="发表于 2018-01-08 15:16:21">2018-01-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.490Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">Python的输入输出print(&#39;Hello,World!&#39;)  
+name &#x3D; input()
+print(&#39;Your name is&#39;, name, &#39;,Right?&#39;)
+
+Python字符中文编码Title#!&#x2F;usr&#x2F;bin&#x2F;env python3  
+# -*- coding: utf-8 -*-  
+
+a &#x3D; input()
+age &#x3D; int(a)                       \\print输出都是字符串，格式化为数字之后才可以使用
+
+Python输出多行内容print(&#39;&#39;&#39;line1
+...line2
+...line3
+&#39;&#39;&#39;)
+
+Python的语句拼接print(&#39;Hello,World!&#39;,&#39;My Name is Liarlee.&#39;)  
+
+Python占位符name &#x3D; Liarlee
+age &#x3D; 24
+print(&#39;Hello,%s&#39; % (name))
+print(&#39;Your age is %d&#39; % (age))
+
+Python中使用list和tupleList – 列表classmates &#x3D; [Liarlee,TEST,WTF,LOL]
+classmates就是一个list，list可以嵌套list    
+len(classmates)                    \\查看list的长度  
+classmates[1]                      \\list第二个元素  
+classmates[-1]                     \\list倒数第一个元素    
+classmates.append(&#39;Liarlee&#39;)       \\末尾添加一个值
+classmates.pop()                   \\删除末尾的值
+classmates.pop(i)                  \\删除指定索引位置的值
+classmates.insert(1, &#39;Liarlee&#39;)    \\将值插入到某个索引位置
+classmates[1] &#x3D; Liarlee            \\直接更改某个索引位置的值
+classmates.sort()                  \\list排序
+
+Tuple – 元组另一种有序列表叫元组：tuple。tuple和list非常类似，但是tuple一旦初始化就不能修改  
+classmates &#x3D; (Liarlee,TEST,WTF,LOL)
+
+循环和判断IF判断if
+elif
+.
+.
+.
+elif
+else                                        \\完全if格式        
+
+FOR……IN……循环for classmate in classmates:
+  print(classmate)
+
+list(range(101))                              \\生成0-100数字存入list
+
+WHILE循环# -*- coding: utf-8 -*-
+classmates &#x3D; [Liarlee,TEST,WTF,LOL]
+i &#x3D; 0
+while i &lt; 4:
+    print(&#39;Hello,%s&#39; % (classmates[i]))
+    i &#x3D; i + 1
+
+Dict和setDict – 字典SCORE &#x3D; &#123;&#39;Liarlee&#39;: 95, &#39;TEST&#39;: 75, &#39;WTF&#39;: 85, ‘LOL‘：54&#125;       \\定义字典
+d[&#39;Liarlee&#39;] &#x3D; 67                                                \\字典赋值
+&#39;Thomas&#39; in d                                                    \\确定Key是否在字典中
+d.get(&#39;Liarlee&#39;)                                                 \\确定Key是否在字典中
+d.pop(&#39;Liarlee&#39;)                                                 \\删除Key
+
+Setset和dict类似，也是一组key的集合，但不存储value。    
+s &#x3D; set([1, 2, 3])                      \\创建一个set然后将list传入
+s.add(4)                                \\添加一个元素进入set
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/01/02/Windows/Windows_%E5%A6%82%E4%BD%95%E7%BB%99%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%B5%E8%84%91%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F/" title="如何使用微软官方镜像重装系统">如何使用微软官方镜像重装系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-02T11:25:50.000Z" title="发表于 2018-01-02 19:25:50">2018-01-02</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.492Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Windows/">Windows</a></span></div><div class="content">注意，这是一个完整且详细的新手教程！
+
+
+一、写在最前面有几句有用的建议，在这里先写,能让你的电脑长久运行良好：- 国内的软件普遍都带有广告，这不是Windows的锅- 不要使用360系列的产品 ，有人和我说企业版特别良心，但是我没用过，欢迎尝试后给我反馈- 所有软件都从官方网站下载，不要图方便使用软件升级助手，或者电脑管家- 安装程序请仔细观察是否有捆绑软件，一定取消勾选的捆绑软件- 注意观察安装程序界面的角落位置|折叠菜单|高级选项|更多，否则你的电脑一定会“自动”多很多奇怪的东西- 如果可以尽量使用微软官方的系统，第三方系统或者Ghost系统确实方便了你的安装过程，但是你一定会被广告和捆绑的软件折磨的不要不要的～最重要的是，不能确定是否会有后门程序，谨慎使用Onekey-Ghost和YLMF- 最后一点千万注意，系统优化类软件除非你清楚这个软件都更改了那些设置，否则不要使用，请相信没有任何一个第三方公司比微软更了解自己的产品  
+
+二、环境及工具
+可以正常使用的 计算机A（也就是可用的电脑）  
+需要重装系统的 计算机B（一定要保证开机出现Logo，如果开机Logo都没有，请确认计算机是否通电；检查显示器是否正常；如其他情况请送维修。）  
+4G 空间以上的 空U盘  
+Rufus (后面介绍这个工具的用途)Rufus-官方网站Rufus-下载链接  
+微软官方 的系统镜像文件MSDNitellyou-搬运官方的非官方下载点MSDNitellyou-Windows10中文64位下载链接ed2k  
+最重要的一点，最好有网，没有会麻烦些
+
+
+三、原理部分为计算机安装操作系统过程
+计算机的简要启动过程： 通电 - 硬件自检 - 寻找操作系统所在硬盘 - 启动操作系统  
+安装系统难理解的是在硬件自检之后，直接从U盘中读取系统安装程序，然后将系统这个大程序写入硬盘的相应分区内
+
+
+四、开始安装操作部分 – 计算机A接下来的操作都是在计算机A下完成的~  
+Rufusrufus是用来制作可启动U盘的一款绿色应用程序  
+下载系统镜像文件上面提到的系统镜像文件以Win10-1709为例,这是当前最新版本的Windows,下载之后应该是一个后缀名为.iso的文件
+使用Rufus制作可启动U盘
+双击打开Rufus，插入U盘，确认最顶部设备已经识别你的空U盘  
+点击箭头指向的按钮，选择刚才下载的镜像文件  
+加载镜像文件，选项如图，选择开始  
+点击确认    
+开始写入 ， 等待  
+U盘制作成功
+
+操作部分 – 计算机B下面的部分转移到重新安装系统的计算机B上面来了～  
+从U盘中启动系统安装程序
+开机按下电源按键之后，请反复按下F12，直到屏幕变成这个样子～  
+选择引导设备菜单，请选择刚刚制作好的U盘，一般设备名称会是USB……或者Sandisk……或者Kingston……这类的名字，或者如上图–通用闪存设备，回车选择后安装程序自行启动  
+选择语言，没什么特殊要求就中文就可以了，当然如果需要请下载EN版本的镜像，或者多国语言版，在下拉菜单中选择需要的语言  
+点击现在安装…   
+稍等  
+这里有两种情况：
+
+
+有密钥的情况请直接输入，系统会被激活，安装完成之后就是官方正版的系统；  
+没有密钥，只是需要在系统安装完成之后再次输入密钥或者安装一个补丁就好；
+
+    
+
+这个位置就很随意了，选择你需要的版本，我安装的是一个WIN10专业版  
+只能接受，接受才能下一步  
+这里也是两种情况：
+
+
+如果你的计算机中本身有WIN7、8、8.1，可以选择直接升级，但是升级之后会有Windows Old文件夹占用大量C盘空间，清理会很麻烦；
+如果就已经打算重新安装了，请确认数据已经备份或者无用，之后这里选择自定义，进入下一步；
+
+    
+
+Note: 如果你的计算机中有重要数据请自行备份，
+
+  - 下面开始进行的操作会直接修改硬盘的内容！！！  - 下面开始进行的操作会直接修改硬盘的内容！！！  - 下面开始进行的操作会直接修改硬盘的内容！！！   
+  硬盘分区关键词：  驱动器0 是指物理硬盘编号0，有几块硬盘就顺序向下编号0&#x2F;1&#x2F;2&#x2F;3…  分区1 一般是指物理硬盘的第一个分区，通常对应了CDEF不同的字母，同样有几个分区就顺序向下编号1&#x2F;2&#x2F;3…  主分区 是我们在系统内使用的硬盘分区，主分区从上到下分别是CDEF盘，图中只有一个主分区，所以我的系统安装完成之后只有一个C盘  
+  图示数字说明:  1-删除 硬盘分区会让当前的硬盘空间释放为可用空间，用于打破之前划分的分区，比如可以将分区CDEF的EF删除，合并成新的E盘  
+  2-格式化 格式化是清空当前选择分区内的所有数据，所有分区我们都需要格式化  
+  3-新建 新建分区需要我们指定大小，比如新建的C盘我希望有100G，那么我需要在新建之后输入100*1024M&#x3D;102400，这样就新建了100G的新分区   
+  4-类型 中，我们只需要修改和关注主分区即可,其他保留就可以  
+  Note: 点击下一步之前，一定确认我们选择的是 由上到下的第一个主分区 ，因为系统会安装到高亮选择的主分区内，请 检查 之后在点击下一步
+
+点了 下一步 就开始安装咯， 之前的已经没有办法再更改了 ，除非从1开始再来一次…..  
+
+结束了，等待它自动重启看看全新的系统吧～
+
+
+
+五、配置新系统激活 淘宝 激活码 很便宜的  
+安装驱动官方网站 或者 驱动精灵最好不用鲁大师和360，真的  
+其他选项待续吧….累了…
+
+六、软件推荐微信QQ这些都是必备的，我就不说了……说一些好用的软件但是少有人知道的……我平时不安装电脑管家，杀毒软件就一个小红伞，如果真的不放心会在加一个火绒，基本上够了，小红伞对硬盘要求还挺高的，如果觉得安装小红伞卡，就安装小A吧，Avast……  
+软件清单如下：
+
+Notepad++ 替代Windows记事本的最佳方案，支持代码高亮哦～  
+Potplayer Windows下最简单好用的播放器～  
+Everything Windows搜索神器～  
+Firefox 浏览器……我不知道该怎么说，又爱又恨吧～  
+CCleaner Windows下的老牌清理软件….还不错～
+Office 2016 - 全家桶 ed2k Office2016 ed2k链接，请直接迅雷下载～
+Bandizip 美观友好的解压缩软件，省心免费～
+Mactype Windows字体渲染优化，解救windows默认的字体渲染，配置省事，效果明显～
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2017/12/28/Linux/Linux_Firefox-Openh264/" title="Firefox-Openh264的问题">Firefox-Openh264的问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2017-12-28T09:24:52.000Z" title="发表于 2017-12-28 17:24:52">2017-12-28</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.468Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">fedora27中Firefox插件OpenH264不启用  
+环境OS：Fedora 27 WorkstationSoftware: Firefox 57  
+问题Firefox的插件中提示OpenH264 未启用，不能正常使用，打开视频站点不能播放视频。在插件中调整插件状态为 Always Activate，插件状态改变为将被安装，但是无论的等待多久这个插件的安装状态不会改变，依旧不能正常工作。  
+解决办法查找到官方WIKI，给出了如下的解决办法：  
+
+在Fedora默认给出的官方源中，有一个名称是：fedora-cisco-openh264.repo
+这个源默认关闭，开启它sudo dnf config-manager --set-enabled fedora-cisco-openh264  
+安装如下两个插件sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264  
+重启Firefox查看插件状态已经恢复正常，启动openh264插件即可。
+
+Openh264测试页Simple mozRTCPeerConnection Video Test
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2017/12/27/Other/Hexo_Install/" title="Hexo+Github建立个人博客记录">Hexo+Github建立个人博客记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2017-12-27T08:07:34.000Z" title="发表于 2017-12-27 16:07:34">2017-12-27</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.488Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">建立Blog，记录过程所有的配置都是在Fedora 27 Workstation版本下进行，Windows配置环境恶心了我很久所以不做介绍。
+Hexo部署环境Hexo运行在Linux环境中的配置及其简单，只需要确认系统中安装了git和Nodejs就好，在Fedora27中已经默认有Git软件包，如果需要安装git使用dnf install -y git就好。目前我们只需要添加nodejs就可以了，准备工作开始～使用git version 进行git是否存在于系统中的检测。
+安装Node.jsNode.js的安装只需要两条命令，按照顺序执行就好：  
+
+用于系统的更新，基本上等待命令结束就可以，只是保证运行环境的所有软件包都是最新的状态。
+
+[root@localhost test]# dnf update -y  
+
+
+用于安装Nodejs，dnf管理器会自动配置需要的依赖软件，也是等待就好，没有特别的操作。
+
+[root@localhost test]# dnf install -y nodejs
+
+
+
+安装Hexo
+接下来需要选择一个你想安装的目录，例如：&#x2F;root&#x2F;Document&#x2F;Hexo&#x2F;test  
+
+那么需要确定工作目录并且切换过去  
+
+[root@localhost test]# cd /root/Document/Hexo/test  
+
+
+之后所有的操作都会在这个目录或者它的子目录，请留意。  
+
+[root@localhost test]# npm install hexo -g  
+
+
+等待安装结果…….  
+
+安装结束之后，查看是否安装成功,使用：  
+
+[root@localhost test]# hexo -v  
+
+
+如输出如下信息则说明安装成功，可以执行下一步。  
+
+[root@localhost test]# hexo -vhexo: 3.4.4hexo-cli: 1.0.4os: Linux 4.13.13-300.fc27.x86_64 linux x64http_parser: 2.7.1node: 8.9.3v8: 6.1.534.48uv: 1.16.0zlib: 1.2.11ares: 1.10.1-DEVmodules: 57nghttp2: 1.25.0openssl: 1.0.2m-fipsicu: 57.1unicode: 8.0cldr: 29.0tz: 2016b
+
+
+
+安装成功，没有写安装失败的解决方法，因为我觉得难以失败，成功率很高的。  
+失败解决方案
+失败请更换cnpm 或者 更换淘宝源重试。  
+如果安装，确认自己在正确的目录下，执行npm install重试
+
+安装Hexo-server安装Hexo-server主要是作为本地测试使用，通过本地localhost:4000访问来预览，方便调整。  
+
+使用如下命令执行安装：  
+
+[root@localhost test]npm install hexo-server -g
+
+
+执行启动hexo-server，确认是否可以正常使用：  
+
+[root@localhost test]hexo sOR[root@localhost test]hexo server  
+
+
+输入如下结果则正常启动：  
+
+[root@localhost test]# hexo s INFO  Start processing INFO  Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.  
+
+
+这里服务器已经启动了，使用Ctrl+C停止服务，恢复正常的Shell窗口。
+
+
+初始化Hexo
+这里需要创建新的Blog目录，例如：&#x2F;root&#x2F;Document&#x2F;Hexo&#x2F;test
+
+在test目录下执行：  
+
+[root@localhost test] hexo init  
+
+
+初始化会将Blog所需的文件放入test文件夹中，这个目录就是我们需要推到github上面的东西。也就是整个博客的根目录。
+
+
+配置Git这部分的内容已经和我们本地的计算机没有什么太大的关系了，我们需要去Github上面注册一个账户，在这个账户里面添加一个新的repo，例如： test.github.io我们在本地建立的site使用git工具，将整个blog发布到对应的软件仓库中，接下来我们需要配置git的信息使用命令配置git的用户名和邮箱：  
+
+[root@localhost test] git config --global user.name &quot;yourname&quot;[root@localhost test] git config --global user.email &quot;youremailaddress&quot;
+
+添加SSH认证使用ssh进行与github的通信可以免去我们每次都输入用户名密码的繁琐，因此我们需要为本地的计算机生成一个SSH的KEY。  
+
+命令如下：  
+
+[root@localhost test] ssh-keygen -t rsa -C &quot;your_email@example.com&quot;  
+
+
+期间会让我们输入密码进行验证，如果这个位置输入密码，今后每次连接到github的时候，都需要输入这个密码才能连接，如果这里我们不输入密码直接回车，今后连接的时候就不需要密码了，推送的内容会直接被推送，之后返回结果。  
+
+生成的密钥会直接放在当前用户家目录下的隐藏文件夹里，因此我们把他找出来：  
+
+[root@localhost test] cd ~/.ssh  
+
+
+复制id_rsa.pub文件内的所有内容，粘贴到github的添加SSH密钥位置。成功。
+
+
+连接Github测试连接到Github是否能够成功，使用如下命令：  
+
+[root@localhost test] ssh -T git@github.com  
+
+如果上一部分生成SSH密钥的时候输入了密码，请在这个命令运行之后按照提示输入密码，返回结果如下：  
+
+[root@localhost .ssh]# ssh -T &#x67;&#105;&#x74;&#x40;&#103;&#x69;&#116;&#x68;&#x75;&#98;&#46;&#99;&#x6f;&#109;Hi test! You’ve successfully authenticated, but GitHub does not provide shell access.  
+
+我们已经成功的连接上了Github上面的repo，github的配置结束了～  
+配置Hexo-deployergit可以将我们的blog推送到repo上面去，但是本身我们也可以使用hexo提供的工具来进行blog的更新。  
+
+直接编辑hexo的配置文件： _config.yml  
+
+[root@localhost test]# vim _config.yml
+
+
+修改配置文件中的这个部分，如下是最终的修改结果：  
+
+ 77 # Deployment 78 ## Docs: https://hexo.io/docs/deployment.html
+
+
+
+ 79 deploy: 80   type:  git 81   repo:  &#x67;&#105;&#116;&#x40;&#103;&#x69;&#116;&#104;&#x75;&#x62;&#x2e;&#99;&#111;&#x6d;:test&#x2F;test.github.io.git 82   branch:  master  
+
+现在将我们本地的默认站点推送到Github上面去试试吧！   
+
+[root@localhost test]# hexo dINFO  Deploying: gitINFO  Clearing .deploy_git folder…INFO  Copying files from public folder…INFO  Copying files from extend dirs…[master caa83a9] Site updated: 2017-12-27 18:26:01 1 file changed, 63 insertions(+), 11 deletions(-)To github.com:test&#x2F;test.github.io.git62dcd56..caa83a9  HEAD -&gt; masterBranch master set up to track remote branch master from   &#103;&#x69;&#116;&#x40;&#x67;&#x69;&#x74;&#x68;&#x75;&#98;&#46;&#99;&#x6f;&#109;:test&#x2F;test.github.io.git.INFO  Deploy done: git  
+
+
+输出最后Deploy done,就表示我们的原始页面已经上传成功了～，访问Repo的名字就可以直接看到初始blog的样子了。
+
+后续插件安装的记录:
+[root@localhost ~]# cnpm list -g --depth 0
+&#x2F;usr&#x2F;lib
+├── cnpm@6.0.0
+├── hexo@3.4.4
+├── hexo-cli@1.1.0
+├── hexo-generator-archive@0.1.5
+├── hexo-generator-category@0.1.3
+├── hexo-generator-index@0.2.1
+├── hexo-generator-search@2.4.0
+├── hexo-generator-tag@0.2.0
+├── hexo-render-pug@2.1.0
+├── hexo-site@0.0.0
+└── npm@6.4.1
+
+Hexo常用命令说明Hexo目录下常用的命令有：
+[root@localhost test]# hexo s           &#x2F;&#x2F;启动hexo本地服务进行blog预览
+[root@localhost test]# hexo new TITLE   &#x2F;&#x2F;新建文章
+[root@localhost test]# hexo clean       &#x2F;&#x2F;清除缓存
+[root@localhost test]# hexo g           &#x2F;&#x2F;重新生成站点页面文件
+[root@localhost test]# hexo d           &#x2F;&#x2F;推送到github
+添加鼠标爆炸点击效果在&#x2F;themes&#x2F;yelee&#x2F;layout&#x2F;layout.ejs的文件中，文件开始位置加入如下字段：  
+&lt;head&gt;
+  &lt;canvas class&#x3D;&quot;fireworks&quot; style&#x3D;&quot;position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;&quot; &gt;&lt;&#x2F;canvas&gt; 
+  &lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;&#x2F;&#x2F;cdn.bootcss.com&#x2F;animejs&#x2F;2.2.0&#x2F;anime.min.js&quot;&gt;&lt;&#x2F;scr ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">65</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/Redis%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/%E5%85%B3%E4%BA%8ETrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.158Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/CFS%20Schedler/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.157Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/30/iostat/" title="无题">无题</a><time datetime="2023-10-30T05:30:17.573Z" title="发表于 2023-10-30 13:30:17">2023-10-30</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AWS/"><span class="card-category-list-name">AWS</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Books/"><span class="card-category-list-name">Books</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Database/"><span class="card-category-list-name">Database</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ESXi/"><span class="card-category-list-name">ESXi</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ElasticSearch/"><span class="card-category-list-name">ElasticSearch</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Healthcare-IT/"><span class="card-category-list-name">Healthcare-IT</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Kubernetes/"><span class="card-category-list-name">Kubernetes</span><span class="card-category-list-count">17</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.5em; color: #99a9bf">Linux</a> <a href="/tags/Application-ElasticSearch/" style="font-size: 1.17em; color: #999c9f">Application, ElasticSearch</a> <a href="/tags/Hexo/" style="font-size: 1.1em; color: #999">Hexo</a> <a href="/tags/Docker-Application-Prometheus-Grafana/" style="font-size: 1.1em; color: #999">Docker, Application, Prometheus, Grafana</a> <a href="/tags/%E4%B9%A6/" style="font-size: 1.23em; color: #999ea6">书</a> <a href="/tags/VIM-Linux/" style="font-size: 1.1em; color: #999">VIM, Linux</a> <a href="/tags/Linux-Memory-Kernel/" style="font-size: 1.1em; color: #999">Linux, Memory, Kernel</a> <a href="/tags/Linux-Git/" style="font-size: 1.1em; color: #999">Linux, Git</a> <a href="/tags/Linux-Ansible/" style="font-size: 1.1em; color: #999">Linux, Ansible</a> <a href="/tags/Linux-EC2-Network/" style="font-size: 1.1em; color: #999">Linux, EC2, Network</a> <a href="/tags/Windows-Office/" style="font-size: 1.1em; color: #999">Windows, Office</a> <a href="/tags/Kubernetes/" style="font-size: 1.43em; color: #99a6b9">Kubernetes</a> <a href="/tags/Linux-Hexo/" style="font-size: 1.1em; color: #999">Linux, Hexo</a> <a href="/tags/Linux-IO-FileSystem/" style="font-size: 1.1em; color: #999">Linux, IO, FileSystem</a> <a href="/tags/Nginx-Application/" style="font-size: 1.37em; color: #99a4b2">Nginx, Application</a> <a href="/tags/Linux-Ranger/" style="font-size: 1.1em; color: #999">Linux, Ranger</a> <a href="/tags/Linux-Network/" style="font-size: 1.1em; color: #999">Linux, Network</a> <a href="/tags/Vim/" style="font-size: 1.1em; color: #999">Vim</a> <a href="/tags/Linux-Kernel/" style="font-size: 1.3em; color: #99a1ac">Linux, Kernel</a> <a href="/tags/Linux-Perf/" style="font-size: 1.17em; color: #999c9f">Linux, Perf</a> <a href="/tags/Kubernetes-Cilium-EKS/" style="font-size: 1.1em; color: #999">Kubernetes, Cilium, EKS</a> <a href="/tags/AWS-VPC-FLowLog/" style="font-size: 1.1em; color: #999">AWS, VPC, FLowLog</a> <a href="/tags/Linux-Perf-Strace/" style="font-size: 1.1em; color: #999">Linux, Perf, Strace</a> <a href="/tags/Orthanc-Docker/" style="font-size: 1.1em; color: #999">Orthanc, Docker</a> <a href="/tags/Linux-LVM-Filesystem-IO/" style="font-size: 1.1em; color: #999">Linux, LVM, Filesystem, IO</a> <a href="/tags/Ansible/" style="font-size: 1.1em; color: #999">Ansible</a> <a href="/tags/Bash/" style="font-size: 1.1em; color: #999">Bash</a> <a href="/tags/Linux-CPU-EC2/" style="font-size: 1.1em; color: #999">Linux, CPU, EC2</a> <a href="/tags/Application-RabbitMQ/" style="font-size: 1.1em; color: #999">Application, RabbitMQ</a> <a href="/tags/Windows/" style="font-size: 1.23em; color: #999ea6">Windows</a> <a href="/tags/Linux-Fedora/" style="font-size: 1.23em; color: #999ea6">Linux, Fedora</a> <a href="/tags/Linux-EC2/" style="font-size: 1.1em; color: #999">Linux, EC2</a> <a href="/tags/MongoDB-JAVA/" style="font-size: 1.1em; color: #999">MongoDB, JAVA</a> <a href="/tags/Linux-BPF/" style="font-size: 1.1em; color: #999">Linux, BPF</a> <a href="/tags/Application-Harbor/" style="font-size: 1.1em; color: #999">Application, Harbor</a> <a href="/tags/Docker/" style="font-size: 1.37em; color: #99a4b2">Docker</a> <a href="/tags/Linux-JAVA/" style="font-size: 1.1em; color: #999">Linux, JAVA</a> <a href="/tags/docker/" style="font-size: 1.1em; color: #999">docker</a> <a href="/tags/Linux-Kubernetes/" style="font-size: 1.1em; color: #999">Linux, Kubernetes</a> <a href="/tags/Repo-Linux/" style="font-size: 1.1em; color: #999">Repo, Linux</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/11/"><span class="card-archive-list-date">十一月 2023</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">9</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">四月 2023</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">128</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">143k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-11-06T04:20:45.802Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
