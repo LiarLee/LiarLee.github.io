@@ -49,7 +49,54 @@ helm upgrade -i cilium cilium/cilium \
   --set hubble.relay.enabled=true \
   --set hubble.ui.enabled=true
 ```
+# Cilium Cli
+touch ./install_cilium_cli.sh
+```shell
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+CLI_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+```
+# Hubble Cli
+touch ./install_hubble_client.sh
+```shell
+HUBBLE_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/hubble/master/stable.txt)
+HUBBLE_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then HUBBLE_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/hubble/releases/download/$HUBBLE_VERSION/hubble-linux-${HUBBLE_ARCH}.tar.gz{,.sha256sum}
+sha256sum --check hubble-linux-${HUBBLE_ARCH}.tar.gz.sha256sum
+sudo tar xzvfC hubble-linux-${HUBBLE_ARCH}.tar.gz /usr/local/bin
+rm hubble-linux-${HUBBLE_ARCH}.tar.gz{,.sha256sum}
+```
 
+## Cilium Cli 安装插件命令
+```shell
+cilium upgrade # 原地升级
+
+# 安装并直接替换kubeproxy
+cilium install --version 1.14.1 --set kubeProxyReplacement=true --set=ipam.operator.clusterPoolIPv4PodCIDRList="10.42.0.0/16" --set k8sServiceHost=kube3s.liarlee.site --set k8sServicePort=6443
+
+
+# 升级
+hayden@arch ~> cilium upgrade
+🔮 Auto-detected Kubernetes kind: K3s
+ℹ️  Using Cilium version 1.14.2
+🔮 Auto-detected cluster name: default
+
+# 看状态
+cilium status
+# 使用hubble
+cilium hubble port-forward &
+
+cilium hubble enable --ui
+
+hubble observe --since=1m -t l7 -
+
+
+```
 ---
 
 # 特性以及状态检查

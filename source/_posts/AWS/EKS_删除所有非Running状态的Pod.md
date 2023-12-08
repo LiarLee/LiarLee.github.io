@@ -7,7 +7,7 @@ tags: Kubernetes, EKS
 
 ## 背景
 
-遇到了一个奇怪的问题， 如果所有的节点上面都有Taint， 然后这个没有Taint的节点磁盘满了， 会导致当前的节点上面留下许多状态不正常的Pod， 这些Pod大概率是停留在了Evicted状态， 或者是Completed, 甚至是 Unknown 就离谱。 
+ 如果所有的节点上面都有Taint， 然后这个没有Taint的节点磁盘满了， 会导致当前的节点上面留下许多状态不正常的Pod， 这些Pod大概率是停留在了Evicted状态， 或者是Completed, 甚至是 Unknown 。 
 
 这种状态的Pod Deployment默认的情况下不会自动回收， 所以需要人工操作一下。 
 

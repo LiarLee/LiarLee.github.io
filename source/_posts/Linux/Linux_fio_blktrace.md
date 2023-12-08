@@ -112,11 +112,13 @@ root@ip-172-31-11-235:/home/ec2-user|⇒  btt -i nvme0n1p1.blktrace.bin
 > 默认推荐使用LVM
 > LVM 和 mdadm 在操作系统都是使用的Raid驱动（内核模块）。
 >
-> 其实也是可以使用btrfs ， 这个测试的结果是 btrfs 的性能确实是比LVM更好。
-
+> 其实也是可以使用btrfs ， 这个测试的结果是 btrfs 的实现和管理成本比 LVM 要少的多。 
+> 
 ## 相关的问题
 如果说有一个性能的问题， IOPS达不到指定的数值， 思路？ 
 首先查看队列深度是不是足够，看svctm时间长不长，看队列长度 
+
+/sys/block/sda/nr_requests 
 
 ## Iostat命令的理解
 iostat -xkt 1

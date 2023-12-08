@@ -24,7 +24,7 @@ vmstat 提供的信息是从硬件和物理参数的角度。**vmstat 第一次�
 
 输出结果如下：
    ```bash
-   hayden@HaydenArchRPi4 ~ vmstat -w 1
+   ~ vmstat -w 1
    --procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
       r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu
       2    0      1005492        42600         1328      1973356    4    7    77   312 1767    6   2   2  95   1   0   0
