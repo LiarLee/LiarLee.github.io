@@ -60,6 +60,3 @@ ceph osd crush rule dump
 7. 创建一个存储池 
 ceph osd pool create magedu-ssdpool 32 32 magedu_ssd_rule
 ceph pg ls-by-pool  magedu-ssdpool | awk '{print $1,$2,$15}' 
-
-#### 分机械盘和固态盘调整运行图的配置
-

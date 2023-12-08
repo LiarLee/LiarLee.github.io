@@ -62,4 +62,4 @@ tags: Linux, Kernel
 ## 更多
 tcp协议的网络流量控制 [[../Network/Network_tc控制流量-update|Network_tc控制流量-update]]
 Amazon Linux 2 完整的sysctl参数 [[Linux_Sysctl]]
-Linux操作系统触发NMI中断调试和Kdump [[Linux_DebugLinuxOnEC2]]
+Linux操作系统触发NMI中断调试和Kdump [[Linux_DebugLinuxCrashOnEC2]]

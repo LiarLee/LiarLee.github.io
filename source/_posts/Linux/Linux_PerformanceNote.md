@@ -430,7 +430,7 @@ TCPIP流量控制
 
    k -- kill
 
-2. [[../vmstat|vmstat]]
+2. [[vmstat|vmstat]]
 
 3. uptime OR w
 
