@@ -1,3 +1,11 @@
+---
+title: Kubectl Apply 报错 annotation Too long
+category: Kubernetes
+date: 2023-12-22 00:53:54
+tags: Kubernetes, EKS
+---
+重装Prometheus operator 的时候报错， 提示annotation 太长了， 不能 apply
+
 ```shell
 > kubectl apply -f ./setup
 customresourcedefinition.apiextensions.k8s.io/alertmanagerconfigs.monitoring.coreos.com created
@@ -14,8 +22,8 @@ Error from server (Invalid): error when creating "setup/0prometheusCustomResourc
 Error from server (Invalid): error when creating "setup/0prometheusagentCustomResourceDefinition.yaml": CustomResourceDefinition.apiextensions.k8s.io "prometheusagents.monitoring.coreos.com" is invalid: metadata.annotations: Too long: must have at most 262144 bytes
 
 ```
-
-解决方案：
+## 解决方案
+### 使用 Create 或者 Replace
 ```shell
 > kubectl create -f ./setup
 customresourcedefinition.apiextensions.k8s.io/prometheuses.monitoring.coreos.com created
@@ -31,7 +39,6 @@ Error from server (AlreadyExists): error when creating "setup/0thanosrulerCustom
 Error from server (AlreadyExists): error when creating "setup/namespace.yaml": object is being deleted: namespaces "monitoring" already exists
 
 ```
-
 使用create命令去创建crd ，使用replace更新crd，他们都不添加 `last-applied-configuration`  这个字段，
 ```shell
 > kubectl replace -f ./setup
@@ -46,11 +53,12 @@ customresourcedefinition.apiextensions.k8s.io/scrapeconfigs.monitoring.coreos.co
 customresourcedefinition.apiextensions.k8s.io/servicemonitors.monitoring.coreos.com replaced
 customresourcedefinition.apiextensions.k8s.io/thanosrulers.monitoring.coreos.com replaced
 namespace/monitoring replaced
-
+```
+### SSA 的方式创建
+当然还有另一个方法就是使用server-side apply： 
+```shell
+> kubectl apply --server-side -f ./setup
 ```
 
-当然还有另一个方法就是使用server-side apply： 
-
-这个还在查。。。。
 https://kubernetes.io/docs/reference/using-api/server-side-apply/
 

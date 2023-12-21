@@ -1,3 +1,14 @@
+---
+title: Filebeat 输出日志到 Opensearch
+category: Docker
+date: 2023-12-08 13:57:57
+tags: AWS, ELK, OpenSearch
+---
+
+这个最后基本上可以确认是一个兼容性问题，测试完成发现， 开启兼容模式的Opensearch+filebeat的组合， filebeat 还是会不定期重启。 
+
+---
+
 ## 背景
 需求是，使用ES + filebeat 模式在收集日志。 
 使用Supervisor作为容器的主进程管理工具，启动后分别运行 应用（这里用nginx代替） + filebeat
@@ -6,7 +17,7 @@
 
 按照这个路数测试。 
 
-## 创建一个Opensearch
+## 创建Opensearch
 版本： 
 OpenSearch 2.11 (latest)
 OpenSearch_2_11_R20231113-P1 (latest)
@@ -132,3 +143,5 @@ access_log  /var/log/access.log  main;
 然后查看Opensearch 创建了默认index， 名称是`filebeat-7.12.1-2023.12.14`
 
 ## 放到 Ecs 里面去
+我直接使用我自己的仓库里面拉取了 ，创建ecs service然后curl请求发送到 alb ， 转给 task。 
+观察opensearch中收集的访问日志。 
