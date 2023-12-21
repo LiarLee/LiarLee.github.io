@@ -1,0 +1,308 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RDS QPS 下降引发的网络流控分析记录 | Liarlee's Notebook</title><meta name="author" content="Liarlee"><meta name="copyright" content="Liarlee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Topic 1 现象看到一个朋友的问题， 由 RDS QPS 下降引发的网络问题分析：  引用原文的问题描述：  这个问题一开始是在进行RDS实验的时候发现的。最初的情景是，多台机器同时对数据库进行select和insert操作时，会发现insert操作会造成select操作qps大幅下降，且insert操作结束之后select操作的qps仍不能回升。起初以为是RDS的问题，但是在复现问题、监控R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RDS QPS 下降引发的网络流控分析记录">
+<meta property="og:url" content="https://liarlee.site/2023/05/09/Linux/Linux_RDS%20QPS%20%E4%B8%8B%E9%99%8D%E5%BC%95%E5%8F%91%E7%9A%84%E7%BD%91%E7%BB%9C%E6%B5%81%E6%8E%A7%E5%88%86%E6%9E%90%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Liarlee&#39;s Notebook">
+<meta property="og:description" content="Topic 1 现象看到一个朋友的问题， 由 RDS QPS 下降引发的网络问题分析：  引用原文的问题描述：  这个问题一开始是在进行RDS实验的时候发现的。最初的情景是，多台机器同时对数据库进行select和insert操作时，会发现insert操作会造成select操作qps大幅下降，且insert操作结束之后select操作的qps仍不能回升。起初以为是RDS的问题，但是在复现问题、监控R">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png">
+<meta property="article:published_time" content="2023-05-08T17:34:00.000Z">
+<meta property="article:modified_time" content="2023-08-20T15:01:42.477Z">
+<meta property="article:author" content="Liarlee">
+<meta property="article:tag" content="Linux, Database, Kernel, Network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://liarlee.site/2023/05/09/Linux/Linux_RDS%20QPS%20%E4%B8%8B%E9%99%8D%E5%BC%95%E5%8F%91%E7%9A%84%E7%BD%91%E7%BB%9C%E6%B5%81%E6%8E%A7%E5%88%86%E6%9E%90%E8%AE%B0%E5%BD%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RDS QPS 下降引发的网络流控分析记录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-20 23:01:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">RDS QPS 下降引发的网络流控分析记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-08T17:34:00.000Z" title="发表于 2023-05-09 01:34:00">2023-05-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.477Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="RDS QPS 下降引发的网络流控分析记录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h3 id="Topic-1-现象"><a href="#Topic-1-现象" class="headerlink" title="Topic 1 现象"></a>Topic 1 现象</h3><p>看到一个朋友的问题， 由 RDS QPS 下降引发的网络问题分析： </p>
+<p>引用原文的问题描述：</p>
+<blockquote>
+<p>这个问题一开始是在进行RDS实验的时候发现的。最初的情景是，多台机器同时对数据库进行select和insert操作时，会发现insert操作会造成select操作qps大幅下降，且insert操作结束之后select操作的qps仍不能回升。起初以为是RDS的问题，但是在复现问题、监控RDS之后发现RDS的压力其实很小。于是开始怀疑是网络的问题，在简化了场景和操作之后，发现能在过去做tcp实验的机器上复现，于是用这个更简单的场景进行问题复现和分析。</p>
+</blockquote>
+<p>正确答案以及复盘： <a target="_blank" rel="noopener" href="https://yishenggong.com/2023/05/06/why-does-my-network-speed-drop-cn/">https://yishenggong.com/2023/05/06/why-does-my-network-speed-drop-cn/</a></p>
+<p>感谢大佬<a target="_blank" rel="noopener" href="https://twitter.com/plantegg">@plantegg</a> 提供的这个案例和<a target="_blank" rel="noopener" href="https://public.zsxq.com/groups/15552551584552.html">知识星球</a>， tcp协议和 os 网络系统的分析我之前真是一句都说不出来， 这次确实完整的走了一遍网络的部分。</p>
+<hr>
+<p>下面是我的一些思路和资料整理： </p>
+<p>看完了问题的描述， 我基本上可以给出一个经验的判断，这个问题是aws t2实例的流控， 因为表现和之前的测试非常一致， 为了确认这个问题我又进行了相关的测试，基准信息如下：</p>
+<p>实例类型：t2.micro</p>
+<p>实例的基准带宽: 64Mbps</p>
+<p>实例的突增带宽: 1Gbps</p>
+<p>实例的EBS规格： 3000 IOPS， 100GB根卷存储， 125MiB&#x2F;s</p>
+<p>实例的OS ： AmazonLinux2023. </p>
+<p>Congestion: Cubic</p>
+<p>具体的测试方法：</p>
+<ol>
+<li>启动4个实例  t2.micro, hostname 分别是 nginx \ client1 \ client2 ， 方便测试和区分实例； 启动一个额外的实例Client3 来尝试验证是不是流控。</li>
+<li>nginx上面启动一个Nginx server， 发布一个 2GB 大小的文件； Client 1、 Client2 两个实例上面使用curl命令下载。</li>
+<li>尝试保持这个流量一段时间之后， 带宽会被限制到64 Mbps。</li>
+<li>由于是流控的问题， 所以现象会稳定出现。</li>
+</ol>
+<hr>
+<p>Summary： </p>
+<p>我理解这个应该是一个对tcp流的限制， 所以验证这个问题的方法是启动一个iperf的服务并重新生成流量， 如果是流控的话， 那么新的流量应该不受限制， 简单的证明方式就是在Nginx Server上面启动一个Iperf3 的 Server ， 然后在发生降低速度的时刻， 使用 Client3 iperf 测试 Nginx Server， 这个时候观察到的现象是两个原有网络链接的速度还是很低， 但是iperf3 的测试网络吞吐量是比较高的。</p>
+<p>t系列的实例都是突增类型， 可以允许一定的时间使用超过实例基准性能的资源， 在网络流量超过基准性能一段时间之后， 实例的带宽会被限制。 之前真的一直都没有思考过实例的带宽限制都是怎么做的， 让我在描述更多的细节我也确实无法提供， 借着这个机会，深入研究一下。</p>
+<hr>
+<p>重新开始分析这个问题： </p>
+<ol>
+<li><p>分析网络抓包看看，被限速的是Server的实例， 所以直接看Server的抓包.</p>
+<p>贴一个我自己抓包截图，<strong>两个不同的流</strong>:</p>
+<ul>
+<li>Server to Client 1:</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/05/08/WDAdY2RIxu9lPoF.png" alt="2023-05-08_20-39.png"></p>
+<ul>
+<li>Server to Client 2:</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/05/08/WPR62JiBQ4ktlbh.png" alt="2023-05-08_20-39_1.png"></p>
+<p>对与上面的两个截图来看， 斜率表越大，下载速度越快， 在斜率较大的前半段， 并未发生任何的TCP异常； 后半段斜率变小的期间，一直有规律的红色标记， 那个标记对应到抓包的结果中，是快速重传的数据包， 并且发生快速重传的时间比较规律， 这类规律的快速重传影响了传输的速度。</p>
+</li>
+<li><p>查看<strong>RTT的变化</strong>， 截图如下： </p>
+<p>Server to Client 1: </p>
+<p><img src="https://s2.loli.net/2023/05/08/YUZSvzAGq1PwnsF.png" alt="2023-05-08_20-52.png"></p>
+<p>Server to Client 2:</p>
+<p><img src="https://s2.loli.net/2023/05/08/7TfVQMUIghqarCx.png" alt="2023-05-08_20-52_1.png"></p>
+<p>上面的这个部分可以看出整体增大了RTT ，基于之前的tc流控测试，<strong>rtt增大</strong>的链路上， 发<strong>送和接收的窗口</strong>需要相应的<strong>增大</strong>， 才能保证带宽的利用率较高。 按照实验更增加 <strong>wmem 和 rmem</strong>， 三个实例的设置都增加， 增加之后的速度并没有改变， <strong>依旧还是被限制的水平</strong>。RTT从抓包的结果上面来看就是有明显的变化。</p>
+</li>
+<li><p>查看Server 实例的<strong>CWND</strong>， 这个CWND的记录直接使用命令行看：</p>
+<p><img src="https://s2.loli.net/2023/05/08/3eGPAKtZ9RdBHUE.png" alt="2023-05-08_16-20.png"></p>
+<p>左侧是Server上面的命令行执行结果 命令是 <code>ss -4tni</code> ， 命令输出的结果中， 有当前的TCP链接的 RTT， CWND的值， 可以观察到， 到两个Server的链接中RTT的值 ~60ms 左右， 我使用了watch 0.1s来执行ss命令和观察， 重点关注上面的几个参数， 可以发现这几个数值的范围如下：</p>
+<p><strong>RTT</strong> ~ 50ms ~ 70ms 之间变化的频率基本上与cwnd的变化频率一致。</p>
+<p><strong>CWND</strong> 40 - 64 之间变化， 到达64之后回落到40左右， 然后快速提高到64再回落。</p>
+<p>引用一个描述比较清晰的中文文章，其中也介绍了常见的几种<strong>拥塞控制算法</strong>的模式， 帮我大概理解了下网络的部分： </p>
+<blockquote>
+<p>TCP 连接建立后先经过 Slow Start 阶段，每收到一个 ACK，CWND 翻倍，数据发送率以指数形式增长，等出现丢包，或达到 ssthresh，或到达接收方 RWND 限制后进入 Congestion Avoidance 阶段。<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/142618130?utm_id=0">1</a></p>
+</blockquote>
+<p>从另一个文章中找到了如下的一个公式： </p>
+<blockquote>
+<p>因此想要充分利用带宽，必须让窗口大小接近 BDP 的大小，才能确保最大吞吐量。</p>
+<p>我们通过如下的例子来讨论一下，究竟 rwnd 和 cwnd 的值与理论最大使用带宽的关系是什么？</p>
+<pre><code>min(cwnd, rwnd) = 16 KB
+RTT = 100 ms
+16 KB = 16 X 1024 X 8 = 131072 bits
+131072 / 0.1 = 1310720 bits/s
+1310720 bits/s = 1310720 / 1000000 = 1.31 Mbps
+</code></pre>
+<p>因此，无论发送端和接收端的实际带宽为多大，当窗口大小为 16 KB 时，传输速率最大只能为 1.31 Mbps 。<a target="_blank" rel="noopener" href="https://blog.csdn.net/lingshengxiyou/article/details/130210354">2</a></p>
+</blockquote>
+<p>可以看到上面的公式中的第一个， 在计算的时候会在cwnd， rwnd 两个指标中<strong>选取最小</strong>的生效， 那么基于上面的变动， 我们已经把wmem ， rmem 都改到了较大的值， 那么这个时候较小 的就是 cwnd 了， 这个值增加不上去就无法充分的利用带宽。</p>
+<p>那么现在的问题变成了为什么 cwnd 无法继续增长？</p>
+<blockquote>
+<p>Cubic 在 BIC 的基础上，一个是通过三次函数去平滑 CWND 增长曲线，让它在接近上一个  CWND 最大值时保持的时间更长一些，再有就是让 CWND 的增长和 RTT 长短无关，即不是每次 ACK 后就去增大 CWND，而是让  CWND 增长的三次函数跟时间相关，不管 RTT 多大，一定时间后 CWND 一定增长到某个值，从而让网络更公平，RTT 小的连接不能挤占  RTT 大的连接的资源。<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/142618130?utm_id=0">1</a></p>
+</blockquote>
+<p>如果cwnd的大小在拥塞避免之后是基于时间来进行增长的，那么就可以结合上面我观察到的现象， 基本上过一段时间就会出现一定量的快速重传（抓包结果）， 周期性的RTT 与 cwnd的变化（命令输出结果）比较吻合了。</p>
+<p>基于上面的命令输出结果可以认为确实是通过RTT的增加 + 丢包控制 CWND， 压着CWND的值上不去的原因就是快速重传， 让cwnd随时间增大之后快速重传， 然后触发拥塞避免， 回退到较低的值， 然后开始循环。</p>
+</li>
+</ol>
+<hr>
+<p>感谢<a target="_blank" rel="noopener" href="https://twitter.com/bnu_chenshuo/status/1654867295452397569">Shuo Chen 和 Hao Chen 大佬的测试分析思路以及工具</a>，反复的理解这个Thread里面的说法， 现在基本上可以抓住这个问题的逻辑了。 </p>
+<p>走着一圈之后， 写完了上面自己的总结， 现在复制大佬的答案： </p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://twitter.com/haoel/status/1654654583149563904">@bnu_chenshuo</a> 从发生 retransmit 的间隔看，太规律了。我现在怀疑是 aws 有意限速，通过非常巧妙的少量丢包或乱序（图一中粗线下挂的小黑点），并控制 RTT，让 Linux TCP sender 的 cwnd 钳制在几十 KB，RTT 在 10ms，进而限制吞吐量在几千 KB&#x2F;s。</p>
+<p>我在 t3.micro 上用 FreeBSD 13 复现。观察到 AWS 先用对付 Linux 的办法：故意丢包乱序 + RTT&#x3D;10ms，发现不灵之后，恼羞成怒，包也不丢了，直接卡脖子。总之就是不让你白嫖网速。对 Linux 是智斗，每秒钟丢你一两个包，RTT&#x3D;10ms，让你自己cwnd小、速度上不去，你也不好说啥。对 FreeBSD 就上武力了。</p>
+</blockquote>
+<p>？？？对于测试的结果， 我这边确实不同，我读取到的RTT 60ms 明显要比大佬测试的时候的RTT 10ms 更高. 我把这个理解为 中国区AWS 与 Global的差异， 这个问题也许还能继续分析?</p>
+<p>调整 rmem ， wmem 的大小到 MTU * CWND &#x3D; 9001 * 60 &#x3D; 540600 ，这个数值x2 设置到发送和接收的窗口， 重新抓包， 理论上应该看不到快速重传了。并且拥塞窗口应该是稳定在 60 左右。 </p>
+<p>测试的过程中观察， 设置 rmem wmem 最终的值为 1000000， ss命令中的 CWND稳定在 57 ， 抓包的结果中没有快速重传， RTT也比较稳定了， 不再有跳跃和突然增加到 100+ 的RTT， 速度还是被限制了， 这时候较小的是 RWND， 所以也是为什么 CWND 可以比较稳定不再变化的原因。</p>
+<p><img src="https://s2.loli.net/2023/05/09/B9y1vpEAQ7nDUrc.png" alt="2023-05-09_15-04_1.png"><br><img src="https://s2.loli.net/2023/05/09/o4SgzJrtXf5wixe.png" alt="2023-05-09_15-04.png"></p>
+<h3 id="Topic-2-如何使用wireshark查看丢包率？"><a href="#Topic-2-如何使用wireshark查看丢包率？" class="headerlink" title="Topic 2 如何使用wireshark查看丢包率？"></a>Topic 2 如何使用wireshark查看丢包率？</h3><p>如何查看实例在限速状态的 丢包率 和 重传率？ </p>
+<p>在客户端的抓包结果里面， 使用字段 tcp.stream eq 0 and tcp.analysis.fast_retransmission 调整到对应的 tcp stream， 然后在Conversion</p>
+<p>s窗口中统计的 Percent Filter 里面的百分比就是重传率， 丢包应该是 ： tcp.analysis.lost_segment</p>
+<p>或者就直接使用IO Graphs， 然后可以看到下面的图像，可以看到这个丢包比较小， 所以我在Y轴设置 100 的 Factor， 这样看起来清楚些。</p>
+<p>如图：</p>
+<p><img src="https://s2.loli.net/2023/05/10/yZ5uCSnvYXi73Be.png" alt="2023-05-10_16-23.png"></p>
+<p>基于这个抓包结果里面的基本上是乱序和快速重传，Server是发送数据的源头， 客户端没有收到认为这个是丢包。</p>
+<p>那么感觉<strong>丢包率</strong>看Client的抓包结果应该就可以。 查看<strong>重传率</strong> 从Server这测的抓包结果来看。 </p>
+<hr>
+<h3 id="Topic-3-RTT的变长是不是流控可以设计的？"><a href="#Topic-3-RTT的变长是不是流控可以设计的？" class="headerlink" title="Topic 3 RTT的变长是不是流控可以设计的？"></a>Topic 3 RTT的变长是不是流控可以设计的？</h3><p>这个rtt确实无法区分到底是底层的流控带来的， 或者是设计故意拖长的，更新额外测试的结果:</p>
+<ol>
+<li><p>将三个实例完全换成 c5.large,  后续没有RTT非常高的的问题了， 如图:</p>
+<p><img src="https://s2.loli.net/2023/05/09/2PzAZy7GdYQbxp8.png" alt="2023-05-09_20-24.png"></p>
+</li>
+<li><p>尝试处理掉CPU 的 IOwait， 也就是将这个文件缩小到 500MB ，之后nginx的数据都从内存取出， 发现RTT增加到了120ms， 维持了较长的时间之后还会回到60ms， 不知道这个原因是什么， 但是看起来RTT不稳定可能确实和os本身没什么关系。</p>
+</li>
+</ol>
+<hr>
+<p>试试其他规格的实例： 尝试在c5的实例上面直接使用tc卡住网桥设备的带宽， 来模拟链路中的网络设备？ 观察rtt看看是否有任何的变化。 </p>
+<p>测试的方法使用docker-compose启动两个pod， 文件如下：</p>
+<pre class="language-yaml" data-language="yaml"><code class="language-yaml"><span class="token punctuation">---</span>
+<span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.8"</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">pod1</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> 111.dkr.ecr.cn<span class="token punctuation">-</span>north<span class="token punctuation">-</span>1.amazonaws.com.cn/haydenarchlinux<span class="token punctuation">:</span>latest
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+  <span class="token key atrule">pod2</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> 111.dkr.ecr.cn<span class="token punctuation">-</span>north<span class="token punctuation">-</span>1.amazonaws.com.cn/haydenarchlinux<span class="token punctuation">:</span>latest
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always</code></pre>
+
+<p>在docker容器里面放入 Shuo Chen 大佬的tcpperf二进制文件，然后我在pod2里面启动 <code>-s</code>，  然后在br上面加tc控制带宽。</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash">tc qdisc del dev <span class="token string">"br-9f86ad93edf1"</span> root
+tc qdisc <span class="token function">add</span> dev <span class="token string">"br-9f86ad93edf1"</span> root handle <span class="token number">1</span>:0 htb default <span class="token number">1</span>
+tc class <span class="token function">add</span> dev <span class="token string">"br-9f86ad93edf1"</span> parent <span class="token number">1</span>:0 classid <span class="token number">1</span>:1 htb rate 64mbit</code></pre>
+
+<p>在测试pod1与pod2 的带宽， 他们的通信速度非常快， 10G的文件几秒就发送完了， 并且br上面的限制没有生效， 感觉应该是直接走了os的协议栈， 其他的部分都没过， 所以没法继续测试。 </p>
+<p>转而使用host os上面的 tcpperf 去发送数据到容器内， 带宽确实被限制了， 但是RTT依旧很低。</p>
+<p><img src="https://s2.loli.net/2023/05/10/SnGDIEO31YxiMHe.png" alt="2023-05-10_10-47.png"></p>
+<p>看起来思路是没问题的？ 但是好像也确实无法证明RTT升高的最终原因。</p>
+<hr>
+<p>Update 2023-05-10</p>
+<p>对于这个延迟是不是流控添加上去的， 我得到了两个不一致的答案， </p>
+<p>一种说法是， RTT升高是流控刻意为之， 主要的原因是， RTT的翻倍量级比较大。</p>
+<p>另一个说法是， 没有给网络添加延时， 这不符合逻辑， RTT增高确实是不合理的现象。 </p>
+<p><img src="https://s2.loli.net/2023/05/10/v7FPdLZyMkGNjSO.png" alt="2023-05-10_10-53.png"></p>
+<hr>
+<p>Update 2023-07-04</p>
+<p>我最后找到了原因， 在ENA驱动程序的文档中是这样描述流控这个行为的： </p>
+<blockquote>
+<p>当实例的网络流量超过最大值时，AWS 将通过排队然后丢弃网络数据包来调整超过最大值的流量。您可以使用网络性能指标监控流量何时超过最大值。这些指标可以实时告知您对网络流量的影响以及可能的网络性能问题。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/WindowsGuide/monitoring-network-performance-ena.htmlhttps://docs.aws.amazon.com/zh_cn/AWSEC2/latest/WindowsGuide/monitoring-network-performance-ena.html">https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/WindowsGuide/monitoring-network-performance-ena.htmlhttps://docs.aws.amazon.com/zh_cn/AWSEC2/latest/WindowsGuide/monitoring-network-performance-ena.html</a></p>
+</blockquote>
+<p>基于上面的描述就可以确认， 延迟高的原因是 队列 ， 丢包的原因是控制操作系统的TCP协议， 让 TCP 协议来遵守底层的规则。 看到了相关的指标， 两者是分开的。 </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://liarlee.site">Liarlee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://liarlee.site/2023/05/09/Linux/Linux_RDS%20QPS%20%E4%B8%8B%E9%99%8D%E5%BC%95%E5%8F%91%E7%9A%84%E7%BD%91%E7%BB%9C%E6%B5%81%E6%8E%A7%E5%88%86%E6%9E%90%E8%AE%B0%E5%BD%95/">https://liarlee.site/2023/05/09/Linux/Linux_RDS%20QPS%20%E4%B8%8B%E9%99%8D%E5%BC%95%E5%8F%91%E7%9A%84%E7%BD%91%E7%BB%9C%E6%B5%81%E6%8E%A7%E5%88%86%E6%9E%90%E8%AE%B0%E5%BD%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://liarlee.site" target="_blank">Liarlee's Notebook</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux-Database-Kernel-Network/">Linux, Database, Kernel, Network</a></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/12/Linux/Linux_free-command-issue/" title="buffer/cache 无法释放"><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">buffer/cache 无法释放</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/20/AWS/EKS_%E6%B7%BB%E5%8A%A0ArchLinux%E5%88%B0EKS%E4%BD%9C%E4%B8%BA%E8%8A%82%E7%82%B9/" title="将ArchLinux作为节点加入EKS UnmanagedNode"><img class="cover" src="https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">将ArchLinux作为节点加入EKS UnmanagedNode</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Topic-1-%E7%8E%B0%E8%B1%A1"><span class="toc-number">1.</span> <span class="toc-text">Topic 1 现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Topic-2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8wireshark%E6%9F%A5%E7%9C%8B%E4%B8%A2%E5%8C%85%E7%8E%87%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">Topic 2 如何使用wireshark查看丢包率？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Topic-3-RTT%E7%9A%84%E5%8F%98%E9%95%BF%E6%98%AF%E4%B8%8D%E6%98%AF%E6%B5%81%E6%8E%A7%E5%8F%AF%E4%BB%A5%E8%AE%BE%E8%AE%A1%E7%9A%84%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">Topic 3 RTT的变长是不是流控可以设计的？</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/%E6%9C%AA%E5%91%BD%E5%90%8D/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.195Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Other/Other-TrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.194Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/iostat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/vmstat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.189Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

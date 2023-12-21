@@ -56,7 +56,7 @@
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2023-11-06 12:32:05'
+  postUpdate: '2023-12-22 00:36:09'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -160,7 +160,330 @@
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">65</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/11/06/Redis%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-06T03:00:30.160Z" title="更新于 2023-11-06 11:00:30">2023-11-06</time></span></div><div class="content">在Redis内存与物理内存mapping由操作系统的虚拟内存管理器 和 指定的内存分配器进行处理。
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/%E6%9C%AA%E5%91%BD%E5%90%8D/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.195Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.195Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">> kubectl apply -f ./setup
+customresourcedefinition.apiextensions.k8s.io/alertmanagerconfigs.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/alertmanagers.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/podmonitors.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/probes.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/prometheusrules.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/scrapeconfigs.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/servicemonitors.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/thanosrulers.monitoring.coreos.com created
+Warning: Detected changes to resource monitoring which is currently being deleted.
+namespace/monitoring unchanged
+Error from server (Invalid): error when creating "setup/0prometheusCustomResourceDefinition.yaml": CustomResourceDefinition.apiextensions.k8s.io "prometheuses.monitoring.coreos.com" is invalid: metadata.annotations: Too long: must have at most 262144 bytes
+Error from server (Invalid): error when creating "setup/0prometheusagentCustomResourceDefinition.yaml": CustomResourceDefinition.apiextensions.k8s.io "prometheusagents.monitoring.coreos.com" is invalid: metadata.annotations: Too long: must have at most 262144 bytes
+
+
+解决方案：
+> kubectl create -f ./setup
+customresourcedefinition.apiextensions.k8s.io/prometheuses.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/prometheusagents.monitoring.coreos.com created
+Error from server (AlreadyExists): error when creating "setup/0alertmanagerConfigCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "alertmanagerconfigs.monitoring.coreos.com" already exists
+Error from server (AlreadyExists): error when creating "setup/0alertmanagerCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "alertmanagers.monitoring.coreos.com" already exists
+Error from server (AlreadyExists): error when creating "setup/0podmonitorCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "podmonitors.monitoring.coreos.com" already exists
+Error from server (AlreadyExists): error when creating "setup/0probeCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "probes.monitoring.coreos.com" already exists
+Error from server (AlreadyExists): error when creating "setup/0prometheusruleCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "prometheusrules.monitoring.coreos.com" already exists
+Error from server (AlreadyExists): error when creating "setup/0scrapeconfigCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "scrapeconfigs.monitoring.coreos.com" already exists
+Error from server (AlreadyExists): error when creating "setup/0servicemonitorCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "servicemonitors.monitoring.coreos.com" already exists
+Error from server (AlreadyExists): error when creating "setup/0thanosrulerCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "thanosrulers.monitoring.coreos.com" already exists
+Error from server (AlreadyExists): error when creating "setup/namespace.yaml": object is being deleted: namespaces "monitoring" already exists
+
+
+使用create命令去创建crd ，使用replace更新crd，他们都不添加 last-applied-configuration  这个字段，
+> kubectl replace -f ./setup
+customresourcedefinition.apiextensions.k8s.io/alertmanagerconfigs.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/alertmanagers.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/podmonitors.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/probes.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/prometheuses.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/prometheusagents.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/prometheusrules.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/scrapeconfigs.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/servicemonitors.monitoring.coreos.com replaced
+customresourcedefinition.apiextensions.k8s.io/thanosrulers.monitoring.coreos.com replaced
+namespace/monitoring replaced
+
+
+当然还有另一个方法就是使用server-side apply： 
+这个还在查。。。。https://kubernetes.io/docs/reference/using-api/server-side-apply/
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/Other/Other-TrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.194Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.194Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">这个命令的记录在 TrueNas Scale ,也就是linux场景下的， Linux 这个版本在我的蜗牛星际上面我看到了一些兼容性问题， 可能会导致磁盘的状态一场， 遂弃之。 回FreeBSD的版本就没事了，还没有那个碍事的集成 k3s.
+TrueNas ScaleSome param can use to tunning Memory Usage : 
+Config the ARC Memory to 75% Total Memory :
+root@haydentruenas:&#x2F;sys&#x2F;block# echo 2995556352 &gt; &#x2F;sys&#x2F;module&#x2F;zfs&#x2F;parameters&#x2F;zfs_arc_maxroot@haydentruenas:&#x2F;sys&#x2F;block# echo 268435456 &gt; &#x2F;sys&#x2F;module&#x2F;zfs&#x2F;parameters&#x2F;zfs_arc_sys_free
+#!/bin/sh
+
+PATH="/bin:/sbin:/usr/bin:/usr/sbin:$&#123;PATH&#125;"
+export PATH
+
+ARC_PCT="90"
+ARC_BYTES=$(grep '^MemTotal' /proc/meminfo | awk -v pct=$&#123;ARC_PCT&#125; '&#123;printf "%d", $2 * 1024 * (pct / 100.0)&#125;')
+echo $&#123;ARC_BYTES&#125; > /sys/module/zfs/parameters/zfs_arc_max
+
+SYS_FREE_BYTES=$((8*1024*1024*1024))
+echo $&#123;SYS_FREE_BYTES&#125; > /sys/module/zfs/parameters/zfs_arc_sys_free</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/Linux/iostat/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.193Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">
+从manpage 里面直接获取的命令说明， 汇报CPU指标 和 设备 或者 分区 的 I&#x2F;O指标。       iostat - Report Central Processing Unit (CPU) statistics and input&#x2F;output statistics for devices and partitions.
+
+指标的解释说明如下：rrqm&#x2F;s - wrqm&#x2F;s  两个看的是的merge的请求数量， 表示发送给驱动程序并被驱动程序合并的请求数量，表示有没有进行合并，这也表示系统将随机IO请求合并成连续以提高性能。r&#x2F;s - w&#x2F;s  IO读写的请求数量IOPS， 发送给磁盘设备的请求数。rKB&#x2F;s - wKB&#x2F;s 吞吐量， 可以使用 -m 转换成MB&#x2F;s， 设备的传输数据量的吞吐量信息。avgrq-sz  平均请求大小， 也就是IOsize 的大小。单位是扇区（512B）。rareq-sz -  wareq-sz 新版本的iostat已经是这两个指标了， 这两个指标单位是 KB.avgqu-sz  在驱动队列和设备队列中或活跃的平均请求数量。 单位是 个。await 这个指标记录的总的延迟， 新的版本也包括 rw 两类请求的延迟。 延迟单位是 ms ，通常不应该超过10ms.
+命令输出结果：
+iostat -dx 3
+
+Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
+nvme0n1       2147.33  34842.67     0.00   0.00    0.46    16.23    0.33      1.33     0.00   0.00    1.00     4.00    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    1.00 100.00
+
+Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
+nvme0n1       2128.33  34248.00     0.00   0.00    0.46    16.09    5.33     49.83     1.33  20.00    0.94     9.34    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.99  99.87
+
+iostat -dcpx 5
+Linux 6.4.10-arch1-1 (arch.liarlee.site) 	08/22/2023 	_x86_64_	(4 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           5.23    0.00    2.05    0.01    0.01   92.71
+
+Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
+nvme0n1          1.00     32.72     0.00   0.04    0.66    32.86    1.24     23.27     0.18  12.62    0.99    18.79    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.00   0.18
+nvme0n1p1        1.00     32.72     0.00   0.04    0.66    32.86    1.24     23.27     0.18  12.62    0.99    18.79    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.00   0.18
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           1.80    0.00    0.95    0.05    0.00   97.20
+
+Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
+nvme0n1          0.00      0.00     0.00   0.00    0.00     0.00    1.60     10.40     0.00   0.00    0.62     6.50    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.00   0.32
+nvme0n1p1        0.00      0.00     0.00   0.00    0.00     0.00    1.60     10.40     0.00   0.00    0.62     6.50    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.00   0.34
+
+监控数据来源： cat /proc/diskstats这些所有的指标都是By Device的， 与进程的部分无关，统计的是发送到设备或者发送到设备分区的请求。基于man page 中的描述， 这四个参数分别是：     r&#x2F;s    The number (after merges) of read requests completed per second for the device.     w&#x2F;s    The number (after merges) of write requests completed per second for the device.     d&#x2F;s    The number (after merges) of discard requests completed per second for the device.     f&#x2F;s    The number (after merges) of flush requests completed per second for the device.  This counts flush requests executed by disks. Flush requests are not tracked for partitions.  Before being merged, flush operations are counted as writes.
+命令行参数的一部分解释-d 展示磁盘设备使用率的信息。-x 扩展显示更多的指标数据， 不添加这个参数不区分设备 读&#x2F;写&#x2F;磁盘&#x2F;文件系统 这四个维度。-c 查看CPU统计的使用率指标。-p 磁盘分区的指标。-z 只是输出一些有IO的设备的统计信息。 性能之巅里面有写出这个参数。 
+使用这个命令的思路： 
+
+看设备， 具体是那个设备上面有IO请求。
+看await，等待的时间长不长， 这里面的等待时间是从请求进入设备队列到请求返回成功的时间 ， 通常情况下应该是在10ms以内， 尤其是 ssd。
+看 q-sz， 按照EBS的规则，说法， 应该是每 1000 IOPS 队列数为 1。 
+综合看 IOPS， 块大小， 吞吐量，  使用率， 确认设备是不是达到了瓶颈。 
+最后切换工具定位具体是那个进程在大量的发送IO请求 ，大概可能的工具是 pidstat， htop ， atop ， sar 等等， 感觉工具还可能有 pm 的这部分工具。
+
+通常可以直接使用命令 ： iostat -xz 1 
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/Linux/vmstat/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.193Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">命令说明vmstat 提供的信息是从硬件和物理参数的角度。vmstat 第一次的数据显示的是从上一次重启到现在的平均值，所以只能用来参考。标题内容就不在解释了，分别是 进程 ， 内存， 交换 ， IO， 系统 ， 和 CPU。
+详细参数如下：  r - 等待运行的进程数量,  多少个进程在R状态， 并一直取得并占用CPU时间片。  b - Uninterreptable Sleep的进程数量， 有多少个处于D状态显示的进程， 通常代表有多少个进程正常等待IO资源。  swpd： VirtualMemory的值 （KB）, 交换的使用量，如果未开启交换分区就会显示是 0。 这个指标和后面的 si so 是整体的， swpd 有用量， 那么si&#x2F;so 就有数据， swpd 是 0， 那么永远不会有 si&#x2F;so。  free： IdleMemory的值（KB), 完全可用的内存，  这里free的内存是 完全没有被分配的。total - buffer - cache - used 计算完了之后剩下的, 与 free 命令中的 free 字段是同样的含义。  buff： 被buffer使用的内存量（KB），被 buff 使用的内存空间。  cache： 被cache使用的内存量（KB）， 被 cache 占用的内存空间， 这部分和buffer 一样， 是临时数据，在落盘后buffer 会被释放， cache可以直接被释放。  si： Swapin 内存从硬盘换入的数据量 （KB&#x2F;s)， 读取交换分区（disk）到 内存 的数据量 。  so：Swapout 内存交换到硬盘的数据量 （KB&#x2F;s）， 写入磁盘交换分区的数据量。  bi： blockin， 发送到块设备的块数量（blocks&#x2F;s),   系统收到disk发送来的数据量， 也就是通常说的读磁盘数据。  bo： blockout ， 从块设备接收的块数量（blocks&#x2F;s）， 系统写入disk的数据量， 也就是通常说的写磁盘数据。  in： 包括时钟在内的那每秒中断数。  cs： 进程上下文每秒切换的次数。  us：非内核代码使用的CPU百分比， 包括用户时间和Nice时间。  sy：内核代码使用的CPU时间百分比。  id： CPU的空闲时间百分比。  wa：等待IO操作花费的时间百分比。 这个容易误解的是， wa 其实cpu 是空闲的， 统计的方式是， 在收集数据的时候有多少个进程处于需要处理io或者等待处理io的状态， 当时那个时刻的百分比， 而实际上等待io的时间其实CPU没有做事， 所以在CPU的度量上， 这个时间的CPU是可以做其他事情的， 可以被其他需要进行计算的进程使用掉这部分时间。  st：虚拟化层操作花费的时间百分比。这个通常是指虚拟化层的限制。 这个指标如果有， 那么表示虚拟化层对cpu的使用进行了限制（EC2 T系列实例） 或者是 底层的资源并不完全满足需求而导致的争抢。  gu： Time spent running KVM guest code (guest time, including guest nice). ， 这个是新添加的指标， 之前没有见过。 如果是KVM host os 上面这个指标还是比较有用的。  
+输出结果如下：   ~ vmstat -w 1
+--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
+   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu
+   2    0      1005492        42600         1328      1973356    4    7    77   312 1767    6   2   2  95   1   0   0
+   1    0      1005492        42652         1328      1973360    0    0     0     0 2519 3373   1   2  97   0   0   0
+   1    0      1005492        42652         1328      1973360    0    0     0     8 1001 1844   0   1  99   0   0   0
+   1    0      1005492        42652         1328      1973360    0    0     0    12 1056 1822   1   0  99   0   0   0
+   1    0      1005492        42652         1328      1973368    0    0     0     0 1308 2150   1   1  98   0   0   0
+   1    0      1005492        43156         1328      1973376    0    0     0     0 1394 2245   3   1  97   0   0   0
+   1    0      1005492        43156         1328      1973376    0    0     0     0 1125 1898   1   1  99   0   0   0
+   1    0      1005492        43408         1328      1973376    0    0     0    55 1229 2218   1   1  99   0   0   0
+   1    0      1005492        44948         1328      1973392    0    0     0     0 3544 5490   7   4  89   0   0   0
+   1    0      1005492        45228         1328      1973428    0    0     0     0 1410 2082   3   4  93   0   0   0分析指标的逻辑输出之后 先看前几次输出的 r 和 b。  r 有没有超过核心数；  b 这里是不是有数据， 数据在运行命令的周期是不是一直存在， 数量有没有超过CPU核心数。变化的频率的幅度是什么样的。    例子：    总共观察10s ， 每秒输出一次数据， 每秒都有 超过cpu 核心数的 不可中断进程， 那么这代表当前的操作系统可能存在大量io进程，被阻塞的IO进程比较多 。 
+然后看最后一列的CPU情况， id的数据是多少，如果这个时候id 比较小， 看 us&#x2F;sy&#x2F;wa ，cpu 把时间花费在了什么地方。通常的场景下， cpu 应该把时间尽可能的使用在 us 这个部分。 如果其他而部分比较多的就需要关注较多的那个部分了。 
+有交换就看看交换， 没有交换直接看内存相关， cache + free 总共有多少。如果内存用量是不是在oom 的边缘 ，然后再看 in&#x2F;cs，  一个是硬中断次数， 一个是进程上下文切换次数， 这两个一个可能代表潜在的cpu被硬件事件终止， 另一个cpu忙于在进程之间反复横跳。 这些都可能指向当前系统的效率并不高， 或者潜在的问题。 
+命令示例   vmstat -m – 显示内核占用内存的分配情况。   vmstat -a – 将内存的使用量分为活动内存和非活动内存。   vmstat -n 2 10 – 展示vmstat的结果10次， 每两秒一次。
+更多参考https://docs.oracle.com/cd/E19455-01/805-7229/6j6q8svh5/index.html
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/Linux/Linux_Iptables-and-conntrack/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.189Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.190Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">https://stackoverflow.com/questions/47645859/meaning-of-modules-instances-in-proc-modules
+Lsmod命令基于manpage的说明， 这个命令的数据来源是 ： &#x2F;proc&#x2F;modules
+[root@centos ~]# lsmod
+Module                  Size  Used by
+iptable_nat            12875  0
+nf_conntrack_ipv4      19149  1
+nf_defrag_ipv4         12729  1 nf_conntrack_ipv4
+nf_nat_ipv4            14115  1 iptable_nat
+nf_nat                 26583  1 nf_nat_ipv4
+nf_conntrack          143360  3 nf_nat,nf_nat_ipv4,nf_conntrack_ipv4
+iptable_filter         12810  0
+nfit                   59735  0
+libnvdimm             163620  1 nfit
+iosf_mbi               15582  0
+crc32_pclmul           13133  0
+ghash_clmulni_intel    13273  0
+aesni_intel           189456  0
+ppdev                  17671  0
+lrw                    13286  1 aesni_intel
+gf128mul               15139  1 lrw
+glue_helper            13990  1 aesni_intel
+ablk_helper            13597  1 aesni_intel
+cryptd                 21190  3 ghash_clmulni_intel,aesni_intel,ablk_helper
+parport_pc             28205  0
+parport                46395  2 ppdev,parport_pc
+i2c_piix4              22401  0
+pcspkr                 12718  0
+ip_tables              27126  2 iptable_filter,iptable_nat
+xfs                  1014152  1
+libcrc32c              12644  3 xfs,nf_nat,nf_conntrack
+crct10dif_pclmul       14307  0
+crct10dif_common       12595  1 crct10dif_pclmul
+crc32c_intel           22094  1
+nvme                   32382  1
+serio_raw              13434  0
+ena                    96895  0
+nvme_core              63547  3 nvme
+sunrpc                366617  1
+
+&#x2F;proc&#x2F;modules 的输出结果
+[root@centos ~]# cat /proc/modules
+iptable_nat 12875 0 - Live 0xffffffffc0661000
+nf_conntrack_ipv4 19149 1 - Live 0xffffffffc065b000
+nf_defrag_ipv4 12729 1 nf_conntrack_ipv4, Live 0xffffffffc05fd000
+nf_nat_ipv4 14115 1 iptable_nat, Live 0xffffffffc05f4000
+nf_nat 26583 1 nf_nat_ipv4, Live 0xffffffffc0603000
+nf_conntrack 143360 3 nf_conntrack_ipv4,nf_nat_ipv4,nf_nat, Live 0xffffffffc0634000
+iptable_filter 12810 0 - Live 0xffffffffc05dd000
+nfit 59735 0 - Live 0xffffffffc066d000
+libnvdimm 163620 1 nfit, Live 0xffffffffc060b000
+iosf_mbi 15582 0 - Live 0xffffffffc05ed000
+crc32_pclmul 13133 0 - Live 0xffffffffc05e5000
+ghash_clmulni_intel 13273 0 - Live 0xffffffffc059e000
+aesni_intel 189456 0 - Live 0xffffffffc05ad000
+ppdev 17671 0 - Live 0xffffffffc05a4000
+lrw 13286 1 aesni_intel, Live 0xffffffffc0575000
+gf128mul 15139 1 lrw, Live 0xffffffffc0590000
+glue_helper 13990 1 aesni_intel, Live 0xffffffffc0570000
+ablk_helper 13597 1 aesni_intel, Live 0xffffffffc0418000
+cryptd 21190 3 ghash_clmulni_intel,aesni_intel,ablk_helper, Live 0xffffffffc0569000
+parport_pc 28205 0 - Live 0xffffffffc0596000
+parport 46395 2 ppdev,parport_pc, Live 0xffffffffc0583000
+i2c_piix4 22401 0 - Live 0xffffffffc057c000
+pcspkr 12718 0 - Live 0xffffffffc0466000
+ip_tables 27126 2 iptable_nat,iptable_filter, Live 0xffffffffc045e000
+xfs 1014152 1 - Live 0xffffffffc0470000
+libcrc32c 12644 3 nf_nat,nf_conntrack,xfs, Live 0xffffffffc0459000
+crct10dif_pclmul 14307 0 - Live 0xffffffffc0438000
+crct10dif_common 12595 1 crct10dif_pclmul, Live 0xffffffffc046b000
+crc32c_intel 22094 1 - Live 0xffffffffc041d000
+nvme 32382 1 - Live 0xffffffffc040f000
+serio_raw 13434 0 - Live 0xffffffffc0407000
+ena 96895 0 - Live 0xffffffffc0440000
+nvme_core 63547 3 nvme, Live 0xffffffffc0427000
+sunrpc 366617 1 - Live 0xffffffffc03ac000
+
+调试 Iptables 的方法Kubernetes 里面大量的使用了iptables 规则的各种转换，可以使用iptables的trace功能进行追踪， 查看具体经过了哪些链表。
+iptables -t raw -A PREROUTING -p tcp -s 172.31.47.174/32 -j TRACE
+or
+iptables -t raw -A PREROUTING -p tcp -d 172.31.71.167 --dport 8090 -j TRACE
+
+modprobe ipt_LOG ip6t_LOG nfnetlink_log
+modprobe nf_log_ipv4
+xtables-monitor  --trace
+完成之后就可以在 message 里面看到记录了。 
+kern  :warn  : [Thu Sep 21 15:01:24 2023] TRACE: raw:PREROUTING:policy:2 IN=eth3 OUT= MAC=02:19:e6:40:fc:c8:02:55:96:c9:21:66:08:00 SRC=172.31.47.174 DST=172.31.55.27 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=26039 DF PROTO=TCP SPT=22896 DPT=8090 SEQ=1763415057 ACK=0 WINDOW=62727 RES=0x00 SYN URGP=0 OPT (020423010402080ADBFD1C1B0000000001030307)
+kern  :warn  : [Thu Sep 21 15:01:24 2023] TRACE: mangle:PREROUTING:policy:4 IN=eth3 OUT= MAC=02:19:e6:40:fc:c8:02:55:96:c9:21:66:08:00 SRC=172.31.47.174 DST=172.31.55.27 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=26039 DF PROTO=TCP SPT=22896 DPT=8090 SEQ=1763415057 ACK=0 WINDOW=62727 RES=0x00 SYN URGP=0 OPT (020423010402080ADBFD1C1B0000000001030307)
+kern  :warn  : [Thu Sep 21 15:01:24 2023] TRACE: nat:PREROUTING:rule:1 IN=eth3 OUT= MAC=02:19:e6:40:fc:c8:02:55:96:c9:21:66:08:00 SRC=172.31.47.174 DST=172.31.55.27 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=26039 DF PROTO=TCP SPT=22896 DPT=8090 SEQ=1763415057 ACK=0 WINDOW=62727 RES=0x00 SYN URGP=0 OPT (020423010402080ADBFD1C1B0000000001030307)
+kern  :warn  : [Thu Sep 21 15:01:24 2023] TRACE: nat:KUBE-SERVICES:return:45 IN=eth3 OUT= MAC=02:19:e6:40:fc:c8:02:55:96:c9:21:66:08:00 SRC=172.31.47.174 DST=172.31.55.27 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=26039 DF PROTO=TCP SPT=22896 DPT=809 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/Linux/Linux_CFS%20Schedler/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.188Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.188Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">https://docs.kernel.org/scheduler/sched-design-CFS.htmlhttp://arthurchiao.art/blog/linux-cfs-design-and-implementation-zh/#11-cfs%E8%BF%9B%E7%A8%8Btask%E7%9A%84%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6https://danluu.com/cgroup-throttling/https://heapdump.cn/article/4235306
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/Linux%20CheatSheet/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.187Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.187Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">PS Command# Top CPU users
+ps auxwww --sort -%cpu | head -20
+
+# Top memory users
+ps auxwww --sort -rss | head -20
+
+ps auxf --width=200
+or 
+ps auxwwwf
+Curl Commandcurl -o /dev/null -s -w "time_namelookup:%&#123;time_namelookup&#125;\ntime_connect: %&#123;time_connect&#125;\ntime_appconnect: %&#123;time_appconnect&#125;\ntime_redirect:  %&#123;time_redirect&#125;\ntime_pretransfer:  %&#123;time_pretransfer&#125;\ntime_starttransfer: %&#123;time_starttransfer&#125;\ntime_total: %&#123;time_total&#125;\n"  http://nginx.liarlee.site/Fedora-Workstation-Live-x86_64-38_Beta-1.3.iso
+Sysctl Commandsysctl -a | egrep "rmem|wmem|tcp_mem|adv_win|moderate"</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/Filebeat%20%E8%BE%93%E5%87%BA%E6%97%A5%E5%BF%97%E5%88%B0%20Opensearch/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.186Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.187Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">背景需求是，使用ES + filebeat 模式在收集日志。使用Supervisor作为容器的主进程管理工具，启动后分别运行 应用（这里用nginx代替） + filebeat
+现在想要用ECS Fargate， 然后依旧还是这个模式， 尽可能新的变动之前的架构， ES 替换成 OpenSearch。
+按照这个路数测试。 
+创建一个Opensearch版本：OpenSearch 2.11 (latest)OpenSearch_2_11_R20231113-P1 (latest)Availability Zone(s)1-AZ without standby
+构建Supervisor管理的容器创建dockerfile创建dockerfile的部分， 比较难的是 ， 需要找到合适的filebeat版本参考页面:  Agents and ingestion tools其他的步骤就下载安装就可以. 
+# 使用官方Nginx作为基础镜像
+FROM reg.liarlee.site/docker.io/nginx
+
+# 安装Supervisor
+RUN apt-get update &amp;&amp; apt-get install -y supervisor
+RUN mkdir -p /var/log/supervisor
+RUN mkdir -p /etc/filebeat/
+#RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.11.3-amd64.deb &amp;&amp; dpkg -i filebeat-8.11.3-amd64.deb
+RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-oss-7.12.1-amd64.deb &amp;&amp; dpkg -i filebeat-oss-7.12.1-amd64.deb
+
+
+COPY filebeat.yml /etc/filebeat/filebeat.yml
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# 将Supervisor配置文件复制到容器中
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# 启动Supervisor来管理Nginx进程
+CMD [ "/usr/bin/supervisord", "-n" ]
+准备配置文件需要准备的配置文件一共3个： 
+
+supervisord.conf  supervisor的管理配置， 决定了那些进程被管理。
+> cat ./supervisord.conf
+[unix_http_server]
+file=/var/run/supervisor.sock   ; (the path to the socket file)
+chmod=0700                       ; socket file mode (default 0700)
+chown=nobody:nogroup             ; socket file uid:gid owner
+
+[supervisord]
+logfile_maxbytes=50MB                          ; 日志文件的最大大小
+logfile_backups=10                             ; 日志文件的备份数
+loglevel=info                                  ; 日志级别
+nodaemon=false                                 ; 是否以守护进程模式启动Supervisor
+minfds=1024                                    ; 可以打开的文件描述符的最小数量
+minprocs=200                                   ; 可以创建的进程的最小数量
+
+[program:nginx]
+command=/usr/sbin/nginx -g "daemon off;"  ; 启动Nginx的命令
+autostart=true                             ; 在Supervisor启动时自动启动
+autorestart=true                           ; 程序异常退出后自动重启
+stderr_logfile=/var/log/nginx/error.log    ; 错误日志文件路径
+stdout_logfile=/var/log/access.log   ; 访问日志文件路径
+
+[program:filebeat]
+command=/usr/bin/filebeat -e -c /etc/filebeat/filebeat.yml  ; 启动Filebeat的命令
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/filebeat.err.log
+stdout_logfile=/var/log/filebeat.out.log
+filebeat.yml   filebeat的配置文件。  这配置文件 GPT 会直接写出一个可以用 output.opensearch:， 其实还是不能的， 只能使用原本的配置文件。 (也许是我选择的filebeats版本不正确,  所以不行吧
+ filebeat本身是es序列里面的产品， 不支持opensearch也合理， 如果写成opensearch 会找不到output 的定义， 也说明并不支持这个字段。
+
+
+2023-12-14T12:03:12.560Z	INFO	[publisher_pipeline_output]	pipeline&#x2F;output.go:145	Attempting to reconnect to backoff(elasticsearch(https://vpc-ecs-nginx-opensearch-qt7m5rmhddggkiuapyybcmz5oe.cn-north-1.es.amazonaws.com.cn:443)) with 7 reconnect attempt(s)
+&#96;&#96;&#96;shell
+&gt; cat .&#x2F;filebeat.yml
+filebeat.inputs:
+- type: filestream
+  id: nginxaccesslog
+  paths:
+    - &#x2F;var&#x2F;log&#x2F;access.log
+  fields:
+    log_type: access
+
+seccomp.enabled: false # 这个不关闭的话可能会是一个干扰。
+logging.level: debug # 由于调试方便设置了DEBUG。 
+
+# 这个配置段是关闭 xpack， xpack功能只在es里面提供， 商业版本。
+ilm.enabled: false
+setup.ilm.enabled: false
+setup.pack.security.enabled: false
+setup.xpack.graph.enabled: false
+setup.xpack.watcher.enabled: false
+setup.xpack.monitoring.enabled: false
+setup.xpack.reporting.enabled: false
+
+# output就是还用es
+output.elasticsearch:
+  enable: true
+  hosts: [&quot;vpc-ecs-nginx-opensearch-qt7m5rmhddggkiuapyybcmz5oe.cn-north-1.es.amazonaws.com.cn:443&quot;] # 这个部分需要手动指定443, 因为是es的默认配置, 所以直接去 9200,就会连接不上.
+  protocol: &quot;https&quot;
+
+  xpack 报错的日志大概是这样的： 
+
+ 2023-12-14T12:03:12.560Z	ERROR	[publisher_pipeline_output]	pipeline&#x2F;output.go:154	Failed to connect to backoff(elasticsearch(https://vpc-ecs-nginx-opensearch-qt7m5rmhddggkiuapyybcmz5oe.cn-north-1.es.amazonaws.com.cn:443)): Connection marked as failed because the onConnect callback failed: request checking for ILM availability failed: 401 Unauthorized: {“Message”:”Your request: ‘&#x2F;_xpack’ is not allowed.”} 2023-12-14T12:03:12.560Z	INFO	[publisher_pipeline_output]	pipeline&#x2F;output.go:145	Attempting to reconnect to backoff(elasticsearch(https://vpc-ecs-nginx-opensearch-qt7m5rmhddggkiuapyybcmz5oe.cn-north-1.es.amazonaws.com.cn:443)) with 7 reconnect attempt(s)
+
+
+nginx.conf   这个是nginx 应用文件， 模拟一个应用程序， 提供webserver服务。配置文件就是标准的配置文件, 修改一下日志输出的路径. access_log  /var/log/access.log  main;
+ 由于baseimage用的是nginx的， 所以nginx 的日志输出会软链接到&#x2F;dev&#x2F;stdout, filebeat 不收软链接的文件, 开了DEBUG会看到跳过这个文件的日志.
+
+Buildstage接下来就可以Build镜像然后进行测试了。 
+> dive build -t reg.liarlee.site/library/superv-nginx:v31 .
+> docker push reg.liarlee.site/library/superv-nginx:v31
+> docker run -it --name superv-nginx --rm  reg.liarlee.site/library/superv-nginx:v31
+运行启动之后可以看到输出的日志是： 
+2023-12-14 14:03:31,093 INFO success: filebeat entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-12-14 14:03:31,093 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+然后查看Opens ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/22/Database/Redis%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T16:34:33.185Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.186Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span></div><div class="content">在Redis内存与物理内存mapping由操作系统的虚拟内存管理器 和 指定的内存分配器进行处理。
 关于Info指令的所有参数的解释：https://redis.io/commands/info/
 localhost:6379> info memory
 # Memory
@@ -290,170 +613,204 @@ Restart Redis.
 数据对齐： 在条件允许的情况下尽量做数据对齐， 比如数据尽量采用数字类型或者固定长度字符串等， 但是这要视具体的业务而定， 有些场景无法做到。
 安全重启： 重启节点可以做到内存碎片重新整理， 因此可以利用高可用架构， 如Sentinel或Cluster， 将碎片率过高的主节点转换为从节点， 进行安全重启。
 
-内存驱逐当 Redis 内存使用达到 maxmemory 时，需要选择设置好的 maxmemory-policy 进行对 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/11/06/%E5%85%B3%E4%BA%8ETrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-06T03:00:30.161Z" title="更新于 2023-11-06 11:00:30">2023-11-06</time></span></div><div class="content">TrueNas ScaleSome param can use to tunning Memory Usage : 
-Config the ARC Memory to 75% Total Memory :
-root@haydentruenas:&#x2F;sys&#x2F;block# echo 2995556352 &gt; &#x2F;sys&#x2F;module&#x2F;zfs&#x2F;parameters&#x2F;zfs_arc_maxroot@haydentruenas:&#x2F;sys&#x2F;block# echo 268435456 &gt; &#x2F;sys&#x2F;module&#x2F;zfs&#x2F;parameters&#x2F;zfs_arc_sys_free
-#!/bin/sh
+内存驱逐当 Redis 内存使用达到 maxmemory 时，需要选择设置好的 maxmemory-policy 进行对 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/08/AWS/EKS-Container-Pod-ENI/" title="查看EKS集群节点上的容器和ENI的对应关系">查看EKS集群节点上的容器和ENI的对应关系</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-08T06:39:16.000Z" title="发表于 2023-12-08 14:39:16">2023-12-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.182Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/EKS/">EKS</a></span></div><div class="content">版本信息root@ip-172-31-35-61 ~ [1]# containerd -v
+containerd github.com/containerd/containerd v1.6.16 31aa4358a36870b21a992d3ad2bef29e1d693bec.m
 
-PATH="/bin:/sbin:/usr/bin:/usr/sbin:$&#123;PATH&#125;"
-export PATH
+root@ip-172-31-35-61 ~# uname -a
+Linux ip-172-31-35-61.cn-north-1.compute.internal 6.1.10-arch1-1 #1 SMP PREEMPT_DYNAMIC Mon, 06 Feb 2023 09:28:04 +0000 x86_64 GNU/Linux
 
-ARC_PCT="90"
-ARC_BYTES=$(grep '^MemTotal' /proc/meminfo | awk -v pct=$&#123;ARC_PCT&#125; '&#123;printf "%d", $2 * 1024 * (pct / 100.0)&#125;')
-echo $&#123;ARC_BYTES&#125; > /sys/module/zfs/parameters/zfs_arc_max
+root@ip-172-31-35-60 ~ [1]# kubelet --version
+Kubernetes v1.24.9-eks-49d8fe8
+容器虚拟网卡和节点网卡的关主要的思路是通过veth的id 。
+找到 Pod 的 Pause 容器
+root@ip-172-31-35-61 ~# nerdctl -n k8s.io ps | grep -v pause
+CONTAINER ID    IMAGE                                                                                         COMMAND                   CREATED           STATUS    PORTS    NAMES
+218279edbee1    918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn/eks/kube-proxy:v1.24.9-minimal-eksbuild.1    "kube-proxy --v=2 --…"    14 hours ago      Up                 k8s://kube-system/kube-proxy-kqlj2/kube-proxy
+3a8aaf963501    123456123456.dkr.ecr.cn-north-1.amazonaws.com.cn/haydenarchlinux:latest                       "sleep 365d"              8 minutes ago     Up                 k8s://default/haydenarch-77c4f7cff9-dxsps/haydenarch
+进入容器内部查看网卡的ID
+root@ip-172-31-35-61 ~# nerdctl -n k8s.io exec -it 3a8aaf963501 fish
 
-SYS_FREE_BYTES=$((8*1024*1024*1024))
-echo $&#123;SYS_FREE_BYTES&#125; > /sys/module/zfs/parameters/zfs_arc_sys_free</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/11/06/Linux_Iptables-and-conntrack/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-06T03:00:30.158Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-06T03:00:30.159Z" title="更新于 2023-11-06 11:00:30">2023-11-06</time></span></div><div class="content">https://stackoverflow.com/questions/47645859/meaning-of-modules-instances-in-proc-modules
-Lsmod命令基于manpage的说明， 这个命令的数据来源是 ： &#x2F;proc&#x2F;modules
-[root@centos ~]# lsmod
-Module                  Size  Used by
-iptable_nat            12875  0
-nf_conntrack_ipv4      19149  1
-nf_defrag_ipv4         12729  1 nf_conntrack_ipv4
-nf_nat_ipv4            14115  1 iptable_nat
-nf_nat                 26583  1 nf_nat_ipv4
-nf_conntrack          143360  3 nf_nat,nf_nat_ipv4,nf_conntrack_ipv4
-iptable_filter         12810  0
-nfit                   59735  0
-libnvdimm             163620  1 nfit
-iosf_mbi               15582  0
-crc32_pclmul           13133  0
-ghash_clmulni_intel    13273  0
-aesni_intel           189456  0
-ppdev                  17671  0
-lrw                    13286  1 aesni_intel
-gf128mul               15139  1 lrw
-glue_helper            13990  1 aesni_intel
-ablk_helper            13597  1 aesni_intel
-cryptd                 21190  3 ghash_clmulni_intel,aesni_intel,ablk_helper
-parport_pc             28205  0
-parport                46395  2 ppdev,parport_pc
-i2c_piix4              22401  0
-pcspkr                 12718  0
-ip_tables              27126  2 iptable_filter,iptable_nat
-xfs                  1014152  1
-libcrc32c              12644  3 xfs,nf_nat,nf_conntrack
-crct10dif_pclmul       14307  0
-crct10dif_common       12595  1 crct10dif_pclmul
-crc32c_intel           22094  1
-nvme                   32382  1
-serio_raw              13434  0
-ena                    96895  0
-nvme_core              63547  3 nvme
-sunrpc                366617  1
+root@haydenarch-77c4f7cff9-dxsps /# cat /sys/class/net/eth0/iflink
+54
 
-&#x2F;proc&#x2F;modules 的输出结果
-[root@centos ~]# cat /proc/modules
-iptable_nat 12875 0 - Live 0xffffffffc0661000
-nf_conntrack_ipv4 19149 1 - Live 0xffffffffc065b000
-nf_defrag_ipv4 12729 1 nf_conntrack_ipv4, Live 0xffffffffc05fd000
-nf_nat_ipv4 14115 1 iptable_nat, Live 0xffffffffc05f4000
-nf_nat 26583 1 nf_nat_ipv4, Live 0xffffffffc0603000
-nf_conntrack 143360 3 nf_conntrack_ipv4,nf_nat_ipv4,nf_nat, Live 0xffffffffc0634000
-iptable_filter 12810 0 - Live 0xffffffffc05dd000
-nfit 59735 0 - Live 0xffffffffc066d000
-libnvdimm 163620 1 nfit, Live 0xffffffffc060b000
-iosf_mbi 15582 0 - Live 0xffffffffc05ed000
-crc32_pclmul 13133 0 - Live 0xffffffffc05e5000
-ghash_clmulni_intel 13273 0 - Live 0xffffffffc059e000
-aesni_intel 189456 0 - Live 0xffffffffc05ad000
-ppdev 17671 0 - Live 0xffffffffc05a4000
-lrw 13286 1 aesni_intel, Live 0xffffffffc0575000
-gf128mul 15139 1 lrw, Live 0xffffffffc0590000
-glue_helper 13990 1 aesni_intel, Live 0xffffffffc0570000
-ablk_helper 13597 1 aesni_intel, Live 0xffffffffc0418000
-cryptd 21190 3 ghash_clmulni_intel,aesni_intel,ablk_helper, Live 0xffffffffc0569000
-parport_pc 28205 0 - Live 0xffffffffc0596000
-parport 46395 2 ppdev,parport_pc, Live 0xffffffffc0583000
-i2c_piix4 22401 0 - Live 0xffffffffc057c000
-pcspkr 12718 0 - Live 0xffffffffc0466000
-ip_tables 27126 2 iptable_nat,iptable_filter, Live 0xffffffffc045e000
-xfs 1014152 1 - Live 0xffffffffc0470000
-libcrc32c 12644 3 nf_nat,nf_conntrack,xfs, Live 0xffffffffc0459000
-crct10dif_pclmul 14307 0 - Live 0xffffffffc0438000
-crct10dif_common 12595 1 crct10dif_pclmul, Live 0xffffffffc046b000
-crc32c_intel 22094 1 - Live 0xffffffffc041d000
-nvme 32382 1 - Live 0xffffffffc040f000
-serio_raw 13434 0 - Live 0xffffffffc0407000
-ena 96895 0 - Live 0xffffffffc0440000
-nvme_core 63547 3 nvme, Live 0xffffffffc0427000
-sunrpc 366617 1 - Live 0xffffffffc03ac000
+root@haydenarch-77c4f7cff9-dxsps /# ip ad
+1: lo: &lt;LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+3: eth0@if54: &lt;BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 qdisc noqueue state UP group default
+    link/ether 66:3a:fb:f2:00:b2 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.31.39.84/32 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::643a:fbff:fef2:b2/64 scope link
+       valid_lft forever preferred_lft forever
+在实例上面查看 网卡的信息， 找到带有 id 54 的虚拟网卡对。
+root@ip-172-31-35-61 ~# ip ad | grep 54
+54: enid573ff579e6@if3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 qdisc noqueue state UP group default
+查看这个虚拟网卡的全部信息， 可以看到 link-netns， 这是容器的Network NameSpace。 
+&#96;&#96;&#96;shell
+root@ip-172-31-35-61 ~ [1]# ip link show enid573ff579e6
+54: enid573ff579e6@if3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 9001 qdisc noqueue state UP mode DEFAULT group default
+    link&#x2F;ether 36:06:dc:85:42:a4 brd ff:ff:ff:ff:ff:ff link-netns cni-bb451da7-00be-2d59-b5e0-1dd4e77565e8
+可以使用下面的命令查看所有的ns并找到对应的id。
+root@ip-172-31-35-61 ~# ip netns list
+cni-2e29d022-09f4-6626-f416-29cfb9652e78 (id: 13)
+cni-e5be29a1-d111-53ec-8f88-94118eb1466c (id: 10)
+cni-bb451da7-00be-2d59-b5e0-1dd4e77565e8 (id: 8)  # 这个就是
+cni-673e1c4b-acd1-ab7e-b374-1a4192eea86e (id: 6)
+cni-1207e72f-e68e-a7e7-161e-979e9e9ada7a (id: 5)
+cni-a8b7807f-a37e-dd4e-98cb-9d3e7cd42f11 (id: 4)
+cni-08a7a0e2-8e33-b669-83ee-75957676ffbb (id: 3)
+cni-8a26c501-2ea9-f4be-36ae-745a5c307fbc (id: 0)
+cni-2598e89a-d2ba-38a8-6412-92fbff32871b (id: 9)
+cni-817961be-8d28-b32c-816f-a842b9d243fe (id: 2)
+cni-a84561aa-8668-8b7c-4b5e-56568e14dc83 (id: 12)
+cni-5de27d6e-c311-6ee3-4ed5-85b2a05b6943 (id: 11)
+cni-d102a5e6-d6ea-fb90-2ac8-a97cd8df9c85 (id: 7)
+cni-88bf7480-bdd6-e063-3103-894d29b16302 (id: 1)
+可以直接进入pod 的network ns 查看容器的网络信息， 这和上面在容器内直接看到的信息是一致的。
+root@ip-172-31-35-61 ~ [1]# ip netns exec cni-bb451da7-00be-2d59-b5e0-1dd4e77565e8 ip ad
+1: lo: &lt;LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+3: eth0@if54: &lt;BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 qdisc noqueue state UP group default
+    link/ether 66:3a:fb:f2:00:b2 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.31.39.84/32 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::643a:fbff:fef2:b2/64 scope link
+       valid_lft forever preferred_lft forever
+如何确定容器的网卡绑定在了哪个ENI上面由于VPC CNI本身的实现， 在EKS的节点上面会出现多的ENI，具体pod的流量是怎么走向eth网卡的，去了eth0 还是 eth1 或者其他的网卡， 需要通过路由条目来确定。和上面的记录时间不同， 所以这个部分的记录，是另一个节点的另一个容器了， ip地址会不一致。
+查看容器的IP地址
+> kubectl get pods -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP              NODE                                          NOMINATED NODE   READINESS GATES
+haydenarch-7d9ff55cbd-4b7pl   1/1     Running   0          18h   172.31.55.218   ip-172-31-55-30.cn-north-1.compute.internal   &lt;none>           &lt;none>
+查看节点的路由表， 看看这个ip地址的路由信息。 
+[root@ip-172-31-55-30 ~]# ip rule list | grep 172.31.55.218
+512:	from all to 172.31.55.218 lookup main
+1536:	from 172.31.55.218 lookup 2
+那么上面的结果显示， 这个IP地址的数据包会查 table 2， 查看 table 2
+[root@ip-172-31-55-30 ~]# ip r s table 2
+default via 172.31.48.1 dev eth1
+172.31.48.1 dev eth1 scope link
+观察的这个容器现在是在 eth1 上面的， 查看节点的网卡信息。
+[root@ip-172-31-55-30 ~]# ip ad s eth1
+17 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/08/AWS/%E6%89%8B%E5%8A%A8%E8%A7%A6%E5%8F%91bootstrap%E8%84%9A%E6%9C%AC%E5%B0%86%E8%8A%82%E7%82%B9%E5%8A%A0%E5%85%A5%E9%9B%86%E7%BE%A4/" title="自管理节点加入集群">自管理节点加入集群</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-08T06:39:16.000Z" title="发表于 2023-12-08 14:39:16">2023-12-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.185Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/EKS/">EKS</a></span></div><div class="content">添加一个自管理的节点
+创建集群，启动一个新的 EC2， 登录到已经启动的 EKS 优化 OS 内，准备复制一些脚本过来。
 
-调试 Iptables 的方法Kubernetes 里面大量的使用了iptables 规则的各种转换，可以使用iptables的trace功能进行追踪， 查看具体经过了哪些链表。
-iptables -t raw -A PREROUTING -p tcp -s 172.31.47.174/32 -j TRACE
-or
-iptables -t raw -A PREROUTING -p tcp -d 172.31.71.167 --dport 8090 -j TRACE
+添加EC2的标签： kubernetes.io&#x2F;cluster&#x2F;clusterName  owned
 
-modprobe ipt_LOG ip6t_LOG nfnetlink_log
-modprobe nf_log_ipv4
-xtables-monitor  --trace
-完成之后就可以在 message 里面看到记录了。 
-kern  :warn  : [Thu Sep 21 15:01:24 2023] TRACE: raw:PREROUTING:policy:2 IN=eth3 OUT= MAC=02:19:e6:40:fc:c8:02:55:96:c9:21:66:08:00 SRC=172.31.47.174 DST=172.31.55.27 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=26039 DF PROTO=TCP SPT=22896 DPT=8090 SEQ=1763415057 ACK=0 WINDOW=62727 RES=0x00 SYN URGP=0 OPT (020423010402080ADBFD1C1B0000000001030307)
-kern  :warn  : [Thu Sep 21 15:01:24 2023] TRACE: mangle:PREROUTING:policy:4 IN=eth3 OUT= MAC=02:19:e6:40:fc:c8:02:55:96:c9:21:66:08:00 SRC=172.31.47.174 DST=172.31.55.27 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=26039 DF PROTO=TCP SPT=22896 DPT=8090 SEQ=1763415057 ACK=0 WINDOW=62727 RES=0x00 SYN URGP=0 OPT (020423010402080ADBFD1C1B0000000001030307)
-kern  :warn  : [Thu Sep 21 15:01:24 2023] TRACE: nat:PREROUTING:rule:1 IN=eth3 OUT= MAC=02:19:e6:40:fc:c8:02:55:96:c9:21:66:08:00 SRC=172.31.47.174 DST=172.31.55.27 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=26039 DF PROTO=TCP SPT=22896 DPT=8090 SEQ=1763415057 ACK=0 WINDOW=62727 RES=0x00 SYN URGP=0 OPT (020423010402080ADBFD1C1B0000000001030307)
-kern  :warn  : [Thu Sep 21 15:01:24 2023] TRACE: nat:KUBE-SERVICES:return:45 IN=eth3 OUT= MAC=02:19:e6:40:fc:c8:02:55:96:c9:21:66:08:00 SRC=172.31.47.174 DST=172.31.55.27 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=26039 DF PROTO=TCP SPT=22896 DPT=809 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/11/06/CFS%20Schedler/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-06T03:00:30.157Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-06T03:00:30.158Z" title="更新于 2023-11-06 11:00:30">2023-11-06</time></span></div><div class="content">https://docs.kernel.org/scheduler/sched-design-CFS.htmlhttp://arthurchiao.art/blog/linux-cfs-design-and-implementation-zh/#11-cfs%E8%BF%9B%E7%A8%8Btask%E7%9A%84%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6https://danluu.com/cgroup-throttling/https://heapdump.cn/article/4235306
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/10/30/iostat/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-30T05:30:17.573Z" title="发表于 2023-10-30 13:30:17">2023-10-30</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.573Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span></div><div class="content">
-从manpage 里面直接获取的命令说明， 汇报CPU指标 和 设备 或者 分区 的 I&#x2F;O指标。       iostat - Report Central Processing Unit (CPU) statistics and input&#x2F;output statistics for devices and partitions.
+配置EC2的Instance Profile
 
-指标的解释说明如下：rrqm&#x2F;s - wrqm&#x2F;s  两个看的是的merge的请求数量， 表示发送给驱动程序并被驱动程序合并的请求数量，表示有没有进行合并，这也表示系统将随机IO请求合并成连续以提高性能。r&#x2F;s - w&#x2F;s  IO读写的请求数量IOPS， 发送给磁盘设备的请求数。rKB&#x2F;s - wKB&#x2F;s 吞吐量， 可以使用 -m 转换成MB&#x2F;s， 设备的传输数据量的吞吐量信息。avgrq-sz  平均请求大小， 也就是IOsize 的大小。单位是扇区（512B）。rareq-sz -  wareq-sz 新版本的iostat已经是这两个指标了， 这两个指标单位是 KB.avgqu-sz  在驱动队列和设备队列中或活跃的平均请求数量。 单位是 个。await 这个指标记录的总的延迟， 新的版本也包括 rw 两类请求的延迟。 延迟单位是 ms ，通常不应该超过10ms.
-命令输出结果：
-iostat -dx 3
+控制台获取 Kubernetes APIServer的Endpoint URL
 
-Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
-nvme0n1       2147.33  34842.67     0.00   0.00    0.46    16.23    0.33      1.33     0.00   0.00    1.00     4.00    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    1.00 100.00
+获取 apiserver b64 CA : cat ~/.kube/config 这个文件里面可以找到 ，或者是通过EKS的控制台上面， 找到 Base64 的 CA。
 
-Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
-nvme0n1       2128.33  34248.00     0.00   0.00    0.46    16.09    5.33     49.83     1.33  20.00    0.94     9.34    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.99  99.87
+编辑 userdata， 或者 ssh 登录到ec2上面创建一个bash脚本用来调用 bootstrap.sh
+mkdir ~/eks; touch ~/eks/start.sh
+---
+#!/bin/bash
+set -ex
 
-iostat -dcpx 5
-Linux 6.4.10-arch1-1 (arch.liarlee.site) 	08/22/2023 	_x86_64_	(4 CPU)
+B64_CLUSTER_CA=
+API_SERVER_URL=
+K8S_CLUSTER_DNS_IP=10.100.0.10
 
-avg-cpu:  %user   %nice %system %iowait  %steal   %idle
-           5.23    0.00    2.05    0.01    0.01   92.71
+/etc/eks/bootstrap.sh $&#123;ClusterName&#125; --b64-cluster-ca $&#123;B64_CLUSTER_CA&#125; --apiserver-endpoint $&#123;API_SERVER_URL&#125;
 
-Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
-nvme0n1          1.00     32.72     0.00   0.04    0.66    32.86    1.24     23.27     0.18  12.62    0.99    18.79    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.00   0.18
-nvme0n1p1        1.00     32.72     0.00   0.04    0.66    32.86    1.24     23.27     0.18  12.62    0.99    18.79    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.00   0.18
+集群里面没有节点组 ， 也不会创建aws-auth configmap 所以节点无法正常的加入集群， 需要手动创建。
+apiVersion: v1
+data:
+  mapRoles: |
+    - groups:
+      - system:bootstrappers
+      - system:nodes
+      rolearn: [CLUSTER_ROLE]
+      username: system:node:&#123;&#123;EC2PrivateDNSName&#125;&#125;
+  mapUsers: |
+    []
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
 
+需要复制的文件sudo pacman -S containerd # 安装Containerd
+scp /etc/eks/bootstrap.sh root@54.222.253.235:/etc/eks/bootstrap.sh # 复制bootstrap
+scp /usr/bin/imds root@54.222.253.235:/usr/bin/imds # shell 脚本， 用来帮忙调用ec2 metadata 获取实例和VPC子网的信息
+scp -pr /etc/eks/ root@54.222.253.235:/etc/eks/ # 直接复制了eks的相关脚本和配置模板
+scp -pr /var/lib/kubelet/kubeconfig root@54.222.253.235:/var/lib/kubelet/kubeconfig # 复制kubeletconfig配置文件模板
+scp -pr /etc/kubernetes/ root@54.222.253.235:/etc/kubernetes/ # 复制 kubernetes 的配置文件
+scp -pr /etc/kubernetes/kubelet/ root@54.222.253.235:/etc/kubernetes/kubelet/ # 上面的命令没有递归复制， 所以需要指定
 
-avg-cpu:  %user   %nice %system %iowait  %steal   %idle
-           1.80    0.00    0.95    0.05    0.00   97.20
+# 设置对应的内核参数， 如果不做kubelet 会报错提示 这些参数不符合要求。
+kernel.panic = 10
+kernel.panic_on_oops = 1
+vm.overcommit_memory = 1
 
-Device            r/s     rkB/s   rrqm/s  %rrqm r_await rareq-sz     w/s     wkB/s   wrqm/s  %wrqm w_await wareq-sz     d/s     dkB/s   drqm/s  %drqm d_await dareq-sz     f/s f_await  aqu-sz  %util
-nvme0n1          0.00      0.00     0.00   0.00    0.00     0.00    1.60     10.40     0.00   0.00    0.62     6.50    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.00   0.32
-nvme0n1p1        0.00      0.00     0.00   0.00    0.00     0.00    1.60     10.40     0.00   0.00    0.62     6.50    0.00      0.00     0.00   0.00    0.00     0.00    0.00    0.00    0.00   0.34
+Bootstrap 脚本内容记录一下脚本自动配置的内容， 大概就是 获取变量， aws的服务地址， ec2 元数据地址， 替换模板中的变量生成Kubelet配置文件 和 Containerd 的配置文件（这个替换是一次性的， 也就是说， bootstrap只能变更模板中的变量一次， 第二次执行只会生成刷新一次集群的信息， 以及重启服务）。
 
-监控数据来源： cat /proc/diskstats这些所有的指标都是By Device的， 与进程的部分无关，统计的是发送到设备或者发送到设备分区的请求。基于man page 中的描述， 这四个参数分别是：     r&#x2F;s    The number (after merges) of read requests completed per second for the device.     w&#x2F;s    The number (after merges) of write requests completed per second for the device.     d&#x2F;s    The number (after merges) of discard requests completed per second for the device.     f&#x2F;s    The number (after merges) of flush requests completed per second for the device.  This counts flush requests executed by disks. Flush requests are not tracked for partitions.  Before being merged, flush operations are counted as writes.
-命令行参数的一部分解释-d 展示磁盘设备使用率的信息。-x 扩展显示更多的指标数据， 不添加这个参数不区分设备 读&#x2F;写&#x2F;磁盘&#x2F;文件系统 这四个维度。-c 查看CPU统计的使用率指标。-p 磁盘分区的指标。-z 只是输出一些有IO的设备的统计信息。 性能之巅里面有写出这个参数。 
-使用这个命令的思路： 
+读取bootstrap后面给出的参数，设置变量， 例如： ClusterName etc.
+查看Kubelet的版本， 决定Runtime， containerd | dockerd, 判断条件是 kubelet 版本 大于 1.24++ kubelet --version
+++ grep -Eo '[0-9]\.[0-9]+\.[0-9]+'
++ KUBELET_VERSION=1.24.9
+---
++ IS_124_OR_GREATER=true
++ DEFAULT_CONTAINER_RUNTIME=containerd
+设置ECR以及Pause容器地址# 获取region以及aws service domain
++ AWS_DEFAULT_REGION=cn-north-1
++ AWS_SERVICES_DOMAIN=amazonaws.com.cn
 
-看设备， 具体是那个设备上面有IO请求。
-看await，等待的时间长不长， 这里面的等待时间是从请求进入设备队列到请求返回成功的时间 ， 通常情况下应该是在10ms以内， 尤其是 ssd。
-看 q-sz， 按照EBS的规则，说法， 应该是每 1000 IOPS 队列数为 1。 
-综合看 IOPS， 块大小， 吞吐量，  使用率， 确认设备是不是达到了瓶颈。 
-最后切换工具定位具体是那个进程在大量的发送IO请求 ，大概可能的工具是 pidstat， htop ， atop ， sar 等等， 感觉工具还可能有 pm 的这部分工具。
+# 调用脚本 /etc/eks/get-ecr-uri.sh cn-north-1 amazonaws.com.cn ''
++ ECR_URI=918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn
++ PAUSE_CONTAINER_IMAGE=918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn/eks/pause
++ PAUSE_CONTAINER=918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn/eks/pause:3.5
++ CA_CERTIFICATE_DIRECTORY=/etc/kubernetes/pki
++ CA_CERTIFICATE_FILE_PATH=/etc/kubernetes/pki/ca.crt
+创建证书目录：+ mkdir -p /etc/kubernetes/pki
++ sed -i s,MASTER_ENDPOINT,https://CE0253A94B6B14215AE3282580CFA5E3.yl4.cn-north-1.eks.amazonaws.com.cn,g /var/lib/kubelet/kubeconfig
++ sed -i s,AWS_REGION,cn-north-1,g /var/lib/kubelet/kubeconfig
++ sed -i s,CLUSTER_NAME,NewClusterForManualJoin,g /var/lib/kubelet/kubeconfig
+获取 VPC CIDR# imds shell script help to get metadata.
+imds: /usr/bin/imds
+++ imds latest/meta-data/local-ipv4
+++ imds latest/meta-data/network/interfaces/macs/02:66:06:2e:48:08/vpc-ipv4-cidr-blocks
+创建kubelet 配置, 计算预留的资源 和 MaxPod 等等参数的数值。/etc/kubernetes/kubelet/kubelet-config.json
++ mkdir -p /etc/systemd/system/kubelet.service.d
++ sudo mkdir -p /etc/containerd
++ sudo mkdir -p /etc/cni/net.d
++ sudo mkdir -p /etc/systemd/system/containerd.service.d
+创建containerd 配置文件+ printf '[Service]\nSlice=runtime.slice\n'
++ sudo tee /etc/systemd/system/containerd.service.d/00-runtime-slice.conf
++ sudo sed -i s,SANDBOX_IMAGE,918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn/eks/pause:3.5,g /etc/eks/containerd/containerd-config.toml
+kubelet配置和启动。+ sudo cp -v /etc/eks/containerd/kubelet-containerd.service /etc/systemd/system/kubelet.service
++ sudo chown root:root /etc/systemd/system/kubelet.service
++ sudo containerd config dump
++ systemctl enable kubelet
++ systemctl start kubelet
 
-通常可以直接使用命令 ： iostat -xz 1 
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/10/30/vmstat/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-30T05:30:17.573Z" title="发表于 2023-10-30 13:30:17">2023-10-30</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.573Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span></div><div class="content">命令说明vmstat 提供的信息是从硬件和物理参数的角度。vmstat 第一次的数据显示的是从上一次重启到现在的平均值，所以只能用来参考。标题内容就不在解释了，分别是 进程 ， 内存， 交换 ， IO， 系统 ， 和 CPU。
-详细参数如下：  r - 等待运行的进程数量,  多少个进程在R状态， 并一直取得并占用CPU时间片。  b - Uninterreptable Sleep的进程数量， 有多少个处于D状态显示的进程， 通常代表有多少个进程正常等待IO资源。  swpd： VirtualMemory的值 （KB）, 交换的使用量，如果未开启交换分区就会显示是 0。 这个指标和后面的 si so 是整体的， swpd 有用量， 那么si&#x2F;so 就有数据， swpd 是 0， 那么永远不会有 si&#x2F;so。  free： IdleMemory的值（KB), 完全可用的内存，  这里free的内存是 完全没有被分配的。total - buffer - cache - used 计算完了之后剩下的, 与 free 命令中的 free 字段是同样的含义。  buff： 被buffer使用的内存量（KB），被 buff 使用的内存空间。  cache： 被cache使用的内存量（KB）， 被 cache 占用的内存空间， 这部分和buffer 一样， 是临时数据，在落盘后buffer 会被释放， cache可以直接被释放。  si： Swapin 内存从硬盘换入的数据量 （KB&#x2F;s)， 读取交换分区（disk）到 内存 的数据量 。  so：Swapout 内存交换到硬盘的数据量 （KB&#x2F;s）， 写入磁盘交换分区的数据量。  bi： blockin， 发送到块设备的块数量（blocks&#x2F;s),   系统收到disk发送来的数据量， 也就是通常说的读磁盘数据。  bo： blockout ， 从块设备接收的块数量（blocks&#x2F;s）， 系统写入disk的数据量， 也就是通常说的写磁盘数据。  in： 包括时钟在内的那每秒中断数。  cs： 进程上下文每秒切换的次数。  us：非内核代码使用的CPU百分比， 包括用户时间和Nice时间。  sy：内核代码使用的CPU时间百分比。  id： CPU的空闲时间百分比。  wa：等待IO操作花费的时间百分比。 这个容易误解的是， wa 其实cpu 是空闲的， 统计的方式是， 在收集数据的时候有多少个进程处于需要处理io或者等待处理io的状态， 当时那个时刻的百分比， 而实际上等待io的时间其实CPU没有做事， 所以在CPU的度量上， 这个时间的CPU是可以做其他事情的， 可以被其他需要进行计算的进程使用掉这部分时间。  st：虚拟化层操作花费的时间百分比。这个通常是指虚拟化层的限制。 这个指标如果有， 那么表示虚拟化层对cpu的使用进行了限制（EC2 T系列实例） 或者是 底层的资源并不完全满足需求而导致的争抢。  gu： Time spent running KVM guest code (guest time, including guest nice). ， 这个是新添加的指标， 之前没有见过。 如果是KVM host os 上面这个指标还是比较有用的。  
-输出结果如下：   hayden@HaydenArchRPi4 ~ vmstat -w 1
---procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
-   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu
-   2    0      1005492        42600         1328      1973356    4    7    77   312 1767    6   2   2  95   1   0   0
-   1    0      1005492        42652         1328      1973360    0    0     0     0 2519 3373   1   2  97   0   0   0
-   1    0      1005492        42652         1328      1973360    0    0     0     8 1001 1844   0   1  99   0   0   0
-   1    0      1005492        42652         1328      1973360    0    0     0    12 1056 1822   1   0  99   0   0   0
-   1    0      1005492        42652         1328      1973368    0    0     0     0 1308 2150   1   1  98   0   0   0
-   1    0      1005492        43156         1328      1973376    0    0     0     0 1394 2245   3   1  97   0   0   0
-   1    0      1005492        43156         1328      1973376    0    0     0     0 1125 1898   1   1  99   0   0   0
-   1    0      1005492        43408         1328      1973376    0    0     0    55 1229 2218   1   1  99   0   0   0
-   1    0      1005492        44948         1328      1973392    0    0     0     0 3544 5490   7   4  89   0   0   0
-   1    0      1005492        45228         1328      1973428    0    0     0     0 1410 2082   3   4  93   0   0   0分析指标的逻辑输出之后 先看前几次输出的 r 和 b。  r 有没有超过核心数；  b 这里是不是有数据， 数据在运行命令的周期是不是一直存在， 数量有没有超过CPU核心数。变化的频率的幅度是什么样的。    例子：    总共观察10s ， 每秒输出一次数据， 每秒都有 超过cpu 核心数的 不可中断进程， 那么这代表当前的操作系统可能存在大量io进程，被阻塞的IO进程比较多 。 
-然后看最后一列的CPU情况， id的数据是多少，如果这个时候id 比较小， 看 us&#x2F;sy&#x2F;wa ，cpu 把时间花费在了什么地方。通常的场景下， cpu 应该把时间尽可能的使用在 us 这个部分。 如果其他而部分比较多的就需要关注较多的那个部分了。 
-有交换就看看交换， 没有交换直接看内存相关， cache + free 总共有多少。如果内存用量是不是在oom 的边缘 ，然后再看 in&#x2F;cs，  一个是硬中断次数， 一个是进程上下文切换次数， 这两个一个可能代表潜在的cpu被硬件事件终止， 另一个cpu忙于在进程之间反复横跳。 这些都可能指向当前系统的效率并不高， 或者潜在的问题。 
-命令示例   vmstat -m – 显示内核占用内存的分配情况。   vmstat -a – 将内存的使用量分为活动内存和非活动内存。   vmstat -n 2 10 – 展示vmstat的结果10次， 每两秒一次。
-更多参考https://docs.oracle.com/cd/E19455-01/805-7229/6j6q8svh5/index.html
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/10/30/AWS%20CLI%20Quick%20ref/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-30T05:30:17.570Z" title="发表于 2023-10-30 13:30:17">2023-10-30</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.570Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span></div><div class="content">查看实例和对应实例的系统平台信息aws ec2 describe-instances --query "Reservations[*].Instances[*].&#123;InstanceId:InstanceId,PlatformDetails:Platform&#125;" --output table</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/09/06/Linux/Linux_AlwaysRunUserdata/" title="在EC2实例每次启动的时候都运行Userdata">在EC2实例每次启动的时候都运行Userdata</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-06T06:24:46.000Z" title="发表于 2023-09-06 14:24:46">2023-09-06</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.571Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">使用Cloud-init提供读取Userdata的功能。 
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/08/Kubernetes%20Cheatsheet/" title="Kubernetes_Cheatsheet">Kubernetes_Cheatsheet</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-08T05:57:57.000Z" title="发表于 2023-12-08 13:57:57">2023-12-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.187Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">移除所有失败的podkubectl delete pod --field-selector="status.phase==Failed"
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/08/AWS_CLI%20Cheatsheet/" title="title">title</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-08T05:56:27.000Z" title="发表于 2023-12-08 13:56:27">2023-12-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.185Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/AWS/">AWS</a></span></div><div class="content">查看实例和对应实例的系统平台信息aws ec2 describe-instances --query "Reservations[*].Instances[*].&#123;InstanceId:InstanceId,PlatformDetails:Platform&#125;" --output table
+查看实例和EBS的关联关系aws ec2 describe-volumes --query 'Volumes[*].[VolumeId, Attachments[0].InstanceId, Size]' --output table</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/08/title/" title="title">title</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-08T05:56:27.000Z" title="发表于 2023-12-08 13:56:27">2023-12-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.194Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content"></div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/12/05/AWS/EKS_windows%20core%20%E8%8A%82%E7%82%B9%E7%AE%A1%E7%90%86/" title="Windows Core EKS 节点管理命令">Windows Core EKS 节点管理命令</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-05T02:11:22.000Z" title="发表于 2023-12-05 10:11:22">2023-12-05</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.183Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">windows 查看磁盘空间的使用情况: 
+Get-PSDrive -Name C | Select-Object Name, Free
+
+windows 实例的磁盘空间扩容
+diskpart
+list volume
+select volume 0
+extend
+从ecr下载镜像
+$ecrCreds = (Get-ECRLoginCommand).password
+
+Write-Host $ecrCreds
+
+ctr  -n k8s.io image pull -u AWS:$ecrCreds ecr link
+pull image 需要使用节点的C盘空间, 　在节点的磁盘空间不足的情况下，会报错。　
+rpc error: code = Unknown desc = failed to pull and unpack image 
+failed to extract layer sha256:9ee7a25f1f619685e0c27cd1f08b34fd7a567f8f0fa789gf9aeb79c72169afa: hcsshim::ImportLayer failed in Win32: There is not enough space on the disk. (0x70): unknown</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/09/06/Linux/Linux_AlwaysRunUserdata/" title="在EC2实例每次启动的时候都运行Userdata">在EC2实例每次启动的时候都运行Userdata</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-06T06:24:46.000Z" title="发表于 2023-09-06 14:24:46">2023-09-06</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.571Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">使用Cloud-init提供读取Userdata的功能。 
 需要在Userdata中添加一个 MIME 的头部， 覆盖默认的行为。
 
 https://cloudinit.readthedocs.io/en/latest/topics/format.html#mime-multi-part-archivehttps://repost.aws/zh-Hans/knowledge-center/execute-user-data-ec2
@@ -653,7 +1010,7 @@ IT Toosl
 魔罗想要争取更多追随者，因而聪明地鼓吹自由，但是如果有人真的行使自由，他不一定会喜欢。基本上，我们只想要让自己，而不想让他人拥有自由。难怪，我们真的行使所有的自由，就不会被邀请去参加任何派对了。
 悉达多的解答是—-培养对情绪的觉察。如果情绪正在起的时候，你能够有所觉察，即使只是一点点，不能够限制它们的活动；它们变成象有监护人在旁的青少年。有人在监视着，魔罗的力量就会减弱。悉达多没有被毒箭所伤，因为他觉察到这些只不过是幻相。同样的，我们自己强大的情绪，也可以变成象花瓣一般地不具杀伤力。当天女接近悉达多的时候，他清楚地了解，她们如同火圈，只是和合而成的，因此她们失去了诱惑力，无法动他一丝一毫。同样的，只要了解我们所欲求的对象事实上是和合而成的现象，就能破除诱惑的魔咒。
 当你开始注意到情绪所能够造成的损害，觉知就会开始发展。当你有了觉知—-举例来说，如果你知道自己正站在悬崖上行走不再那么恐怖，事实上，它反而是非常刺激的。不知才是恐惧的真正根源。觉知不会妨碍你的生活，反而让生命更加充实。如果你在享用一杯茶，而且了解短暂事物的甘与苦，你将能够真正的享受那杯茶。
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/08/16/Linux/EBS-performance-tuning-advise/" title="EBS性能优化">EBS性能优化</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-16T06:17:31.000Z" title="发表于 2023-08-16 14:17:31">2023-08-16</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-26T11:25:39.475Z" title="更新于 2023-08-26 19:25:39">2023-08-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">EBS性能优化Agenda
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/08/16/Linux/EBS-performance-tuning-advise/" title="EBS性能优化">EBS性能优化</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-16T06:17:31.000Z" title="发表于 2023-08-16 14:17:31">2023-08-16</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.188Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">EBS性能优化Agenda
 
 磁盘调优方法论
 常用的磁盘调优方法
@@ -751,13 +1108,30 @@ fio 324148 87167.271746:     250000 cpu-clock:pppH:
                   103fa1 read+0x11 (/usr/lib/libc.so.6)
                        0 [unknown] ([unknown])
 
-观测[[..&#x2F;iostat|iostat]]可以直接使用这个命令来观察磁盘的使用情况， 磁盘的使用率其实并不太准确，这个表示单位时间内cpu时间被io请求占用的时间。 
+观测[[iostat|iostat]]可以直接使用这个命令来观察磁盘的使用情况， 磁盘的使用率其实并不太准确，这个表示单位时间内cpu时间被io请求占用的时间。 
 个别的 10ms 之上的IO请求的长尾现象是正常的， 这个无法避免。
 关于长尾现象的说明： 
 
 长尾请求一般是指明显高于均值的那部分占比较小的请求。  业界关于延迟有一个常用的P99标准， 也就是99%的请求延迟要满足在一定耗时以内， 1%的请求会大于这个耗时， 而这1%就可以认为是长尾请求。  
 Refer to:  https://zhuanlan.zhihu.com/p/35516682
 
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/08/16/Linux/Linux_X11Forward/" title="X11 通过 ssh 转发图形化界面">X11 通过 ssh 转发图形化界面</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-16T06:17:31.000Z" title="发表于 2023-08-16 14:17:31">2023-08-16</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.192Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">Ssh 转发 X11sudo yum install xorg-x11-xauth xorg-x11-fonts-* xorg-x11-font-utils xorg-x11-fonts-Type1 xclock
+
+vim /etc/ssh/sshd_config
+  X11Forwarding yes
+  X11UseLocalhost no
+运行图形化的命令 , 自动捕获请求， 查看mobexterm是否已经正常的启动了一个临时的窗口来进行数据的转发即可 。
+Ssh 转发连接到远端ssh -L local-port:target-host:target-port tunnel-host
+ssh -vvv -f -N -D 0.0.0.0:30890 hayden@localhost
+Ssh 转发命令参数说明-L listen-port:host:port 指派本地的 port 到达端机器地址上的 port
+    建立本地SSH隧道(本地客户端建立监听端口)
+    将本地机(客户机)的某个端口转发到远端指定机器的指定端口.
+
+-R listen-port:host:port 指派远程上的 port 到本地地址上的 port
+    建立远程SSH隧道(隧道服务端建立监听端口)
+    将远程主机(服务器)的某个端口转发到本地端指定机器的指定端口.
+
+-D port 指定一个本地机器 "动态的" 应用程序端口转发.
 </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/08/13/Other/Other-InputMethodForRIME/" title="rime的配置">rime的配置</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-13T02:39:06.000Z" title="发表于 2023-08-13 10:39:06">2023-08-13</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.489Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Other/">Other</a></span></div><div class="content">https://github.com/iDvel/rime-ice
 https://rime.im/
 小狼毫输入法， 或者Fcitx5 挂载 rime 即可。 
@@ -1656,7 +2030,7 @@ URG 2^5
 ECE 2^6
 CWR 2^7
 
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/06/28/Linux/Linux_DebugLinuxOnEC2/" title="发送一个NMI unknown 事件给OS">发送一个NMI unknown 事件给OS</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-06-28T09:12:22.000Z" title="发表于 2023-06-28 17:12:22">2023-06-28</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.571Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">在ec2触发linux的crash发送一个诊断请求给EC2， 触发os本身NMI Unknown事件，这个时间会触发Kdump记录当时的现场。
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/06/28/Linux/Linux_DebugLinuxCrashOnEC2/" title="发送一个NMI unknown 事件给OS">发送一个NMI unknown 事件给OS</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-06-28T09:12:22.000Z" title="发表于 2023-06-28 17:12:22">2023-06-28</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.189Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">在ec2触发linux的crash发送一个诊断请求给EC2， 触发os本身NMI Unknown事件，这个时间会触发Kdump记录当时的现场。
 aws ec2 send-diagnostic-interrupt --region cn-north-1 --instance-id i-********************
 
 记录下来的现场文件保存在 &#x2F;var&#x2F;crash&#x2F; 
@@ -1920,12 +2294,14 @@ mysql&gt; show table status like &#39;test&#39;\G
  Avg_row_length: 48
     Data_length: 202063872
 Max_data_length: 0
-    ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/12/Network/Network-RFC1180/" title="Network 相关知识不知道放那儿">Network 相关知识不知道放那儿</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-12T14:48:45.000Z" title="发表于 2023-05-12 22:48:45">2023-05-12</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.487Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Network/">Network</a></span></div><div class="content">Origin Version:https://datatracker.ietf.org/doc/html/rfc1180
+    ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/12/Network/Network-RFC1180/" title="Network 相关知识不知道放那儿">Network 相关知识不知道放那儿</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-12T14:48:45.000Z" title="发表于 2023-05-12 22:48:45">2023-05-12</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.194Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Network/">Network</a></span></div><div class="content">Origin Version:https://datatracker.ietf.org/doc/html/rfc1180
 Chinese Version:http://arthurchiao.art/blog/rfc1180-a-tcp-ip-tutorial-zh/
 
 Tuning initcwnd for optimum Performance: 
 https://www.cdnplanet.com/blog/tune-tcp-initcwnd-for-optimum-performance/
 https://www.kawabangga.com/posts/5217
+
+Other Linux Network Stack Explaination:https://www.clockblog.life/article/2023/7/4/44.html
 </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/12/Linux/Linux_free-command-issue/" title="buffer/cache 无法释放">buffer/cache 无法释放</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-12T14:15:35.000Z" title="发表于 2023-05-12 22:15:35">2023-05-12</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.483Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">问题看到了一个案例， 这个案例的问题是： 为什么我的buffer&#x2F;cache在echo 3 之后， 还是不能回收， 内存的占用很大。
 命令如下： 
 root@ip-172-31-47-174 ~# free -h
@@ -2369,7 +2745,7 @@ tc qdisc add dev eth0 parent 1:1 handle 2:0 netem delay 50ms
 在添加带宽控制和 50ms 延迟之后， 带宽使用：
 ping 命令 确认 rtt ： 
 root@arch ~# ping nginx.liarlee.site
-PING nginx.liarlee.site (172.31.48.133) 56(84) bytes  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/03/23/AWS/EKS_%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/" title="删除所有非Running状态的Pod">删除所有非Running状态的Pod</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-23T15:42:22.000Z" title="发表于 2023-03-23 23:42:22">2023-03-23</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.457Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">背景遇到了一个奇怪的问题， 如果所有的节点上面都有Taint， 然后这个没有Taint的节点磁盘满了， 会导致当前的节点上面留下许多状态不正常的Pod， 这些Pod大概率是停留在了Evicted状态， 或者是Completed, 甚至是 Unknown 就离谱。 
+PING nginx.liarlee.site (172.31.48.133) 56(84) bytes  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/03/23/AWS/EKS_%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E9%9D%9ERunning%E7%8A%B6%E6%80%81%E7%9A%84Pod/" title="删除所有非Running状态的Pod">删除所有非Running状态的Pod</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-23T15:42:22.000Z" title="发表于 2023-03-23 23:42:22">2023-03-23</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.184Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">背景 如果所有的节点上面都有Taint， 然后这个没有Taint的节点磁盘满了， 会导致当前的节点上面留下许多状态不正常的Pod， 这些Pod大概率是停留在了Evicted状态， 或者是Completed, 甚至是 Unknown 。 
 这种状态的Pod Deployment默认的情况下不会自动回收， 所以需要人工操作一下。 
 Knowledge Source
 处理方法记录一个命令来处理这个类型的Pod。 
@@ -2909,7 +3285,7 @@ perf stat -C 1 -e irq_vectors:local_timer_entry taskset -c 3 sleep 3
 先记录这么多吧， 这个功能用到的地方实在是有限，基本上不怎么需要。并且需要知道是现在已经不怎么需要使用这个工具进行调优了， Redhat有 Tuned 守护进程， 可以通过默认的profile对OS进行调优。
 
 
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/08/19/AWS/EKS_CiliumInstallation&amp;Summary/" title="Cilium 踩坑总结">Cilium 踩坑总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-19T14:21:48.000Z" title="发表于 2022-08-19 22:21:48">2022-08-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.456Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">测试环境
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/08/19/AWS/EKS_CiliumInstallation&amp;Summary/" title="Cilium 踩坑总结">Cilium 踩坑总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-19T14:21:48.000Z" title="发表于 2022-08-19 22:21:48">2022-08-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.183Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">测试环境
 KVM  - hayden@HaydenArchDesktop ~&gt; virsh version
 
  Compiled against library: libvirt 8.6.0 Using library: libvirt 8.6.0 Using API: QEMU 8.6.0 Running hypervisor: QEMU 7.0.0
@@ -2954,6 +3330,44 @@ helm upgrade -i cilium cilium/cilium \
   --set k8sServicePort=6443 \
   --set hubble.relay.enabled=true \
   --set hubble.ui.enabled=true
+Cilium Clitouch .&#x2F;install_cilium_cli.sh
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+CLI_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/$&#123;CILIUM_CLI_VERSION&#125;/cilium-linux-$&#123;CLI_ARCH&#125;.tar.gz&#123;,.sha256sum&#125;
+sha256sum --check cilium-linux-$&#123;CLI_ARCH&#125;.tar.gz.sha256sum
+sudo tar xzvfC cilium-linux-$&#123;CLI_ARCH&#125;.tar.gz /usr/local/bin
+rm cilium-linux-$&#123;CLI_ARCH&#125;.tar.gz&#123;,.sha256sum&#125;
+Hubble Clitouch .&#x2F;install_hubble_client.sh
+HUBBLE_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/hubble/master/stable.txt)
+HUBBLE_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then HUBBLE_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/hubble/releases/download/$HUBBLE_VERSION/hubble-linux-$&#123;HUBBLE_ARCH&#125;.tar.gz&#123;,.sha256sum&#125;
+sha256sum --check hubble-linux-$&#123;HUBBLE_ARCH&#125;.tar.gz.sha256sum
+sudo tar xzvfC hubble-linux-$&#123;HUBBLE_ARCH&#125;.tar.gz /usr/local/bin
+rm hubble-linux-$&#123;HUBBLE_ARCH&#125;.tar.gz&#123;,.sha256sum&#125;
+
+Cilium Cli 安装插件命令cilium upgrade # 原地升级
+
+# 安装并直接替换kubeproxy
+cilium install --version 1.14.1 --set kubeProxyReplacement=true --set=ipam.operator.clusterPoolIPv4PodCIDRList="10.42.0.0/16" --set k8sServiceHost=kube3s.liarlee.site --set k8sServicePort=6443
+
+
+# 升级
+hayden@arch ~> cilium upgrade
+🔮 Auto-detected Kubernetes kind: K3s
+ℹ️  Using Cilium version 1.14.2
+🔮 Auto-detected cluster name: default
+
+# 看状态
+cilium status
+# 使用hubble
+cilium hubble port-forward &amp;
+
+cilium hubble enable --ui
+
+hubble observe --since=1m -t l7 -
+
 
 
 特性以及状态检查默认的安装完成之后开启特性如下：
@@ -2995,36 +3409,7 @@ ds&#x2F;cilium 中的命令返回结果：
 root@fedora:/home/cilium# cilium status
 KVStore:                 Ok   Disabled
 Kubernetes:              Ok   1.24 (v1.24.3) [linux/amd64]
-Kubernetes APIs:         ["cilium/v2::CiliumClusterwideNetworkPolicy", "cilium/v2::CiliumEndpoint", "cilium/v2::CiliumNetworkPolicy", "cilium/v2::CiliumNode", "core/v1::Namespace", "core/v1::Node", "core/v1::Pods", "core/v1::Service", "discovery/v1::EndpointSlice", "networking.k8s.io/v1::NetworkPolicy"]
-KubeProxyReplacement:    Strict   [enp1s0 192.168.31.100 (Direct Routing)]
-Host firewall:           Disabled
-CNI Chaining:            none
-Cilium:                  Ok   1.12.0 (v1.12.0-9447cd1)
-NodeMonitor:             Listening for events on 4 CPUs with 64x4096 of shared memory
-Cilium health daemon:    Ok
-IPAM:                    IPv4: 3/254 allocated from 10.0.0.0/24,
-BandwidthManager:        Disabled
-Host Routing:            BPF
-Masquerading:            Disabled
-Controller Status:       23/23 healthy
-Proxy Status:            OK, ip 10.0.0.78, 0 redirects active on ports 10000-20000
-Global Identity Range:   min 256, max 65535
-Hubble:                  Ok   Current/Max Flows: 283/4095 (6.91%), Flows/s: 1.62   Metrics: Disabled
-Encryption:              Disabled
-Cluster health:          2/2 reachable   (2022-08-23T01:57:33Z)
-
-Cilium verbose的详细结果：
-root@fedora:/home/cilium# cilium status --verbose
-KVStore:                Ok   Disabled
-Kubernetes:             Ok   1.24 (v1.24.3) [linux/amd64]
-Kubernetes APIs:        ["cilium/v2::CiliumClusterwideNetworkPolicy", "cilium/v2::CiliumEndpoint", "cilium/v2::CiliumNetworkPolicy", "cilium/v2::CiliumNode", "core/v1::Namespace", "core/v1::Node", "core/v1::Pods", "core/v1::Service", "discovery/v1::EndpointSlice", "networking.k8s.io/v1::NetworkPolicy"]
-KubeProxyReplacement:   Strict   [enp1s0 192.168.31.100 (Direct Routing)]
-Host firewall:          Disabled
-CNI Chaining:           none
-Cilium:                 Ok   1.12.0 (v1.12.0-9447cd1)
-NodeMonitor:            Listening for events on 4 CPUs with 64x4096 of shared memory
-Cilium health daemon:   Ok
-IPAM:                   IPv4: 3/254 allocated from 10 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/AWS/EKS_ConfigureNodeGC/" title="如何配置kubelet的节点自动回收资源">如何配置kubelet的节点自动回收资源</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.457Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">配置Node节点按照磁盘阈值回收空间
+Kubernetes APIs:         ["cilium/v2::CiliumClusterwideNetworkPolicy", "cilium/v2::CiliumEndpoint", "cilium/v2::CiliumNetworkPolicy", "cilium/v2::CiliumNode", "core/v1::Namespace", "core/v1::Node", "core/v1::Pods", "core/v1 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/AWS/EKS_ConfigureNodeGC/" title="如何配置kubelet的节点自动回收资源">如何配置kubelet的节点自动回收资源</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.457Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kubernetes/">Kubernetes</a></span></div><div class="content">配置Node节点按照磁盘阈值回收空间
 https://aws.amazon.com/cn/premiumsupport/knowledge-center/eks-worker-nodes-image-cache/
 
 
@@ -3490,14 +3875,7 @@ https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html
 # (Note that setting this to anything except zero will break programs!)
 #
 # 0 - Default attach security permissions.
-# 1 - Restricted attach. Only child processes plus normal permissions ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_X11Forward/" title="SSH转发X11">SSH转发X11</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.481Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">记录转发的配置和步骤
-ssh转发X11sudo yum install xorg-x11-xauth xorg-x11-fonts-* xorg-x11-font-utils xorg-x11-fonts-Type1 xclock
-
-vim /etc/ssh/sshd_config
-  X11Forwarding yes
-  X11UseLocalhost no
-运行图形化的命令 查看mobexterm是否已经正常的启动了一个临时的窗口来进行数据的转发即可 。
-Ssh 转发连接到远端的数据ssh -L local-port:target-host:target-port tunnel-host</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_btrfs/" title="关于BTRFS的一些测试">关于BTRFS的一些测试</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.572Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">创建BTRFS卷mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 
+# 1 - Restricted attach. Only child processes plus normal permissions ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_btrfs/" title="关于BTRFS的一些测试">关于BTRFS的一些测试</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.572Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">创建BTRFS卷mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 
 
 更改btrfs的元数据冗余  这里最好的办法当然是创建的时候就规划和指定好。    btrfs balance start -dconvert&#x3D;raid1 -mconvert&#x3D;raid1 &#x2F;mnt
 创建轻量副本文件cp --reflink source dest 
@@ -3616,7 +3994,7 @@ job1: (groupid=0, jobs=1): err= 0: pid=26541: Thu Nov 18 08:04:01 2021
     lat (msec) : 20=1.78%, 50=3.55%, 100=0.59%, 250=94.08%
   cpu          : usr=0.74%, sys=0.49%, ctx=2132, majf=0, minf=1
   IO depths    : 1=0.6%, 2=99.4%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
-     submit  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_fio_blktrace/" title="Fio 命令使用的说明">Fio 命令使用的说明</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.483Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">Fio 一些测试和思考， fio ，blktrace等等。
+     submit  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/19/Linux/Linux_fio_blktrace/" title="Fio 命令使用的说明">Fio 命令使用的说明</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-19T09:45:39.000Z" title="发表于 2022-04-19 17:45:39">2022-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.192Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">Fio 一些测试和思考， fio ，blktrace等等。
 Github地址  https://github.com/axboe/fio  https://tobert.github.io/post/2014-04-17-fio-output-explained.html  http://xiaqunfeng.cc/2017/07/12/fio-test-ceph/  https://fio.readthedocs.io/en/latest/fio_doc.html  http://linuxperf.com/?p=156
 命令和说明# fio test file defination
 # ini file format 
@@ -3695,9 +4073,10 @@ root@ip-172-31-11-235:/home/ec2-user|⇒  btt -i nvme0n1p1.blktrace.bin
 
 历史背景
 mdadm 已经不怎么更新和开发了默认推荐使用LVMLVM 和 mdadm 在操作系统都是使用的Raid驱动（内核模块）。
-其实也是可以使用btrfs ， 这个测试的结果是 btrfs 的性能确实是比LVM更好。
+其实也是可以使用btrfs ， 这个测试的结果是 btrfs 的实现和管理成本比 LVM 要少的多。 
 
 相关的问题如果说有一个性能的问题， IOPS达不到指定的数值， 思路？首先查看队列深度是不是足够，看svctm时间长不长，看队列长度 
+&#x2F;sys&#x2F;block&#x2F;sda&#x2F;nr_requests 
 Iostat命令的理解iostat -xkt 1rrqm&#x2F;s wrqm&#x2F;s  - 读写请求的合并数量r&#x2F;s w&#x2F;s - 读写请求数量avgrq - 队列长度await - 时延util - 时间度量 ， 时间周期之内进行IO操作所占的比例。例如 1 秒的时间之内， 取样的点中有多少是在执行IO操作。
 一个例子 ， 如果采样的周期为1s， 那么采样的范围之内 ， 前面的0.5秒有执行IO的操作， 后面的0.5秒没有执行任何的操作， 那么 最后 Util 现在的结果就是50% 。avgrq也是一直平均值， 在采样周期之内如果前后的状况不一致 也会进行平均。
 一般情况下这个参数是准确的，但是大部分指标都是取决于监控取样周期的。
@@ -4167,7 +4546,7 @@ oom_score 一般是自动计算出来的结果，综合计算的结果, 参考 �
 oom_score_adj OOM分数的偏移量，-1000 to +1000, 可以设置-1000表示永远不会被Kill
 
 DISKIODisk OverCommit : 1:1.2
-PAUSE\RESUME</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/09/01/Linux/Linux_Ceph04/" title="Ceph Cluster 04 - CRUSH算法">Ceph Cluster 04 - CRUSH算法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-01T14:29:26.000Z" title="发表于 2021-09-01 22:29:26">2021-09-01</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.462Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">ceph笔记04
+PAUSE\RESUME</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/09/01/Linux/Linux_Ceph04/" title="Ceph Cluster 04 - CRUSH算法">Ceph Cluster 04 - CRUSH算法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-01T14:29:26.000Z" title="发表于 2021-09-01 22:29:26">2021-09-01</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.189Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">ceph笔记04
 修改CRUSH算法的分配方式基础概念：五种运行图： MON服务维护
 Monitor Map - 监控的运行图 MON的状态
 OSD Map - OSD的状态， 每隔六秒钟汇报一次状态
@@ -4204,7 +4583,7 @@ reweight - 磁盘的所有权重相加之后， 单个osd所占用的比例，�
 查看是否生效ceph osd crush rule dump
 创建一个存储池ceph osd pool create magedu-ssdpool 32 32 magedu_ssd_ruleceph pg ls-by-pool  magedu-ssdpool | awk ‘{print $1,$2,$15}’
 
-分机械盘和固态盘调整运行图的配置</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/26/Linux/Linux_RangerUsage/" title="Linux_Ranger_Usage">Linux_Ranger_Usage</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-25T17:49:46.000Z" title="发表于 2021-08-26 01:49:46">2021-08-26</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.479Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">ranger 备忘
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/26/Linux/Linux_RangerUsage/" title="Linux_Ranger_Usage">Linux_Ranger_Usage</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-25T17:49:46.000Z" title="发表于 2021-08-26 01:49:46">2021-08-26</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.479Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">ranger 备忘
 g/ Go root 
 gh Go home
 gg Go to top 
@@ -4608,7 +4987,7 @@ Timed out after 30000 ms while waiting to connect. Client view of cluster state 
 所以 最后的连接参数变成： 
 mongodb:&#x2F;&#x2F;192.168.1.1:8635&#x2F;test?authSource&#x3D;admin&amp;ssl&#x3D;true&amp;sslinvalidhostnameallowed&#x3D;true
 
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/08/20/Linux/Linux_PerformanceNote/" title="Linux性能调优笔记">Linux性能调优笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-20T09:50:39.000Z" title="发表于 2020-08-20 17:50:39">2020-08-20</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.476Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">应该是一个性能调优的书的笔记， 记不清了， 存货了属于是。
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/08/20/Linux/Linux_PerformanceNote/" title="Linux性能调优笔记">Linux性能调优笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-20T09:50:39.000Z" title="发表于 2020-08-20 17:50:39">2020-08-20</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-21T16:34:33.191Z" title="更新于 2023-12-22 00:34:33">2023-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">应该是一个性能调优的书的笔记， 记不清了， 存货了属于是。
 Linux的性能调优CPU性能释放Process生命周期
 建立一个新的进程, 表示为父进程， 父进程进入Wait状态。
 父进程Fork()系统调用出来的一个子进程。
@@ -6462,423 +6841,13 @@ systemctl enable kubelet
  四个组件的用途分别是：
 kubeadm 用来进行所有节点的部署及初始化。
 kubectl 集群的cli接口。
-kubelet 每个Node节点都会启动kubelet进程，用来处理Master节点下发到本节点的任务，管理Pod和其中的容器。kubelet会在API Server上注册节点信息，定期向Mast ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/18/Other/Interview_2019/" title="面试记录">面试记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-07-18T05:12:33.000Z" title="发表于 2019-07-18 13:12:33">2019-07-18</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.489Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span></div><div class="content">这个月还是发生了不少事情了，面试，换房子，真快。
-
-面试题
-有一个字符串s&#x3D;“kjdfdsfevsdf”,使用python单独输出每个字符并在后面加上”th”.
- s = "asdfaurhgauh"
-for i in s:
-  print(i+'th')	
-数据库问题，增删改查。基本上都没答上来。select语句对数据库内容Where做一个筛选。
-
-提取b.txt中的所有域名，awk我写的grep。
-grep -E -o "www.[[:alpha:]]*.com" ./b.txt | sort | uniq -c | sort -nr
-awk -F / '&#123;print $3&#125;' b.txt | sort | uniq -c | sort -nr
-我写的这个唯一个不好的地方就是不能匹配数字的部分，如果域名有数字就提取不出了。其实中间如果全部用正则也可以，但是正则会特别的长。
-
-nginx的反向代理配置文件是不是能看懂，考了一个upstream模块，考了一个weight的分配，考了一个 proxy_pass模块的调用。
-
-描述Raid0 ， 1 ，5的区别，但是没让说raid10。
-
-描述如果你有多的资源如何搭建高可用和高并发，这种题目其实还挺无聊的，高并发靠负载均衡分流，四层转发七层代理。高可用靠的冗余和故障的快速切换。没什么特别的架构，web服务也就是keepalived + lvs。硬件的话F5直接搞，虽然我没见过，但是也听说过。
-
-容器问了一个私有的register,不记得叫什么名字，但是我知道Docker官方有文档。软件名称是Harbor
-
-k8s没什么可说了，昨天晚上听了一堆的k8s的理论，一个集群简单而要三个网络，要不是设计思路清晰，网络就已经是一锅粥了。软件的架构真的是越来越复杂了，现在的网络里面不是桥桥桥，就是NAT转换。
-
-查看Linux系统CPU，MEM，NET-IO，DISK-IO的命令。top | htop | free -m | iostat -a
-
-ext4如果分区超过2T如何操作。这题估计本来是问Ext3文件系统的，改的。Ext4随便分了已经。
-
-如何理解top命令中的load average的含义 这个问题本来是聊到了服务器性能的观察，我说到了top命令查看系统的当前状况，所以后续有了这个问题，其实在系统中，这三个数值的计算方式是通过CPU进程队列的长度来进行计算的，具体的数值及计算公式网上有很多,等我不记得了我在去找资料吧，这种东西已经是死知识了，到处都是。 我说说我的理解，这三个数值其实是system load average,是系统的负载状态，其实是描述了系统的压力变化趋势，计算的CPU参数主要是Running Process &amp; uninterreptable Process , 其实就是正在运行和不可中断运行的进程，这些是CPU的工作量。还有一个衡量的参数实际上是IO，IO的指标也会体现在三个不同时间点的计算中。 如何查看或者分析是我一直理解的不透彻的点，记录一下。单项指标的观察不足以解决系统的问题，需要搭配其他的工具进行分析才可以。 看三个参数的变化趋势，1，5，15三个时间点：  
-
-如果1分钟高，但是后面两个都低，说明系统当前的状态是压力高的，但是是暂时的。
-如果是三个数值都高，可以说明可能是系统的性能不足或者有问题需要解决。
-如果1分钟的数值低，但是15分钟的数值高，说明系统的压力会慢慢平稳下来，不会持续太久。
-
-
-ps命令的使用
-
-ps aux 
-To see every process on the system using BSD syntax USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root         1  0.1  0.0 186736 10160 ?        Ss   09:32   0:03 &#x2F;sbin&#x2F;init
-root         2  0.0  0.0      0     0 ?        S    09:32   0:00 [kthreadd]
-root         3  0.0  0.0      0     0 ?        I&lt;   09:32   0:00 [rcu_gp]
-root         4  0.0  0.0      0     0 ?        I&lt;   09:32   0:00 [rcu_par_gp]
-root         6  0.0  0.0      0     0 ?        I&lt;   09:32   0:00 [kworker&#x2F;0:0H-kblockd]
-root         8  0.0  0.0      0     0 ?        I&lt;   09:32   0:00 [mm_percpu_wq]
-root         9  0.0  0.0      0     0 ?        S    09:32   0:00 [ksoftirqd&#x2F;0]
-root        10  0.0  0.0      0     0 ?        I    09:32   0:00 [rcu_preempt]
-root        11  0.0  0.0      0     0 ?        I    09:32   0:00 [rcu_sched]
-root        12  0.0  0.0      0     0 ?        I    09:32   0:00 [rcu_bh]
-
-
-ps axjf &#x2F; ps -ejH
-To print a process tree  PPID   PID  PGID   SID TTY      TPGID STAT   UID   TIME COMMAND
-1   555   555   555 ?           -1 Ssl      0   0:00 &#x2F;usr&#x2F;bin&#x2F;gdm
-555   585   555   555 ?           -1 Sl       0   0:00  \_ gdm-session-worker [pam&#x2F;gdm-launch-environment]
-585   789   789   789 tty1       789 Ssl+   120   0:00  |   \_ &#x2F;usr&#x2F;lib&#x2F;gdm-x-session gnome-session --autostart &#x2F;usr&#x2F;share&#x2F;gdm&#x2F;g
-789   791   789   789 tty1       789 Sl+    120   0:01  |       \_ &#x2F;usr&#x2F;lib&#x2F;Xorg vt1 -displayfd 3 -auth &#x2F;run&#x2F;user&#x2F;120&#x2F;gdm&#x2F;Xautho
-791   848   789   789 tty1       789 S+       0   0:00  |       |   \_ xf86-video-intel-backlight-helper intel_backlight
-789   939   789   789 tty1       789 Sl+    120   0:00  |       \_ &#x2F;usr&#x2F;lib&#x2F;gnome-session-binary --autostart &#x2F;usr&#x2F;share&#x2F;gdm&#x2F;gree
-939   970   789   789 tty1       789 Sl+    120   0:04  |           \_ &#x2F;usr&#x2F;bin&#x2F;gnome-shell
-970  1032  1032   789 tty1       789 Sl     120   0:00  |           |   \_ ibus-daemon --xim --panel disable
-1032  1035  1032   789 tty1       789 Sl     120   0:00  |           |       \_ &#x2F;usr&#x2F;lib&#x2F;ibus&#x2F;ibus-dconf
-1032  1200  1032   789 tty1       789 Sl     120   0:00  |           |       \_ &#x2F;usr&#x2F;lib&#x2F;ibus&#x2F;ibus-engine-simple
-939  1086   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-rfkill
-939  1088   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-smartcard
-939  1089   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-clipboard
-939  1090   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-xsettings
-939  1091   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-housekeeping
-939  1092   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-mouse
-939  1093   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-power
-939  1094   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-screensaver-proxy
-939  1095   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-sound
-939  1099   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F;lib&#x2F;gsd-color
-939  1101   789   789 tty1       789 Sl+    120   0:00  |           \_ &#x2F;usr&#x2F ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/13/Linux/Linux_Nginx-Proxy/" title="Nginx反向代理笔记">Nginx反向代理笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-07-13T09:50:39.000Z" title="发表于 2019-07-13 17:50:39">2019-07-13</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-26T11:25:39.478Z" title="更新于 2023-08-26 19:25:39">2023-08-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">Nginx的反向代理笔记。
-Nginx程序的主要功能
-load configuration
-launch workers
-non-stop upgrade
-
-可以使用epoll单进程响应多个用户请求，如果是BSD可以使用kevent时间驱动模式响应。磁盘一侧使用的是高级IO中的sendfile机制，AIO异步IO，以及内存映射机制来完成硬盘IO的高级特性。
-
-Nginx官方文档及参数说明在这里： nginx documentation
-
-SNAT &amp;&amp; DNAT主要是工作在三层&#x2F;四层的协议SNAT主要的功能是隐藏客户端，DNAT对服务器接受并转发请求。NAT功能无法触及7层协议的上面三层，所以无权控制上面的数据包内容，所以NAT不能对应用层的内容作出更改及缓存。只能对网络的内容及数据包进行直接的转发以及控制。
-正向代理 &amp;&amp; 反向代理正向代理是通过代理服务器对客户端发出的请求进行全部修改及转发；反向代理是通过代理服务器对发送到服务器的请求进行全部修改及转发；由于代理的服务器可以控制判定URL的资源内容，因此可以对站点进行动静分离处理。如果这个功能可以工作在应用层叫做代理，如果工作类似SNAT上的叫做正向代理，工作类似DNAT就叫做反向代理。
-Nginx反向代理服务器
-面向客户端：该方向支持两种协议： http&#x2F;https
-面向服务端：该方向支持HTTP&#x2F;FastCGI&#x2F;memcache协议Nginx需要支持相关的协议需要有相关协议的对应模块原理以及流程：  从远程服务器取得数据进行nginx服务器本地的缓存，然后响应给客户端.可修改或具有修改意义的报文有两种：第一种是发到后面处理服务器的报文；第二种是发给客户端的响应报文。
-
-Nginx的代理模块
-ngx_http_proxy_module – Nginx的反向代理模块官方说明：Module ngx_http_proxy_module 添加新的反向代理服务配置文件： vim &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;proxy.conf
- server &#123;
-    listen 80；
-    server_name [SERVER_FQDN]
-    location &#x2F; &#123;
-        proxy_pass http:&#x2F;&#x2F;[IP_ADDR:PORT]
-        # 字段后加上&#x2F;表示将location后的目录映射为后端服务器的目录；
-        # 例如：如果是location &#x2F;test，那么在反向代理不加&#x2F;的时候，访问的是后端真实的&#x2F;test目录；
-        # 如果加上&#x2F;，访问到的是后端服务器的根目录；
-        # 当使用了正则表达式进行了匹配的时候后面不能添加&#x2F;符号；
-    &#125;
-
-    location ~* \.&#123;jpg|jpeg|png&#125;$ &#123;
-        proxy_pass http:&#x2F;&#x2F;[IP_ADDR:PORT];
-        # 正则表达模式下部分在代理服务器的地址后面加上&#x2F;；
-    &#125;
-&#125;
-proxy_pass [RealServerAddress]；# 设置反向代理服务器的地址； proxy_set_header [field] [value]; # 设定传递到后端服务器的请求报文首部的值； proxy_set_header – Nginx的设定代理头文件参数模块的官方说明：proxy_set_header    
- proxy_set_header X-Real-IP $remote_addr;
-在设定字段后，更改后端真实服务器的日志记录的值，即可记录所有的真正的客户端IP；  
-proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  
-
-proxy_http_headers_module # 设定发给客户端的响应报文的地址的值； Module ngx_http_headers_module – Nginx的客户端响应报文模块官方说明：  Module ngx_http_headers_module  
- add_header X_Via $server_addr;&#96; # 显示后端服务器的真实地址；
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/13/Linux/Linux_Boot-sequence/" title="Linux启动流程简述">Linux启动流程简述</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-07-13T09:18:40.000Z" title="发表于 2019-07-13 17:18:40">2019-07-13</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.460Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">记录Linux启动流程。
-Linux启动的简要流程Linux-MBR启动流程POST – GRUB(Bootloader-MBR) – Kernel – init
-详细描述及说明
-在触发开机通电之后，计算机读取BIOS中CMOS芯片的已经写好的程序进行主板设备的通电自检.
-在自检完成后将读取硬盘上的前512个字节，通过前面的446个字节载入grub的bootloader及硬盘相关驱动.
-同时引导grub进入stage1.5,stage1.5指向了定义在boot分区下的grub.cfg，及相关的grub图形文件.
-grub的stage2进行了grub的菜单展示及内核选择的界面.
-通过grub的引导，计算机挂载内核，识别的根文件系统.
-启动init进程，通过SysV管理其他进程的启动及执行.
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/08/Linux/Linux_VIM-note/" title="vim笔记">vim笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-07-08T13:49:04.000Z" title="发表于 2019-07-08 21:49:04">2019-07-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T05:30:17.572Z" title="更新于 2023-10-30 13:30:17">2023-10-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">vim的常用的命令速记。  
-
-可在~&#x2F;.vimrc中进行vim的的默认配置，echo ‘:set nu’ &gt; ~&#x2F;.vimrc即可设置vim默认显示行号。30分钟正则表达式入门教程
-Vim一种模式化的编辑器，具有多种不同的模式。  
-
-编辑模式，命令模式
-插入模式
-末行模式 内置的命令行接口
-
-vim +12 test.sh
-vim +/PATTERN test.sh 打开自动定位到匹配模式的第一个结果的行首。
-vim + test.sh 直接出现在文件末尾  
-切换模式的说明i – 直接在当前光标的位置输入a – 在光标字符的后面输入o – 在光标下面直接新建一行，开始输入I – 在光标所在行的行首输入O – 在光标所在的上面直接新建一行，开始输入A – 在光所所在行的行尾输入
-编辑模式到末行模式 使用符号 ：:10，100d:set nu:set nonu:s&#x2F;dhcp&#x2F;static&#x2F;g
-关闭文件：    编辑模式下 连续ZZ，表示保存退出    :q 表示直接退出，类似的常用还有 :wq :wq! :q! :w! :w    :x 保存退出    :w [PATHTOFILE]
-光标调整:字符间hjkl 左 下 上 右 10l 右侧10个字符w 下一个单词的词首b 前一个单词的词首e 下一个单词的词尾
-行首行尾^ 调至行首第一个非空白字符0 调至行首$ 调至行尾
-HIJK 行间G 直接到最后一行句间段间
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/07/Linux/Linux_Ansible-Note-2/" title="Ansible笔记-2">Ansible笔记-2</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-07-07T13:57:06.000Z" title="发表于 2019-07-07 21:57:06">2019-07-07</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.459Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">这份笔记介绍的是Ansible playbook的格式及相关的内容。
-Ansible笔记Ansible PlaybookYAML
-YAML（&#x2F;ˈjæməl&#x2F;，尾音类似 camel ) 是“YAML不是一种标记语言”的外语缩写（见前方参考资料原文内容）；但为了强调这种语言以数据做为中心，而不是以置标语言为重点，而用返璞词重新命名。它是一种直观的能够被电脑识别的数据序列化格式，是一个可读性高并且容易被人类阅读，容易和脚本语言交互，用来表达资料序列的编程语言。数据结构可以用类似大纲的缩排方式呈现，结构通过缩进来表示，连续的项目通过减号“-”来表示，map结构里面的key&#x2F;value对用冒号“:”来分隔。YAML文件一般的文件名为.yaml 或 .yml,文本结构举例如下：
-
-house:
-  family:
-    name: Doe
-    parents:
-      - John
-      - Jane
-    children:
-      - Paul
-      - Mark
-      - Simone
-  address:
-    number: 34
-    street: Main Street
-    city: Nowheretown
-    zipcode: 12345
-Ansible Playbook的关键字内容与命令的内容基本一致，有如下的几个关键字：
-
-- hosts  用来指定控制主机的范围,注意短横线后空格接字符
-remote_user 用来指定使用的用户
-tasks 可在字段下方缩进指定需要执行的任务,注意缩进
-- name 用来定义任务的名称或描述,注意短横线后空格接字符
-yum: name&#x3D;httpd state&#x3D;latest 定义使用的模块功能：后面跟操作参数
-tags: 对任务进行标记，可通过命令调用标记执行或排除某些任务
-when: 判断，满足when后面的条件才执行任务
-notify: 触发handler的标志
-
-
-handlers: 定义触发任务的内容
-- name: 任务的名称,注意短横线后空格接字符
-service: name&#x3D;httpd state&#x3D;restarted 定义使用的模块：后面跟操作参数
-
-
-
-Ansible Playbook示例先看一个已经写好的playbook，针对写好的来解释playbook如何书写。
----		# 默认的开头
-- hosts: all 		# 先定义控制的范围，all表示所有主机，分组可定义在/etc/ansible/hosts文件中；
-  remote_user: root	# 定义执行下面操作的用户，控制权限
-  tasks:		# tasks字段负责定义任务
-  # 如果是Redhat系，执行安装httpd
-    - name: install httpd CentOS
-      yum: 
-        name: httpd
-        state: latest
-      tags: install_httpd
-      when: ansible_os_family == "RedHat"
-  # 如果是Debain系，执行安装apache
-    - name: install httpd Ubuntu
-      apt:
-        name: apache
-        state: latest
-      when: ansible_os_family == "Ubuntu" 
-      tags: install_httpd
-  # 执行网站主页的替换，如果变更触发handler字段定义的重启服务任务
-    - name: set the homepage
-      copy: 
-        src: ./index.html
-        dest: /var/www/html/index.html
-      notify: 
-        - restart_the_service
-  # 执行启动服务
-    - name: start httpd
-      service: 
-        name: httpd
-        service: started
-  # 执行清空防火墙
-    - name: empty firewalld
-      shell: iptables -F
-  # 移除apache软件包
-    - name: remove httpd
-      yum: 
-        name: httpd
-        state: absent
-      tags: remove_httpd
-  # 删除预设的apache网站文件
-    - name: clean stuff
-      file:
-        name: /var/www/html/
-        state: absent
-      tags: clean_stuff
-  #  handler触发后需要执行的任务
-  handlers:
-  # 重启httpd服务
-    - name: restart_the_service
-      service: 
-        name: httpd
-        state: restarted
-Ansible Playbook执行命令使用格式：
-  ansible-playbook [options] playbook.yml [playbook2 ...]
-命令作用：
-  Runs Ansible playbooks, executing the defined tasks on the targeted hosts.
-  # 运行ansible的playbook，在目标主机上执行已经定义好的任务。
-
-命令示例：
-[root@Hayden ~]$ ansible-playbook --syntax-check install_httpd.yaml
-# 对playbook进行语法检查
-[root@Hayden ~]$ ansible-playbook -C install_httpd.yaml
-# 对playbook进行运行测试，不改变结果，仅仅进行测试
-[root@Hayden ~]$ ansible-playbook install_httpd.yaml
-# 对playbook进行运行，并生成运行的结果
-[root@Hayden ~]$ ansible-playbook -t "install_httpd" install-httpd.yaml
-# 只运行具有“install_httpd”标签的任务
-[root@Hayden ~]$ ansible-playbook --skip-tags "install_httpd" install-httpd.yaml
-# 跳过install_httpd标签的任务
-[root@Hayden ~]$ ansible-playbook --skip-tags "install_httpd clean_stuff" install-httpd.yaml
-# 跳过多个标签的任务示例
-
-默认文件位置sudo pacman -Ql ansible | grep hosts 查看hosts文件的范例文件所在目录，其他文件操作类似.
-如果有不明白的命令可通过ansible-doc命令直接查看内置的说明文件，针对模块的ansible-doc -l 为列出所有可用模块
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/06/26/Linux/Linux_Ansible-Note-1/" title="Ansible笔记-1">Ansible笔记-1</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-06-26T04:32:52.000Z" title="发表于 2019-06-26 12:32:52">2019-06-26</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.459Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">Ansible的学习笔记。Ansible管理方式是资源在目标主机上，定义所期望的目标状态的方式；每一个操作必须是幂等的（可重复操作但结果不变的）。ansible采用ssh链接所管理的服务器，因此具有agentless的优势。
-Ansible的安装Ansible在Redhat的仓库中就有二进制包，直接dnf或yum安装就可以了。
-[root@localhost Liarlee]$ yum install -y Ansible
-
-Ansible的配置文件Ansible的配置文件常用的有：
-
-&#x2F;etc&#x2F;ansible&#x2F;ansible.cfg  Ansible的配置文件
-&#x2F;etc&#x2F;ansible&#x2F;hosts       Ansible允许控制的主机列表，可在hosts文件中对服务器进行分组
-
-Ansible的组件
-ansible
-ansible-playbook
-ansible-doc
-
-Ansible的配置和使用Ansible命令模式
-ansible [HOST_PARTTEN] -m [MODUELS] -a “[ARGS]” -f [Forks] -C -u [USERNAME] -c [CONNTECTION]
-
-基于密钥认证ansibleansible支持使用ssh用户命名密码的认证方式，也支持使用ssh密钥认证的方式进行链接。ssh密钥的方式可以保证安全性，同时免去输入密码的麻烦。
-
-生成ansible的密钥 [root@localhost Liarlee]$ ssh-keygen -t rsa -P ""
-复制ansible的公钥到需要连接控制的host上   [root@localhost Liarlee]$ ssh-copy-id -i ~/.ssh/id-rsa.pub root@[host1-IP]
-[root@localhost Liarlee]$ ssh-copy-id -i ~/.ssh/id-rsa.pub root@[host2-IP]
-在ansible的hosts文件中记录需要控制的主机名或者IP [root@localhost Liarlee]$ echo "[host1-IP]" >> /etc/ansible/hosts
-[root@localhost Liarlee]$ echo "[host2-IP]" >> /etc/ansible/hosts
-使用ansible进行控制测试 [root@localhost Liarlee]$ ansible all -m ping       # 进行连通测试
-[root@localhost Liarlee]$ ansible all -m ping --list-hosts      # 列举所有受影响的主机，但是不执行操作
-[root@localhost Liarlee]$ ansible all -m ping -C        # 进行测试，但是不对控制的主机作更改
-
-Ansible使用示例Ansible默认将所有的操作通过模块的方式定义，这里列举了一些常用的模块：
-Ansible管理查询命令使用ansible-doc命令来进行模块的文档查看, &#x2F;var&#x2F;log&#x2F;messages 中会记录操作日志。
-[root@localhost Liarlee]$ ansible-doc -l      # 列举所有当前可用的模块和简单说明
-[root@localhost Liarlee]$ ansible-doc -s [MODULES_NAME]     # 查看指定模块的使用方法和说明
-User模块设定主机的用户状态，对用户进行创建删除，更改信息以及参数。
-# 设置所有主机创建用户user,设置内容有uid,groups,shell
-    [root@localhost Liarlee]$ ansible all -m user -a "name=user1 uid=3000 state=present groups=testgrp shell=/bin/zsh"
-Group模块设置主机的组状态，对组状态进行编辑。
-# 控制所有主机创建组testgrp,设置内容有gid,非系统组
-    [root@localhost Liarlee]$ ansible all -m group -a "gid=3000 name=testgrp state=present system=no"
-# 控制所有主机删除testgrp
-    [root@localhost Liarlee]$ ansible all -m group -a "gid=3000 name=testgrp state=absent"
-Copy模块从本地复制内容到控制的所有主机,指定源地址和目的地址。
-# 复制本地/etc/fstab到所有主机的/tmp/fstab.ansible,同时设置权限为755
-    [root@localhost Liarlee]$ ansible all -m copy -a "src=/etc/fstab dest=/tmp/fstab.ansible mode=755"
-# 通过键盘输入的文本内容传输到目的文件中，文件可不存在，可同时设置文件的属主属组
-    [root@localhost Liarlee]$ ansible all -m copy -a "content='hello,world\n' dest=/tmp/test.txt owner=liarlee group=liarlee"
-# 递归复制目录及其子文件到所有主机的/tmp/下
-    [root@localhost Liarlee]$ ansible all -m copy -a "src=/etc/httpd dest=/tmp/"
-# 复制目录下的所有文件到所有主机的/tmp/下，不创建对应的目录
-    [root@localhost Liarlee]$ ansible all -m copy -a "src=/etc/httpd/ dest=/tmp/"
-# 在所有主机的目录下新建一个空文件
-    [root@localhost Liarlee]$ ansible all -m copy -a "content='' dest=/tmp/testfile"
-Fetch模块可从远程主机复制文件到本地。
-# 从某个主机复制文件到本地目录，文件不存在退出
-    [root@localhost Liarlee]$ ansible [HOST1] -m fetch -a "src=/etc/fstab dest=/tmp/fstab.host1 fail-on-missing=yes"
-Command模块command模块不调用shell去解析命令，仅仅读取第一个命令进行简单执行,因此不支持管道传递参数。
-# 在所有主机上执行ifconfig
-    [root@localhost Liarlee]$ ansible all -m command -a "ifconfig"
-Shell模块使用shell执行传递的命令，支持管道传递参数
-# 执行shell命令修改用户的密码
-    [root@localhost Liarlee]$ ansible all -m shell -a "echo PASSWORD | passwd --stdin user1"
-File模块用于设定文件的状态以及属性
-# 在所有主机上建立目录
-    [root@localhost Liarlee]$ ansible all -m file -a "path=/tmp/testdir state=directory"
-# 在所有主机上对文件建立符号链接
-    [root@localhost Liarlee]$ ansible all -m file -a "src=/tmp/testfile path=/tmp/testfile.link state=link"
-# 在所有主机上设置文件或目录的权限
-    [root@localhost Liarlee]$ ansible all -m file -a "path=/tmp/testfile mode=0755"
-Cron模块用于设置计划任务
-# 设置每三分钟运行一次同步时间的脚本
-    [root@localhost Liarlee]$ ansible all -m cron -a "miniute=*/3 name=synctime job='usr/sbin/update 172.16.0.1 &amp;> /dev/null'state=present"
-# 删除设置的计划任务
-    [root@localhost Liarlee]$ ansible all -m cron -a "miniute=*/3 name=synctime job='usr/sbin/update 172.16.0.1 &amp;> /dev/null'state=absent"
-Yum模块用于调用yum进行软件包的安装卸载等，定义主机安装软件包的状态
-# 在所有主机安装nginx
-    [root@localhost Liarlee]$ ansible all -m yum -a "name=nginx state=install"
-Service模块用于定义管理目标主机的服务状态
-# 在所有的主机上启动nginx服务
-    [root@localhost Liarlee]$ ansible all -m service -a "name=nginx state=startd"
-# 在所有的主机上设置nginx开机启动
-    [root@localhost Liarlee]$ ansible all -m service -a "name=nginx enabled"
-# 在所有主机上停止nginx服务
-    [root@localhost Liarlee]$ ansible all -m service -a "name=nginx state=stoppd"
-# 在所有的主机上重载nginx的配置文件
-    [root@localhost Liarlee]$ ansible all -m service -a "name=nginx state=reloaded"
-# 在所有主机上重启nginx服务
-    [root@localhost Liarlee]$ ansible all -m service -a "name=nginx state=restarted"
-Scripts模块用于在所有主机上执行设置好的脚本
-# 在所有的主机上执行test.sh
-    [root@localhost Liarlee]$ ansible all -m scripts -a "/tmp/test.sh"</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/06/25/Linux/Linux_VM-timer/" title="KVM中windows7虚拟机时间问题">KVM中windows7虚拟机时间问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-06-25T07:45:56.000Z" title="发表于 2019-06-25 15:45:56">2019-06-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.481Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">在KVM虚拟机中，安装Windows7的虚拟机，安装完成启动的时候发现虚拟机的时间与外部时间的速度不一致。记录问题的原因及解决方法。
-解决方式查看虚拟机的配置文件观察运行的效果类似于GBA模拟器的加速设定，动画速度变快了，windows7的系统时间也被加速了。  首先怀疑的是虚拟机的运行速度是不是被加速了，没有相关的设置。其次是查看配置文件中时间的相关定义，发现我的配置文件中，时间的定义是这样的：
-&lt;clock offset='localtime'>
-  &lt;timer name='rtc' tickpolicy='catchup'/>
-  &lt;timer name='pit' tickpolicy='delay'/>
-  &lt;timer name='hpet' present='no'/>
-  &lt;timer name='hypervclock' present='yes'/>
-&lt;/clock>
-怀疑这几个timer是有问题的，一般来说配置文件中只有简单的 clock offset&#x3D;’localtime’ 的字段其实就够用了。在删除了第一个timer之后，系统的时间和运行速度就正常了。
-在fedora-wiki找到的说明页面Libvirt_Managed_Timers页面链接在字段中‘rtc’并不是主要的问题，主要问题是后面的tickpolicy&#x3D;’catchcup’。fedora wiki给出的答案是catchup–Deliver at a higher rate to catch up.所以这就是为什么我们删除了这个timer之后系统正常的原因。
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/06/25/Linux/Linux_IO-Redirect/" title="IO重定向笔记">IO重定向笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-06-25T07:43:33.000Z" title="发表于 2019-06-25 15:43:33">2019-06-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.470Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">输出重定向部分的复习笔记  
-标准输入输出文件描述符的概念可以通过命令查看以及绑定文件描述符FD。  
-liarlee@hayden-pc ~
-&gt; $ ll &#x2F;proc&#x2F;$$&#x2F;fd
-总用量 0
-dr-x------ 2 liarlee liarlee  0  6月 24 20:22 .
-dr-xr-xr-x 9 liarlee liarlee  0  6月 24 20:22 ..
-lrwx------ 1 liarlee liarlee 64  6月 24 20:22 0 -&gt; &#x2F;dev&#x2F;pts&#x2F;0
-lrwx------ 1 liarlee liarlee 64  6月 24 20:22 1 -&gt; &#x2F;dev&#x2F;pts&#x2F;0
-lrwx------ 1 liarlee liarlee 64  6月 24 20:22 10 -&gt; &#x2F;dev&#x2F;pts&#x2F;0
-lrwx------ 1 liarlee liarlee 64  6月 24 20:22 2 -&gt; &#x2F;dev&#x2F;pts&#x2F;0
-Linux提供的I&#x2F;O设备Linux系统提供的IO设备，共有三种：
-
-STDIN - 0 默认键盘输入
-STDOUT - 1 默认输出信息到终端
-STDERR - 2 默认输出错误信息到终端
-
-Linux输入输出重定向重定向说明STDOUT和STDERR可以被重定向到文件中，STDIN可通过读取文件实现输入重定向，重定向命令的基本格式如下：  
-[CMD] [lOPERATION_SYMBOL] [FILENAME]  
-命令    操作符号    文件名
-
-操作符号包括：
-&gt; 把STDOUT重定向到文件 
-2&gt; 把STDERR重定向到文件
-&amp;&gt; 把所有结果输出重定向到文件
-&gt;&gt; 在原有文件内容的基础上进行追加 
-&lt; 标准输入的重定向
-
-例子那么会有如下的操作：  
-    &gt; $ ls 1&gt; &#x2F;tmp&#x2F;echo.stdout  
-        # 正确的命令结果输出到文件中
-
-    &gt; $ ls 2&gt; &#x2F;tmp&#x2F;echo.stderr  
-        # 命令执行的错误结果输出到文件中  
-
-    &gt; $ ls &#x2F;error &#x2F;usr 2&gt;&amp;1 &gt;&#x2F;tmp&#x2F;right.test   
-        # 将错误信息重定向输出到屏幕显示，正确的信息输出到文件 
-        # 通俗的讲是-- 将STDERR(2)重定向为STDOUT(1)输出到屏幕上，
-        # 命令的其他结果输出到文件中  
-
-    &gt; $ ls &#x2F;error &#x2F;usr &gt;true 2&gt;false
-        # 将正确的信息输出到true中，把错误的信息输出到false中  
-
-    &gt; $ ls &#x2F;error &#x2F;usr &gt;all 2&gt;&amp;1 
-        # 先将标准输出重定向到文件all中，在将错误信息追加到标准输出中  
-        # 命令结果等于ls &#x2F;error &#x2F;usr &amp;&gt;all 
-
-    &gt; $ ls &#x2F;error &#x2F;usr &amp;&gt; &#x2F;dev&#x2F;null
-        # 静默执行命令，不显示结果，不输出到终端
-
-    &gt; $ ls &#x2F;error &#x2F;usr 2&gt;&amp;1 &gt;&#x2F;dev&#x2F;null  
-        # 错误的信息显示在终端上，其他信息不显示
-
-#  某些命令可以使用管道将STDIN输入重定向作为命令的值
-    echo [PASSWD] | passwd --stdin [username] &amp;&gt; &#x2F;dev&#x2F;null
-        # 更改某个用户的用户名和密码
-
-</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">65</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/Redis%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/%E5%85%B3%E4%BA%8ETrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.160Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.158Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/CFS%20Schedler/" title="无题">无题</a><time datetime="2023-11-06T03:00:30.157Z" title="发表于 2023-11-06 11:00:30">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/30/iostat/" title="无题">无题</a><time datetime="2023-10-30T05:30:17.573Z" title="发表于 2023-10-30 13:30:17">2023-10-30</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+kubelet 每个Node节点都会启动kubelet进程，用来处理Master节点下发到本节点的任务，管理Pod和其中的容器。kubelet会在API Server上注册节点信息，定期向Mast ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/%E6%9C%AA%E5%91%BD%E5%90%8D/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.195Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Other/Other-TrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.194Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/iostat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/vmstat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.189Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>分类</span>
             <a class="card-more-btn" href="/categories/" title="查看更多">
     <i class="fas fa-angle-right"></i></a>
             </div>
             <ul class="card-category-list" id="aside-cat-list">
-            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AWS/"><span class="card-category-list-name">AWS</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Books/"><span class="card-category-list-name">Books</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Database/"><span class="card-category-list-name">Database</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ESXi/"><span class="card-category-list-name">ESXi</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ElasticSearch/"><span class="card-category-list-name">ElasticSearch</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Healthcare-IT/"><span class="card-category-list-name">Healthcare-IT</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Kubernetes/"><span class="card-category-list-name">Kubernetes</span><span class="card-category-list-count">17</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Vim/" style="font-size: 1.1em; color: #999">Vim</a> <a href="/tags/Windows-Office/" style="font-size: 1.1em; color: #999">Windows, Office</a> <a href="/tags/GRUB2-Linux/" style="font-size: 1.1em; color: #999">GRUB2, Linux</a> <a href="/tags/Linux-Perf/" style="font-size: 1.18em; color: #999ca1">Linux, Perf</a> <a href="/tags/Nginx-Application/" style="font-size: 1.42em; color: #99a6b7">Nginx, Application</a> <a href="/tags/Ansible/" style="font-size: 1.1em; color: #999">Ansible</a> <a href="/tags/MySQL-Database/" style="font-size: 1.1em; color: #999">MySQL, Database</a> <a href="/tags/Linux-EC2-Network/" style="font-size: 1.1em; color: #999">Linux, EC2, Network</a> <a href="/tags/Linux/" style="font-size: 1.5em; color: #99a9bf">Linux</a> <a href="/tags/Application-RabbitMQ/" style="font-size: 1.1em; color: #999">Application, RabbitMQ</a> <a href="/tags/Linux-Network-EC2/" style="font-size: 1.1em; color: #999">Linux, Network, EC2</a> <a href="/tags/Linux-JAVA/" style="font-size: 1.1em; color: #999">Linux, JAVA</a> <a href="/tags/Kubernetes-EKS/" style="font-size: 1.42em; color: #99a6b7">Kubernetes, EKS</a> <a href="/tags/Network/" style="font-size: 1.1em; color: #999">Network</a> <a href="/tags/Kubernetes-Cilium-EKS/" style="font-size: 1.1em; color: #999">Kubernetes, Cilium, EKS</a> <a href="/tags/Linux-Kubernetes/" style="font-size: 1.1em; color: #999">Linux, Kubernetes</a> <a href="/tags/Linux-BPF/" style="font-size: 1.1em; color: #999">Linux, BPF</a> <a href="/tags/English/" style="font-size: 1.1em; color: #999">English</a> <a href="/tags/Linux-Perf-Strace/" style="font-size: 1.1em; color: #999">Linux, Perf, Strace</a> <a href="/tags/Linux-IO/" style="font-size: 1.1em; color: #999">Linux, IO</a> <a href="/tags/Linux-EC2/" style="font-size: 1.1em; color: #999">Linux, EC2</a> <a href="/tags/Docker-Application-Prometheus-Grafana/" style="font-size: 1.1em; color: #999">Docker, Application, Prometheus, Grafana</a> <a href="/tags/Linux-IO-FileSystem/" style="font-size: 1.1em; color: #999">Linux, IO, FileSystem</a> <a href="/tags/Linux-EBS-IO/" style="font-size: 1.18em; color: #999ca1">Linux, EBS, IO</a> <a href="/tags/Linux-CPU-EC2/" style="font-size: 1.1em; color: #999">Linux, CPU, EC2</a> <a href="/tags/Application-Firefox/" style="font-size: 1.1em; color: #999">Application, Firefox</a> <a href="/tags/docker/" style="font-size: 1.1em; color: #999">docker</a> <a href="/tags/Linux-Kernel/" style="font-size: 1.34em; color: #99a3b0">Linux, Kernel</a> <a href="/tags/VIM-Linux/" style="font-size: 1.1em; color: #999">VIM, Linux</a> <a href="/tags/%E4%B9%A6/" style="font-size: 1.26em; color: #999fa8">书</a> <a href="/tags/Linux-CPU/" style="font-size: 1.1em; color: #999">Linux, CPU</a> <a href="/tags/Application-Cacti/" style="font-size: 1.1em; color: #999">Application, Cacti</a> <a href="/tags/Linux-Ansible/" style="font-size: 1.1em; color: #999">Linux, Ansible</a> <a href="/tags/Linux-Redis-Memory/" style="font-size: 1.1em; color: #999">Linux, Redis, Memory</a> <a href="/tags/Personal/" style="font-size: 1.1em; color: #999">Personal</a> <a href="/tags/Repo-Linux/" style="font-size: 1.1em; color: #999">Repo, Linux</a> <a href="/tags/Application-ElasticSearch/" style="font-size: 1.18em; color: #999ca1">Application, ElasticSearch</a> <a href="/tags/%E8%AF%97/" style="font-size: 1.1em; color: #999">诗</a> <a href="/tags/Bash/" style="font-size: 1.1em; color: #999">Bash</a> <a href="/tags/Ceph-IO/" style="font-size: 1.34em; color: #99a3b0">Ceph, IO</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/11/"><span class="card-archive-list-date">十一月 2023</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">9</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">四月 2023</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">128</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">143k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-11-06T04:32:01.355Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AWS/"><span class="card-category-list-name">AWS</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Books/"><span class="card-category-list-name">Books</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Database/"><span class="card-category-list-name">Database</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/EKS/"><span class="card-category-list-name">EKS</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ESXi/"><span class="card-category-list-name">ESXi</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ElasticSearch/"><span class="card-category-list-name">ElasticSearch</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Healthcare-IT/"><span class="card-category-list-name">Healthcare-IT</span><span class="card-category-list-count">2</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux-Bash/" style="font-size: 1.1em; color: #999">Linux, Bash</a> <a href="/tags/Linux-Database-Kernel-Network/" style="font-size: 1.1em; color: #999">Linux, Database, Kernel, Network</a> <a href="/tags/Linux-Memory/" style="font-size: 1.34em; color: #99a3b0">Linux, Memory</a> <a href="/tags/EKS%EF%BC%8C-Kubernetes/" style="font-size: 1.18em; color: #999ca1">EKS， Kubernetes</a> <a href="/tags/Linux-FileSystem/" style="font-size: 1.1em; color: #999">Linux, FileSystem</a> <a href="/tags/VIM-Linux/" style="font-size: 1.1em; color: #999">VIM, Linux</a> <a href="/tags/Application-Harbor/" style="font-size: 1.1em; color: #999">Application, Harbor</a> <a href="/tags/Linux-LVM-Filesystem-IO/" style="font-size: 1.1em; color: #999">Linux, LVM, Filesystem, IO</a> <a href="/tags/Orthanc-Docker/" style="font-size: 1.1em; color: #999">Orthanc, Docker</a> <a href="/tags/Application-Firefox/" style="font-size: 1.1em; color: #999">Application, Firefox</a> <a href="/tags/Linux-KVM/" style="font-size: 1.1em; color: #999">Linux, KVM</a> <a href="/tags/Docker-Application-Prometheus-Grafana/" style="font-size: 1.1em; color: #999">Docker, Application, Prometheus, Grafana</a> <a href="/tags/Docker/" style="font-size: 1.42em; color: #99a6b7">Docker</a> <a href="/tags/English/" style="font-size: 1.1em; color: #999">English</a> <a href="/tags/Linux-EC2-Network/" style="font-size: 1.1em; color: #999">Linux, EC2, Network</a> <a href="/tags/Ansible/" style="font-size: 1.1em; color: #999">Ansible</a> <a href="/tags/%E8%AF%97/" style="font-size: 1.1em; color: #999">诗</a> <a href="/tags/Linux-Ansible/" style="font-size: 1.1em; color: #999">Linux, Ansible</a> <a href="/tags/Linux-Memory-Kernel/" style="font-size: 1.1em; color: #999">Linux, Memory, Kernel</a> <a href="/tags/Bash/" style="font-size: 1.1em; color: #999">Bash</a> <a href="/tags/Linux-Hexo/" style="font-size: 1.1em; color: #999">Linux, Hexo</a> <a href="/tags/Linux-BPF/" style="font-size: 1.1em; color: #999">Linux, BPF</a> <a href="/tags/Linux-RPM/" style="font-size: 1.1em; color: #999">Linux, RPM</a> <a href="/tags/Nginx-Application/" style="font-size: 1.42em; color: #99a6b7">Nginx, Application</a> <a href="/tags/Linux-Git/" style="font-size: 1.1em; color: #999">Linux, Git</a> <a href="/tags/Linux-Perf-IO/" style="font-size: 1.1em; color: #999">Linux, Perf, IO</a> <a href="/tags/AWS-VPC-FLowLog/" style="font-size: 1.1em; color: #999">AWS, VPC, FLowLog</a> <a href="/tags/Linux-JAVA/" style="font-size: 1.1em; color: #999">Linux, JAVA</a> <a href="/tags/%E4%B9%A6/" style="font-size: 1.26em; color: #999fa8">书</a> <a href="/tags/Linux-Kubernetes/" style="font-size: 1.1em; color: #999">Linux, Kubernetes</a> <a href="/tags/Repo-Linux/" style="font-size: 1.1em; color: #999">Repo, Linux</a> <a href="/tags/Linux-CPU-EC2/" style="font-size: 1.1em; color: #999">Linux, CPU, EC2</a> <a href="/tags/Application-Cacti/" style="font-size: 1.1em; color: #999">Application, Cacti</a> <a href="/tags/Kubernetes-Cilium-EKS/" style="font-size: 1.1em; color: #999">Kubernetes, Cilium, EKS</a> <a href="/tags/Application-RabbitMQ/" style="font-size: 1.1em; color: #999">Application, RabbitMQ</a> <a href="/tags/Kubernetes-EKS/" style="font-size: 1.5em; color: #99a9bf">Kubernetes, EKS</a> <a href="/tags/Windows/" style="font-size: 1.26em; color: #999fa8">Windows</a> <a href="/tags/Application-ElasticSearch/" style="font-size: 1.18em; color: #999ca1">Application, ElasticSearch</a> <a href="/tags/Linux-Ranger/" style="font-size: 1.1em; color: #999">Linux, Ranger</a> <a href="/tags/GRUB2-Linux/" style="font-size: 1.1em; color: #999">GRUB2, Linux</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/12/"><span class="card-archive-list-date">十二月 2023</span><span class="card-archive-list-count">15</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">9</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">9</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">四月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/03/"><span class="card-archive-list-date">三月 2023</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">136</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">147.5k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-12-21T16:36:07.112Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Archlinux安装过程记录 | Liarlee's Notebook</title><meta name="author" content="Liarlee"><meta name="copyright" content="Liarlee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="自己尝试安装了archlinux在虚拟机里，记录安装过程，不过现在archlinux的WIKI是描述清晰的，直接查看和参考即可。   Pacman常用命令pacman命令的常用说明：   [root@LiarLee ~]# pacman -Sg gnome  查看gnome软件包组下面的所有软件包   [root@LiarLee ~]# pacman -Qe openssh  查询已经安装的软件包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Archlinux安装过程记录">
+<meta property="og:url" content="https://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/index.html">
+<meta property="og:site_name" content="Liarlee&#39;s Notebook">
+<meta property="og:description" content="自己尝试安装了archlinux在虚拟机里，记录安装过程，不过现在archlinux的WIKI是描述清晰的，直接查看和参考即可。   Pacman常用命令pacman命令的常用说明：   [root@LiarLee ~]# pacman -Sg gnome  查看gnome软件包组下面的所有软件包   [root@LiarLee ~]# pacman -Qe openssh  查询已经安装的软件包">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png">
+<meta property="article:published_time" content="2019-05-17T06:03:08.000Z">
+<meta property="article:modified_time" content="2023-08-20T15:01:42.459Z">
+<meta property="article:author" content="Liarlee">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Archlinux安装过程记录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-20 23:01:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Archlinux安装过程记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-05-17T06:03:08.000Z" title="发表于 2019-05-17 14:03:08">2019-05-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.459Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Archlinux安装过程记录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><p>自己尝试安装了archlinux在虚拟机里，记录安装过程，不过现在archlinux的WIKI是描述清晰的，直接查看和参考即可。  </p>
+<h2 id="Pacman常用命令"><a href="#Pacman常用命令" class="headerlink" title="Pacman常用命令"></a>Pacman常用命令</h2><p>pacman命令的常用说明：  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee ~]# pacman -Sg gnome  查看gnome软件包组下面的所有软件包  
+[root@LiarLee ~]# pacman -Qe openssh  查询已经安装的软件包  
+[root@LiarLee ~]# pacman -Qs openssh  正则查询软件包
+[root@LiarLee ~]# pacman -Rs $(pacman -Qtdq) 递归删除孤立软件包
+[root@LiarLee ~]# pacman -Ss 关键字：在仓库中搜索含关键字的包
+[root@LiarLee ~]# pacman -Qs 关键字： 搜索已安装的包
+[root@LiarLee ~]# pacman -Qi 包名：查看有关包的详尽信息
+[root@LiarLee ~]# pacman -Ql 包名：列出该包的文件
+[root@LiarLee ~]# pacman -Syyu 下载已经更新本地的所有软件包</code></pre>
+
+<h2 id="安装Archlinux"><a href="#安装Archlinux" class="headerlink" title="安装Archlinux"></a>安装Archlinux</h2><h3 id="1-获取Archlinux镜像"><a href="#1-获取Archlinux镜像" class="headerlink" title="1. 获取Archlinux镜像"></a>1. 获取Archlinux镜像</h3><p>从这个页面获取镜像： <a target="_blank" rel="noopener" href="https://www.archlinux.org/download/">LINK HERE</a></p>
+<h3 id="2-启动到Archlinux-Live环境"><a href="#2-启动到Archlinux-Live环境" class="headerlink" title="2. 启动到Archlinux Live环境"></a>2. 启动到Archlinux Live环境</h3><p>在VMware中使用镜像文件直接引导Archlinux Live环境。  </p>
+<h3 id="3-设置Archlinux的键盘布局"><a href="#3-设置Archlinux的键盘布局" class="headerlink" title="3. 设置Archlinux的键盘布局"></a>3. 设置Archlinux的键盘布局</h3><p>默认为US键盘布局，此处未作修改。    </p>
+<h3 id="4-连接到Internet"><a href="#4-连接到Internet" class="headerlink" title="4. 连接到Internet"></a>4. 连接到Internet</h3><p>使用ip link命令查看目前网卡的状态  </p>
+<pre class="language-none"><code class="language-none">root@archiso ~ # ip link show
+  1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link&#x2F;loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+  2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; dmtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link&#x2F;ether 00:0c:29:5e:ea:d5 brd ff:ff:ff:ff:ff:ff
+  
+root@archiso ~ # ifconfig
+  ens33: flags&#x3D;4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+      inet 192.168.229.129  netmask 255.255.255.0  broadcast 192.168.229.255
+      inet6 fe80::9888:f57a:5c25:9cf9  prefixlen 64  scopeid 0x20&lt;link&gt;
+      inet6 fd15:4ba5:5a2b:1008:6e02:ff6:feeb:c250  prefixlen 64  scopeid 0x0&lt;global&gt;
+      ether 00:0c:29:5e:ea:d5  txqueuelen 1000  (Ethernet)
+      RX packets 199  bytes 18652 (18.2 KiB)
+      RX errors 0  dropped 0  overruns 0  frame 0
+      TX packets 186  bytes 23144 (22.6 KiB)
+      TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+  lo: flags&#x3D;73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536
+      inet 127.0.0.1  netmask 255.0.0.0
+      inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;
+      loop  txqueuelen 1000  (Local Loopback)
+      RX packets 0  bytes 0 (0.0 B)
+      RX errors 0  dropped 0  overruns 0  frame 0
+      TX packets 0  bytes 0 (0.0 B)
+      TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+    
+root@archiso ~ # ping baidu.com   
+  PING baidu.com (123.125.114.144) 56(84) bytes of data.
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;1 ttl&#x3D;128 time&#x3D;14.8 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;2 ttl&#x3D;128 time&#x3D;13.6 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;3 ttl&#x3D;128 time&#x3D;17.1 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;4 ttl&#x3D;128 time&#x3D;14.1 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;5 ttl&#x3D;128 time&#x3D;13.9 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;6 ttl&#x3D;128 time&#x3D;14.7 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;7 ttl&#x3D;128 time&#x3D;13.5 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;8 ttl&#x3D;128 time&#x3D;16.2 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;9 ttl&#x3D;128 time&#x3D;16.9 ms
+  64 bytes from 123.125.114.144 (123.125.114.144): icmp_seq&#x3D;10 ttl&#x3D;128 time&#x3D;14.1 ms
+  ^C
+  --- baidu.com ping statistics ---
+  10 packets transmitted, 10 received, 0% packet loss, time 26ms
+  rtt min&#x2F;avg&#x2F;max&#x2F;mdev &#x3D; 13.543&#x2F;14.895&#x2F;17.105&#x2F;1.278 ms</code></pre>
+<p>网络连接到此为止无需配置，可以正常访问网络。</p>
+<h3 id="5-更新系统时间，硬件时间同步"><a href="#5-更新系统时间，硬件时间同步" class="headerlink" title="5. 更新系统时间，硬件时间同步"></a>5. 更新系统时间，硬件时间同步</h3><p>使用命令查看系统时间以及硬件时间，将同步的当前时间写入硬件：  </p>
+<pre class="language-none"><code class="language-none">root@archiso ~ # timedatectl status
+      Local time: Wed 2019-04-24 08:55:39 UTC
+    Universal time: Wed 2019-04-24 08:55:39 UTC
+        RTC time: Wed 2019-04-24 08:55:40
+        Time zone: UTC (UTC, +0000)
+System clock synchronized: yes
+      NTP service: active
+    RTC in local TZ: no
+
+root@archiso ~ # timedatectl set-ntp true</code></pre>
+
+<h3 id="6-建立系统的硬盘分区"><a href="#6-建立系统的硬盘分区" class="headerlink" title="6. 建立系统的硬盘分区"></a>6. 建立系统的硬盘分区</h3><p>建立硬盘分区，我建立了两个分区，一个根分区和一个交换分区。  </p>
+<pre class="language-none"><code class="language-none">root@archiso ~ # fdisk -l 
+  Disk &#x2F;dev&#x2F;sda: 50 GiB, 53687091200 bytes, 104857600 sectors
+  Disk model: VMware Virtual S
+  Units: sectors of 1 * 512 &#x3D; 512 bytes
+  Sector size (logical&#x2F;physical): 512 bytes &#x2F; 512 bytes
+  I&#x2F;O size (minimum&#x2F;optimal): 512 bytes &#x2F; 512 bytes
+  Disklabel type: dos
+  Disk identifier: 0xba00941d
+
+  Device     Boot   Start       End   Sectors  Size Id Type
+  &#x2F;dev&#x2F;sda1          2048   1050623   1048576  512M 82 Linux swap &#x2F; Solaris
+  &#x2F;dev&#x2F;sda2       1050624 104857599 103806976 49.5G 83 Linux
+
+
+  Disk &#x2F;dev&#x2F;loop0: 491.2 MiB, 515084288 bytes, 1006024 sectors
+  Units: sectors of 1 * 512 &#x3D; 512 bytes
+  Sector size (logical&#x2F;physical): 512 bytes &#x2F; 512 bytes
+  I&#x2F;O size (minimum&#x2F;optimal): 512 bytes &#x2F; 512 bytes</code></pre>
+<h3 id="7-已经建立分区的格式化"><a href="#7-已经建立分区的格式化" class="headerlink" title="7. 已经建立分区的格式化"></a>7. 已经建立分区的格式化</h3><ol>
+<li>格式化ext4分区<pre class="language-none"><code class="language-none">root@archiso ~ # mkfs.ext4 &#x2F;dev&#x2F;sda2</code></pre></li>
+<li>格式化swap分区<pre class="language-none"><code class="language-none">root@archiso ~ # mkswap &#x2F;dev&#x2F;sda1  # 将&#x2F;dev&#x2F;sda1格式化为swap分区
+root@archiso ~ # swapon &#x2F;dev&#x2F;sda1  # 将&#x2F;dev&#x2F;sda1启用为swap分区</code></pre></li>
+</ol>
+<h3 id="8-挂载分区"><a href="#8-挂载分区" class="headerlink" title="8. 挂载分区"></a>8. 挂载分区</h3><p>使用系统挂载点&#x2F;mnt，将&#x2F;dev&#x2F;sda2作为系统的根目录挂载到&#x2F;mnt上。 </p>
+<pre class="language-none"><code class="language-none">root@archiso ~ # mount &#x2F;dev&#x2F;sda2 &#x2F;mnt</code></pre>
+<h3 id="9-定义安装所需的Mirrorlist"><a href="#9-定义安装所需的Mirrorlist" class="headerlink" title="9. 定义安装所需的Mirrorlist"></a>9. 定义安装所需的Mirrorlist</h3><h3 id="10-安装基础的Archlinux系统组件"><a href="#10-安装基础的Archlinux系统组件" class="headerlink" title="10. 安装基础的Archlinux系统组件"></a>10. 安装基础的Archlinux系统组件</h3><p>部署安装linux的文件系统，安装系统基础组建的软件包。  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# pacstrap &#x2F;mnt base</code></pre>
+<h3 id="11-新系统的相关配置"><a href="#11-新系统的相关配置" class="headerlink" title="11. 新系统的相关配置"></a>11. 新系统的相关配置</h3><h4 id="1-Fstab"><a href="#1-Fstab" class="headerlink" title="1. Fstab"></a>1. Fstab</h4><p>根据自己建立的分区自动生成系统的分区表。<br>    <pre class="language-none"><code class="language-none">  [root@LiarLee &#x2F;]# genfstab -U &#x2F;mnt &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;fstab		# 生成新的fstab，写入安装硬盘的&#x2F;etc&#x2F;fstab  
+  [root@LiarLee ~]# cat &#x2F;etc&#x2F;fstab		#  查看新的分区表
+# Static Information about the Filesystems.
+# See fstab(5) for Details.
+
+    # &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+    # &#x2F;dev&#x2F;sda2
+    UUID&#x3D;3b61b364-b9eb-4e31-b65a-55fdcf09c614	&#x2F;         	ext4      	rw,relatime	0 1
+  
+    # &#x2F;dev&#x2F;sda1
+    UUID&#x3D;91987ac9-fa6b-4ac5-a9c5-014169dcf058	none      	swap      	defaults  	0 0</code></pre></p>
+<h4 id="2-Chroot"><a href="#2-Chroot" class="headerlink" title="2. Chroot"></a>2. Chroot</h4><p>使用chroot命令切换根文件系统。  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# arch-chroot &#x2F;mnt</code></pre>
+<h4 id="3-Timezone"><a href="#3-Timezone" class="headerlink" title="3. Timezone"></a>3. Timezone</h4><p>chroot命令相当于直接将当前的shell切换到了新安装的系统中。<br>设置新的系统的时间及同步硬件时间。  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# ln -sf &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;Asia&#x2F;Shanghai &#x2F;etc&#x2F;localtime
+[root@LiarLee &#x2F;]# hwclock --systohc</code></pre>
+<h4 id="4-本地设置"><a href="#4-本地设置" class="headerlink" title="4. 本地设置"></a>4. 本地设置</h4><h4 id="5-网络设置"><a href="#5-网络设置" class="headerlink" title="5. 网络设置"></a>5. 网络设置</h4><p>配置hostname以及本地解析hosts文件的解析条目。  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# vim &#x2F;etc&#x2F;hostname
+  YOUR_HOSTNAME.YOUR_DOMAIN
+
+[root@LiarLee &#x2F;]# vim &#x2F;etc&#x2F;hosts
+  127.0.0.1	localhost
+  ::1		localhost
+  IP_ADDRESS 	YOUR_HOSTNAME.YOUR_DOMAIN YOUR_HOSTNAME</code></pre>
+
+<h4 id="6-生成initramfs"><a href="#6-生成initramfs" class="headerlink" title="6. 生成initramfs"></a>6. 生成initramfs</h4><p>为新的系统生成ramfs。<br>ramfs的作用是，利用ramfs的文件系统，快速驱动周边的系统设备。在ramfs的使命结束后，自动chroot到新系统的文件系统中。  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# mkinitcpio -p linux</code></pre>
+<h4 id="7-设置root密码"><a href="#7-设置root密码" class="headerlink" title="7. 设置root密码"></a>7. 设置root密码</h4><p>修改root密码。  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# passwd </code></pre>
+<h4 id="8-安装grub2"><a href="#8-安装grub2" class="headerlink" title="8. 安装grub2"></a>8. 安装grub2</h4><p>这里pacman命令已经可以使用了，因此直接在这个安装grub2，这样才可以在后面正确的重启到新安装好的系统。  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# pacman -S grub2 
+[root@LiarLee &#x2F;]# grub-mkconfig </code></pre>
+<h3 id="12-重启引导新系统"><a href="#12-重启引导新系统" class="headerlink" title="12. 重启引导新系统"></a>12. 重启引导新系统</h3><p>将已经安装完成的那个根分区卸载，之后就可以重启了。  </p>
+<pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# umount -R &#x2F;mnt  # umount 接触挂载新的根文件系统  
+[root@LiarLee &#x2F;]# fuser &#x2F;mnt		# fuser 查看占用文件系统的进程，如果确认的话可以直接-k结束所有占用的进程
+[root@LiarLee &#x2F;]# reboot 		# 重启</code></pre>
+<h3 id="13-安装图形化界面"><a href="#13-安装图形化界面" class="headerlink" title="13. 安装图形化界面"></a>13. 安装图形化界面</h3><h4 id="1-安装Xorg"><a href="#1-安装Xorg" class="headerlink" title="1. 安装Xorg"></a>1. 安装Xorg</h4><p>安装如下的所有组件，重启就可以进入图形化环境了。<br>    1. 运行错误 xterm:command not found<br>        <code>[root@LiarLee /]# pacman -S xterm zlib</code><br>    1. 运行报错 twm:command not found<br>        <code>[root@LiarLee /]# pacman -S xorg-twm xorg-xclock</code><br>    1. 安装鼠标驱动<br>        <code>[root@LiarLee /]# pacman -S xf86-input-mouse</code><br>    1. 安装VMware图形驱动<br>        <code>[root@LiarLee /]# pacman -S xf86-video-vmware</code><br>    1. 安装Xorg服务本体<br>        <code>[root@LiarLee /]# pacman -S xorg-server xorg-xinit </code><br>    1. 安装Gnome桌面环境<br>        <code>[root@LiarLee /]# pacman -S gnome</code><br>    1. 安装GDM - Gnome桌面管理工具，也可用其他替换<br>        [<code>root@LiarLee /]# pacman -S gdm</code></p>
+<h4 id="2-安装图形化之后测试启动速度"><a href="#2-安装图形化之后测试启动速度" class="headerlink" title="2. 安装图形化之后测试启动速度"></a>2. 安装图形化之后测试启动速度</h4><p>systemd提供了命令检测启动的速度，包括内核启动速度以及用户空间的启动速度。</p>
+<ol>
+<li>systemd-analyze  </li>
+<li>systemd-analyze blame</li>
+</ol>
+<pre class="language-none"><code class="language-none">[root@LiarLee ~]# systemd-analyze 
+Startup finished in 1.892s (kernel) + 1.182s (userspace) &#x3D; 3.075s 
+graphical.target reached after 1.182s in userspace</code></pre>
+<h4 id="3-刷新国内的镜像源"><a href="#3-刷新国内的镜像源" class="headerlink" title="3. 刷新国内的镜像源"></a>3. 刷新国内的镜像源</h4><pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# cd &#x2F;etc&#x2F;pacman.d&#x2F;
+[root@LiarLee pacman.d]#  mv mirrorlist mirrorlist.bak
+[root@LiarLee pacman.d]#  wget -O &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist https:&#x2F;&#x2F;www.archlinux.org&#x2F;mirrorlist&#x2F;?country&#x3D;CN
+[root@LiarLee pacman.d]#  mv mirrorlist mirrorlist.rank 
+[root@LiarLee pacman.d]#  rankmirrors mirrorlist.rank &gt;&gt; mirrorlist
+[root@LiarLee pacman.d]# sed &#39;s&#x2F;^Server&#x2F;#Server&#x2F;g&#39; .&#x2F;mirrorlist &gt;&gt; .&#x2F;mirrorlist
+[root@LiarLee pacman.d]# s[root@LiarLee pacman.d]# spacman -Syyu</code></pre>
+<h3 id="14-自行编译内核操作"><a href="#14-自行编译内核操作" class="headerlink" title="14. 自行编译内核操作"></a>14. 自行编译内核操作</h3><pre class="language-none"><code class="language-none">[root@LiarLee &#x2F;]# pacman -S base-devel bc xmlto kmod inetutils
+[root@LiarLee &#x2F;]# useradd -d &#x2F;home&#x2F;admin -p admin admin  
+[root@LiarLee &#x2F;]# chown -R admin:admin &#x2F;home&#x2F;admin
+[root@LiarLee &#x2F;]# mkdir &#x2F;home&#x2F;admin&#x2F;mk-new-kernel&#x2F;
+[root@LiarLee &#x2F;]# su - admin 
+[root@LiarLee &#x2F;]# cd &#x2F;home&#x2F;admin&#x2F;mk-new-kernel&#x2F;
+[root@LiarLee &#x2F;]# wget https:&#x2F;&#x2F;cdn.kernel.org&#x2F;pub&#x2F;linux&#x2F;kernel&#x2F;v5.x&#x2F;linux-5.0.8.tar.xz
+[root@LiarLee &#x2F;]# tar xvf linux-5.0.8.tar.xz 
+[root@LiarLee &#x2F;]# cd linux-5.0.8&#x2F;
+[root@LiarLee &#x2F;]# make clean &amp;&amp; make mrproper
+[root@LiarLee &#x2F;]# make localmodconfig
+[root@LiarLee &#x2F;]# make nconfig
+[root@LiarLee &#x2F;]# make </code></pre>
+<h3 id="15-部分问题"><a href="#15-部分问题" class="headerlink" title="15. 部分问题"></a>15. 部分问题</h3><ol>
+<li><p>重启之后没有DHCP获取IP地址的解决方法：  </p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@LiarLee /<span class="token punctuation">]</span><span class="token comment"># systemctl enable dhcpcd</span>
+<span class="token punctuation">[</span>root@LiarLee /<span class="token punctuation">]</span><span class="token comment"># systemctl start dhcpcd </span>
+<span class="token punctuation">[</span>root@LiarLee /<span class="token punctuation">]</span><span class="token comment"># pacman -S net-tools</span></code></pre>
+</li>
+<li><p>Wayland + Sway + Hypeland. （计划中， 等我闲的不行了…..</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://liarlee.site">Liarlee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/">https://liarlee.site/2019/05/17/Linux/Linux_Archlinux-Installation/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://liarlee.site" target="_blank">Liarlee's Notebook</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/05/17/Python/Python_Script-ForGame/" title="pyautogui自动脚本"><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">pyautogui自动脚本</div></div></a></div><div class="next-post pull-right"><a href="/2019/04/24/Linux/Linux_DockerFile-Note/" title="DockerFile笔记"><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">DockerFile笔记</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/08/26/Linux/Linux-UsefulToolsExplanation/" title="Linux 一些工具网站的记录"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-08-26</div><div class="title">Linux 一些工具网站的记录</div></div></a></div><div><a href="/2023/09/06/Linux/Linux_AlwaysRunUserdata/" title="在EC2实例每次启动的时候都运行Userdata"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-10-30</div><div class="title">在EC2实例每次启动的时候都运行Userdata</div></div></a></div><div><a href="/2019/07/13/Linux/Linux_Boot-sequence/" title="Linux启动流程简述"><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-08-20</div><div class="title">Linux启动流程简述</div></div></a></div><div><a href="/2019/09/18/Linux/Linux_CentOS7-VM-Template/" title="虚拟机制作模板的步骤及设置"><img class="cover" src="https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-08-20</div><div class="title">虚拟机制作模板的步骤及设置</div></div></a></div><div><a href="/2019/10/22/Linux/Linux_ChangeGnometoi3wm/" title="i3wm的简单配置"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-08-20</div><div class="title">i3wm的简单配置</div></div></a></div><div><a href="/2022/04/19/Linux/Linux_Epoll/" title="Epoll vs select vs poll vs io_uring"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-08-20</div><div class="title">Epoll vs select vs poll vs io_uring</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pacman%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">Pacman常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Archlinux"><span class="toc-number">2.</span> <span class="toc-text">安装Archlinux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96Archlinux%E9%95%9C%E5%83%8F"><span class="toc-number">2.1.</span> <span class="toc-text">1. 获取Archlinux镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8%E5%88%B0Archlinux-Live%E7%8E%AF%E5%A2%83"><span class="toc-number">2.2.</span> <span class="toc-text">2. 启动到Archlinux Live环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AE%BE%E7%BD%AEArchlinux%E7%9A%84%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80"><span class="toc-number">2.3.</span> <span class="toc-text">3. 设置Archlinux的键盘布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%BF%9E%E6%8E%A5%E5%88%B0Internet"><span class="toc-number">2.4.</span> <span class="toc-text">4. 连接到Internet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4%EF%BC%8C%E7%A1%AC%E4%BB%B6%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5"><span class="toc-number">2.5.</span> <span class="toc-text">5. 更新系统时间，硬件时间同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%BB%BA%E7%AB%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA"><span class="toc-number">2.6.</span> <span class="toc-text">6. 建立系统的硬盘分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%B7%B2%E7%BB%8F%E5%BB%BA%E7%AB%8B%E5%88%86%E5%8C%BA%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-number">2.7.</span> <span class="toc-text">7. 已经建立分区的格式化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E6%8C%82%E8%BD%BD%E5%88%86%E5%8C%BA"><span class="toc-number">2.8.</span> <span class="toc-text">8. 挂载分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85%E6%89%80%E9%9C%80%E7%9A%84Mirrorlist"><span class="toc-number">2.9.</span> <span class="toc-text">9. 定义安装所需的Mirrorlist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E5%AE%89%E8%A3%85%E5%9F%BA%E7%A1%80%E7%9A%84Archlinux%E7%B3%BB%E7%BB%9F%E7%BB%84%E4%BB%B6"><span class="toc-number">2.10.</span> <span class="toc-text">10. 安装基础的Archlinux系统组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E6%96%B0%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="toc-number">2.11.</span> <span class="toc-text">11. 新系统的相关配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Fstab"><span class="toc-number">2.11.1.</span> <span class="toc-text">1. Fstab</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Chroot"><span class="toc-number">2.11.2.</span> <span class="toc-text">2. Chroot</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Timezone"><span class="toc-number">2.11.3.</span> <span class="toc-text">3. Timezone</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%9C%AC%E5%9C%B0%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.11.4.</span> <span class="toc-text">4. 本地设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E7%BD%91%E7%BB%9C%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.11.5.</span> <span class="toc-text">5. 网络设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E7%94%9F%E6%88%90initramfs"><span class="toc-number">2.11.6.</span> <span class="toc-text">6. 生成initramfs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E8%AE%BE%E7%BD%AEroot%E5%AF%86%E7%A0%81"><span class="toc-number">2.11.7.</span> <span class="toc-text">7. 设置root密码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-%E5%AE%89%E8%A3%85grub2"><span class="toc-number">2.11.8.</span> <span class="toc-text">8. 安装grub2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E9%87%8D%E5%90%AF%E5%BC%95%E5%AF%BC%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.12.</span> <span class="toc-text">12. 重启引导新系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2"><span class="toc-number">2.13.</span> <span class="toc-text">13. 安装图形化界面</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85Xorg"><span class="toc-number">2.13.1.</span> <span class="toc-text">1. 安装Xorg</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E5%8C%96%E4%B9%8B%E5%90%8E%E6%B5%8B%E8%AF%95%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6"><span class="toc-number">2.13.2.</span> <span class="toc-text">2. 安装图形化之后测试启动速度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%88%B7%E6%96%B0%E5%9B%BD%E5%86%85%E7%9A%84%E9%95%9C%E5%83%8F%E6%BA%90"><span class="toc-number">2.13.3.</span> <span class="toc-text">3. 刷新国内的镜像源</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-%E8%87%AA%E8%A1%8C%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E6%93%8D%E4%BD%9C"><span class="toc-number">2.14.</span> <span class="toc-text">14. 自行编译内核操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-%E9%83%A8%E5%88%86%E9%97%AE%E9%A2%98"><span class="toc-number">2.15.</span> <span class="toc-text">15. 部分问题</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/%E6%9C%AA%E5%91%BD%E5%90%8D/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.195Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Other/Other-TrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.194Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/iostat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/vmstat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.189Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

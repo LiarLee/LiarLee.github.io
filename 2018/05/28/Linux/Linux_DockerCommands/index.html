@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Docker基本命令说明 | Liarlee's Notebook</title><meta name="author" content="Liarlee"><meta name="copyright" content="Liarlee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="docker基础命令的说明。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker基本命令说明">
+<meta property="og:url" content="https://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/index.html">
+<meta property="og:site_name" content="Liarlee&#39;s Notebook">
+<meta property="og:description" content="docker基础命令的说明。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png">
+<meta property="article:published_time" content="2018-05-28T04:38:06.000Z">
+<meta property="article:modified_time" content="2023-08-20T15:01:42.464Z">
+<meta property="article:author" content="Liarlee">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker基本命令说明',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-20 23:01:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Docker基本命令说明</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-05-28T04:38:06.000Z" title="发表于 2018-05-28 12:38:06">2018-05-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.464Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Docker/">Docker</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Docker基本命令说明"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><p>docker基础命令的说明。</p>
+<span id="more"></span>
+
+<h2 id="Docker常用命令的说明"><a href="#Docker常用命令的说明" class="headerlink" title="Docker常用命令的说明"></a>Docker常用命令的说明</h2><h3 id="Docker-Pull"><a href="#Docker-Pull" class="headerlink" title="Docker Pull"></a>Docker Pull</h3><p>\ 下载一个Image  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker pull nginx:lastest  
+Using default tag: latest  
+Trying to pull repository docker.io&#x2F;library&#x2F;nginx ...   
+sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884: Pulling from docker.io&#x2F;library&#x2F;nginx
+Digest: sha256:0fb320e2a1b1620b4905facb3447e3d84ad36da0b2c8aa8fe3a5a81d1187b884
+Status: Image is up to date for docker.io&#x2F;nginx:latest</code></pre>
+
+<h3 id="Docker-Push"><a href="#Docker-Push" class="headerlink" title="Docker Push"></a>Docker Push</h3><p>\ 上传一个Image  </p>
+<h3 id="Docker-Run"><a href="#Docker-Run" class="headerlink" title="Docker Run"></a>Docker Run</h3><p>\ 启动一个Container  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker run nginx</code></pre>
+
+<h3 id="Docker-Kill"><a href="#Docker-Kill" class="headerlink" title="Docker Kill"></a>Docker Kill</h3><p>\ 结束一个Container  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker kill flamboyant_thompson  </code></pre>
+
+<h3 id="Docker-System-Prune"><a href="#Docker-System-Prune" class="headerlink" title="Docker System Prune"></a>Docker System Prune</h3><p>\ 清理Docker的无用文件,包括未使用的容器和不具有Dangling的镜像(不具有启动能力的Image)  </p>
+<h3 id="Docker-Images"><a href="#Docker-Images" class="headerlink" title="Docker Images"></a>Docker Images</h3><p>\ 列出所有的docker images</p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker images
+ONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1cca834eb80c        nginx                      &quot;nginx -g &#39;daemon ...&quot;   57 seconds ago      Up 56 seconds       80&#x2F;tcp                   flamboyant_thompson
+769aefe85e29        achabill&#x2F;lh-toolkit        &quot;dockerize -wait t...&quot;   3 hours ago         Up 3 hours          0.0.0.0:8080-&gt;8080&#x2F;tcp   sad_payne
+93431e5f2f66        achabill&#x2F;lh-mysql:latest   &quot;docker-entrypoint...&quot;   3 hours ago         Up 3 hours          0.0.0.0:3308-&gt;3306&#x2F;tcp   brave_mcclintock</code></pre>
+
+<h3 id="Docker-search"><a href="#Docker-search" class="headerlink" title="Docker search"></a>Docker search</h3><p>\ 搜索特定名称的image  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker search nginx
+INDEX        NAME                                                             DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+docker.io    docker.io&#x2F;nginx                                                  Official build of Nginx.                        8564      [OK]       
+docker.io    docker.io&#x2F;nginx                                                  Official build of Nginx.                        8564      [OK]       
+docker.io    docker.io&#x2F;jwilder&#x2F;nginx-proxy                                    Automated Nginx reverse proxy for docker c...   1334                 [OK]
+docker.io    docker.io&#x2F;jwilder&#x2F;nginx-proxy                                    Automated Nginx reverse proxy for docker c...   1334                 [OK]
+docker.io    docker.io&#x2F;richarvey&#x2F;nginx-php-fpm                                Container running Nginx + PHP-FPM capable ...   547                  [OK]
+docker.io    docker.io&#x2F;richarvey&#x2F;nginx-php-fpm                                Container running Nginx + PHP-FPM capable ...   547                  [OK]
+docker.io    docker.io&#x2F;jrcs&#x2F;letsencrypt-nginx-proxy-companion                 LetsEncrypt container to use with nginx as...   367                  [OK]
+docker.io    docker.io&#x2F;jrcs&#x2F;letsencrypt-nginx-proxy-companion                 LetsEncrypt container to use with nginx as...   367                  [OK]
+docker.io    docker.io&#x2F;kong                                                   Open-source Microservice &amp; API Management ...   187       [OK]       
+docker.io    docker.io&#x2F;kong                                                   Open-source Microservice &amp; API Management ...   187       [OK]       
+docker.io    docker.io&#x2F;webdevops&#x2F;php-nginx                                    Nginx with PHP-FPM                              103                  [OK]
+docker.io    docker.io&#x2F;webdevops&#x2F;php-nginx                                    Nginx with PHP-FPM                              103                  [OK]
+docker.io    docker.io&#x2F;kitematic&#x2F;hello-world-nginx                            A light-weight nginx container that demons...   98                   
+docker.io    docker.io&#x2F;kitematic&#x2F;hello-world-nginx                            A light-weight nginx container that demons...   98                   
+docker.io    docker.io&#x2F;bitnami&#x2F;nginx                                          Bitnami nginx Docker Image                      50                   [OK]
+docker.io    docker.io&#x2F;bitnami&#x2F;nginx                                          Bitnami nginx Docker Image                      50                   [OK]
+docker.io    docker.io&#x2F;zabbix&#x2F;zabbix-web-nginx-mysql                          Zabbix frontend based on Nginx web-server ...   50                   [OK]
+docker.io    docker.io&#x2F;zabbix&#x2F;zabbix-web-nginx-mysql                          Zabbix frontend based on Nginx web-server ...   50                   [OK]
+docker.io    docker.io&#x2F;1and1internet&#x2F;ubuntu-16-nginx-php-phpmyadmin-mysql-5   ubuntu-16-nginx-php-phpmyadmin-mysql-5          35                   [OK]
+docker.io    docker.io&#x2F;1and1internet&#x2F;ubuntu-16-nginx-php-phpmyadmin-mysql-5   ubuntu-16-nginx-php-phpmyadmin-mysql-5          35                   [OK]
+docker.io    docker.io&#x2F;linuxserver&#x2F;nginx                                      An Nginx container, brought to you by Linu...   35                   
+docker.io    docker.io&#x2F;linuxserver&#x2F;nginx                                      An Nginx container, brought to you by Linu...   35                   
+docker.io    docker.io&#x2F;tobi312&#x2F;rpi-nginx                                      NGINX on Raspberry Pi &#x2F; armhf                   19                   [OK]
+docker.io    docker.io&#x2F;tobi312&#x2F;rpi-nginx                                      NGINX on Raspberry Pi &#x2F; armhf                   19                   [OK]
+docker.io    docker.io&#x2F;nginxdemos&#x2F;nginx-ingress                               NGINX Ingress Controller for Kubernetes . ...   11                   
+docker.io    docker.io&#x2F;nginxdemos&#x2F;nginx-ingress                               NGINX Ingress Controller for Kubernetes . ...   11                   
+docker.io    docker.io&#x2F;blacklabelops&#x2F;nginx                                    Dockerized Nginx Reverse Proxy Server.          9                    [OK]
+docker.io    docker.io&#x2F;blacklabelops&#x2F;nginx                                    Dockerized Nginx Reverse Proxy Server.          9                    [OK]
+docker.io    docker.io&#x2F;wodby&#x2F;drupal-nginx                                     Nginx for Drupal container image                9                    [OK]
+docker.io    docker.io&#x2F;wodby&#x2F;drupal-nginx                                     Nginx for Drupal container image                9                    [OK]
+docker.io    docker.io&#x2F;webdevops&#x2F;nginx                                        Nginx container                                 8                    [OK]
+docker.io    docker.io&#x2F;webdevops&#x2F;nginx                                        Nginx container                                 8                    [OK]
+docker.io    docker.io&#x2F;centos&#x2F;nginx-18-centos7                                Platform for running nginx 1.8 or building...   6                    
+docker.io    docker.io&#x2F;centos&#x2F;nginx-18-centos7                                Platform for running nginx 1.8 or building...   6                    
+docker.io    docker.io&#x2F;nginxdemos&#x2F;hello                                       NGINX webserver that serves a simple page ...   6                    [OK]
+docker.io    docker.io&#x2F;nginxdemos&#x2F;hello                                       NGINX webserver that serves a simple page ...   6                    [OK]
+docker.io    docker.io&#x2F;1science&#x2F;nginx                                         Nginx Docker images that include Consul Te...   4                    [OK]
+docker.io    docker.io&#x2F;1science&#x2F;nginx                                         Nginx Docker images that include Consul Te...   4                    [OK]
+docker.io    docker.io&#x2F;centos&#x2F;nginx-112-centos7                               Platform for running nginx 1.12 or buildin...   3                    
+docker.io    docker.io&#x2F;behance&#x2F;docker-nginx                                   Provides base OS, patches and stable nginx...   2                    [OK]
+docker.io    docker.io&#x2F;behance&#x2F;docker-nginx                                   Provides base OS, patches and stable nginx...   2                    [OK]
+docker.io    docker.io&#x2F;pebbletech&#x2F;nginx-proxy                                 nginx-proxy sets up a container running ng...   2                    [OK]
+docker.io    docker.io&#x2F;pebbletech&#x2F;nginx-proxy                                 nginx-proxy sets up a container running ng...   2                    [OK]
+docker.io    docker.io&#x2F;toccoag&#x2F;openshift-nginx                                Nginx reverse proxy for Nice running on sa...   1                    [OK]
+docker.io    docker.io&#x2F;toccoag&#x2F;openshift-nginx                                Nginx reverse proxy for Nice running on sa...   1                    [OK]
+docker.io    docker.io&#x2F;travix&#x2F;nginx                                           NGinx reverse proxy                             1                    [OK]
+docker.io    docker.io&#x2F;travix&#x2F;nginx                                           NGinx reverse proxy                             1                    [OK]
+docker.io    docker.io&#x2F;ansibleplaybookbundle&#x2F;nginx-apb                        An APB to deploy NGINX                          0                    [OK]
+docker.io    docker.io&#x2F;mailu&#x2F;nginx                                            Mailu nginx frontend                            0                    [OK]
+docker.io    docker.io&#x2F;mailu&#x2F;nginx                                            Mailu nginx frontend                            0                    [OK]
+redhat.com   registry.access.redhat.com&#x2F;3scale-amp20-beta&#x2F;apicast-gateway     3scale&#39;s API gateway (APIcast) is an OpenR...   0                    
+redhat.com   registry.access.redhat.com&#x2F;3scale-amp20&#x2F;apicast-gateway          3scale&#39;s API gateway (APIcast) is an OpenR...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhamp10&#x2F;apicast-gateway               3scale&#39;s API gateway (APIcast) is an OpenR...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhmap43&#x2F;wildcard-proxy                RHMAP Docker image that provides mapping a...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhmap44&#x2F;wildcard-proxy                RHMAP Docker image that provides mapping a...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhmap45&#x2F;wildcard-proxy                RHMAP image that provides mapping and prox...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhmap46&#x2F;wildcard-proxy                RHMAP image that provides mapping and prox...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhscl&#x2F;nginx-110-rhel7                 Nginx container image that delivers an ngi...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhscl&#x2F;nginx-112-rhel7                 Nginx is a web server and a reverse proxy ...   0                    
+redhat.com   registry.access.redhat.com&#x2F;rhscl&#x2F;nginx-16-rhel7                  Nginx 1.6 server and a reverse proxy server     0                    
+redhat.com   registry.access.redhat.com&#x2F;rhscl&#x2F;nginx-18-rhel7                  Nginx 1.8 server and a reverse proxy server     0                    </code></pre>
+
+<h3 id="Docker-Ps"><a href="#Docker-Ps" class="headerlink" title="Docker Ps"></a>Docker Ps</h3><p>\ 列出docker正在运行的Container  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker ps 
+CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1cca834eb80c        nginx                      &quot;nginx -g &#39;daemon ...&quot;   57 seconds ago      Up 56 seconds       80&#x2F;tcp                   flamboyant_thompson
+769aefe85e29        achabill&#x2F;lh-toolkit        &quot;dockerize -wait t...&quot;   3 hours ago         Up 3 hours          0.0.0.0:8080-&gt;8080&#x2F;tcp   sad_payne
+93431e5f2f66        achabill&#x2F;lh-mysql:latest   &quot;docker-entrypoint...&quot;   3 hours ago         Up 3 hours          0.0.0.0:3308-&gt;3306&#x2F;tcp   brave_mcclintock</code></pre>
+
+<h3 id="Docker-Container-Ls"><a href="#Docker-Container-Ls" class="headerlink" title="Docker Container Ls"></a>Docker Container Ls</h3><p>\ 列出所有存在的Container,包括为运行的和未使用的  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker container ls
+CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1cca834eb80c        nginx                      &quot;nginx -g &#39;daemon ...&quot;   57 seconds ago      Up 56 seconds       80&#x2F;tcp                   flamboyant_thompson
+769aefe85e29        achabill&#x2F;lh-toolkit        &quot;dockerize -wait t...&quot;   3 hours ago         Up 3 hours          0.0.0.0:8080-&gt;8080&#x2F;tcp   sad_payne
+93431e5f2f66        achabill&#x2F;lh-mysql:latest   &quot;docker-entrypoint...&quot;   3 hours ago         Up 3 hours          0.0.0.0:3308-&gt;3306&#x2F;tcp   brave_mcclintock</code></pre>
+
+<h3 id="Docker-Run-dt"><a href="#Docker-Run-dt" class="headerlink" title="Docker Run -dt"></a>Docker Run -dt</h3><p>\ 运行一个image,给予一个Terminal,放入后台,返回一个ContainerID  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker run -dt -p 80:80 nginx
+1cca834eb80cd8467dec6d103bf9072adfb55d8cfb2fdc257af548dc25917868</code></pre>
+
+<h3 id="Docker-Run-it"><a href="#Docker-Run-it" class="headerlink" title="Docker Run -it"></a>Docker Run -it</h3><p>\ 运行一个image,给予一个Terminal,直接进入Container  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker run -it -p 80:80 nginx</code></pre>
+
+<h3 id="Docker-Run-1"><a href="#Docker-Run-1" class="headerlink" title="Docker Run"></a>Docker Run</h3><p>\ 运行一个image,如果本地没有自动到docker仓库检索  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker run nginx</code></pre>
+
+<h3 id="Docker-Run-p"><a href="#Docker-Run-p" class="headerlink" title="Docker Run -p"></a>Docker Run -p</h3><p>\ 运行一个image,指定port的映射关系  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker run -p 80:80 nginx </code></pre>
+
+<h3 id="Docker-Attach"><a href="#Docker-Attach" class="headerlink" title="Docker Attach"></a>Docker Attach</h3><p>\ 进入到某一个Container内部,如果没有shell,无法操作, 输出一片空白  </p>
+<pre class="language-none"><code class="language-none">[root@localhost ~]# docker attach flamboyant_thompson
+[root@d4a75f165ce6 &#x2F;]#</code></pre></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://liarlee.site">Liarlee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/">https://liarlee.site/2018/05/28/Linux/Linux_DockerCommands/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://liarlee.site" target="_blank">Liarlee's Notebook</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Docker/">Docker</a></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/06/25/Linux/Linux_Install-Maven-Guide/" title="安装Maven教程"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">安装Maven教程</div></div></a></div><div class="next-post pull-right"><a href="/2018/05/11/Linux/Linux_%E5%85%B3%E9%97%ADFedora%E9%98%B2%E7%81%AB%E5%A2%99/" title="Fedora防火墙关闭，如何开机运行脚本"><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Fedora防火墙关闭，如何开机运行脚本</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/09/04/Linux/Linux_Docker-again/" title="Docker基础知识二周目"><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-08-20</div><div class="title">Docker基础知识二周目</div></div></a></div><div><a href="/2019/04/24/Linux/Linux_DockerFile-Note/" title="DockerFile笔记"><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-08-20</div><div class="title">DockerFile笔记</div></div></a></div><div><a href="/2018/07/02/Other/Other_DCM4CHEE_RunDocker/" title="Docker中运行DCM4CHEE-arc-light"><img class="cover" src="https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-12-22</div><div class="title">Docker中运行DCM4CHEE-arc-light</div></div></a></div><div><a href="/2022/12/20/Other/Other_Docker-daemon-proxy-setting-md/" title="Docker&#x2F;Containerd&#x2F;Harbor 配置代理"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-11-06</div><div class="title">Docker&#x2F;Containerd&#x2F;Harbor 配置代理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-number">1.</span> <span class="toc-text">Docker常用命令的说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Pull"><span class="toc-number">1.1.</span> <span class="toc-text">Docker Pull</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Push"><span class="toc-number">1.2.</span> <span class="toc-text">Docker Push</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Run"><span class="toc-number">1.3.</span> <span class="toc-text">Docker Run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Kill"><span class="toc-number">1.4.</span> <span class="toc-text">Docker Kill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-System-Prune"><span class="toc-number">1.5.</span> <span class="toc-text">Docker System Prune</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Images"><span class="toc-number">1.6.</span> <span class="toc-text">Docker Images</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-search"><span class="toc-number">1.7.</span> <span class="toc-text">Docker search</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Ps"><span class="toc-number">1.8.</span> <span class="toc-text">Docker Ps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Container-Ls"><span class="toc-number">1.9.</span> <span class="toc-text">Docker Container Ls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Run-dt"><span class="toc-number">1.10.</span> <span class="toc-text">Docker Run -dt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Run-it"><span class="toc-number">1.11.</span> <span class="toc-text">Docker Run -it</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Run-1"><span class="toc-number">1.12.</span> <span class="toc-text">Docker Run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Run-p"><span class="toc-number">1.13.</span> <span class="toc-text">Docker Run -p</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Attach"><span class="toc-number">1.14.</span> <span class="toc-text">Docker Attach</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/%E6%9C%AA%E5%91%BD%E5%90%8D/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.195Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Other/Other-TrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.194Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/iostat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/vmstat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.189Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

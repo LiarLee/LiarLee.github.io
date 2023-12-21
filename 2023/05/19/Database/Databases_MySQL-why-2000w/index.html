@@ -1,0 +1,436 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>数据库单表的测试 | Liarlee's Notebook</title><meta name="author" content="Liarlee"><meta name="copyright" content="Liarlee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="基于这个问题的测试为什么MySQL单表不要超过2000w行？ 测试过程：CREATE TABLE test( id int NOT NULL AUTO_INCREMENT PRIMARY KEY comment &#39;主键&#39;, person_id int not null comment &#39;用户id&#39;, person_name VARCHAR(200) comment">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库单表的测试">
+<meta property="og:url" content="https://liarlee.site/2023/05/19/Database/Databases_MySQL-why-2000w/index.html">
+<meta property="og:site_name" content="Liarlee&#39;s Notebook">
+<meta property="og:description" content="基于这个问题的测试为什么MySQL单表不要超过2000w行？ 测试过程：CREATE TABLE test( id int NOT NULL AUTO_INCREMENT PRIMARY KEY comment &#39;主键&#39;, person_id int not null comment &#39;用户id&#39;, person_name VARCHAR(200) comment">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png">
+<meta property="article:published_time" content="2023-05-19T10:10:52.000Z">
+<meta property="article:modified_time" content="2023-08-20T15:01:42.458Z">
+<meta property="article:author" content="Liarlee">
+<meta property="article:tag" content="MySQL, Database">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://liarlee.site/2023/05/19/Database/Databases_MySQL-why-2000w/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '数据库单表的测试',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-20 23:01:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">数据库单表的测试</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-19T10:10:52.000Z" title="发表于 2023-05-19 18:10:52">2023-05-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-20T15:01:42.458Z" title="更新于 2023-08-20 23:01:42">2023-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Database/">Database</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="数据库单表的测试"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><p>基于这个问题的测试<a target="_blank" rel="noopener" href="https://articles.zsxq.com/id_szzdrtss5t7o.html">为什么MySQL单表不要超过2000w行？</a></p>
+<h2 id="测试过程："><a href="#测试过程：" class="headerlink" title="测试过程："></a>测试过程：</h2><pre class="language-none"><code class="language-none">CREATE TABLE test(
+id int NOT NULL AUTO_INCREMENT PRIMARY KEY comment &#39;主键&#39;,
+person_id int not null comment &#39;用户id&#39;,
+person_name VARCHAR(200) comment &#39;用户名称&#39;,
+gmt_create datetime comment &#39;创建时间&#39;,
+gmt_modified datetime comment &#39;修改时间&#39;
+) comment &#39;人员信息表&#39;;
+
+插入数据：
+insert into test values(1,1,&#39;user_1&#39;, NOW(), now());
+
+insert into test (person_id, person_name, gmt_create, gmt_modified)
+select (@i:&#x3D;@i+1) as rownum, person_name, now(), now() from test, (select @i:&#x3D;100) as init;
+set @i&#x3D;1;
+
+&#x2F;&#x2F;测试 SQL,记录他们的运行时间
+select count(*) from test;
+select count(*) from test where id&#x3D;XXX;
+
+查看这个表格的数据量大小： 
+show table status like &#39;test&#39;\G</code></pre>
+
+<p>200w行表： </p>
+<pre class="language-mysql" data-language="mysql"><code class="language-mysql">mysql&gt; describe table test;
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows    | filtered | Extra |
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+|  1 | SIMPLE      | test  | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 2092640 |   100.00 | NULL  |
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+1 row in set, 1 warning (0.00 sec)
+
+MySQL [test]&gt; select count(*) from test;
+1 row in set (0.045 sec)
+1 row in set (0.050 sec)
+1 row in set (0.050 sec)</code></pre>
+
+<p>400w：</p>
+<pre class="language-none"><code class="language-none">mysql&gt; describe table test;
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows    | filtered | Extra |
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+|  1 | SIMPLE      | test  | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 4185280 |   100.00 | NULL  |
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+1 row in set, 1 warning (0.00 sec)
+
+MySQL [test]&gt; select count(*) from test;
+1 row in set (0.126 sec)
+1 row in set (0.120 sec)
+1 row in set (0.119 sec)</code></pre>
+
+<p>800w：</p>
+<pre class="language-none"><code class="language-none">mysql&gt; describe table test;
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows    | filtered | Extra |
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+|  1 | SIMPLE      | test  | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 8370120 |   100.00 | NULL  |
++----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------+
+1 row in set, 1 warning (0.00 sec)
+
+MySQL [test]&gt; select count(*) from test;
+1 row in set (0.266 sec)
+1 row in set (0.266 sec)
+1 row in set (0.253 sec)</code></pre>
+
+<p>1600w：</p>
+<pre class="language-none"><code class="language-none">mysql&gt; describe table test;
++----+-------------+-------+------------+------+---------------+------+---------+------+----------+----------+-------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows     | filtered | Extra |
++----+-------------+-------+------------+------+---------------+------+---------+------+----------+----------+-------+
+|  1 | SIMPLE      | test  | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 16337090 |   100.00 | NULL  |
++----+-------------+-------+------------+------+---------------+------+---------+------+----------+----------+-------+
+1 row in set, 1 warning (0.00 sec)
+
+MySQL [test]&gt; select count(*) from test;
+1 row in set (0.544 sec)
+1 row in set (0.524 sec)
+1 row in set (0.523 sec)</code></pre>
+
+<p>3200w：</p>
+<pre class="language-none"><code class="language-none">mysql&gt; describe table test;
++----+-------------+-------+------------+------+---------------+------+---------+------+----------+----------+-------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows     | filtered | Extra |
++----+-------------+-------+------------+------+---------------+------+---------+------+----------+----------+-------+
+|  1 | SIMPLE      | test  | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 32665301 |   100.00 | NULL  |
++----+-------------+-------+------------+------+---------------+------+---------+------+----------+----------+-------+
+1 row in set, 1 warning (0.00 sec)
+
+MySQL [test]&gt; select count(*) from test;
+1 row in set (1.068 sec)
+1 row in set (1.057 sec)
+1 row in set (1.044 sec)</code></pre>
+
+<p>这个结果基本上都是线性的， 感觉数据量实在是太小了。</p>
+<pre class="language-none"><code class="language-none">mysql&gt; show table status like &#39;test&#39;\G
+*************************** 1. row ***************************
+           Name: test
+         Engine: InnoDB
+        Version: 10
+     Row_format: Dynamic
+           Rows: 4182365
+ Avg_row_length: 48
+    Data_length: 202063872
+Max_data_length: 0
+   Index_length: 0
+      Data_free: 6291456
+ Auto_increment: 4652971
+    Create_time: 2023-05-19 07:56:46
+    Update_time: 2023-05-19 07:57:50
+     Check_time: NULL
+      Collation: utf8mb4_0900_ai_ci
+       Checksum: NULL
+ Create_options:
+        Comment: 人员信息表
+1 row in set (0.00 sec)</code></pre>
+
+<hr>
+<h2 id="换个方案（-从大佬那边伸手拿来的"><a href="#换个方案（-从大佬那边伸手拿来的" class="headerlink" title="换个方案（ 从大佬那边伸手拿来的"></a>换个方案（ 从大佬那边伸手拿来的</h2><pre class="language-none"><code class="language-none">CREATE TABLE tt1(
+id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+person_id tinyint not null ,
+person_name1 VARCHAR(3000) ,
+person_name2 VARCHAR(3000) ,
+person_name3 VARCHAR(3000) ,
+person_name4 VARCHAR(3000) ,
+person_name5 VARCHAR(3000) ,
+gmt_create datetime ,
+gmt_modified datetime
+) ;	
+
+insert into tt1 (person_id, person_name1, person_name2, person_name3, person_name4, person_name5, gmt_create, gmt_modified)
+values (1, lpad(&#39;&#39;,3000,&#39;*&#39;), lpad(&#39;&#39;,3000,&#39;*&#39;), lpad(&#39;&#39;,3000,&#39;*&#39;), lpad(&#39;&#39;,3000,&#39;*&#39;), lpad(&#39;&#39;,3000,&#39;*&#39;), now(), now());
+
+insert into tt1 (person_id, person_name1, person_name2, person_name3, person_name4, person_name5, gmt_create, gmt_modified)
+select person_id, person_name1, person_name2, person_name3, person_name4, person_name5, now(), now() from tt1;
+
+show table status like &#39;tt1&#39;\G
+
+rename user &#39;root&#39;@&#39;localhost&#39;  to &#39;root&#39;@&#39;%&#39;;
+
+select user,host from mysql.user;
+</code></pre>
+
+<p>这次的话， 添加数据的时间实在是太久了， 记录一下中间结果的变化吧： </p>
+<pre class="language-mysql" data-language="mysql"><code class="language-mysql">MySQL [test]&gt; select count(*) from tt1;
++----------+
+| count(*) |
++----------+
+|    32768 |
++----------+
+1 row in set (0.097 sec)
+
+MySQL [test]&gt; select count(*) from tt1;
++----------+
+| count(*) |
++----------+
+|    32768 |
++----------+
+1 row in set (0.096 sec)
+
+MySQL [test]&gt; select count(*) from tt1;
++----------+
+| count(*) |
++----------+
+|    65536 |
++----------+
+1 row in set (0.199 sec)
+
+MySQL [test]&gt; select count(*) from tt1;
++----------+
+| count(*) |
++----------+
+|    65536 |
++----------+
+1 row in set (0.198 sec)
+
+Query OK, 32768 rows affected (1 min 29.31 sec)
+Query OK, 65536 rows affected (2 min 57.96 sec)
+Query OK, 131072 rows affected (6 min 6.59 sec)
+Query OK, 262144 rows affected (13 min 42.06 sec)
+
+# 查table的Page_NO
+SELECT b.name, a.name, index_id, TYPE, a.SPACE, a.PAGE_NO FROM information_schema.INNODB_INDEXES a, information_schema.INNODB_TABLES b WHERE a.TABLE_ID &#x3D; b.table_id AND a.SPACE &lt;&gt; 0 AND b.NAME &#x3D; &#39;tt1&#39;;
+
+mysql&gt; SELECT b.name, a.name, index_id, type, a.space, a.PAGE_NO FROM information_schema.INNODB_INDEXES a, information_schema.INNODB_TABLES b WHERE a.table_id &#x3D; b.table_id AND a.space &lt;&gt; 0;
+
+| cap&#x2F;sbtest24                            | PRIMARY                   |      356 |    3 |   129 |       4 |
+| test&#x2F;test                               | PRIMARY                   |      359 |    3 |   131 |       4 |
+| test&#x2F;tt1                                | PRIMARY                   |      360 |    3 |   132 |       4 |
++-----------------------------------------+---------------------------+----------+------+-------+---------+
+
+计算对应需要查看的位置， 字节数: 16 * 1024 * page_no + 64
+# 使用hexdump 查看表格所在的b+树有几层。
+hexdump -s 49216 -n 10 .&#x2F;tt1.ibd
+
+# 创建tt2完全复制tt1的内容。
+create table tt2 as select * from tt1;</code></pre>
+
+<blockquote>
+<p>对于MySQL的内存使用，在数据库启动后，不会立即将buffer pool对应的内存占用，而是随着使用逐步占用。</p>
+<p>在5月19日看到您的实例有连接数达到1200，并持续了一段时间，内存随之下降。您可以通过查看 Innodb_buffer_pool_size 的值来确定 buffer pool 的最大值。<br>然后根据公式来计算预期的内存使用情况：<br>Maximum MySQL Memory Usage &#x3D; innodb_buffer_pool_size + key_buffer_size + ((read_buffer_size + read_rnd_buffer_size + sort_buffer_size + join_buffer_size) X max_connections)</p>
+<p>我按照您的配置，创建了mysql 5.7.41 版本，实例类型为 db.m5.xlarge ，公式中的参数均为默认值，计算结果如下：<br>Maximum MySQL Memory Usage<br>&#x3D; innodb_buffer_pool_size + key_buffer_size + ((read_buffer_size + read_rnd_buffer_size + sort_buffer_size + join_buffer_size) X max_connections)<br>&#x3D; 11811160064 + 16777216 + (262144 + 524288 + 262144 + 262144 ) * 1200<br>&#x3D; 13400801280 即 12.48GB</p>
+<p>总内存为 16 GB ，减去 12.48 GB，还剩下 3.52 GB。再除去一些SQL执行中消耗的内存以及操作系统等消耗的内存，目前指标上显示剩余1.5GB左右。</p>
+<p>在5月19日连接数增加前，按300连接数算，上述公式计算结果为 11.38 GB，然而可用内存指标显示为 7 GB，相加起来是大于 16 GB 的。由此也能说明是 MySQL 并未直接将参数设置的所有可用内存都占用，而是随着使用逐步增加的。<br>当连接数增加后，MySQL真正使用了这部分内存(如buffer pool)，不会主动释放。</p>
+<p>因此目前可用内存状况符合预期，如果您希望回收 MySQL 占用的内存，可以考虑重启数据库，但之后业务量较大时，还会重新占用这些内存。</p>
+</blockquote>
+<h3 id="Mysql80重置密码"><a href="#Mysql80重置密码" class="headerlink" title="Mysql80重置密码"></a>Mysql80重置密码</h3><pre class="language-mysql" data-language="mysql"><code class="language-mysql">echo &quot;skip-grant-tables&quot; &gt;&gt; &#x2F;etc&#x2F;my.cnf
+sudo systemctl restart mysqld
+
+mysql -uroot -p
+
+SET PASSWORD &#x3D; &#39;root&#39;;
+
+rename user &#39;root&#39;@&#39;localhost&#39;  to &#39;root&#39;@&#39;%&#39;;
+
+select user,host from mysql.user;</code></pre>
+
+<h3 id="MySQLVersion-8-0-修改密码策略："><a href="#MySQLVersion-8-0-修改密码策略：" class="headerlink" title="MySQLVersion 8.0 修改密码策略："></a>MySQLVersion 8.0 修改密码策略：</h3><pre class="language-none"><code class="language-none">mysql -u wordpress -p -h mysql.liarlee.site
+
+MySQL [(none)]&gt; SHOW VARIABLES LIKE &#39;validate_password%&#39;;
++--------------------------------------+--------+
+| Variable_name                        | Value  |
++--------------------------------------+--------+
+| validate_password.check_user_name    | ON     |
+| validate_password.dictionary_file    |        |
+| validate_password.length             | 8      |
+| validate_password.mixed_case_count   | 1      |
+| validate_password.number_count       | 1      |
+| validate_password.policy             | MEDIUM |
+| validate_password.special_char_count | 1      |
++--------------------------------------+--------+
+7 rows in set (0.010 sec)
+
+MySQL [(none)]&gt; set global validate_password.policy&#x3D;0;
+Query OK, 0 rows affected (0.000 sec)
+
+MySQL [(none)]&gt; set global validate_password.length&#x3D;4;
+Query OK, 0 rows affected (0.001 sec)
+
+MySQL [(none)]&gt; set password&#x3D;&#39;123123&#39;;
+Query OK, 0 rows affected (0.005 sec)
+</code></pre>
+
+<p>如果添加了 skip-grant-tables 参数的话， 默认需要先flush priviledges; 然后才能更改密码， 否则的话会报错：</p>
+<blockquote>
+<p>ERROR 1290 (HY000): The MySQL server is running with the –skip-grant-tables option so it cannot execute this statement</p>
+</blockquote>
+<p>解决办法是 ： </p>
+<pre class="language-mysql" data-language="mysql"><code class="language-mysql">mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;123123&#39;;
+ERROR 1290 (HY000): The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
+
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;123123&#39;;
+ERROR 1819 (HY000): Your password does not satisfy the current policy requirements
+
+mysql&gt; set global validate_password.policy&#x3D;0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; set global validate_password.length&#x3D;4;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; set password&#x3D;&#39;123123&#39;;
+ERROR 1133 (42000): Can&#39;t find any matching row in the user table
+
+mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;123123&#39;;
+Query OK, 0 rows affected (0.00 sec)</code></pre>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://liarlee.site">Liarlee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://liarlee.site/2023/05/19/Database/Databases_MySQL-why-2000w/">https://liarlee.site/2023/05/19/Database/Databases_MySQL-why-2000w/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://liarlee.site" target="_blank">Liarlee's Notebook</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL-Database/">MySQL, Database</a></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/25/Linux/Linux_fast-create-prometheus-and-grafana/" title="快速启动一个 prometheus 和 grafana"><img class="cover" src="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">快速启动一个 prometheus 和 grafana</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/12/Network/Network-RFC1180/" title="Network 相关知识不知道放那儿"><img class="cover" src="https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Network 相关知识不知道放那儿</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">67</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">测试过程：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%A2%E4%B8%AA%E6%96%B9%E6%A1%88%EF%BC%88-%E4%BB%8E%E5%A4%A7%E4%BD%AC%E9%82%A3%E8%BE%B9%E4%BC%B8%E6%89%8B%E6%8B%BF%E6%9D%A5%E7%9A%84"><span class="toc-number">2.</span> <span class="toc-text">换个方案（ 从大佬那边伸手拿来的</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mysql80%E9%87%8D%E7%BD%AE%E5%AF%86%E7%A0%81"><span class="toc-number">2.1.</span> <span class="toc-text">Mysql80重置密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQLVersion-8-0-%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81%E7%AD%96%E7%95%A5%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">MySQLVersion 8.0 修改密码策略：</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/%E6%9C%AA%E5%91%BD%E5%90%8D/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.195Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Other/Other-TrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.194Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/iostat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/vmstat/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.193Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_Iptables-and-conntrack/" title="无题">无题</a><time datetime="2023-12-21T16:34:33.189Z" title="发表于 2023-12-22 00:34:33">2023-12-22</time></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
