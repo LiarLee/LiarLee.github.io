@@ -106,7 +106,8 @@ deploy:
   type: git
   repo:
     github:
-      url: https://github.com/LiarLee/LiarLee.github.io.git
+      url: git@github.com:LiarLee/LiarLee.github.io.git
+      #url: https://github.com/LiarLee/LiarLee.github.io.git
       branch: master
       token: $TOKEN
   message: "Hexo Auto Deploy."
