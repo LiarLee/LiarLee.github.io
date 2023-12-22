@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>archlinux 配置 xorg 使用 nvidia T4 | Liarlee's Notebook</title><meta name="author" content="Liarlee"><meta name="copyright" content="Liarlee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="最近的一个想法，基于之前 hacking 到中国区域的 archlinux， 可以尝试直接改改 xorg， 用用 nvidia 的显卡。 大概折腾了一天， 记录一下步骤和过程。 之前使用的是 Xorg + DWM 的简单架构， 软件非常少。那么在这个软件的基础上启用显卡和配置xorgserver 使用显卡， 基本上就是这两部分。 安装显卡驱动 查看显卡信息&gt; lspci 00:1e.0 3D co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="archlinux 配置 xorg 使用 nvidia T4">
+<meta property="og:url" content="https://liarlee.site/2023/12/21/AWS/Linux_UseNvidiaT4/index.html">
+<meta property="og:site_name" content="Liarlee&#39;s Notebook">
+<meta property="og:description" content="最近的一个想法，基于之前 hacking 到中国区域的 archlinux， 可以尝试直接改改 xorg， 用用 nvidia 的显卡。 大概折腾了一天， 记录一下步骤和过程。 之前使用的是 Xorg + DWM 的简单架构， 软件非常少。那么在这个软件的基础上启用显卡和配置xorgserver 使用显卡， 基本上就是这两部分。 安装显卡驱动 查看显卡信息&gt; lspci 00:1e.0 3D co">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png">
+<meta property="article:published_time" content="2023-12-21T05:56:27.000Z">
+<meta property="article:modified_time" content="2023-12-22T06:38:23.696Z">
+<meta property="article:author" content="Liarlee">
+<meta property="article:tag" content="AWS，EC2, Nvidia">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://liarlee.site/2023/12/21/AWS/Linux_UseNvidiaT4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'archlinux 配置 xorg 使用 nvidia T4',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-22 14:38:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">135</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">71</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Liarlee's Notebook"><img class="site-icon" src="/img/logo.png"/><span class="site-name">Liarlee's Notebook</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">archlinux 配置 xorg 使用 nvidia T4</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-21T05:56:27.000Z" title="发表于 2023-12-21 13:56:27">2023-12-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-22T06:38:23.696Z" title="更新于 2023-12-22 14:38:23">2023-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="archlinux 配置 xorg 使用 nvidia T4"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><p>最近的一个想法，基于之前 hacking 到中国区域的 archlinux， 可以尝试直接改改 xorg， 用用 nvidia 的显卡。</p>
+<p>大概折腾了一天， 记录一下步骤和过程。</p>
+<p>之前使用的是 Xorg + DWM 的简单架构， 软件非常少。<br>那么在这个软件的基础上启用显卡和配置xorgserver 使用显卡， 基本上就是这两部分。</p>
+<h2 id="安装显卡驱动"><a href="#安装显卡驱动" class="headerlink" title="安装显卡驱动"></a>安装显卡驱动</h2><ol>
+<li>查看显卡信息<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> lspci
+00:1e.0 3D controller: NVIDIA Corporation TU104GL <span class="token punctuation">[</span>Tesla T4<span class="token punctuation">]</span> <span class="token punctuation">(</span>rev a1<span class="token punctuation">)</span></code></pre></li>
+<li>安装驱动直接参考archwiki ， 一条命令搞定， 走dkms。安装的这个版本的闭源驱动。<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> pacman <span class="token parameter variable">-Ss</span> nvidia-dkms
+extra/nvidia-dkms <span class="token number">545.29</span>.06-1 <span class="token punctuation">[</span>installed<span class="token punctuation">]</span>
+    NVIDIA drivers - module sources
+
+<span class="token operator">></span> pacman <span class="token parameter variable">-S</span> nvidia-utils</code></pre></li>
+<li>等pacman自己处理完dkms的模块编译之后， 重启os就可以看到nvidia模块被装载。<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> lsmod <span class="token operator">|</span> <span class="token function">grep</span> nvidia
+nvidia_uvm           <span class="token number">3481600</span>  <span class="token number">0</span>
+nvidia_drm            <span class="token number">118784</span>  <span class="token number">7</span>
+nvidia_modeset       <span class="token number">1585152</span>  <span class="token number">6</span> nvidia_drm
+nvidia              <span class="token number">62402560</span>  <span class="token number">141</span> nvidia_uvm,nvidia_modeset
+video                  <span class="token number">77824</span>  <span class="token number">1</span> nvidia_modeset
+<span class="token operator">></span> modinfo nvidia
+filename:       /lib/modules/6.6.7-zen1-1-zen/updates/dkms/nvidia.ko.zst
+alias:          char-major-195-*
+version:        <span class="token number">545.29</span>.06
+supported:      external
+license:        NVIDIA
+firmware:       nvidia/545.29.06/gsp_tu10x.bin
+firmware:       nvidia/545.29.06/gsp_ga10x.bin
+srcversion:     8302209549E8FEAC029EDC0
+alias:          pci:v000010DEd*sv*sd*bc06sc80i00*
+alias:          pci:v000010DEd*sv*sd*bc03sc02i00*
+alias:          pci:v000010DEd*sv*sd*bc03sc00i00*
+depends:
+retpoline:      Y
+name:           nvidia
+vermagic:       <span class="token number">6.6</span>.7-zen1-1-zen SMP preempt mod_unload</code></pre></li>
+</ol>
+<h2 id="配置xrdp"><a href="#配置xrdp" class="headerlink" title="配置xrdp"></a>配置xrdp</h2><ol>
+<li>这里已经可以正常的驱动显卡， 但是xorg不会去调用显卡启动图形，查看了archwiki之后，发现如果使用 xrdp ， 那么还需要重新安装 xrdp 的后端。 需要使用来自aur的后端来匹配nvidia显卡的支<br>持， 而不是 archlinux 的主仓库里面的默认软件包， 我这边使用的是paru 进行的下面步骤。<br> aur 里面的 xorgxrdp，会自动拉取编译 xrdp-git， 因此这里的版本显示和 aur 仓库的不完全一致。<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> paru <span class="token parameter variable">-Ss</span> xrdp
+aur/xorgxrdp-nvidia <span class="token number">0.2</span>.18.r55.g3a4d465-1 <span class="token punctuation">[</span>+4 ~0.00<span class="token punctuation">]</span> <span class="token punctuation">[</span>Installed<span class="token punctuation">]</span>
+    Xorg drivers <span class="token keyword">for</span> xrdp, with NVIDIA GPU support.
+aur/xrdp-git <span class="token number">0.9</span>.18.r565.geb1c3cd4-1 <span class="token punctuation">[</span>+30 ~0.01<span class="token punctuation">]</span> <span class="token punctuation">[</span>Installed: <span class="token number">0.9</span>.18.r599.g9fbe0ad1-1<span class="token punctuation">]</span>
+    An <span class="token function">open</span> <span class="token builtin class-name">source</span> remote desktop protocol <span class="token punctuation">(</span>RDP<span class="token punctuation">)</span> server. Git version, devel branch.</code></pre></li>
+<li>安装完成之后， 需要重启一下系统。</li>
+<li>编译安装aur的过程中，最后的步骤里面有一个红色的提示文字， 需要在配置中变更一下xrdp读取的xorg配置文件的位置。<pre class="language-ini" data-language="ini"><code class="language-ini">> cat -n /etc/xrdp/sesman.ini
+   130  [Xorg]
+   <span class="token key attr-name">143  param</span><span class="token punctuation">=</span><span class="token value attr-value">Xorg</span>
+   144  ; Leave the rest parameters as-is unless you understand what will happen.
+   <span class="token key attr-name">145  param</span><span class="token punctuation">=</span><span class="token value attr-value">-config</span>
+        <span class="token comment">; 下面的这两个， 启用nvida的配置文件，注释默认的。</span>
+        <span class="token comment">; 这里配置的是启动xorg server 的时候读取的配置文件位置 以及 xorg server 的参数。</span>
+   <span class="token key attr-name">146  ; param</span><span class="token punctuation">=</span><span class="token value attr-value">xrdp/xorg.conf</span>
+   <span class="token key attr-name">147  param</span><span class="token punctuation">=</span><span class="token value attr-value">xrdp/xorg_nvidia.conf</span>
+   <span class="token key attr-name">148  param</span><span class="token punctuation">=</span><span class="token value attr-value">-noreset</span>
+   <span class="token key attr-name">149  param</span><span class="token punctuation">=</span><span class="token value attr-value">-nolisten</span></code></pre></li>
+<li>之后， 使用 nvidia 提供的 util ， 生成一份nvidia显卡的的配置文件， merge 配置文件里面的这份。<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> nvidia-xconfig <span class="token parameter variable">-c</span> /etc/X11/xrdp/xorg_nvidia.conf
+<span class="token comment"># 这里面可以不手动备份， 该命令会自动备份之前的配文件， 如果有不同的配置会自动merge。</span></code></pre></li>
+<li>最后，我在这样做完之后， 重启 xrdp ， xorg 确实开始使用显卡了， 但是所有启动的程序不会使用显卡， 默认还是CPU在计算， 这是因为 xorg 的配置文件里面少了 FILE Section, 这个文件的位<br>置可能会不同，我这边确实在这个位置， 文件存在的情况下直接拿来用了。<pre class="language-bash" data-language="bash"><code class="language-bash">Section <span class="token string">"Files"</span>
+  ModulePath   <span class="token string">"/usr/lib64/nvidia/xorg"</span>
+  ModulePath   <span class="token string">"/usr/lib64/xorg/modules"</span>
+EndSection</code></pre>
+参考了这个网页中的配置：<br>  <a target="_blank" rel="noopener" href="https://forums.developer.nvidia.com/t/glxinfo-command-returning-badwindow-invalid-window-parameter-error/36172">https://forums.developer.nvidia.com/t/glxinfo-command-returning-badwindow-invalid-window-parameter-error/36172</a></li>
+</ol>
+<p>最终的配置文件内容如下：<br>&#x2F;etc&#x2F;X11&#x2F;xrdp&#x2F;xorg_nvidia.conf</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> <span class="token function">cat</span> <span class="token parameter variable">-n</span> /etc/X11/xrdp/xorg_nvidia.conf
+     <span class="token number">1</span>  Section <span class="token string">"ServerLayout"</span>
+     <span class="token number">2</span>  Identifier <span class="token string">"XRDP GPU Server"</span>
+     <span class="token number">3</span>    Screen <span class="token number">0</span> <span class="token string">"dGPU"</span>
+     <span class="token number">4</span>    InputDevice <span class="token string">"xrdpMouse"</span> <span class="token string">"CorePointer"</span>
+     <span class="token number">5</span>    InputDevice <span class="token string">"xrdpKeyboard"</span> <span class="token string">"CoreKeyboard"</span>
+     <span class="token number">6</span>  EndSection
+     <span class="token number">7</span>
+     <span class="token number">8</span>  Section <span class="token string">"ServerFlags"</span>
+     <span class="token number">9</span>    <span class="token comment"># This line prevents "ServerLayout" sections in xorg.conf.d files</span>
+    <span class="token number">10</span>    <span class="token comment"># overriding the "XRDP GPU Server" layout (xrdp #1784)</span>
+    <span class="token number">11</span>    Option <span class="token string">"DefaultServerLayout"</span> <span class="token string">"XRDP GPU Server"</span>
+    <span class="token number">12</span>    Option <span class="token string">"DontVTSwitch"</span> <span class="token string">"on"</span>
+    <span class="token number">13</span>    Option <span class="token string">"AutoAddDevices"</span> <span class="token string">"off"</span>
+    <span class="token number">14</span>  EndSection
+    <span class="token number">15</span>
+    <span class="token number">16</span>  Section <span class="token string">"Files"</span>
+    <span class="token number">17</span>    ModulePath   <span class="token string">"/usr/lib64/nvidia/xorg"</span>
+    <span class="token number">18</span>    ModulePath   <span class="token string">"/usr/lib64/xorg/modules"</span>
+    <span class="token number">19</span>  EndSection
+    <span class="token number">20</span>
+    <span class="token number">21</span>  Section <span class="token string">"Module"</span>
+    <span class="token number">22</span>    Load <span class="token string">"xorgxrdp"</span>
+    <span class="token number">23</span>  EndSection
+    <span class="token number">24</span>
+    <span class="token number">25</span>  Section <span class="token string">"InputDevice"</span>
+    <span class="token number">26</span>    Identifier <span class="token string">"xrdpKeyboard"</span>
+    <span class="token number">27</span>    Driver <span class="token string">"xrdpkeyb"</span>
+    <span class="token number">28</span>  EndSection
+    <span class="token number">29</span>
+    <span class="token number">30</span>  Section <span class="token string">"InputDevice"</span>
+    <span class="token number">31</span>    Identifier <span class="token string">"xrdpMouse"</span>
+    <span class="token number">32</span>    Driver <span class="token string">"xrdpmouse"</span>
+    <span class="token number">33</span>  EndSection
+    <span class="token number">34</span>
+    <span class="token number">35</span>  Section <span class="token string">"Screen"</span>
+    <span class="token number">36</span>    Identifier <span class="token string">"dGPU"</span>
+    <span class="token number">37</span>    Device <span class="token string">"dGPU"</span>
+    <span class="token number">38</span>    Option <span class="token string">"DPI"</span> <span class="token string">"96 x 96"</span>
+    <span class="token number">39</span>  <span class="token comment"># T4 needs an entry here, this is not the desktop size</span>
+    <span class="token number">40</span>    SubSection <span class="token string">"Display"</span>
+    <span class="token number">41</span>      Virtual <span class="token number">1920</span> <span class="token number">1080</span>
+    <span class="token number">42</span>    EndSubSection
+    <span class="token number">43</span>  EndSection
+    <span class="token number">44</span>
+    <span class="token number">45</span>  Section <span class="token string">"Device"</span>
+    <span class="token number">46</span>    Identifier <span class="token string">"dGPU"</span>
+    <span class="token number">47</span>    Driver <span class="token string">"nvidia"</span>
+    <span class="token number">48</span>  <span class="token comment"># T4 may need to comment out next line</span>
+    <span class="token number">49</span>  <span class="token comment"># Option "UseDisplayDevice" "none"</span>
+    <span class="token number">50</span>    Option <span class="token string">"ConnectToAcpid"</span> <span class="token string">"false"</span>
+    <span class="token number">51</span>    BusID <span class="token string">"PCI:0:30:0"</span>
+    <span class="token number">52</span>  EndSection</code></pre>
+
+<ol start="6">
+<li>排查思路 和 日志的位置。<ul>
+<li>首先查看 xrdp 的 status， 是不是正常。</li>
+<li>排查日志 &#x2F;var&#x2F;log&#x2F;xrdp.log ， 这里面记录的是 xrdp 的启动的过程。</li>
+<li>如果没有错误， 那么查看 &#x2F;var&#x2F;log&#x2F;xrdp-sesman.log, 这里面会记录xorg启动的命令和 xorg 的状态。<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:17.711+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Socket <span class="token number">13</span>: connection accepted from AF_UNIX
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:17.714+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Received system login request from xrdp <span class="token keyword">for</span> user: ec2-user IP: ::ffff:114.251.173.133
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:17.717+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> starting xrdp-sesexec with pid <span class="token number">37443</span>
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:17.763+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> TerminalServerUsers group tsusers doesn't exist. Access granted <span class="token keyword">for</span> ec2-user
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:17.765+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Access permitted <span class="token keyword">for</span> user: ec2-user
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:17.766+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Received sys login status <span class="token keyword">for</span> ec2-user <span class="token builtin class-name">:</span> logged <span class="token keyword">in</span>
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:17.768+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Received request from xrdp to create a session <span class="token keyword">for</span> user ec2-user
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:17.789+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Starting X server on display <span class="token number">10</span>: Xorg :10 <span class="token parameter variable">-auth</span> .Xauthority <span class="token parameter variable">-config</span> xrdp/xorg_nvidia.conf <span class="token parameter variable">-noreset</span> <span class="token parameter variable">-nolisten</span> tcp <span class="token parameter variable">-logfile</span> .xorgxrdp.%s.log
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:19.922+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> X server :10 is working
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:19.923+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Starting window manager <span class="token keyword">for</span> display :10
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:19.924+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Starting the xrdp channel server <span class="token keyword">for</span> display :10
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:19.925+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Using the default window manager on display <span class="token number">10</span>: /etc/xrdp/startwm.sh
+<span class="token punctuation">[</span><span class="token number">2023</span>-12-21T16:50:19.926+0800<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> Session <span class="token keyword">in</span> progress on display :10. Waiting <span class="token keyword">until</span> the window manager <span class="token punctuation">(</span>pid <span class="token number">37458</span><span class="token punctuation">)</span> exits to end the session</code></pre></li>
+</ul>
+</li>
+</ol>
+<p>可以把命令复制出来手动执行， 或者继续查看 xorg 的日志， 看看记录了什么内容。<br>xorg 的日志在命令的输出中 <code>-logfile .xorgxrdp.%s.log</code>， 是这样的一个文件。</p>
+<h2 id="Final"><a href="#Final" class="headerlink" title="Final"></a>Final</h2><p><img src="https://s2.loli.net/2023/12/21/1PBUxzTSwvDs7Kl.png" alt="Snipaste_2023-12-21_13-10-29.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://liarlee.site">Liarlee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://liarlee.site/2023/12/21/AWS/Linux_UseNvidiaT4/">https://liarlee.site/2023/12/21/AWS/Linux_UseNvidiaT4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://liarlee.site" target="_blank">Liarlee's Notebook</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AWS%EF%BC%8CEC2-Nvidia/">AWS，EC2, Nvidia</a></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/12/22/AWS/EKS_Apply%20%E6%8F%90%E7%A4%BA%20TooLong/" title="Kubectl Apply 报错 annotation Too long"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Kubectl Apply 报错 annotation Too long</div></div></a></div><div class="next-post pull-right"><a href="/2023/12/08/AWS/EKS_Container-Pod-ENI/" title="查看EKS集群节点上的容器和ENI的对应关系"><img class="cover" src="https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">查看EKS集群节点上的容器和ENI的对应关系</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Liarlee</div><div class="author-info__description">Archlinux User, Support Engineer</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">135</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">71</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Liarlee"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/LiarLee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">都道无人愁似我，今夜雪，有梅花，似我愁。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.</span> <span class="toc-text">安装显卡驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AExrdp"><span class="toc-number">2.</span> <span class="toc-text">配置xrdp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Final"><span class="toc-number">3.</span> <span class="toc-text">Final</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Database/Databases_Redis-note/" title="Redis 笔记">Redis 笔记</a><time datetime="2023-12-22T04:54:23.000Z" title="发表于 2023-12-22 12:54:23">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_CFS%20Schedler/" title="CFS 调度器资料">CFS 调度器资料</a><time datetime="2023-12-22T04:51:25.000Z" title="发表于 2023-12-22 12:51:25">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_Iptables-and-conntrack/" title="追踪数据包经过的iptables规则">追踪数据包经过的iptables规则</a><time datetime="2023-12-22T04:49:30.000Z" title="发表于 2023-12-22 12:49:30">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_iostat/" title="Iostat 参数说明">Iostat 参数说明</a><time datetime="2023-12-22T04:44:27.000Z" title="发表于 2023-12-22 12:44:27">2023-12-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/22/Linux/Linux_vmstat/" title="vmstat 参数说明">vmstat 参数说明</a><time datetime="2023-12-22T04:44:27.000Z" title="发表于 2023-12-22 12:44:27">2023-12-22</time></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(105,105,105)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Liarlee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="255,250,240" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
