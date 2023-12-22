@@ -13304,7 +13304,9 @@ EndSection</code></pre>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>AWS，EC2, Nvidia</tag>
+        <tag>AWS</tag>
+        <tag>EC2</tag>
+        <tag>Nvidia</tag>
       </tags>
   </entry>
 </search>
