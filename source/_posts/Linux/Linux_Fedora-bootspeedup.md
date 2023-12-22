@@ -2,7 +2,9 @@
 title: Fedora开机启动速度的优化
 date: 2019-01-13 17:02:11
 categories: Linux
-tags: Linux, Fedora
+tags:
+  - Linux
+  - Fedora
 ---
 
 一直认为我的虚拟机性能不够所以导致自己的机器开桌面环境，开机慢慢慢慢慢慢.......今天终于发现了原因.....

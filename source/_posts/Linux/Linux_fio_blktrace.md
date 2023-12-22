@@ -2,7 +2,10 @@
 title: Fio 命令使用的说明
 date: 2022-04-19 17:45:39
 category: Linux
-tags: Linux, EBS, IO 
+tags:
+  - Linux
+  - EBS
+  - IO
 ---
 
 Fio 一些测试和思考， fio ，blktrace等等。

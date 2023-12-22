@@ -2,7 +2,11 @@
 title: Filebeat 输出日志到 Opensearch
 category: Docker
 date: 2023-12-08 13:57:57
-tags: AWS, ELK, OpenSearch
+tags:
+  - AWS
+  - ELK
+  - OpenSearch
+  - LogAgent
 ---
 
 这个最后基本上可以确认是一个兼容性问题，测试完成发现， 开启兼容模式的Opensearch+filebeat的组合， filebeat 还是会不定期重启。 

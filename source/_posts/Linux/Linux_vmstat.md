@@ -2,7 +2,8 @@
 title: vmstat 参数说明
 category: Linux
 date: 2023-12-22 12:44:27
-tags: Linux
+tags:
+  - Linux
 ---
 ### 命令说明
 vmstat 提供的信息是从硬件和物理参数的角度。**vmstat 第一次的数据显示的是从上一次重启到现在的平均值，所以只能用来参考。**

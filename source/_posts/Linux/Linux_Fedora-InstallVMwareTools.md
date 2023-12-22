@@ -2,7 +2,9 @@
 title: VMwareTools共享文件夹方案
 date: 2019-01-08 14:13:00
 categories: Linux
-tags: Linux, Fedora
+tags:
+  - Linux
+  - Fedora
 ---
 
 升级了VMware Workstation 15, 迁移过来Fedora 27的虚拟机里面不能共享剪贴板，不能拖拽复制，共享文件夹设置之后不会挂载在/mnt/hgfs目录下，找到的解决方案如下：  

@@ -2,7 +2,10 @@
 title: 删除所有非Running状态的Pod
 category: Kubernetes
 date: 2023-03-23 23:42:22
-tags: Kubernetes, EKS
+tags:
+  - Kubernetes
+  - EKS
+  - AWS
 ---
 
 ## 背景

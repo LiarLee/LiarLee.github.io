@@ -2,7 +2,9 @@
 title: 发送一个NMI unknown 事件给OS
 date: 2023-06-28 17:12:22
 category: Linux
-tags: Linux, EC2 
+tags:
+  - Linux
+  - EC2
 ---
 
 ## 在ec2触发linux的crash

@@ -2,7 +2,9 @@
 title: Nginx编译安装
 date: 2018-01-22 18:03:58
 categories: Linux
-tags: Nginx, Application
+tags:
+  - Nginx
+  - Application
 ---
 
 很久之前的笔记了，发出来，做编译安装Nginx的时候记录的……包括安装命令和脚本……

@@ -2,7 +2,9 @@
 title: Kubectl Apply 报错 annotation Too long
 category: Kubernetes
 date: 2023-12-22 00:53:54
-tags: Kubernetes, EKS
+tags:
+  - Kubernetes
+  - EKS
 ---
 重装Prometheus operator 的时候报错， 提示annotation 太长了， 不能 apply
 

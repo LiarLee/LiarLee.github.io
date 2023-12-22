@@ -2,7 +2,9 @@
 title: Linux_Cobbler搭建本地YUM源同步k8s阿里云
 date: 2019-09-30 11:02:49
 categories: Linux
-tags: Repo, Linux
+tags:
+  - Repo
+  - Linux
 ---
 
 昨天晚上尝试使用阿里云的时候出现问题 ，阿里云的k8s源安装的时候报错，无法正常通过yum安装。内网正好放了一台Cobbler，所以直接从Cobbler同步阿里的repo过来放到内网，防止这个事情再次发生。

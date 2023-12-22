@@ -2,7 +2,9 @@
 title: Fedora防火墙关闭，如何开机运行脚本
 date: 2018-05-11 14:21:36
 categories: Linux
-tags: Linux, Fedora
+tags:
+  - Linux
+  - Fedora
 ---
 
 这次的内容是两个部分，关闭Firewalld 和 启动rc.local的服务。  

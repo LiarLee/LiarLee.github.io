@@ -2,7 +2,9 @@
 title: KVM虚拟机开启内存大页
 date: 2020-05-02 15:09:50
 categories: Linux
-tags: Linux, Memory
+tags:
+  - Linux
+  - Memory
 ---
 
 Huge Pages是从Linux Kernel 2.6后被引入的。目的是使用更大的内存页面（memory page size） 以适应越来越大的系统内存，让操作系统可以支持现代硬件架构的大页面容量功能。

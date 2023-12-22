@@ -2,7 +2,8 @@
 title: Kubernetes集群的学习笔记(5)
 date: 2019-10-18 11:48:48
 categories: Kubernetes
-tags: Kubernetes
+tags:
+  - Kubernetes
 ---
 
 K8S集群的存储卷笔记。

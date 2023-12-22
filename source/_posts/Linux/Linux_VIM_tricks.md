@@ -1,7 +1,8 @@
 ---
 title: Linux及vim的技巧
 date: 2019-10-10 11:48:58
-tags: Vim
+tags:
+  - Vim
 categories: Linux
 ---
 
@@ -23,7 +24,7 @@ find ./ -type d ! -name . | xargs rm -rf
 :set expandtab
 ```
 
-### 3. 已经编辑的文件进行tab空格转换： 
+### 3. 已经编辑的文件进行tab空格转换：
 - TAB替换为空格：
 ```shell
 :set ts=4
@@ -37,7 +38,7 @@ find ./ -type d ! -name . | xargs rm -rf
 :%retab!
 ```
 
-### 4. vim的个性化配置及插件
+### 4. Vim的个性化配置及插件
 
 - 自动换行
 

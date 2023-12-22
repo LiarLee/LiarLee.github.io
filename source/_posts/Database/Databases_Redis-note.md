@@ -2,7 +2,9 @@
 title: Redis 笔记
 category: Linux
 date: 2023-12-22 12:54:23
-tags: Database, Redis
+tags:
+  - Database
+  - Redis
 ---
 ## ElastiCache主要概念
 1. ElastiCache nodes

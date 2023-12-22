@@ -2,7 +2,8 @@
 title: Kubernetes集群的学习笔记(7)
 date: 2019-11-06 16:07:53
 categories: Kubernetes
-tags: Kubernetes
+tags:
+  - Kubernetes
 ---
 
 Kubernetes的Dashboard 和 分级认证权限。

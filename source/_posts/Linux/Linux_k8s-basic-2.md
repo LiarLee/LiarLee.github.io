@@ -2,7 +2,8 @@
 title: Kubernetes集群的学习笔记(2)
 date: 2019-07-23 21:00:03
 categories: Kubernetes
-tags: Kubernetes
+tags:
+  - Kubernetes
 ---
 
 Kubernetes的基本使用命令。

@@ -2,7 +2,8 @@
 title: Shell脚本处理目录或者文件名中的空格
 date: 2022-04-15 14:10:54
 categories: Linux
-tags: Bash
+tags:
+  - Bash
 ---
 ## 问题：
 问题是： 罗列指定的目录下面的文件， 符合要求的文件保留， 未匹配的删除。

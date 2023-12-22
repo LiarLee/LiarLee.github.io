@@ -1,7 +1,9 @@
 ---
 title: Java连接数据库报错No subject alternative names present
 date: 2020-11-16 21:28:41
-tags: MongoDB, JAVA
+tags:
+  - MongoDB
+  - JAVA
 categories: Database
 ---
 

@@ -2,7 +2,10 @@
 title: EC2 路由表以及多网卡相关问题
 date: 2023-07-25 22:00:04
 category: Linux
-tags: Linux, Network, EC2
+tags:
+  - Linux
+  - Network
+  - EC2
 ---
 
 在EC2实例中， 可以使用多个不同的网卡， 但是虚拟网卡其实是共享实例整体带宽的。 假如EC2实例本身有10Gbps的带宽， 那么无论多少个网卡都应该只能有10Gbps的带宽， 其实添加了多个也不会扩展网络上限。 

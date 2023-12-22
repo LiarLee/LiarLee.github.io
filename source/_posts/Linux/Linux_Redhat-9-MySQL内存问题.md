@@ -2,7 +2,10 @@
 title: Linux Redhat 9 oom不触发
 date: 2023-07-12 06:52:18
 category: Linux
-tags: Linux, Memory, Kernel
+tags:
+  - Linux
+  - Memory
+  - Kernel
 ---
 
 ## 测试环境

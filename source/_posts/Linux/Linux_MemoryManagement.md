@@ -2,7 +2,9 @@
 title: Linux内存管理笔记
 date: 2023-07-11 14:37:43
 category: Linux
-tags: Linux, Memory
+tags:
+  - Linux
+  - Memory
 ---
 
 ---

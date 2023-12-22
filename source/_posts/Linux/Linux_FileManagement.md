@@ -2,7 +2,9 @@
 title: 文件系统及文件管理
 date: 2019-07-24 15:07:34
 categories: Linux
-tags: Linux, FileSystem
+tags:
+  - Linux
+  - FileSystem
 ---
 
 Linux文件管理笔记

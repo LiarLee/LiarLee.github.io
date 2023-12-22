@@ -2,7 +2,10 @@
 title: 由 CPU Steal Time 指标解释
 date: 2022-04-19 17:45:39
 category: Linux
-tags: Linux, CPU, EC2
+tags:
+  - Linux
+  - CPU
+  - EC2
 ---
 
 观察vmstat命令输出的内容， 或者 top 命令 最上面输出的内容。可以看到Stealtime增加，大部分时候都是因为虚拟机的超卖， 总结来说st指示了vCPU的繁忙程度。

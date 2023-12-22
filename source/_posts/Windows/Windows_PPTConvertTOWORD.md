@@ -2,7 +2,9 @@
 title: PPT转换WORD
 date: 2018-01-15 11:53:42
 categories: Windows
-tags: Windows, Office
+tags:
+  - Windows
+  - Office
 ---
 
 前一段时间赶上期末考试，老师放出了一个学期的PPT，于是大家开始疯狂的复制讲义，把关键的知识进行提炼，方便考试。但是老师放出来的PPT，文字量实在是太大了，如果手动复制就会很麻烦，最后自己都快崩溃了

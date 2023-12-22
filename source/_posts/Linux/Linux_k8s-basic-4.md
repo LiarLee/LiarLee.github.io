@@ -2,7 +2,8 @@
 title: Kubernetes集群的学习笔记(4)
 date: 2019-10-14 14:37:10
 categories: Kubernetes
-tags: Kubernetes
+tags:
+  - Kubernetes
 ---
 
 K8S Service资源的笔记以及Ingress资源的笔记。

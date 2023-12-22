@@ -2,7 +2,9 @@
 title: IO重定向笔记
 date: 2019-06-25 15:43:33
 categories: Linux
-tags: Linux, IO
+tags:
+  - Linux
+  - IO
 ---
 
 输出重定向部分的复习笔记  

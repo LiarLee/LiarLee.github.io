@@ -2,7 +2,9 @@
 title: OOM行为 
 date: 2022-04-19 17:45:39
 category: Linux
-tags: Linux, Memory
+tags:
+  - Linux
+  - Memory
 ---
 
 关于OOM行为的思考 以及Kswapd的动作和行为。

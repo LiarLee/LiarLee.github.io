@@ -2,7 +2,8 @@
 title: Gnome快捷键
 date: 2019-09-19 16:02:35
 categories: Linux
-tags: Linux
+tags:
+  - Linux
 ---
 
 Gnome桌面环境的快捷键。

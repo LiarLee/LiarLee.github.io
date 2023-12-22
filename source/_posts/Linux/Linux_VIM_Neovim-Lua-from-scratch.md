@@ -2,7 +2,9 @@
 title: Neovim 全 Lua 配置 
 date: 2023-08-05 00:36:04
 category: Linux
-tags: VIM, Linux
+tags:
+  - VIM
+  - Linux
 ---
 
 写这个是为了记录一下我新的VIM配置和VIM的快捷键，看起来lua的版本比之前的scripts要好的多， 无论是使用的方式还是启动的速度， 都比之前快。 

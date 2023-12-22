@@ -2,7 +2,9 @@
 title: RabbitMQ_SysV风格管理脚本模板
 date: 2019-09-23 15:48:52
 category: Linux
-tags: Application, RabbitMQ 
+tags:
+  - Application
+  - RabbitMQ
 ---
 
 需要自己写一个RabbitMQ的SysV脚本，所以找了一个模板，如果需要的时候可以改改就用了。

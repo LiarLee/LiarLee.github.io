@@ -2,7 +2,9 @@
 title: 如何配置kubelet的节点自动回收资源
 date: 2022-04-19 17:45:39
 category: Kubernetes
-tags: Kubernetes, EKS
+tags:
+  - Kubernetes
+  - EKS
 ---
 
 # 配置Node节点按照磁盘阈值回收空间

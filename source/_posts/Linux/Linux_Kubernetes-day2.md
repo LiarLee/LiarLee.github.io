@@ -1,7 +1,8 @@
 ---
 title: Kubernetes day2 
 date: 2021-10-02 10:49:55
-tags: Kubernetes
+tags:
+  - Kubernetes
 categories: Kubernetes
 ---
 

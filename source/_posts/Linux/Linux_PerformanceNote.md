@@ -2,7 +2,9 @@
 title: Linux性能调优笔记
 date: 2020-08-20 17:50:39
 categories: Linux
-tags: Linux, Perf
+tags:
+  - Linux
+  - Perf
 ---
 
 应该是一个性能调优的书的笔记， 记不清了， 存货了属于是。

@@ -2,7 +2,10 @@
 title: 关于BTRFS的一些测试
 date: 2022-04-19 17:45:39
 category: Linux
-tags: Linux, IO, FileSystem
+tags:
+  - Linux
+  - IO
+  - FileSystem
 ---
 
 ## 创建BTRFS卷

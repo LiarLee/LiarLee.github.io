@@ -2,7 +2,9 @@
 title: Linux_Kubernetes常用debug命令
 date: 2023-09-04 09:08:02
 category: Linux
-tags: Linux, Kubernetes
+tags:
+  - Linux
+  - Kubernetes
 ---
 查看 AWS LoadBalancer 证书的信息，检查证书的有效期： 
 ```bash

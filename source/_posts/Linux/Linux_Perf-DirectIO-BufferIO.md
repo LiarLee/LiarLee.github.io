@@ -2,7 +2,10 @@
 title: BufferIO与DirectIO的比较
 category: Linux
 date: 2023-07-10 11:34:36
-tags: Linux, Perf, IO
+tags:
+  - Linux
+  - Perf
+  - IO
 ---
 
 ## 测试方法

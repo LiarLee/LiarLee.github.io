@@ -2,9 +2,12 @@
 title: Windows Core EKS 节点管理命令
 category: Kubernetes
 date: 2023-12-05 10:11:22
-tags: Kubernetes, EKS
+tags:
+  - Kubernetes
+  - EKS
+  - AWS
 ---
-
+ 
 windows 查看磁盘空间的使用情况: 
 ```powershell
 Get-PSDrive -Name C | Select-Object Name, Free

@@ -2,7 +2,9 @@
 title: 数据库单表的测试
 category: Database
 date: 2023-05-19 18:10:52
-tags: MySQL, Database
+tags:
+  - MySQL
+  - Database
 ---
 
 基于这个问题的测试[为什么MySQL单表不要超过2000w行？](https://articles.zsxq.com/id_szzdrtss5t7o.html)

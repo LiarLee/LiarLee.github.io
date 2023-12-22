@@ -2,7 +2,9 @@
 title: Network 相关知识不知道放那儿
 category: Network
 date: 2023-05-12 22:48:45
-tags: Network
+tags:
+  - Network
+  - Linux
 ---
 
 Origin Version:  

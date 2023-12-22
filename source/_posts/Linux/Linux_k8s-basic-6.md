@@ -2,7 +2,8 @@
 title: Kubernetes集群的学习笔记(6) 
 date: 2019-11-06 14:45:20
 categories: Kubernetes
-tags: Kubernetes
+tags:
+  - Kubernetes
 ---
 
 K8S的认证部分， ServiceAccount以及RBAC 。

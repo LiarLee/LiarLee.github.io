@@ -2,7 +2,8 @@
 title: K8S将loop-lvm改为direct-lvm说明
 date: 2019-09-24 11:10:36
 categories: Kubernetes
-tags: Kubernetes
+tags:
+  - Kubernetes
 ---
 
 对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。

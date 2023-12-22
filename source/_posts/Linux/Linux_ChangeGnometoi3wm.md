@@ -1,7 +1,8 @@
 ---
 title: i3wm的简单配置
 date: 2019-10-22 15:09:59
-tags: Linux
+tags:
+  - Linux
 categories: Linux
 ---
 

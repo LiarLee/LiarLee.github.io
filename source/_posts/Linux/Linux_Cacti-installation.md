@@ -2,7 +2,9 @@
 title: Cacti的安装教程
 date: 2018-04-01 16:01:48
 categories: Linux 
-tags: Application, Cacti
+tags:
+  - Application
+  - Cacti
 ---
 
 当时记录Cacti的安装记录。

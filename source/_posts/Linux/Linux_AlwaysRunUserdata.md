@@ -2,7 +2,8 @@
 title: 在EC2实例每次启动的时候都运行Userdata
 date: 2023-09-06 14:24:46
 category: Linux
-tags: Linux
+tags:
+  - Linux
 ---
 
 使用Cloud-init提供读取Userdata的功能。 

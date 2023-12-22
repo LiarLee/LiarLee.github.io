@@ -2,7 +2,9 @@
 title: Ansible笔记-2 
 date: 2019-07-07 21:57:06
 categories: Linux
-tags: Linux, Ansible
+tags:
+  - Linux
+  - Ansible
 ---
 
 这份笔记介绍的是Ansible playbook的格式及相关的内容。

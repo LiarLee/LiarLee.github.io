@@ -2,7 +2,10 @@
 title: Linux中一些常见的性能分析命令
 date: 2021-12-26 00:18:36
 categories: Linux
-tags: Linux, Perf, Strace
+tags:
+  - Linux
+  - Perf
+  - Strace
 ---
 
 记录性能分析的思路。

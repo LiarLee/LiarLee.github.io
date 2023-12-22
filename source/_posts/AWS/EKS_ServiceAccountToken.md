@@ -1,8 +1,11 @@
 ---
-title: serviceAccount 获取 Token 以及权限的方式 
+title: serviceAccount 获取 Token 以及权限的方式
 category: Kubernetes
 date: 2023-08-05 23:42:22
-tags: Kubernetes, EKS
+tags:
+  - Kubernetes
+  - EKS
+  - AWS
 ---
 
 手动获取Token 并发送请求给容器接口。

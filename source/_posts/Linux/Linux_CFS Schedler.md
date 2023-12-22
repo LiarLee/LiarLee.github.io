@@ -2,7 +2,8 @@
 title: CFS 调度器资料
 category: Linux
 date: 2023-12-22 12:51:25
-tags: Linux
+tags:
+  - Linux
 ---
 
 https://docs.kernel.org/scheduler/sched-design-CFS.html

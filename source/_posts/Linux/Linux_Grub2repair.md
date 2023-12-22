@@ -2,7 +2,9 @@
 title: grub2手动修复引导错误
 date: 2018-01-09 13:27:57
 categories: Linux
-tags: GRUB2, Linux
+tags:
+  - GRUB2
+  - Linux
 ---
 
 grub2引导错误的手动解决方法

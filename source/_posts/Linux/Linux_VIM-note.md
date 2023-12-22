@@ -1,7 +1,8 @@
 ---
 title: vim笔记
 date: 2019-07-08 21:49:04
-tags: Linux
+tags:
+  - Linux
 categories: Linux
 ---
 

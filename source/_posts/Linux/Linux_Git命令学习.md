@@ -2,7 +2,9 @@
 title: Git常见的命令
 date: 2023-07-12 06:52:18
 category: Linux
-tags: Linux, Git
+tags:
+  - Linux
+  - Git
 ---
 
 ## 远端创建， Clone本地

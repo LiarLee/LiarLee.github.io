@@ -2,7 +2,9 @@
 title: Ubuntu 18.04 内核编译初试
 date: 2021-07-01 12:48:29
 categories: Linux
-tags: Linux, Kernel
+tags:
+  - Linux
+  - Kernel
 ---
 
 Ubuntu 18.04 上编译内核，生成deb安装包的过程和遇到的问题。 

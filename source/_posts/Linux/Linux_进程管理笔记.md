@@ -2,7 +2,8 @@
 title: Linux-进程管理笔记
 date: 2018-01-29 11:27:14
 categories: Linux
-tags: Linux
+tags:
+  - Linux
 ---
 
 ## 进程的优先级

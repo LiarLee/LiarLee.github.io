@@ -2,7 +2,9 @@
 title: Orthanc的安装
 date: 2018-04-25 17:02:01
 categories: Healthcare-IT
-tags: Orthanc, Docker
+tags:
+  - Orthanc
+  - Docker
 ---
 
 记录了Orthanc的安装过程。只有简单的安装，复杂没研究，待补全。  

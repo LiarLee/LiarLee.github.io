@@ -2,7 +2,9 @@
 title: Harbor Http 安装部署
 date: 2021-09-27 11:21:47
 categories: Linux
-tags: Application, Harbor
+tags:
+  - Application
+  - Harbor
 ---
 
  Harbor的部署记录。

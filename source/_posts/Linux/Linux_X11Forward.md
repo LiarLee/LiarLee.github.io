@@ -2,7 +2,8 @@
 title: X11 通过 ssh 转发图形化界面
 date: 2023-08-16 14:17:31
 category: Linux
-tags: Linux
+tags:
+  - Linux
 ---
 ## Ssh 转发 X11
 ```shell 

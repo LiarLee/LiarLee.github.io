@@ -2,7 +2,8 @@
 title: Kubernetes集群的学习笔记(1)
 date: 2019-07-21 16:49:56
 categories: Kubernetes
-tags: Kubernetes
+tags:
+  - Kubernetes
 ---
 
 Kubernetes基础知识及笔记。

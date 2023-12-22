@@ -2,7 +2,10 @@
 title: 自管理节点加入集群
 category: EKS
 date: 2023-12-08 14:39:16
-tags: EKS， Kubernetes
+tags:
+  - Kubernetes
+  - AWS
+  - EKS
 ---
 # 添加一个自管理的节点
 1. 创建集群，启动一个新的 EC2， 登录到已经启动的 EKS 优化 OS 内，准备复制一些脚本过来。

@@ -1,7 +1,9 @@
 ---
 title: Ceph Cluster 03 - CephFS
 date: 2021-08-24 22:29:26
-tags: Ceph, IO
+tags:
+  - Ceph
+  - IO
 categories: Linux
 ---
 

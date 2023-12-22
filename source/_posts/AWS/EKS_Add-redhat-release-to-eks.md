@@ -2,7 +2,9 @@
 title: 添加一个Redhat到EKS集群， 基于Packer的步骤
 category: Kubernetes
 date: 2023-07-11 11:29:53
-tags: Kubernetes, EKS
+tags:
+  - Kubernetes
+  - EKS
 ---
 
 Copy From zhojiew 的私有仓库文档， 已经经过授权  ~ 

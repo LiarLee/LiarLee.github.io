@@ -2,7 +2,9 @@
 title: Ceph Cluster 01 - Installation
 date: 2021-08-21 23:09:06
 categories: Linux
-tags: Ceph, IO
+tags:
+  - Ceph
+  - IO
 ---
 Ceph 的学习笔记和记录。
 # 开始

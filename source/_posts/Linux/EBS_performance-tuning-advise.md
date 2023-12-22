@@ -2,7 +2,10 @@
 title: EBS性能优化
 date: 2023-08-16 14:17:31
 category: Linux
-tags: Linux, EBS, IO
+tags:
+  - Linux
+  - EBS
+  - IO
 ---
 
 ## EBS性能优化

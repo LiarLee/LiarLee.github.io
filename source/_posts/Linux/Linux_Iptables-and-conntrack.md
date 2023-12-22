@@ -2,7 +2,9 @@
 title: 追踪数据包经过的iptables规则
 category: Linux
 date: 2023-12-22 12:49:30
-tags: Linux, Iptables
+tags:
+  - Linux
+  - Iptables
 ---
 
 https://stackoverflow.com/questions/47645859/meaning-of-modules-instances-in-proc-modules

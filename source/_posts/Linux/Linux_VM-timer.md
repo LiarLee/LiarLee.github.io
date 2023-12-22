@@ -2,7 +2,9 @@
 title: KVM中windows7虚拟机时间问题
 date: 2019-06-25 15:45:56
 categories: Linux
-tags: Linux, KVM
+tags:
+  - Linux
+  - KVM
 ---
 
 在KVM虚拟机中，安装Windows7的虚拟机，安装完成启动的时候发现虚拟机的时间与外部时间的速度不一致。记录问题的原因及解决方法。

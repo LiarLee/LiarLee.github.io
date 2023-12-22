@@ -2,7 +2,9 @@
 title: ElasticSearch 安装记录
 date: 2019-09-11 17:25:57
 categories: ElasticSearch
-tags: Application, ElasticSearch
+tags:
+  - Application
+  - ElasticSearch
 ---
 
 ElasticSearch的安装过程。

@@ -2,7 +2,10 @@
 title: Cilium 踩坑总结
 date: 2022-08-19 22:21:48
 category: Kubernetes
-tags: Kubernetes, Cilium, EKS
+tags:
+  - Kubernetes
+  - Cilium
+  - EKS
 ---
 # 测试环境
 

@@ -2,7 +2,8 @@
 title: Epoll vs select vs poll vs io_uring
 date: 2022-04-19 17:45:39
 category: Linux
-tags: Linux
+tags:
+  - Linux
 ---
 
 select方式：使用fd_set结构体告诉内核同时监控那些文件句柄，使用逐个排查方式去检查是否有文件句柄就绪或者超时。该方式有以下缺点：文件句柄数量是有上限的，逐个检查吞吐量低，每次调用都要重复初始化fd_set。

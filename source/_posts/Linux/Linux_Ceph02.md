@@ -2,7 +2,9 @@
 title: Ceph Cluster 02 - OSD/RBD
 date: 2021-08-23 15:04:12
 categories: Linux
-tags: Ceph, IO
+tags:
+  - Ceph
+  - IO
 ---
 
 Ceph的使用笔记。

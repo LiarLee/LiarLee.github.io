@@ -2,7 +2,9 @@
 title: Linux-内核参数笔记
 date: 2018-01-22 16:05:47
 categories: Linux
-tags: Linux, Kernel
+tags:
+  - Linux
+  - Kernel
 ---
 
 记录内核参数的含义和调整的效果, 主要是记录这些参数的含义或者使用它们的方法， 什么场景下需要调整这个。

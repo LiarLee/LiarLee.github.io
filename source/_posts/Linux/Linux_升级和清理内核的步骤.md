@@ -2,7 +2,9 @@
 title: 升级以及清理内核的步骤
 category: Linux
 date: 2023-07-12 06:52:18
-tags: Linux, Kernel
+tags:
+  - Linux
+  - Kernel
 ---
 
 通常情况下升级内核版本的步骤:

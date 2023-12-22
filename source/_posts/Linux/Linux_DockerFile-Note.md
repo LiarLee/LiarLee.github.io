@@ -2,7 +2,8 @@
 title: DockerFile笔记
 date: 2019-04-24 14:27:38
 categories: Docker
-tags: Docker
+tags:
+  - Docker
 ---
 
 Dockerfile的书写规则及Dockerfile的指令说明。

@@ -2,7 +2,9 @@
 title: 安装Maven教程
 date: 2018-06-25 21:05:26
 categories: Linux
-tags: Linux, JAVA
+tags:
+  - Linux
+  - JAVA
 ---
 
 安装Maven过程，备忘。

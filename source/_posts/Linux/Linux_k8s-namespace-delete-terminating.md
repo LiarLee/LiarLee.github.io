@@ -2,7 +2,8 @@
 title: k8s所有的NS删除的时候都进入Terminating状态
 date: 2019-10-09 11:17:05
 categories: Kubernetes
-tags: Kubernetes
+tags:
+  - Kubernetes
 ---
 
 集群无法删除Namespace解决方式。
