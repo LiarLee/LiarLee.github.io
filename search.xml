@@ -84,7 +84,9 @@ or
         <category>AWS</category>
       </categories>
       <tags>
-        <tag>AWS, VPC, FLowLog</tag>
+        <tag>AWS</tag>
+        <tag>VPC</tag>
+        <tag>FLowLog</tag>
       </tags>
   </entry>
   <entry>
@@ -369,7 +371,8 @@ EOF</span>
         <category>Kubernetes</category>
       </categories>
       <tags>
-        <tag>Kubernetes, EKS</tag>
+        <tag>Kubernetes</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -425,7 +428,8 @@ namespace/monitoring replaced</code></pre>
         <category>Kubernetes</category>
       </categories>
       <tags>
-        <tag>Kubernetes, EKS</tag>
+        <tag>Kubernetes</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -712,7 +716,9 @@ Nodes:
         <category>Kubernetes</category>
       </categories>
       <tags>
-        <tag>Kubernetes, Cilium, EKS</tag>
+        <tag>Kubernetes</tag>
+        <tag>EKS</tag>
+        <tag>Cilium</tag>
       </tags>
   </entry>
   <entry>
@@ -734,7 +740,8 @@ Nodes:
         <category>Kubernetes</category>
       </categories>
       <tags>
-        <tag>Kubernetes, EKS</tag>
+        <tag>Kubernetes</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -837,7 +844,8 @@ default via <span class="token number">172.31</span>.48.1 dev eth1
         <category>EKS</category>
       </categories>
       <tags>
-        <tag>EKS， Kubernetes</tag>
+        <tag>Kubernetes</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -860,7 +868,9 @@ eyJhbGciOiJSUzI1NiIsImtpZCI6ImE3N2JhOGMwY2FjYWEwNDk0MWU4MWM0ODk1Y2JiZjBiOTU2NTA1
         <category>Kubernetes</category>
       </categories>
       <tags>
-        <tag>Kubernetes, EKS</tag>
+        <tag>Kubernetes</tag>
+        <tag>AWS</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -887,7 +897,9 @@ failed to extract layer sha256:9ee7a25f1f619685e0c27cd1f08b34fd7a567f8f0fa789gf9
         <category>Kubernetes</category>
       </categories>
       <tags>
-        <tag>Kubernetes, EKS</tag>
+        <tag>Kubernetes</tag>
+        <tag>AWS</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -913,7 +925,9 @@ failed to extract layer sha256:9ee7a25f1f619685e0c27cd1f08b34fd7a567f8f0fa789gf9
         <category>Kubernetes</category>
       </categories>
       <tags>
-        <tag>Kubernetes, EKS</tag>
+        <tag>Kubernetes</tag>
+        <tag>AWS</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -1017,7 +1031,9 @@ imds: /usr/bin/imds
         <category>EKS</category>
       </categories>
       <tags>
-        <tag>EKS， Kubernetes</tag>
+        <tag>Kubernetes</tag>
+        <tag>AWS</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -1183,7 +1199,8 @@ drwxr-xr-x <span class="token number">4</span> root root <span class="token numb
         <category>Kubernetes</category>
       </categories>
       <tags>
-        <tag>Kubernetes, EKS</tag>
+        <tag>Kubernetes</tag>
+        <tag>EKS</tag>
       </tags>
   </entry>
   <entry>
@@ -1450,7 +1467,10 @@ output.elasticsearch:
         <category>Docker</category>
       </categories>
       <tags>
-        <tag>AWS, ELK, OpenSearch</tag>
+        <tag>AWS</tag>
+        <tag>ELK</tag>
+        <tag>OpenSearch</tag>
+        <tag>LogAgent</tag>
       </tags>
   </entry>
   <entry>
@@ -1473,7 +1493,8 @@ output.elasticsearch:
         <category>Database</category>
       </categories>
       <tags>
-        <tag>MongoDB, JAVA</tag>
+        <tag>MongoDB</tag>
+        <tag>JAVA</tag>
       </tags>
   </entry>
   <entry>
@@ -1755,7 +1776,8 @@ Query OK, 0 rows affected (0.00 sec)</code></pre>
         <category>Database</category>
       </categories>
       <tags>
-        <tag>MySQL, Database</tag>
+        <tag>MySQL</tag>
+        <tag>Database</tag>
       </tags>
   </entry>
   <entry>
@@ -2010,7 +2032,8 @@ allocator_rss_bytes:2973696</code></pre>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Database, Redis</tag>
+        <tag>Database</tag>
+        <tag>Redis</tag>
       </tags>
   </entry>
   <entry>
@@ -2126,7 +2149,9 @@ fio <span class="token parameter variable">--directory</span><span class="token 
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, EBS, IO</tag>
+        <tag>Linux</tag>
+        <tag>EBS</tag>
+        <tag>IO</tag>
       </tags>
   </entry>
   <entry>
@@ -2430,7 +2455,8 @@ Content-Disposition: attachment; filename&#x3D;&quot;userdata.txt&quot;</code></
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Ansible</tag>
+        <tag>Linux</tag>
+        <tag>Ansible</tag>
       </tags>
   </entry>
   <entry>
@@ -2966,7 +2992,8 @@ make install DESTDIR&#x3D;%&#123;buildroot&#125;
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, RPM</tag>
+        <tag>Linux</tag>
+        <tag>RPM</tag>
       </tags>
   </entry>
   <entry>
@@ -3120,7 +3147,8 @@ Allow from all
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Application, Cacti</tag>
+        <tag>Application</tag>
+        <tag>Cacti</tag>
       </tags>
   </entry>
   <entry>
@@ -3145,7 +3173,9 @@ Allow from all
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, CPU, EC2</tag>
+        <tag>Linux</tag>
+        <tag>EC2</tag>
+        <tag>CPU</tag>
       </tags>
   </entry>
   <entry>
@@ -3174,7 +3204,8 @@ Allow from all
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Bash</tag>
+        <tag>Linux</tag>
+        <tag>Bash</tag>
       </tags>
   </entry>
   <entry>
@@ -3443,7 +3474,8 @@ ID  HOST                  USED  AVAIL  WR OPS  WR DATA  RD OPS  RD DATA  STATE
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Ceph, IO</tag>
+        <tag>IO</tag>
+        <tag>Ceph</tag>
       </tags>
   </entry>
   <entry>
@@ -3576,7 +3608,8 @@ rbd0        <span class="token number">254</span>:0    <span class="token number
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Ceph, IO</tag>
+        <tag>IO</tag>
+        <tag>Ceph</tag>
       </tags>
   </entry>
   <entry>
@@ -3673,7 +3706,8 @@ mds_standby_for_name <span class="token operator">=</span> ceph-mds4</code></pre
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Ceph, IO</tag>
+        <tag>IO</tag>
+        <tag>Ceph</tag>
       </tags>
   </entry>
   <entry>
@@ -3721,7 +3755,8 @@ mds_standby_for_name <span class="token operator">=</span> ceph-mds4</code></pre
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Ceph, IO</tag>
+        <tag>IO</tag>
+        <tag>Ceph</tag>
       </tags>
   </entry>
   <entry>
@@ -3921,7 +3956,8 @@ EOF
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Repo, Linux</tag>
+        <tag>Linux</tag>
+        <tag>Repo</tag>
       </tags>
   </entry>
   <entry>
@@ -4019,7 +4055,8 @@ kdump: Reserved 256MB memory <span class="token keyword">for</span> crash kernel
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, EC2</tag>
+        <tag>Linux</tag>
+        <tag>EC2</tag>
       </tags>
   </entry>
   <entry>
@@ -4699,7 +4736,9 @@ default via 172.31.32.1 dev ens5 proto dhcp src 172.31.43.121 metric 100
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Network, EC2</tag>
+        <tag>Linux</tag>
+        <tag>EC2</tag>
+        <tag>Network</tag>
       </tags>
   </entry>
   <entry>
@@ -4749,7 +4788,8 @@ discovery.zen.ping.unicast.hosts: [&quot;YOUR_OTHER_NODE_HOSTNAME &quot;]
         <category>ElasticSearch</category>
       </categories>
       <tags>
-        <tag>Application, ElasticSearch</tag>
+        <tag>Application</tag>
+        <tag>ElasticSearch</tag>
       </tags>
   </entry>
   <entry>
@@ -4865,7 +4905,8 @@ Download from ELK offical website <span class="token builtin class-name">:</span
         <category>ElasticSearch</category>
       </categories>
       <tags>
-        <tag>Application, ElasticSearch</tag>
+        <tag>Application</tag>
+        <tag>ElasticSearch</tag>
       </tags>
   </entry>
   <entry>
@@ -4917,7 +4958,8 @@ reboot</code></pre></li>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Fedora</tag>
+        <tag>Linux</tag>
+        <tag>Fedora</tag>
       </tags>
   </entry>
   <entry>
@@ -5035,7 +5077,8 @@ systemctl status <span class="token comment"># 查看系统启动之后的所有
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Fedora</tag>
+        <tag>Linux</tag>
+        <tag>Fedora</tag>
       </tags>
   </entry>
   <entry>
@@ -5086,7 +5129,8 @@ systemctl status <span class="token comment"># 查看系统启动之后的所有
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, FileSystem</tag>
+        <tag>Linux</tag>
+        <tag>FileSystem</tag>
       </tags>
   </entry>
   <entry>
@@ -5108,7 +5152,8 @@ systemctl status <span class="token comment"># 查看系统启动之后的所有
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Application, Firefox</tag>
+        <tag>Application</tag>
+        <tag>Firefox</tag>
       </tags>
   </entry>
   <entry>
@@ -5152,7 +5197,8 @@ git rm -r --cached ./plugin
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Git</tag>
+        <tag>Linux</tag>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -5272,7 +5318,8 @@ done</code></pre></li>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>GRUB2, Linux</tag>
+        <tag>Linux</tag>
+        <tag>GRUB2</tag>
       </tags>
   </entry>
   <entry>
@@ -5373,7 +5420,8 @@ DEFAULT_REGISTRY <span class="token operator">=</span> <span class="token string
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Application, Harbor</tag>
+        <tag>Application</tag>
+        <tag>Harbor</tag>
       </tags>
   </entry>
   <entry>
@@ -5457,7 +5505,8 @@ Hugetlb:         8388608 kB</code></pre>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Memory</tag>
+        <tag>Linux</tag>
+        <tag>Memory</tag>
       </tags>
   </entry>
   <entry>
@@ -5525,7 +5574,8 @@ lrwx------ 1 liarlee liarlee 64  6月 24 20:22 2 -&gt; &#x2F;dev&#x2F;pts&#x2F;0
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, IO</tag>
+        <tag>Linux</tag>
+        <tag>IO</tag>
       </tags>
   </entry>
   <entry>
@@ -5547,7 +5597,8 @@ lrwx------ 1 liarlee liarlee 64  6月 24 20:22 2 -&gt; &#x2F;dev&#x2F;pts&#x2F;0
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, JAVA</tag>
+        <tag>Linux</tag>
+        <tag>JAVA</tag>
       </tags>
   </entry>
   <entry>
@@ -5700,7 +5751,8 @@ kern  :warn  <span class="token builtin class-name">:</span> <span class="token 
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Iptables</tag>
+        <tag>Linux</tag>
+        <tag>Iptables</tag>
       </tags>
   </entry>
   <entry>
@@ -5745,7 +5797,8 @@ grub2-mkconfig <span class="token parameter variable">-o</span> /boot/grub2/grub
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, CPU</tag>
+        <tag>Linux</tag>
+        <tag>CPU</tag>
       </tags>
   </entry>
   <entry>
@@ -5999,7 +6052,8 @@ kubectl debug mypod <span class="token parameter variable">-it</span> <span clas
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Kubernetes</tag>
+        <tag>Kubernetes</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -6076,7 +6130,10 @@ HaydenArchLinux$ <span class="token function">mount</span> /dev/fedora_localhost
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, LVM, Filesystem, IO</tag>
+        <tag>Linux</tag>
+        <tag>IO</tag>
+        <tag>LVM</tag>
+        <tag>Filesystem</tag>
       </tags>
   </entry>
   <entry>
@@ -6208,7 +6265,8 @@ rd: invalid user virtual address: 55d54879d000  type: <span class="token string"
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Memory</tag>
+        <tag>Linux</tag>
+        <tag>Memory</tag>
       </tags>
   </entry>
   <entry>
@@ -6392,7 +6450,9 @@ nmcli connection <span class="token function">add</span> <span class="token buil
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, EC2, Network</tag>
+        <tag>Linux</tag>
+        <tag>EC2</tag>
+        <tag>Network</tag>
       </tags>
   </entry>
   <entry>
@@ -6525,7 +6585,8 @@ nmcli connection <span class="token function">add</span> <span class="token buil
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Nginx, Application</tag>
+        <tag>Application</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -6976,7 +7037,8 @@ Percentage of the requests served within a certain time (ms)
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Nginx, Application</tag>
+        <tag>Application</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -7109,7 +7171,8 @@ proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  </code></pre>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Nginx, Application</tag>
+        <tag>Application</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -7552,7 +7615,8 @@ kern  :err   : [Thu Aug 17 17:29:27 2023] Memory cgroup out of memory: Killed pr
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Memory</tag>
+        <tag>Linux</tag>
+        <tag>Memory</tag>
       </tags>
   </entry>
   <entry>
@@ -7574,7 +7638,8 @@ iptables-save</code></pre>
         <category>Healthcare-IT</category>
       </categories>
       <tags>
-        <tag>Orthanc, Docker</tag>
+        <tag>Docker</tag>
+        <tag>Orthanc</tag>
       </tags>
   </entry>
   <entry>
@@ -7643,7 +7708,9 @@ ll <span class="token parameter variable">-h</span>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Perf, IO</tag>
+        <tag>Linux</tag>
+        <tag>IO</tag>
+        <tag>Perf</tag>
       </tags>
   </entry>
   <entry>
@@ -7819,7 +7886,9 @@ FlameGraph/flamegraph.pl out.folded <span class="token operator">></span> out.sv
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Perf, Strace</tag>
+        <tag>Linux</tag>
+        <tag>Perf</tag>
+        <tag>Strace</tag>
       </tags>
   </entry>
   <entry>
@@ -8255,7 +8324,8 @@ FlameGraph/flamegraph.pl out.folded <span class="token operator">></span> out.sv
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Perf</tag>
+        <tag>Linux</tag>
+        <tag>Perf</tag>
       </tags>
   </entry>
   <entry>
@@ -8409,7 +8479,10 @@ tc class <span class="token function">add</span> dev <span class="token string">
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Database, Kernel, Network</tag>
+        <tag>Linux</tag>
+        <tag>Database</tag>
+        <tag>Network</tag>
+        <tag>Kernel</tag>
       </tags>
   </entry>
   <entry>
@@ -8629,7 +8702,8 @@ Current node details:
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Application, RabbitMQ</tag>
+        <tag>Application</tag>
+        <tag>RabbitMQ</tag>
       </tags>
   </entry>
   <entry>
@@ -8688,7 +8762,8 @@ S -- 进入一个新的shell。exit后回到当前的ranger
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Ranger</tag>
+        <tag>Linux</tag>
+        <tag>Ranger</tag>
       </tags>
   </entry>
   <entry>
@@ -8795,7 +8870,9 @@ show table status like &#39;tt1&#39;\G</code></pre>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Memory, Kernel</tag>
+        <tag>Linux</tag>
+        <tag>Memory</tag>
+        <tag>Kernel</tag>
       </tags>
   </entry>
   <entry>
@@ -9063,7 +9140,8 @@ fs.protected_symlinks <span class="token operator">=</span> <span class="token n
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Kernel</tag>
+        <tag>Linux</tag>
+        <tag>Kernel</tag>
       </tags>
   </entry>
   <entry>
@@ -9187,7 +9265,8 @@ Also&#x3D;virtlogd.socket</code></pre>]]></content>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Kernel</tag>
+        <tag>Linux</tag>
+        <tag>Kernel</tag>
       </tags>
   </entry>
   <entry>
@@ -9375,7 +9454,8 @@ Also&#x3D;virtlogd.socket</code></pre>]]></content>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>VIM, Linux</tag>
+        <tag>Linux</tag>
+        <tag>VIM</tag>
       </tags>
   </entry>
   <entry>
@@ -9400,7 +9480,7 @@ Also&#x3D;virtlogd.socket</code></pre>]]></content>
 :set noexpandtab
 :%retab<span class="token operator">!</span></code></pre></li>
 </ul>
-<h3 id="4-vim的个性化配置及插件"><a href="#4-vim的个性化配置及插件" class="headerlink" title="4. vim的个性化配置及插件"></a>4. vim的个性化配置及插件</h3><ul>
+<h3 id="4-Vim的个性化配置及插件"><a href="#4-Vim的个性化配置及插件" class="headerlink" title="4. Vim的个性化配置及插件"></a>4. Vim的个性化配置及插件</h3><ul>
 <li><p>自动换行</p>
 <p>set wrap</p>
 </li>
@@ -9449,7 +9529,8 @@ Also&#x3D;virtlogd.socket</code></pre>]]></content>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, KVM</tag>
+        <tag>Linux</tag>
+        <tag>KVM</tag>
       </tags>
   </entry>
   <entry>
@@ -9544,7 +9625,8 @@ print fmt<span class="token operator">:</span> <span class="token string">"fd: 0
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, BPF</tag>
+        <tag>Linux</tag>
+        <tag>BPF</tag>
       </tags>
   </entry>
   <entry>
@@ -9716,7 +9798,9 @@ Disk stats <span class="token punctuation">(</span>read/write<span class="token 
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, IO, FileSystem</tag>
+        <tag>Linux</tag>
+        <tag>IO</tag>
+        <tag>FileSystem</tag>
       </tags>
   </entry>
   <entry>
@@ -9800,7 +9884,10 @@ Disk stats <span class="token punctuation">(</span>read/write<span class="token 
         <category>Docker</category>
       </categories>
       <tags>
-        <tag>Docker, Application, Prometheus, Grafana</tag>
+        <tag>Application</tag>
+        <tag>Docker</tag>
+        <tag>Prometheus</tag>
+        <tag>Grafana</tag>
       </tags>
   </entry>
   <entry>
@@ -9899,7 +9986,9 @@ root<span class="token operator">@</span>ip<span class="token operator">-</span>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, EBS, IO</tag>
+        <tag>Linux</tag>
+        <tag>EBS</tag>
+        <tag>IO</tag>
       </tags>
   </entry>
   <entry>
@@ -10022,7 +10111,8 @@ Shmem:           <span class="token number">2151884</span> kB  <span class="toke
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Memory</tag>
+        <tag>Linux</tag>
+        <tag>Memory</tag>
       </tags>
   </entry>
   <entry>
@@ -11091,7 +11181,8 @@ systemctl enable rc-local.service</code></pre></li>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Fedora</tag>
+        <tag>Linux</tag>
+        <tag>Fedora</tag>
       </tags>
   </entry>
   <entry>
@@ -11120,7 +11211,8 @@ systemctl enable rc-local.service</code></pre></li>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Kernel</tag>
+        <tag>Linux</tag>
+        <tag>Kernel</tag>
       </tags>
   </entry>
   <entry>
@@ -11151,7 +11243,8 @@ yum <span class="token function">install</span> <span class="token parameter var
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Kernel</tag>
+        <tag>Linux</tag>
+        <tag>Kernel</tag>
       </tags>
   </entry>
   <entry>
@@ -11355,6 +11448,7 @@ root       1915  5.7  6.9 9324108 570096 tty2   Sl+  11:23   2:00 &#x2F;usr&#x2F
         <category>Network</category>
       </categories>
       <tags>
+        <tag>Linux</tag>
         <tag>Network</tag>
       </tags>
   </entry>
@@ -11629,7 +11723,8 @@ net.ipv4.tcp_rmem <span class="token operator">=</span> <span class="token numbe
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Network</tag>
+        <tag>Linux</tag>
+        <tag>Network</tag>
       </tags>
   </entry>
   <entry>
@@ -12047,7 +12142,7 @@ net.ipv4.tcp_rmem <span class="token operator">=</span> <span class="token numbe
 </blockquote>
 <p>如果上一部分生成SSH密钥的时候输入了密码，请在这个命令运行之后按照提示输入密码，返回结果如下：  </p>
 <blockquote>
-<p>[root@localhost .ssh]# ssh -T <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#105;&#116;&#x68;&#117;&#x62;&#x2e;&#99;&#x6f;&#x6d;">&#x67;&#x69;&#116;&#64;&#103;&#105;&#116;&#x68;&#117;&#x62;&#x2e;&#99;&#x6f;&#x6d;</a><br>Hi test! You’ve successfully authenticated, but GitHub does not provide shell access.  </p>
+<p>[root@localhost .ssh]# ssh -T <a href="mailto:&#x67;&#x69;&#x74;&#64;&#103;&#x69;&#x74;&#x68;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#x74;&#64;&#103;&#x69;&#x74;&#x68;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;</a><br>Hi test! You’ve successfully authenticated, but GitHub does not provide shell access.  </p>
 </blockquote>
 <p>我们已经成功的连接上了Github上面的repo，github的配置结束了～  </p>
 <h3 id="配置Hexo-deployer"><a href="#配置Hexo-deployer" class="headerlink" title="配置Hexo-deployer"></a>配置Hexo-deployer</h3><p>git可以将我们的blog推送到repo上面去，但是本身我们也可以使用hexo提供的工具来进行blog的更新。  </p>
@@ -12063,11 +12158,11 @@ net.ipv4.tcp_rmem <span class="token operator">=</span> <span class="token numbe
 </blockquote>
 </li>
 </ol>
-<p> 79 deploy:<br> 80   type:  git<br> 81   repo:  <a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#x69;&#116;&#x68;&#x75;&#98;&#x2e;&#99;&#111;&#109;">&#103;&#x69;&#x74;&#64;&#103;&#x69;&#116;&#x68;&#x75;&#98;&#x2e;&#99;&#111;&#109;</a>:test&#x2F;test.github.io.git<br> 82   branch:  master  </p>
+<p> 79 deploy:<br> 80   type:  git<br> 81   repo:  <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;">&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;</a>:test&#x2F;test.github.io.git<br> 82   branch:  master  </p>
 <ol start="3">
 <li><p>现在将我们本地的默认站点推送到Github上面去试试吧！   </p>
 <blockquote>
-<p><code>[root@localhost test]# hexo d</code><br>INFO  Deploying: git<br>INFO  Clearing .deploy_git folder…<br>INFO  Copying files from public folder…<br>INFO  Copying files from extend dirs…<br>[master caa83a9] Site updated: 2017-12-27 18:26:01<br> 1 file changed, 63 insertions(+), 11 deletions(-)<br>To github.com:test&#x2F;test.github.io.git<br>62dcd56..caa83a9  HEAD -&gt; master<br>Branch master set up to track remote branch master from   <a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#x69;&#116;&#x68;&#x75;&#98;&#x2e;&#x63;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#64;&#103;&#x69;&#116;&#x68;&#x75;&#98;&#x2e;&#x63;&#x6f;&#x6d;</a>:test&#x2F;test.github.io.git.<br>INFO  Deploy done: git  </p>
+<p><code>[root@localhost test]# hexo d</code><br>INFO  Deploying: git<br>INFO  Clearing .deploy_git folder…<br>INFO  Copying files from public folder…<br>INFO  Copying files from extend dirs…<br>[master caa83a9] Site updated: 2017-12-27 18:26:01<br> 1 file changed, 63 insertions(+), 11 deletions(-)<br>To github.com:test&#x2F;test.github.io.git<br>62dcd56..caa83a9  HEAD -&gt; master<br>Branch master set up to track remote branch master from   <a href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;</a>:test&#x2F;test.github.io.git.<br>INFO  Deploy done: git  </p>
 </blockquote>
 </li>
 <li><p>输出最后Deploy done,就表示我们的原始页面已经上传成功了～，访问Repo的名字就可以直接看到初始blog的样子了。</p>
@@ -13189,7 +13284,8 @@ os<span class="token punctuation">.</span>path<span class="token punctuation">.<
         <category>Windows</category>
       </categories>
       <tags>
-        <tag>Windows, Office</tag>
+        <tag>Windows</tag>
+        <tag>Office</tag>
       </tags>
   </entry>
   <entry>
