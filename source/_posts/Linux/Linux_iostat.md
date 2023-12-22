@@ -1,3 +1,10 @@
+---
+title: Iostat 参数说明
+category: Linux
+date: 2023-12-22 12:44:27
+tags: Linux
+---
+
 > 从manpage 里面直接获取的命令说明， 汇报CPU指标 和 设备 或者 分区 的 I/O指标。 
        iostat - Report Central Processing Unit (CPU) statistics and input/output statistics for devices and partitions.
 
