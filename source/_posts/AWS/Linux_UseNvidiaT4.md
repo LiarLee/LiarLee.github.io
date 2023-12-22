@@ -2,7 +2,10 @@
 title: archlinux 配置 xorg 使用 nvidia T4
 category: Linux
 date: 2023-12-21 13:56:27
-tags: AWS，EC2, Nvidia
+tags: 
+  - AWS
+  - EC2
+  - Nvidia
 ---
 
 最近的一个想法，基于之前 hacking 到中国区域的 archlinux， 可以尝试直接改改 xorg， 用用 nvidia 的显卡。
