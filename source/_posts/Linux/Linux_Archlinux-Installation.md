@@ -2,7 +2,8 @@
 title: Archlinux安装过程记录
 date: 2019-05-17 14:03:08
 categories: Linux
-tags: Linux
+tags:
+  - Linux
 ---
 
 自己尝试安装了archlinux在虚拟机里，记录安装过程，不过现在archlinux的WIKI是描述清晰的，直接查看和参考即可。  

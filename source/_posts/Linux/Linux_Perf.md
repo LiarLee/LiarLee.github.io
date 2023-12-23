@@ -2,7 +2,9 @@
 title: Perf 命令的Performance分析
 date: 2022-04-19 17:45:39
 category: Linux
-tags: Linux, Perf
+tags:
+  - Linux
+  - Perf
 ---
 
 https://blog.gmem.cc/perf  一个非常详细的博客， 太强啦。

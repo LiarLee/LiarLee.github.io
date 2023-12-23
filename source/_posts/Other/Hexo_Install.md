@@ -6,7 +6,6 @@ tags:
   - Linux
   - Hexo
 ---
-
 建立Blog，记录过程  
 所有的配置都是在[Fedora 27 Workstation](https://getfedora.org/en/workstation/)版本下进行，Windows配置环境恶心了我很久所以不做介绍。
 

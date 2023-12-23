@@ -6,7 +6,6 @@ tags:
   - TrueNasScale
   - NAS
 ---
-这个命令的记录在 TrueNas Scale ,也就是linux场景下的， Linux 这个版本在我的蜗牛星际上面我看到了一些兼容性问题， 可能会导致磁盘的状态异常， 遂弃之。 回FreeBSD的版本就没事了，还没有那个碍事的集成 k3s.
 
 TrueNas Scale
 Some param can use to tunning Memory Usage : 

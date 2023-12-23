@@ -2,7 +2,9 @@
 title: Nginx反向代理笔记
 date: 2019-07-13 17:50:39
 categories: Linux
-tags: Nginx, Application
+tags:
+  - Nginx
+  - Application
 ---
 
 Nginx的反向代理笔记。

@@ -5,7 +5,6 @@ tags:
   - Linux
 categories: Linux
 ---
-
 就在刚刚经历了电话面试，快速回忆问我的问题，记下：  
 
 <!-- more-->
