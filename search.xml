@@ -7091,7 +7091,8 @@ proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  </code></pre>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Nginx, Application</tag>
+        <tag>Application</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -7424,7 +7425,8 @@ http&#123;
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Nginx, Application</tag>
+        <tag>Application</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -7818,7 +7820,8 @@ root@HaydenArchDesktop /tmp# taskset -c 0 perf bench sched pipe
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Perf</tag>
+        <tag>Linux</tag>
+        <tag>Perf</tag>
       </tags>
   </entry>
   <entry>
@@ -9562,74 +9565,6 @@ Also&#x3D;virtlogd.socket</code></pre>]]></content>
       </tags>
   </entry>
   <entry>
-    <title>bpftrace 使用tracepoint 追踪 tcp 状态变化</title>
-    <url>/2023/03/19/Linux/Linux_bpftrace/</url>
-    <content><![CDATA[<h2 id="入门教程"><a href="#入门教程" class="headerlink" title="入门教程"></a>入门教程</h2><p>大佬的博客， 入门教程： <a href="http://arthurchiao.art/blog/bpf-advanced-notes-1-zh/">http://arthurchiao.art/blog/bpf-advanced-notes-1-zh/</a></p>
-<h2 id="记录基础的bpftrace使用方法"><a href="#记录基础的bpftrace使用方法" class="headerlink" title="记录基础的bpftrace使用方法"></a>记录基础的bpftrace使用方法</h2><p>单行程序的使用方法</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost-live ~<span class="token punctuation">]</span><span class="token comment"># bpftrace -e 'tracepoint:syscalls:sys_enter_execve &#123; printf("%s %s\n", comm, str(args->filename));&#125;'</span></code></pre>
-
-<h2 id="Tracepoint如何获取可用参数的解释"><a href="#Tracepoint如何获取可用参数的解释" class="headerlink" title="Tracepoint如何获取可用参数的解释"></a>Tracepoint如何获取可用参数的解释</h2><pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost-live sys_enter_execve<span class="token punctuation">]</span><span class="token comment"># pwd</span>
-/sys/kernel/tracing/events/syscalls/sys_enter_execve
-<span class="token punctuation">[</span>root@localhost-live sys_enter_execve<span class="token punctuation">]</span><span class="token comment"># grep -ri .</span>
-format:name: sys_enter_execve
-format:ID: <span class="token number">742</span>
-format:format:
-format:	field:unsigned short common_type<span class="token punctuation">;</span>	offset:0<span class="token punctuation">;</span>	size:2<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
-format:	field:unsigned char common_flags<span class="token punctuation">;</span>	offset:2<span class="token punctuation">;</span>	size:1<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
-format:	field:unsigned char common_preempt_count<span class="token punctuation">;</span>	offset:3<span class="token punctuation">;</span>	size:1<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
-format:	field:int common_pid<span class="token punctuation">;</span>	offset:4<span class="token punctuation">;</span>	size:4<span class="token punctuation">;</span>	signed:1<span class="token punctuation">;</span>
-format:	field:int __syscall_nr<span class="token punctuation">;</span>	offset:8<span class="token punctuation">;</span>	size:4<span class="token punctuation">;</span>	signed:1<span class="token punctuation">;</span>
-format:	field:const char * filename<span class="token punctuation">;</span>	offset:16<span class="token punctuation">;</span>	size:8<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
-format:	field:const char *const * argv<span class="token punctuation">;</span>	offset:24<span class="token punctuation">;</span>	size:8<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
-format:	field:const char *const * envp<span class="token punctuation">;</span>	offset:32<span class="token punctuation">;</span>	size:8<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
-format:print fmt: <span class="token string">"filename: 0x%08lx, argv: 0x%08lx, envp: 0x%08lx"</span>, <span class="token variable"><span class="token punctuation">((</span>unsigned long<span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-</span><span class="token operator">></span>filename<span class="token punctuation">))</span></span>, <span class="token variable"><span class="token punctuation">((</span>unsigned long<span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-</span><span class="token operator">></span>argv<span class="token punctuation">))</span></span>, <span class="token variable"><span class="token punctuation">((</span>unsigned long<span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-</span><span class="token operator">></span>envp<span class="token punctuation">))</span></span>
-trigger:<span class="token comment"># Available triggers:</span>
-trigger:<span class="token comment"># traceon traceoff snapshot stacktrace enable_event disable_event enable_hist disable_hist hist</span>
-filter:none
-id:742
-enable:0</code></pre>
-
-<h2 id="记录尝试追踪tcp状态变化的方法"><a href="#记录尝试追踪tcp状态变化的方法" class="headerlink" title="记录尝试追踪tcp状态变化的方法"></a>记录尝试追踪tcp状态变化的方法</h2><p>关于bpftrace追踪的总结, 追踪tcp状态的方法， 通过使用特定的tracepoint的来获取tcp状态的变化： </p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">~$ bpftrace <span class="token parameter variable">-e</span> <span class="token string">'tracepoint:sock:inet_sock_set_state &#123; printf("%s %d %d\n", comm, pid, args->newstate); &#125;'</span>
-~$ bpftrace <span class="token parameter variable">-e</span> <span class="token string">'tracepoint:sock:inet_sock_set_state &#123; printf("%s - %d -> %d - %d - %s\n",strftime("%H:%M:%S.%L", nsecs), args->oldstate, args->newstate, pid, comm); &#125;'</span></code></pre>
-
-<p>关于返回值的说明： </p>
-<blockquote>
-<p><a href="https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-9/-/blob/main/include/net/tcp_states.h">https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-9/-/blob/main/include/net/tcp_states.h</a>  </p>
-</blockquote>
-<p>tcp_set_state 是一个内核函数，用于设置 TCP 套接字的状态。它有 12 个可能的返回值，分别对应 TCP 协议中定义的 12 种状态1。这些状态是：</p>
-<blockquote>
-<p>1 TCP_ESTABLISHED：连接已建立<br>2 TCP_SYN_SENT：主动打开连接，已发送 SYN 包<br>3 TCP_SYN_RECV：被动打开连接，已收到 SYN 包<br>4 TCP_FIN_WAIT1：主动关闭连接，已发送 FIN 包<br>5 TCP_FIN_WAIT2：主动关闭连接，已收到对方的 ACK 包<br>6 TCP_TIME_WAIT：主动关闭连接，等待一段时间以确保对方收到最后一个 ACK 包<br>7 TCP_CLOSE：连接已关闭<br>8 TCP_CLOSE_WAIT：被动关闭连接，已收到 FIN 包<br>9 TCP_LAST_ACK：被动关闭连接，已发送最后一个 ACK 包<br>10 TCP_LISTEN：监听状态，等待被动打开连接<br>11 TCP_CLOSING：双方同时关闭连接，交换 FIN 和 ACK 包的过程中<br>12 TCP_NEW_SYN_RECV：临时状态，用于处理 SYN 队列溢出的情况</p>
-</blockquote>
-<p>追踪点理解起来还是比较简单的， 查看追踪点可用的参数，在这个部分可以看。 </p>
-<pre class="language-c" data-language="c"><code class="language-c"><span class="token operator">~</span>$ cat <span class="token operator">/</span>sys<span class="token operator">/</span>kernel<span class="token operator">/</span>debug<span class="token operator">/</span>tracing<span class="token operator">/</span>events<span class="token operator">/</span>syscalls<span class="token operator">/</span>sys_enter_sendmsg<span class="token operator">/</span>format
-name<span class="token operator">:</span> sys_enter_sendmsg
-ID<span class="token operator">:</span> <span class="token number">1252</span>
-format<span class="token operator">:</span>
-        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">short</span> common_type<span class="token punctuation">;</span>       offset<span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
-        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span> common_flags<span class="token punctuation">;</span>       offset<span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
-        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span> common_preempt_count<span class="token punctuation">;</span>       offset<span class="token operator">:</span><span class="token number">3</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
-        field<span class="token operator">:</span><span class="token keyword">int</span> common_pid<span class="token punctuation">;</span>   offset<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
-        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span> common_preempt_lazy_count<span class="token punctuation">;</span>  offset<span class="token operator">:</span><span class="token number">8</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
-
-        field<span class="token operator">:</span><span class="token keyword">int</span> __syscall_nr<span class="token punctuation">;</span> offset<span class="token operator">:</span><span class="token number">12</span><span class="token punctuation">;</span>      size<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
-        field<span class="token operator">:</span><span class="token keyword">int</span> fd<span class="token punctuation">;</span>   offset<span class="token operator">:</span><span class="token number">16</span><span class="token punctuation">;</span>      size<span class="token operator">:</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
-        field<span class="token operator">:</span><span class="token keyword">struct</span> <span class="token class-name">user_msghdr</span> <span class="token operator">*</span> msg<span class="token punctuation">;</span> offset<span class="token operator">:</span><span class="token number">24</span><span class="token punctuation">;</span>      size<span class="token operator">:</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
-        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> flags<span class="token punctuation">;</span>       offset<span class="token operator">:</span><span class="token number">32</span><span class="token punctuation">;</span>      size<span class="token operator">:</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
-
-print fmt<span class="token operator">:</span> <span class="token string">"fd: 0x%08lx, msg: 0x%08lx, flags: 0x%08lx"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-></span>fd<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-></span>msg<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-></span>flags<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
-
-<p>如果是使用 kprobe 的话， 不能使用 args， 需要使用确定的arg0 - argN， 这个部分还在摸索， 目前尝试用这个参数还是失败。 取到对应的得值， 但是print不出来。</p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>BPF</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>关于BTRFS的一些测试</title>
     <url>/2022/04/19/Linux/Linux_btrfs/</url>
     <content><![CDATA[<h2 id="创建BTRFS卷"><a href="#创建BTRFS卷" class="headerlink" title="创建BTRFS卷"></a>创建BTRFS卷</h2><pre><code>mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 
@@ -9801,6 +9736,74 @@ Disk stats <span class="token punctuation">(</span>read/write<span class="token 
         <tag>Linux</tag>
         <tag>IO</tag>
         <tag>FileSystem</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>bpftrace 使用tracepoint 追踪 tcp 状态变化</title>
+    <url>/2023/03/19/Linux/Linux_bpftrace/</url>
+    <content><![CDATA[<h2 id="入门教程"><a href="#入门教程" class="headerlink" title="入门教程"></a>入门教程</h2><p>大佬的博客， 入门教程： <a href="http://arthurchiao.art/blog/bpf-advanced-notes-1-zh/">http://arthurchiao.art/blog/bpf-advanced-notes-1-zh/</a></p>
+<h2 id="记录基础的bpftrace使用方法"><a href="#记录基础的bpftrace使用方法" class="headerlink" title="记录基础的bpftrace使用方法"></a>记录基础的bpftrace使用方法</h2><p>单行程序的使用方法</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost-live ~<span class="token punctuation">]</span><span class="token comment"># bpftrace -e 'tracepoint:syscalls:sys_enter_execve &#123; printf("%s %s\n", comm, str(args->filename));&#125;'</span></code></pre>
+
+<h2 id="Tracepoint如何获取可用参数的解释"><a href="#Tracepoint如何获取可用参数的解释" class="headerlink" title="Tracepoint如何获取可用参数的解释"></a>Tracepoint如何获取可用参数的解释</h2><pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost-live sys_enter_execve<span class="token punctuation">]</span><span class="token comment"># pwd</span>
+/sys/kernel/tracing/events/syscalls/sys_enter_execve
+<span class="token punctuation">[</span>root@localhost-live sys_enter_execve<span class="token punctuation">]</span><span class="token comment"># grep -ri .</span>
+format:name: sys_enter_execve
+format:ID: <span class="token number">742</span>
+format:format:
+format:	field:unsigned short common_type<span class="token punctuation">;</span>	offset:0<span class="token punctuation">;</span>	size:2<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
+format:	field:unsigned char common_flags<span class="token punctuation">;</span>	offset:2<span class="token punctuation">;</span>	size:1<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
+format:	field:unsigned char common_preempt_count<span class="token punctuation">;</span>	offset:3<span class="token punctuation">;</span>	size:1<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
+format:	field:int common_pid<span class="token punctuation">;</span>	offset:4<span class="token punctuation">;</span>	size:4<span class="token punctuation">;</span>	signed:1<span class="token punctuation">;</span>
+format:	field:int __syscall_nr<span class="token punctuation">;</span>	offset:8<span class="token punctuation">;</span>	size:4<span class="token punctuation">;</span>	signed:1<span class="token punctuation">;</span>
+format:	field:const char * filename<span class="token punctuation">;</span>	offset:16<span class="token punctuation">;</span>	size:8<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
+format:	field:const char *const * argv<span class="token punctuation">;</span>	offset:24<span class="token punctuation">;</span>	size:8<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
+format:	field:const char *const * envp<span class="token punctuation">;</span>	offset:32<span class="token punctuation">;</span>	size:8<span class="token punctuation">;</span>	signed:0<span class="token punctuation">;</span>
+format:print fmt: <span class="token string">"filename: 0x%08lx, argv: 0x%08lx, envp: 0x%08lx"</span>, <span class="token variable"><span class="token punctuation">((</span>unsigned long<span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-</span><span class="token operator">></span>filename<span class="token punctuation">))</span></span>, <span class="token variable"><span class="token punctuation">((</span>unsigned long<span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-</span><span class="token operator">></span>argv<span class="token punctuation">))</span></span>, <span class="token variable"><span class="token punctuation">((</span>unsigned long<span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-</span><span class="token operator">></span>envp<span class="token punctuation">))</span></span>
+trigger:<span class="token comment"># Available triggers:</span>
+trigger:<span class="token comment"># traceon traceoff snapshot stacktrace enable_event disable_event enable_hist disable_hist hist</span>
+filter:none
+id:742
+enable:0</code></pre>
+
+<h2 id="记录尝试追踪tcp状态变化的方法"><a href="#记录尝试追踪tcp状态变化的方法" class="headerlink" title="记录尝试追踪tcp状态变化的方法"></a>记录尝试追踪tcp状态变化的方法</h2><p>关于bpftrace追踪的总结, 追踪tcp状态的方法， 通过使用特定的tracepoint的来获取tcp状态的变化： </p>
+<pre class="language-bash" data-language="bash"><code class="language-bash">~$ bpftrace <span class="token parameter variable">-e</span> <span class="token string">'tracepoint:sock:inet_sock_set_state &#123; printf("%s %d %d\n", comm, pid, args->newstate); &#125;'</span>
+~$ bpftrace <span class="token parameter variable">-e</span> <span class="token string">'tracepoint:sock:inet_sock_set_state &#123; printf("%s - %d -> %d - %d - %s\n",strftime("%H:%M:%S.%L", nsecs), args->oldstate, args->newstate, pid, comm); &#125;'</span></code></pre>
+
+<p>关于返回值的说明： </p>
+<blockquote>
+<p><a href="https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-9/-/blob/main/include/net/tcp_states.h">https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-9/-/blob/main/include/net/tcp_states.h</a>  </p>
+</blockquote>
+<p>tcp_set_state 是一个内核函数，用于设置 TCP 套接字的状态。它有 12 个可能的返回值，分别对应 TCP 协议中定义的 12 种状态1。这些状态是：</p>
+<blockquote>
+<p>1 TCP_ESTABLISHED：连接已建立<br>2 TCP_SYN_SENT：主动打开连接，已发送 SYN 包<br>3 TCP_SYN_RECV：被动打开连接，已收到 SYN 包<br>4 TCP_FIN_WAIT1：主动关闭连接，已发送 FIN 包<br>5 TCP_FIN_WAIT2：主动关闭连接，已收到对方的 ACK 包<br>6 TCP_TIME_WAIT：主动关闭连接，等待一段时间以确保对方收到最后一个 ACK 包<br>7 TCP_CLOSE：连接已关闭<br>8 TCP_CLOSE_WAIT：被动关闭连接，已收到 FIN 包<br>9 TCP_LAST_ACK：被动关闭连接，已发送最后一个 ACK 包<br>10 TCP_LISTEN：监听状态，等待被动打开连接<br>11 TCP_CLOSING：双方同时关闭连接，交换 FIN 和 ACK 包的过程中<br>12 TCP_NEW_SYN_RECV：临时状态，用于处理 SYN 队列溢出的情况</p>
+</blockquote>
+<p>追踪点理解起来还是比较简单的， 查看追踪点可用的参数，在这个部分可以看。 </p>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token operator">~</span>$ cat <span class="token operator">/</span>sys<span class="token operator">/</span>kernel<span class="token operator">/</span>debug<span class="token operator">/</span>tracing<span class="token operator">/</span>events<span class="token operator">/</span>syscalls<span class="token operator">/</span>sys_enter_sendmsg<span class="token operator">/</span>format
+name<span class="token operator">:</span> sys_enter_sendmsg
+ID<span class="token operator">:</span> <span class="token number">1252</span>
+format<span class="token operator">:</span>
+        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">short</span> common_type<span class="token punctuation">;</span>       offset<span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
+        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span> common_flags<span class="token punctuation">;</span>       offset<span class="token operator">:</span><span class="token number">2</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
+        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span> common_preempt_count<span class="token punctuation">;</span>       offset<span class="token operator">:</span><span class="token number">3</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
+        field<span class="token operator">:</span><span class="token keyword">int</span> common_pid<span class="token punctuation">;</span>   offset<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">char</span> common_preempt_lazy_count<span class="token punctuation">;</span>  offset<span class="token operator">:</span><span class="token number">8</span><span class="token punctuation">;</span>       size<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
+
+        field<span class="token operator">:</span><span class="token keyword">int</span> __syscall_nr<span class="token punctuation">;</span> offset<span class="token operator">:</span><span class="token number">12</span><span class="token punctuation">;</span>      size<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+        field<span class="token operator">:</span><span class="token keyword">int</span> fd<span class="token punctuation">;</span>   offset<span class="token operator">:</span><span class="token number">16</span><span class="token punctuation">;</span>      size<span class="token operator">:</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
+        field<span class="token operator">:</span><span class="token keyword">struct</span> <span class="token class-name">user_msghdr</span> <span class="token operator">*</span> msg<span class="token punctuation">;</span> offset<span class="token operator">:</span><span class="token number">24</span><span class="token punctuation">;</span>      size<span class="token operator">:</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
+        field<span class="token operator">:</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> flags<span class="token punctuation">;</span>       offset<span class="token operator">:</span><span class="token number">32</span><span class="token punctuation">;</span>      size<span class="token operator">:</span><span class="token number">8</span><span class="token punctuation">;</span> <span class="token keyword">signed</span><span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
+
+print fmt<span class="token operator">:</span> <span class="token string">"fd: 0x%08lx, msg: 0x%08lx, flags: 0x%08lx"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-></span>fd<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-></span>msg<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">(</span>REC<span class="token operator">-></span>flags<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+
+<p>如果是使用 kprobe 的话， 不能使用 args， 需要使用确定的arg0 - argN， 这个部分还在摸索， 目前尝试用这个参数还是失败。 取到对应的得值， 但是print不出来。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>BPF</tag>
       </tags>
   </entry>
   <entry>
@@ -10682,6 +10685,163 @@ spec:
       </tags>
   </entry>
   <entry>
+    <title>Kubernetes集群的学习笔记(6)</title>
+    <url>/2019/11/06/Linux/Linux_k8s-basic-6/</url>
+    <content><![CDATA[<p>K8S的认证部分， ServiceAccount以及RBAC 。</p>
+<h1 id="授权插件"><a href="#授权插件" class="headerlink" title="授权插件"></a>授权插件</h1><ol>
+<li>Node</li>
+<li>ABAC</li>
+<li>RBAC</li>
+<li>Webhook</li>
+</ol>
+<p>常用的授权插件就是RBAC</p>
+<h1 id="基于角色的授权和访问控制"><a href="#基于角色的授权和访问控制" class="headerlink" title="基于角色的授权和访问控制"></a>基于角色的授权和访问控制</h1><p>基于角色的访问控制，就是将权限授予Role，而不是User。 将权限的控制授予Role， 将User分配到Role。默认的是拒绝全部， 无法也无需定义拒绝权限，定义的Permission是许可访问的权限。</p>
+<ol>
+<li>角色，User Accouts OR Service Accounts.</li>
+<li>许可， Permission分为两个部分：Operation 以及 Object.</li>
+</ol>
+<h2 id="角色以及角色绑定"><a href="#角色以及角色绑定" class="headerlink" title="角色以及角色绑定"></a>角色以及角色绑定</h2><p>Role – RoleBinding</p>
+<p>Role 和 RoleBinding 是建立和控制 NameSpace 级别的权限。</p>
+<h2 id="集群角色以及集群角色绑定"><a href="#集群角色以及集群角色绑定" class="headerlink" title="集群角色以及集群角色绑定"></a>集群角色以及集群角色绑定</h2><p>ClusterRole – ClusterRoleBinding</p>
+<p>Cluster 和 ClusterBinding 是建立和控制 Cluster 级别的权限。</p>
+<p>NOTE： 特殊的情况，可以对名称空间级别的</p>
+<h2 id="特殊的绑定方式"><a href="#特殊的绑定方式" class="headerlink" title="特殊的绑定方式"></a>特殊的绑定方式</h2><p>ClusterRole – RoleBinding</p>
+<p>可以使用 RoleBinding 绑定 ClusterRole， 那么这种情况下，Role只是具有NameSpace的权限。<strong>解释一下：</strong>雷在同一个Cluster中有多个不同的NameSpace，我需要对每个NameSpace都授权相同的权限，这种场景下:</p>
+<ul>
+<li><p>如果使用RoleBinding 去绑定一个Role，那么每一个NameSpace都需要建立各自的 RoleBinding，并且都要各自绑定到Role。</p>
+</li>
+<li><p>如果建立一个ClusterRole, 使用RoleBinding绑定到ClusterRole上面，那么我只需要定义一个即可在全部集群范围内生效这个权限。这样的就相当于批量的进行Role的授权。</p>
+</li>
+</ul>
+<h1 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h1><p>命令不做过多的解释，所有的资源可以通过explain获取，主要是记录逻辑和思路。</p>
+<pre class="language-Shell" data-language="Shell"><code class="language-Shell">~]$ kubectl create role testrole --verb&#x3D;get,list,watch --resources&#x3D;pods -o yaml
+~]$ kubectl get role
+~]$ kubectl describe role pods-reader
+~]$ kubectl create rolebinding test-rolebinding --role&#x3D;testrole --user&#x3D;testuser -o yaml
+~]$ kubectl explain rolebinding
+~]$ kubectl config use-context USERNAME@kubernetes
+~]$ kubectl create clusterrole test-clusterrole --verb&#x3D;get,list,watch --resource&#x3D;pods -o yaml 
+~]$ kubectl explain clusterrole
+~]$ kubectl get clusterrole
+~]$ </code></pre>
+
+<h1 id="其他补充"><a href="#其他补充" class="headerlink" title="其他补充"></a>其他补充</h1><p>在RBAC中可以存在三类组件：</p>
+<ol>
+<li>user</li>
+<li>group</li>
+<li>service account</li>
+</ol>
+<p>创建Pod的过程中可以指定一个值叫做ServiceAccountName，如果授权ServiceAccount高等级的权限，那么，Pod会以这个Account运行，那么Pod中的应用程序也会有ServiceAccount的权限。也就是提高了Pod应用程序的等级，使得Pod可以对K8S的相关资源进行管理和配置。</p>
+]]></content>
+      <categories>
+        <category>Kubernetes</category>
+      </categories>
+      <tags>
+        <tag>Kubernetes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kubernetes集群的学习笔记(7)</title>
+    <url>/2019/11/06/Linux/Linux_k8s-basic-7/</url>
+    <content><![CDATA[<p>Kubernetes的Dashboard 和 分级认证权限。</p>
+<h1 id="Dashboard的简介"><a href="#Dashboard的简介" class="headerlink" title="Dashboard的简介"></a>Dashboard的简介</h1><p>Dashboard算是k8s的一个管理的web界面。不做具体的操作，登录的时候使用的是K8S提供的用户名和密码。</p>
+<h2 id="Dashboard的部署"><a href="#Dashboard的部署" class="headerlink" title="Dashboard的部署"></a>Dashboard的部署</h2><p>只需要从github进行apply资源清单即可。</p>
+<h2 id="Dashboard的登录"><a href="#Dashboard的登录" class="headerlink" title="Dashboard的登录"></a>Dashboard的登录</h2><h3 id="使用Token登录"><a href="#使用Token登录" class="headerlink" title="使用Token登录"></a>使用Token登录</h3><ol>
+<li><p>获取系统中默认的admin的token，或者创建一个需要登录和管理的ServiceAccount，然后Binding到Role或者 ClusterRole,进行权限的控制</p>
+</li>
+<li><p>查看集群中自动创建的dashboard的secret， 系统部署完成之后自动创建了一个可管理全部集群的secret</p>
+</li>
+</ol>
+   <pre class="language-Shell" data-language="Shell"><code class="language-Shell">~]$ kubectl get secret -n kube-system | grep dashboard
+dashboard-admin-token-g85h7                      kubernetes.io&#x2F;service-account-token   3      109d</code></pre>
+
+<ol start="3">
+<li><p>在这个secret中有Token相关的信息</p>
+<pre class="language-none"><code class="language-none">~]$ kubectl describe secret dashboard-admin-token-g85h7 -n kube-system</code></pre>
+</li>
+<li><p>其中的<strong>Token字段</strong>的内容就是可以用来登录的令牌。复制到dashboard中粘贴即可</p>
+</li>
+</ol>
+<h3 id="使用config文件登录"><a href="#使用config文件登录" class="headerlink" title="使用config文件登录"></a>使用config文件登录</h3><ol>
+<li>创建ServiceAccount，Binding到role</li>
+<li>获取Secret，然后查看他的token</li>
+<li>制作config文件</li>
+<li>使用config文件登录</li>
+</ol>
+<h2 id="Kubernetes的管理方式"><a href="#Kubernetes的管理方式" class="headerlink" title="Kubernetes的管理方式"></a>Kubernetes的管理方式</h2><ol>
+<li><p>命令</p>
+<p>create , run ,expose , delete ,edit ….</p>
+</li>
+<li><p>命令式配置文件</p>
+<p>create -f , delete -f , replace -f </p>
+</li>
+<li><p>声明式配置文件</p>
+<p>apply -f , patch</p>
+</li>
+</ol>
+<p>一般不混合使用，1.2 使用的是替换，但是3是立刻修改，立刻生效，所以还是比较危险的。</p>
+]]></content>
+      <categories>
+        <category>Kubernetes</category>
+      </categories>
+      <tags>
+        <tag>Kubernetes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>K8S将loop-lvm改为direct-lvm说明</title>
+    <url>/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/</url>
+    <content><![CDATA[<p>对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。</p>
+<h2 id="k8s的几种不同的存储驱动"><a href="#k8s的几种不同的存储驱动" class="headerlink" title="k8s的几种不同的存储驱动"></a>k8s的几种不同的存储驱动</h2><ol>
+<li>AUFS - 这是一个经过时间检验的存储驱动</li>
+<li>DeviceMapper - Redhat系默认的驱动，有loop和direct两种不同配置</li>
+<li>Btrfs - 我…. 这个文件系统的快照真的是贼好用，但是性能什么的….我倒觉得都一般</li>
+<li>ZFS - 还没用过</li>
+<li>VFS - 还没用过</li>
+<li>Overlay2 - 简单的接触了一下，docker目前推荐的存储驱动</li>
+</ol>
+<h2 id="关于存储驱动选择的相关博客及文章"><a href="#关于存储驱动选择的相关博客及文章" class="headerlink" title="关于存储驱动选择的相关博客及文章"></a>关于存储驱动选择的相关博客及文章</h2><blockquote>
+<p><a href="https://www.jianshu.com/p/6bf1bc011ade">Docker引擎 - 选择存储驱动</a><br><a href="http://dockone.io/article/1513">Docker五种存储驱动原理及应用场景和性能测试对比</a><br><a href="https://www.cnblogs.com/Terry-Wu/p/7471476.html">Docker系统八：Docker的存储驱动</a> </p>
+</blockquote>
+<h2 id="Loop-lvm"><a href="#Loop-lvm" class="headerlink" title="Loop-lvm"></a>Loop-lvm</h2><p>这是docker默认安装之后的选择，因为这样可以out-of-box，但是据说稳定性不佳，我没遇到稳定性的问题，但是遇到了IO高导致的整个虚拟机运行缓慢。<br>Loop-LVM其实使用了linux中的使用loop设备<br>我之前安装的一套k8s默认是使用overlay2的存储，可能是内核的版本过低导致无法使用其他的存储驱动，所以我觉得默认使用了loop-lvm。</p>
+<blockquote>
+<p>loop-lvm的工作模式是，默认在&#x2F;var&#x2F;lib&#x2F;docker&#x2F;devicemapper&#x2F;devicemapper&#x2F;目录下生成data&amp;metadata两个<strong>稀疏文件</strong>（我目前还不知道什么叫做稀疏文件），并将两个文件挂载为loop设备做为块设备来使用。<br>按照这个说法的话确实如果直接对裸设备的想能和稳定性都应该更强。所以下面可以动手啦~</p>
+</blockquote>
+<h2 id="Direct-lvm"><a href="#Direct-lvm" class="headerlink" title="Direct-lvm"></a>Direct-lvm</h2><p>这里直接放一个官方文档的链接好了。<br><a href="https://docs.docker.com/storage/storagedriver/device-mapper-driver/">Device-Mapper-driver</a></p>
+<h3 id="切换loop-lvm到direct-lvm"><a href="#切换loop-lvm到direct-lvm" class="headerlink" title="切换loop-lvm到direct-lvm"></a>切换loop-lvm到direct-lvm</h3><p>想要切换的原因其实是已经安装好的这个k8s的master节点在跑了很久之后，总是被zabbix监控到报警，硬盘负载高；cpu进程数高。cpu的进程数量高可以理解，毕竟监控了如此多的容器。硬盘负载高这个报警在系统中发现是&#x2F;dev&#x2F;loop2这个设备。对应去查找 docker info中的信息，发现这是k8s的存储所使用的。进而搜索到了关于loop-lvm&amp;direct-lvm的相关问题，发现使用loop设备的方式应该实在性能上有影响的，k8s不推荐生产环境使用，所以考虑切换过来，今后毕竟还是要长期使用的。<strong>值得注意的是</strong>：切换一定会导致之前的容器无法使用。而且目前来看关键的数据是不能恢复的，所以最好是在之前已经做好了计划。</p>
+<h4 id="自动托管配置"><a href="#自动托管配置" class="headerlink" title="自动托管配置"></a>自动托管配置</h4><p>自动托管的配置主要是两部分，首先是建立一个空的LVM，不需要挂载，只要系统识别到即可。之后是更改配置文件及重启docker服务。</p>
+<ol>
+<li>在虚拟机中加入一块新的硬盘，fdisk中识别为&#x2F;dev&#x2F;sdb；</li>
+<li>关闭docker。systemctl stop docker.</li>
+<li>在配置文件中加入如下的配置，注意格式不要错，不要丢下末尾的逗号：<pre class="language-none"><code class="language-none">&#123;
+  &quot;storage-driver&quot;: &quot;devicemapper&quot;,   # 告诉docker应用使用的存储驱动
+  &quot;storage-opts&quot;: [
+    &quot;dm.directlvm_device&#x3D;&#x2F;dev&#x2F;sdb&quot;,	# 指定使用的块设备，不需要格式化，不需要分区。在这里指定了设备docker会自动完成创建LVM等等操作。
+    &quot;dm.thinp_percent&#x3D;95&quot;,	# 指定Thinpool占用的百分比
+    &quot;dm.thinp_metapercent&#x3D;1&quot;,	# 指定Thinpool Meta数据使用的百分比
+    &quot;dm.thinp_autoextend_threshold&#x3D;80&quot;,	# 指定自动扩容的阈值
+    &quot;dm.thinp_autoextend_percent&#x3D;20&quot;,	# 指定自动扩容的比例
+    &quot;dm.directlvm_device_force&#x3D;false&quot;	# 是否强制格式化设备，默认是false。如果使用dockerd启动的时候出现了提供需要强行格式化设备的提示，就改为True。
+  ]
+&#125;</code></pre></li>
+<li>重新启动docker服务。如果正常启动可通过docker info 查看是否已经切换过来。</li>
+<li>如果没有能成功启动，尝试重启虚拟机；尝试使用dockerd命令直接启动，根据dockerd的日志信息进行相应的修改。</li>
+<li>常见错误有：<pre class="language-none"><code class="language-none">Sep 23 18:38:03 k8s-master dockerd: time&#x3D;&quot;2019-09-23T18:38:03.931876136+08:00&quot; level&#x3D;warning msg&#x3D;&quot;[graphdriver] WARNING: the devicemapper storage-driver is deprecated, and will be removed in a future release&quot;
+# 存储驱动将会在未来的版本被移除的警告。这不会导致docker无法运行。
+Sep 23 18:25:52 localhost dockerd: Error starting daemon: error initializing graphdriver: &#x2F;dev&#x2F;sdb is already part of a volume group &quot;docker&quot;: must remove this device from any volume group or provide a different device
+# 这个问题说明 docker 认为你的&#x2F;dev&#x2F;sdb上已经被创建了LVM，你需要手动指定，自动托管不会对这个设备进行操作。这会导致docker无法启动。
+# 首先你需要把&#x2F;dev&#x2F;sdb这个设备从LVM里面移除，lvdelete,pvdelete,vgdelete, 将设备还原为默认的状态，之后重启docker，将设备的所有操作控制都交给docker来做，就不会有这个错误了。</code></pre></li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在更换之后目前性能稳定，IO的负载也下来了。总体来看还是不错的。不过随着kubernetes的发展，我觉得这种问题应该会越来越少。还是推荐在安装的时候直接调整，不然数据的随时确实带来了一些麻烦。</p>
+]]></content>
+      <categories>
+        <category>Kubernetes</category>
+      </categories>
+      <tags>
+        <tag>Kubernetes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Kubernetes集群的学习笔记(5)</title>
     <url>/2019/10/18/Linux/Linux_k8s-basic-5/</url>
     <content><![CDATA[<p>K8S集群的存储卷笔记。</p>
@@ -10918,163 +11078,6 @@ spec:
 
 <p>Pod的dns命名规则：</p>
 <p>Pod_Name+Service_Name+NameSpace_Name.svc.cluster.local</p>
-]]></content>
-      <categories>
-        <category>Kubernetes</category>
-      </categories>
-      <tags>
-        <tag>Kubernetes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kubernetes集群的学习笔记(6)</title>
-    <url>/2019/11/06/Linux/Linux_k8s-basic-6/</url>
-    <content><![CDATA[<p>K8S的认证部分， ServiceAccount以及RBAC 。</p>
-<h1 id="授权插件"><a href="#授权插件" class="headerlink" title="授权插件"></a>授权插件</h1><ol>
-<li>Node</li>
-<li>ABAC</li>
-<li>RBAC</li>
-<li>Webhook</li>
-</ol>
-<p>常用的授权插件就是RBAC</p>
-<h1 id="基于角色的授权和访问控制"><a href="#基于角色的授权和访问控制" class="headerlink" title="基于角色的授权和访问控制"></a>基于角色的授权和访问控制</h1><p>基于角色的访问控制，就是将权限授予Role，而不是User。 将权限的控制授予Role， 将User分配到Role。默认的是拒绝全部， 无法也无需定义拒绝权限，定义的Permission是许可访问的权限。</p>
-<ol>
-<li>角色，User Accouts OR Service Accounts.</li>
-<li>许可， Permission分为两个部分：Operation 以及 Object.</li>
-</ol>
-<h2 id="角色以及角色绑定"><a href="#角色以及角色绑定" class="headerlink" title="角色以及角色绑定"></a>角色以及角色绑定</h2><p>Role – RoleBinding</p>
-<p>Role 和 RoleBinding 是建立和控制 NameSpace 级别的权限。</p>
-<h2 id="集群角色以及集群角色绑定"><a href="#集群角色以及集群角色绑定" class="headerlink" title="集群角色以及集群角色绑定"></a>集群角色以及集群角色绑定</h2><p>ClusterRole – ClusterRoleBinding</p>
-<p>Cluster 和 ClusterBinding 是建立和控制 Cluster 级别的权限。</p>
-<p>NOTE： 特殊的情况，可以对名称空间级别的</p>
-<h2 id="特殊的绑定方式"><a href="#特殊的绑定方式" class="headerlink" title="特殊的绑定方式"></a>特殊的绑定方式</h2><p>ClusterRole – RoleBinding</p>
-<p>可以使用 RoleBinding 绑定 ClusterRole， 那么这种情况下，Role只是具有NameSpace的权限。<strong>解释一下：</strong>雷在同一个Cluster中有多个不同的NameSpace，我需要对每个NameSpace都授权相同的权限，这种场景下:</p>
-<ul>
-<li><p>如果使用RoleBinding 去绑定一个Role，那么每一个NameSpace都需要建立各自的 RoleBinding，并且都要各自绑定到Role。</p>
-</li>
-<li><p>如果建立一个ClusterRole, 使用RoleBinding绑定到ClusterRole上面，那么我只需要定义一个即可在全部集群范围内生效这个权限。这样的就相当于批量的进行Role的授权。</p>
-</li>
-</ul>
-<h1 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h1><p>命令不做过多的解释，所有的资源可以通过explain获取，主要是记录逻辑和思路。</p>
-<pre class="language-Shell" data-language="Shell"><code class="language-Shell">~]$ kubectl create role testrole --verb&#x3D;get,list,watch --resources&#x3D;pods -o yaml
-~]$ kubectl get role
-~]$ kubectl describe role pods-reader
-~]$ kubectl create rolebinding test-rolebinding --role&#x3D;testrole --user&#x3D;testuser -o yaml
-~]$ kubectl explain rolebinding
-~]$ kubectl config use-context USERNAME@kubernetes
-~]$ kubectl create clusterrole test-clusterrole --verb&#x3D;get,list,watch --resource&#x3D;pods -o yaml 
-~]$ kubectl explain clusterrole
-~]$ kubectl get clusterrole
-~]$ </code></pre>
-
-<h1 id="其他补充"><a href="#其他补充" class="headerlink" title="其他补充"></a>其他补充</h1><p>在RBAC中可以存在三类组件：</p>
-<ol>
-<li>user</li>
-<li>group</li>
-<li>service account</li>
-</ol>
-<p>创建Pod的过程中可以指定一个值叫做ServiceAccountName，如果授权ServiceAccount高等级的权限，那么，Pod会以这个Account运行，那么Pod中的应用程序也会有ServiceAccount的权限。也就是提高了Pod应用程序的等级，使得Pod可以对K8S的相关资源进行管理和配置。</p>
-]]></content>
-      <categories>
-        <category>Kubernetes</category>
-      </categories>
-      <tags>
-        <tag>Kubernetes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kubernetes集群的学习笔记(7)</title>
-    <url>/2019/11/06/Linux/Linux_k8s-basic-7/</url>
-    <content><![CDATA[<p>Kubernetes的Dashboard 和 分级认证权限。</p>
-<h1 id="Dashboard的简介"><a href="#Dashboard的简介" class="headerlink" title="Dashboard的简介"></a>Dashboard的简介</h1><p>Dashboard算是k8s的一个管理的web界面。不做具体的操作，登录的时候使用的是K8S提供的用户名和密码。</p>
-<h2 id="Dashboard的部署"><a href="#Dashboard的部署" class="headerlink" title="Dashboard的部署"></a>Dashboard的部署</h2><p>只需要从github进行apply资源清单即可。</p>
-<h2 id="Dashboard的登录"><a href="#Dashboard的登录" class="headerlink" title="Dashboard的登录"></a>Dashboard的登录</h2><h3 id="使用Token登录"><a href="#使用Token登录" class="headerlink" title="使用Token登录"></a>使用Token登录</h3><ol>
-<li><p>获取系统中默认的admin的token，或者创建一个需要登录和管理的ServiceAccount，然后Binding到Role或者 ClusterRole,进行权限的控制</p>
-</li>
-<li><p>查看集群中自动创建的dashboard的secret， 系统部署完成之后自动创建了一个可管理全部集群的secret</p>
-</li>
-</ol>
-   <pre class="language-Shell" data-language="Shell"><code class="language-Shell">~]$ kubectl get secret -n kube-system | grep dashboard
-dashboard-admin-token-g85h7                      kubernetes.io&#x2F;service-account-token   3      109d</code></pre>
-
-<ol start="3">
-<li><p>在这个secret中有Token相关的信息</p>
-<pre class="language-none"><code class="language-none">~]$ kubectl describe secret dashboard-admin-token-g85h7 -n kube-system</code></pre>
-</li>
-<li><p>其中的<strong>Token字段</strong>的内容就是可以用来登录的令牌。复制到dashboard中粘贴即可</p>
-</li>
-</ol>
-<h3 id="使用config文件登录"><a href="#使用config文件登录" class="headerlink" title="使用config文件登录"></a>使用config文件登录</h3><ol>
-<li>创建ServiceAccount，Binding到role</li>
-<li>获取Secret，然后查看他的token</li>
-<li>制作config文件</li>
-<li>使用config文件登录</li>
-</ol>
-<h2 id="Kubernetes的管理方式"><a href="#Kubernetes的管理方式" class="headerlink" title="Kubernetes的管理方式"></a>Kubernetes的管理方式</h2><ol>
-<li><p>命令</p>
-<p>create , run ,expose , delete ,edit ….</p>
-</li>
-<li><p>命令式配置文件</p>
-<p>create -f , delete -f , replace -f </p>
-</li>
-<li><p>声明式配置文件</p>
-<p>apply -f , patch</p>
-</li>
-</ol>
-<p>一般不混合使用，1.2 使用的是替换，但是3是立刻修改，立刻生效，所以还是比较危险的。</p>
-]]></content>
-      <categories>
-        <category>Kubernetes</category>
-      </categories>
-      <tags>
-        <tag>Kubernetes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>K8S将loop-lvm改为direct-lvm说明</title>
-    <url>/2019/09/24/Linux/Linux_k8s-changelooplvm-directlvm/</url>
-    <content><![CDATA[<p>对k8s集群进行存储驱动的调整，从loop-lvm 切换到direct-lvm。</p>
-<h2 id="k8s的几种不同的存储驱动"><a href="#k8s的几种不同的存储驱动" class="headerlink" title="k8s的几种不同的存储驱动"></a>k8s的几种不同的存储驱动</h2><ol>
-<li>AUFS - 这是一个经过时间检验的存储驱动</li>
-<li>DeviceMapper - Redhat系默认的驱动，有loop和direct两种不同配置</li>
-<li>Btrfs - 我…. 这个文件系统的快照真的是贼好用，但是性能什么的….我倒觉得都一般</li>
-<li>ZFS - 还没用过</li>
-<li>VFS - 还没用过</li>
-<li>Overlay2 - 简单的接触了一下，docker目前推荐的存储驱动</li>
-</ol>
-<h2 id="关于存储驱动选择的相关博客及文章"><a href="#关于存储驱动选择的相关博客及文章" class="headerlink" title="关于存储驱动选择的相关博客及文章"></a>关于存储驱动选择的相关博客及文章</h2><blockquote>
-<p><a href="https://www.jianshu.com/p/6bf1bc011ade">Docker引擎 - 选择存储驱动</a><br><a href="http://dockone.io/article/1513">Docker五种存储驱动原理及应用场景和性能测试对比</a><br><a href="https://www.cnblogs.com/Terry-Wu/p/7471476.html">Docker系统八：Docker的存储驱动</a> </p>
-</blockquote>
-<h2 id="Loop-lvm"><a href="#Loop-lvm" class="headerlink" title="Loop-lvm"></a>Loop-lvm</h2><p>这是docker默认安装之后的选择，因为这样可以out-of-box，但是据说稳定性不佳，我没遇到稳定性的问题，但是遇到了IO高导致的整个虚拟机运行缓慢。<br>Loop-LVM其实使用了linux中的使用loop设备<br>我之前安装的一套k8s默认是使用overlay2的存储，可能是内核的版本过低导致无法使用其他的存储驱动，所以我觉得默认使用了loop-lvm。</p>
-<blockquote>
-<p>loop-lvm的工作模式是，默认在&#x2F;var&#x2F;lib&#x2F;docker&#x2F;devicemapper&#x2F;devicemapper&#x2F;目录下生成data&amp;metadata两个<strong>稀疏文件</strong>（我目前还不知道什么叫做稀疏文件），并将两个文件挂载为loop设备做为块设备来使用。<br>按照这个说法的话确实如果直接对裸设备的想能和稳定性都应该更强。所以下面可以动手啦~</p>
-</blockquote>
-<h2 id="Direct-lvm"><a href="#Direct-lvm" class="headerlink" title="Direct-lvm"></a>Direct-lvm</h2><p>这里直接放一个官方文档的链接好了。<br><a href="https://docs.docker.com/storage/storagedriver/device-mapper-driver/">Device-Mapper-driver</a></p>
-<h3 id="切换loop-lvm到direct-lvm"><a href="#切换loop-lvm到direct-lvm" class="headerlink" title="切换loop-lvm到direct-lvm"></a>切换loop-lvm到direct-lvm</h3><p>想要切换的原因其实是已经安装好的这个k8s的master节点在跑了很久之后，总是被zabbix监控到报警，硬盘负载高；cpu进程数高。cpu的进程数量高可以理解，毕竟监控了如此多的容器。硬盘负载高这个报警在系统中发现是&#x2F;dev&#x2F;loop2这个设备。对应去查找 docker info中的信息，发现这是k8s的存储所使用的。进而搜索到了关于loop-lvm&amp;direct-lvm的相关问题，发现使用loop设备的方式应该实在性能上有影响的，k8s不推荐生产环境使用，所以考虑切换过来，今后毕竟还是要长期使用的。<strong>值得注意的是</strong>：切换一定会导致之前的容器无法使用。而且目前来看关键的数据是不能恢复的，所以最好是在之前已经做好了计划。</p>
-<h4 id="自动托管配置"><a href="#自动托管配置" class="headerlink" title="自动托管配置"></a>自动托管配置</h4><p>自动托管的配置主要是两部分，首先是建立一个空的LVM，不需要挂载，只要系统识别到即可。之后是更改配置文件及重启docker服务。</p>
-<ol>
-<li>在虚拟机中加入一块新的硬盘，fdisk中识别为&#x2F;dev&#x2F;sdb；</li>
-<li>关闭docker。systemctl stop docker.</li>
-<li>在配置文件中加入如下的配置，注意格式不要错，不要丢下末尾的逗号：<pre class="language-none"><code class="language-none">&#123;
-  &quot;storage-driver&quot;: &quot;devicemapper&quot;,   # 告诉docker应用使用的存储驱动
-  &quot;storage-opts&quot;: [
-    &quot;dm.directlvm_device&#x3D;&#x2F;dev&#x2F;sdb&quot;,	# 指定使用的块设备，不需要格式化，不需要分区。在这里指定了设备docker会自动完成创建LVM等等操作。
-    &quot;dm.thinp_percent&#x3D;95&quot;,	# 指定Thinpool占用的百分比
-    &quot;dm.thinp_metapercent&#x3D;1&quot;,	# 指定Thinpool Meta数据使用的百分比
-    &quot;dm.thinp_autoextend_threshold&#x3D;80&quot;,	# 指定自动扩容的阈值
-    &quot;dm.thinp_autoextend_percent&#x3D;20&quot;,	# 指定自动扩容的比例
-    &quot;dm.directlvm_device_force&#x3D;false&quot;	# 是否强制格式化设备，默认是false。如果使用dockerd启动的时候出现了提供需要强行格式化设备的提示，就改为True。
-  ]
-&#125;</code></pre></li>
-<li>重新启动docker服务。如果正常启动可通过docker info 查看是否已经切换过来。</li>
-<li>如果没有能成功启动，尝试重启虚拟机；尝试使用dockerd命令直接启动，根据dockerd的日志信息进行相应的修改。</li>
-<li>常见错误有：<pre class="language-none"><code class="language-none">Sep 23 18:38:03 k8s-master dockerd: time&#x3D;&quot;2019-09-23T18:38:03.931876136+08:00&quot; level&#x3D;warning msg&#x3D;&quot;[graphdriver] WARNING: the devicemapper storage-driver is deprecated, and will be removed in a future release&quot;
-# 存储驱动将会在未来的版本被移除的警告。这不会导致docker无法运行。
-Sep 23 18:25:52 localhost dockerd: Error starting daemon: error initializing graphdriver: &#x2F;dev&#x2F;sdb is already part of a volume group &quot;docker&quot;: must remove this device from any volume group or provide a different device
-# 这个问题说明 docker 认为你的&#x2F;dev&#x2F;sdb上已经被创建了LVM，你需要手动指定，自动托管不会对这个设备进行操作。这会导致docker无法启动。
-# 首先你需要把&#x2F;dev&#x2F;sdb这个设备从LVM里面移除，lvdelete,pvdelete,vgdelete, 将设备还原为默认的状态，之后重启docker，将设备的所有操作控制都交给docker来做，就不会有这个错误了。</code></pre></li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在更换之后目前性能稳定，IO的负载也下来了。总体来看还是不错的。不过随着kubernetes的发展，我觉得这种问题应该会越来越少。还是推荐在安装的时候直接调整，不然数据的随时确实带来了一些麻烦。</p>
 ]]></content>
       <categories>
         <category>Kubernetes</category>
@@ -12142,7 +12145,7 @@ net.ipv4.tcp_rmem <span class="token operator">=</span> <span class="token numbe
 </blockquote>
 <p>如果上一部分生成SSH密钥的时候输入了密码，请在这个命令运行之后按照提示输入密码，返回结果如下：  </p>
 <blockquote>
-<p>[root@localhost .ssh]# ssh -T <a href="mailto:&#x67;&#x69;&#x74;&#64;&#103;&#x69;&#x74;&#x68;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#x74;&#64;&#103;&#x69;&#x74;&#x68;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;</a><br>Hi test! You’ve successfully authenticated, but GitHub does not provide shell access.  </p>
+<p>[root@localhost .ssh]# ssh -T <a href="mailto:&#x67;&#x69;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#x6d;">&#x67;&#x69;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#x6d;</a><br>Hi test! You’ve successfully authenticated, but GitHub does not provide shell access.  </p>
 </blockquote>
 <p>我们已经成功的连接上了Github上面的repo，github的配置结束了～  </p>
 <h3 id="配置Hexo-deployer"><a href="#配置Hexo-deployer" class="headerlink" title="配置Hexo-deployer"></a>配置Hexo-deployer</h3><p>git可以将我们的blog推送到repo上面去，但是本身我们也可以使用hexo提供的工具来进行blog的更新。  </p>
@@ -12158,11 +12161,11 @@ net.ipv4.tcp_rmem <span class="token operator">=</span> <span class="token numbe
 </blockquote>
 </li>
 </ol>
-<p> 79 deploy:<br> 80   type:  git<br> 81   repo:  <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;">&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;</a>:test&#x2F;test.github.io.git<br> 82   branch:  master  </p>
+<p> 79 deploy:<br> 80   type:  git<br> 81   repo:  <a href="mailto:&#x67;&#105;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#117;&#x62;&#46;&#99;&#111;&#109;">&#x67;&#105;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#117;&#x62;&#46;&#99;&#111;&#109;</a>:test&#x2F;test.github.io.git<br> 82   branch:  master  </p>
 <ol start="3">
 <li><p>现在将我们本地的默认站点推送到Github上面去试试吧！   </p>
 <blockquote>
-<p><code>[root@localhost test]# hexo d</code><br>INFO  Deploying: git<br>INFO  Clearing .deploy_git folder…<br>INFO  Copying files from public folder…<br>INFO  Copying files from extend dirs…<br>[master caa83a9] Site updated: 2017-12-27 18:26:01<br> 1 file changed, 63 insertions(+), 11 deletions(-)<br>To github.com:test&#x2F;test.github.io.git<br>62dcd56..caa83a9  HEAD -&gt; master<br>Branch master set up to track remote branch master from   <a href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;</a>:test&#x2F;test.github.io.git.<br>INFO  Deploy done: git  </p>
+<p><code>[root@localhost test]# hexo d</code><br>INFO  Deploying: git<br>INFO  Clearing .deploy_git folder…<br>INFO  Copying files from public folder…<br>INFO  Copying files from extend dirs…<br>[master caa83a9] Site updated: 2017-12-27 18:26:01<br> 1 file changed, 63 insertions(+), 11 deletions(-)<br>To github.com:test&#x2F;test.github.io.git<br>62dcd56..caa83a9  HEAD -&gt; master<br>Branch master set up to track remote branch master from   <a href="mailto:&#x67;&#x69;&#x74;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#x63;&#111;&#109;">&#x67;&#x69;&#x74;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#x63;&#111;&#109;</a>:test&#x2F;test.github.io.git.<br>INFO  Deploy done: git  </p>
 </blockquote>
 </li>
 <li><p>输出最后Deploy done,就表示我们的原始页面已经上传成功了～，访问Repo的名字就可以直接看到初始blog的样子了。</p>
@@ -12201,7 +12204,8 @@ net.ipv4.tcp_rmem <span class="token operator">=</span> <span class="token numbe
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux, Hexo</tag>
+        <tag>Linux</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -12436,8 +12440,7 @@ iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
   <entry>
     <title>TrueNas Scale 让 ZFS 占用更多内存作为 ARC</title>
     <url>/2023/10/08/Other/NAS_TrueNas%20Scale%20%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0/</url>
-    <content><![CDATA[<p>这个命令的记录在 TrueNas Scale ,也就是linux场景下的， Linux 这个版本在我的蜗牛星际上面我看到了一些兼容性问题， 可能会导致磁盘的状态异常， 遂弃之。 回FreeBSD的版本就没事了，还没有那个碍事的集成 k3s.</p>
-<p>TrueNas Scale<br>Some param can use to tunning Memory Usage : </p>
+    <content><![CDATA[<p>TrueNas Scale<br>Some param can use to tunning Memory Usage : </p>
 <p>Config the ARC Memory to 75% Total Memory :</p>
 <p>root@haydentruenas:&#x2F;sys&#x2F;block# echo 2995556352 &gt; &#x2F;sys&#x2F;module&#x2F;zfs&#x2F;parameters&#x2F;zfs_arc_max<br>root@haydentruenas:&#x2F;sys&#x2F;block# echo 268435456 &gt; &#x2F;sys&#x2F;module&#x2F;zfs&#x2F;parameters&#x2F;zfs_arc_sys_free</p>
 <pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
@@ -12455,7 +12458,8 @@ iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
         <category>Tools, Toy</category>
       </categories>
       <tags>
-        <tag>TrueNasScale, NAS</tag>
+        <tag>TrueNasScale</tag>
+        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
@@ -12698,7 +12702,9 @@ patch:
         <category>Other</category>
       </categories>
       <tags>
-        <tag>RIME, Linux, Windows</tag>
+        <tag>Linux</tag>
+        <tag>RIME</tag>
+        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
