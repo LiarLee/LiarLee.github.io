@@ -1,7 +1,8 @@
 ---
 title: 本地方式安装.Net3.5笔记
 date: 2018-01-22 11:55:01
-tags: Windows
+tags:
+  - Windows
 categories: Windows
 ---
 

@@ -1,7 +1,8 @@
 ---
 title: '诗词收集'
 date: 2023-01-09 01:45:39
-tags: 诗
+tags:
+  - 诗
 categories: Books
 ---
 

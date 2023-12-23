@@ -1,7 +1,8 @@
 ---
 title: 正见——佛陀的证悟（一）诸行无常(选摘)
 date: 2020-04-10 18:59:51
-tags: 书
+tags:
+  - 书
 categories: Books
 ---
 

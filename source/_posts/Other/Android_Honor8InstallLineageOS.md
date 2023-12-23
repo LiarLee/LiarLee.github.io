@@ -1,7 +1,8 @@
 ---
 title: 荣耀8-刷LineageOS14.1简述
 date: 2018-07-08 17:47:39
-tags: Android
+tags:
+  - Android
 category: Linux
 ---
 

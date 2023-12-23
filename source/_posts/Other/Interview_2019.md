@@ -1,7 +1,8 @@
 ---
 title: 面试记录
 date: 2019-07-18 13:12:33
-tags: Personal
+tags:
+  - Personal
 ---
 
 这个月还是发生了不少事情了，面试，换房子，真快。

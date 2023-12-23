@@ -1,6 +1,9 @@
 ---
 title: rime的配置
-tags: RIME, Linux, Windows
+tags:
+  - RIME
+  - Linux
+  - Windows
 category: Other
 date: 2023-08-13 10:39:06
 ---

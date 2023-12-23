@@ -2,7 +2,8 @@
 title: CheatSheet_awscli
 category: AWS
 date: 2023-12-08 13:56:27
-tags: AWS
+tags:
+  - AWS
 ---
 
 ### 查看实例和对应实例的系统平台信息

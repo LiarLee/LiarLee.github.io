@@ -2,7 +2,8 @@
 title: 制作一个可用的malloc image
 category: Linux
 date: 2023-01-03 12:58:47
-tags: docker
+tags:
+  - docker
 ---
 
 # 写一个melloc的C程序
