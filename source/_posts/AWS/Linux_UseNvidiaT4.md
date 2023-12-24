@@ -178,5 +178,4 @@ EndSection
 xorg 的日志在命令的输出中 `-logfile .xorgxrdp.%s.log`， 是这样的一个文件。
 ## Final
 
-![Snipaste_2023-12-21_13-10-29.png](https://s2.loli.net/2023/12/21/1PBUxzTSwvDs7Kl.png)
-
+![1PBUxzTSwvDs7Kl.png](https://s2.loli.net/2023/12/24/oCjSO7ab1FsZBd9.png)
