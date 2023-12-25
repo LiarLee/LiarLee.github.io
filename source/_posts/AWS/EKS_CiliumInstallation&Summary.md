@@ -83,6 +83,8 @@ cilium upgrade # 原地升级
 cilium install --version 1.14.1 --set kubeProxyReplacement=true --set=ipam.operator.clusterPoolIPv4PodCIDRList="10.42.0.0/16" --set k8sServiceHost=kube3s.liarlee.site --set k8sServicePort=6443
 
 
+
+
 # 升级
 hayden@arch ~> cilium upgrade
 🔮 Auto-detected Kubernetes kind: K3s
@@ -318,3 +320,11 @@ Nodes:
 > https://lwn.net/Articles/841755/
 >
 > 
+## 启用 Bandwidth Manager 和 BBR
+```shell
+# 尝试添加了bbr 算法的选项， 使用如下命令进行变更： 
+cilium upgrade --version 1.14.5 --set kubeProxyReplacement=true --set=ipam.operator.clusterPoolIPv4PodCIDRList="10.42.0.0/16" --set k8sServiceHost=kube3s.liarlee.site --set k8sServicePort=6443 --set bandwidthManager.enabled=true --set bandwidthManager.bbr=true
+
+# 使用如下的命令进行确认：
+kubectl -n kube-system exec ds/cilium -- cilium status | grep BandwidthManager
+```
