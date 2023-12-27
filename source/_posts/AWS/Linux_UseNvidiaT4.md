@@ -156,11 +156,11 @@ EndSection
 
 6. 排查思路 和 日志的位置。
     - 首先查看 xrdp 的 status， 是不是正常。
-    - 排查日志 /var/log/xrdp.log ， 这里面记录的是 xrdp 的启动的过程。
-    - 如果没有错误， 那么查看 /var/log/xrdp-sesman.log, 这里面会记录xorg启动的命令和 xorg 的状态。
+    - 排查日志 `/var/log/xrdp.log` ， 这里面记录的是 xrdp 的启动的过程。
+    - 如果没有错误， 那么查看 `/var/log/xrdp-sesman.log`, 这里面会记录xorg启动的命令和 xorg 的状态。  可以把日志里面记录的命令复制出来手动执行，直接看命令的输出；  或者查看 xorg 的日志， 看看历史记录了什么错误。
 ```shell
 [2023-12-21T16:50:17.711+0800] [INFO ] Socket 13: connection accepted from AF_UNIX
-[2023-12-21T16:50:17.714+0800] [INFO ] Received system login request from xrdp for user: ec2-user IP: ::ffff:114.251.173.133
+[2023-12-21T16:50:17.714+0800] [INFO ] Received system login request from xrdp for user: ec2-user IP: ::ffff:10.0.0.0
 [2023-12-21T16:50:17.717+0800] [INFO ] starting xrdp-sesexec with pid 37443
 [2023-12-21T16:50:17.763+0800] [INFO ] TerminalServerUsers group tsusers doesn't exist. Access granted for ec2-user
 [2023-12-21T16:50:17.765+0800] [INFO ] Access permitted for user: ec2-user
@@ -174,8 +174,10 @@ EndSection
 [2023-12-21T16:50:19.926+0800] [INFO ] Session in progress on display :10. Waiting until the window manager (pid 37458) exits to end the session
 ```
 
-可以把命令复制出来手动执行， 或者继续查看 xorg 的日志， 看看记录了什么内容。
-xorg 的日志在命令的输出中 `-logfile .xorgxrdp.%s.log`， 是这样的一个文件。
+  - 最后， xorg 的日志在命令的输出中 `-logfile .xorgxrdp.%s.log`， 是这样的一个文件。
+
+> NOTE：我的图形化启动的用户是： `ec2-user` ,那么默认的日志就在 `/home/ec2-user/.xrogxrdp.10.log` 这个文件里面， 如果启动xrdp报错就查看这个日志，我这边看到目前可以用， 还有其他的兼容性问题， 有报错。 
 ## Final
+正常配置的情况下， 启动的程序应该都可以直接使用显卡， 可以在 `nvtop` 或者 `nvidia-smi` 找到对应的进程。
 
 ![1PBUxzTSwvDs7Kl.png](https://s2.loli.net/2023/12/24/oCjSO7ab1FsZBd9.png)
