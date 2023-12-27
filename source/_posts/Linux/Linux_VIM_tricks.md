@@ -2,7 +2,8 @@
 title: Linux及vim的技巧
 date: 2019-10-10 11:48:58
 tags:
-  - Vim
+  - VIM
+  - Linux
 categories: Linux
 ---
 
