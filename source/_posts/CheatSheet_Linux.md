@@ -26,7 +26,6 @@ curl -o /dev/null -s -w "time_namelookup:%{time_namelookup}\ntime_connect: %{tim
 ```shell
 sysctl -a | egrep "rmem|wmem|tcp_mem|adv_win|moderate|slow_start"
 ```
-## 其他
 ### 查看系统内所有用户的Crontab
 ```shell
 ~]$ cat /etc/passwd | cut -f 1 -d : | xargs -I {} crontab -l -u {}
@@ -60,5 +59,4 @@ no crontab for tss
 no crontab for netdata
 no crontab for cwagent
 no crontab for ssm-user
-
 ```
