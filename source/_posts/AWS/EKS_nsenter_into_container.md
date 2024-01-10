@@ -92,3 +92,4 @@ listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
 09:09:18.174537 IP 172.31.48.162 > 13.107.21.200: ICMP echo request, id 45375, seq 1, length 64
 09:09:18.255142 IP 13.107.21.200 > 172.31.48.162: ICMP echo reply, id 45375, seq 1, length 64
 ```
+退出的方式直接使用exit即可， 就回到了host本身的ns里面。
