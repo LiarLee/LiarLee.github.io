@@ -24,3 +24,7 @@ kubectl debug -it --image=public.ecr.aws/amazonlinux/amazonlinux:latest aws-node
 # 项目仓库地址： https://github.com/nicolaka/netshoot
 kubectl debug mypod -it --image=nicolaka/netshoot
 ```
+### 查看EKS集群插件的兼容范围
+```shell
+aws eks describe-addon-versions --kubernetes-version 1.25 --addon-name vpc-cni | grep addonVersion
+```

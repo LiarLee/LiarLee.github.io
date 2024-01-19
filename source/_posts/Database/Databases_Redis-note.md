@@ -209,7 +209,8 @@ Redis的内存中主要是如下数据：
 		2. 复制积压缓冲区:  增量同步的缓冲区， 使用参数 `repl-backlog-size` 配置， 控制是否是增量或者全量同步。 backlog 越大， 越容易进行增量。
 	3. AOF 缓冲区（这玩意儿好像Ecache里面没有.
 		1. AOF缓冲区： 写AOF日志异步落到磁盘的Buffer
-		3. AOF重写缓冲区: AOF重写流程中使用的Buffer
+		2. AOF重写缓冲区: AOF重写流程中使用的Buffer
+
 https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20210621_e018a38e-d26a-11eb-b77e-00163e068ecd.png
 ## 内存碎片
 内存碎片有外部碎片 和 内部碎片： 

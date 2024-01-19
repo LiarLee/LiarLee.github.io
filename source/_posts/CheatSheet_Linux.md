@@ -60,3 +60,17 @@ no crontab for netdata
 no crontab for cwagent
 no crontab for ssm-user
 ```
+### 查看AWS EC2 的 Billing Code
+对于EC2来说，Redhat 或者 SUSE 的 Enterprise版本是有Billing Code的， 这标记了是否是已经付费过的版本，  有没有安全补丁和技术支持。 
+```shell
+# IDMSv1可以使用如下命令： 
+  curl http://169.254.169.254/latest/dynamic/instance-identity/document
+
+# IDMSv2可以使用： 
+  TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` && curl -H "X-aws-ec2-metadata-token: $TOKEN" -v http://169.254.169.254/latest/dynamic/instance-identity/document
+```
+### 查看SUSE的注册情况，以及是否启用 LTSS
+```shell
+sudo SUSEConnect --list-extensions
+```
+###
