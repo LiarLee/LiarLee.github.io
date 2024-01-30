@@ -63,11 +63,19 @@ sudo tailscale up --accept-dns=false --advertise-exit-node --advertise-routes=19
 sudo tailscale up --accept-dns=false --advertise-exit-node --login-server=https://YOURHOSTNAME.YOURDOMAIN:PORT --accept-routes
 # 或者是: 
 sudo tailscale up --accept-dns=false --login-server=https://YOURHOSTNAME.YOURDOMAIN:PORT --accept-routes
-# 还能是: 
-sudo tailscale up --accept-dns=false --login-server=https://YOURHOSTNAME.YOURDOMAIN:PORT --accept-routes --force-reauth
 # 最后是: 
 sudo tailscale up --accept-dns=true --login-server=https://YOURHOSTNAME.YOURDOMAIN:PORT --accept-routes
-
-
+```
 这个命令执行完毕之后, 会返回一个网页, 网页打开里面有一个命令, 复制命令去 headscale 服务器的命令行(bash)里面执行一下,节点就注册进来了.
+
+## 更新现在已经存在的设置
+最近需要更新我的一个节点， 发布 VPC内的 CIDR 块, 这个设置之前没有 advertise-route, 已经跑了很久, 是是否更新一下了 。
+这个实例在我的默认VPC里面， 这样的话这个实例就直接变成了这个VPC内的IGW, 流量会通过这个实例发送到VPC内, 试了一下, 可以直接将这个网络范围内的DNS指向VPC内的.2, 甚至可以直接在家用 EFS 这类的东西了. 
+
+当然, 如果节点需要变动之前运行的参数, 是需要给出和之前一致的参数, 然后添加 或者 变更其中的一部分的.
+
+```shell
+
+sudo tailscale up --accept-dns=false --advertise-exit-node --login-server=https://YOURHOSTNAME.YOURDOMAIN:PORT --accept-routes --advertise-routes=172.31.0.0/16
+
 ```
