@@ -11,13 +11,13 @@ tags:
 kubectl delete pod --field-selector="status.phase==Failed"
 ```
 
-## 查看证书信息
+### 查看证书信息
 查看 AWS LoadBalancer 证书的信息，检查证书的有效期： 
 ```bash
 kubectl get validatingwebhookconfigurations.admissionregistration.k8s.io aws-load-balancer-webhook -ojsonpath={.webhooks[0].clientConfig.caBundle}  | base64 -d  | openssl x509 -noout -text
 ```
 
-## 使用 Debug 容器
+### 使用 Debug 容器
 ```bash
 # 给特定的容器附加一个Sidecar， 并启动shell。
 kubectl debug -it --image=public.ecr.aws/amazonlinux/amazonlinux:latest aws-node-cpmck
