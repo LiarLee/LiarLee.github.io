@@ -73,4 +73,27 @@ no crontab for ssm-user
 ```shell
 sudo SUSEConnect --list-extensions
 ```
-###
+### Linux 查看网络可能存在的丢包和异常。
+```shell
+> ip -s link show wlan0
+3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc cake state UP mode DORMANT group default qlen 1000
+    link/ether dc:a6:32:a2:77:a1 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast
+    1479773800 3264136      0       0       0   29898
+    TX:  bytes packets errors dropped carrier collsns
+    2132719784 3716055      0       0       0       0
+> ethtool -S end0 | grep drop
+     rx_dropped: 0
+     tx_dropped: 0
+     rxq0_dropped: 0
+     rxq1_dropped: 0
+     rxq2_dropped: 0
+     rxq3_dropped: 0
+     rxq16_dropped: 0
+```
+### Openssl 建立连接测试
+```shell
+openssl s_client -debug --connect some.domain.com:443
+# 指定算法和协议版本
+openssl s_client -debug --connect some.domain.com:443 -tls1_2 -cipher RC4
+```
