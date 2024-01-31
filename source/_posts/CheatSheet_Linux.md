@@ -4,6 +4,7 @@ category: Linux
 date: 2023-12-08 13:57:57
 tags:
   - Linux
+  - CheatSheet
 ---
 
 ### PS 查看 Cpu， Mem 最高几个进程

@@ -4,6 +4,7 @@ category: Kubernetes
 date: 2023-12-08 13:57:57
 tags:
   - Kubernetes
+  - CheatSheet
 ---
 ### 移除所有失败的pod
 ```shell
