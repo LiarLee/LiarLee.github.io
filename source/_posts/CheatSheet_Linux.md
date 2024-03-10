@@ -1,7 +1,7 @@
 ---
 title: CheatSheet_Linux
 category: Linux
-date: 2023-12-08 13:57:57
+date: 2333-12-08 13:57:57
 tags:
   - Linux
   - CheatSheet
@@ -147,4 +147,31 @@ tshark -i ens5 -n -f 'tcp dst port 32123' -T fields -e frame.number -e frame.tim
 
 # 抓取 dns 请求， 并显示 IP TTL 以及 DNS TTL， 格式化输出
 > sudo tshark -i ens5 -Y 'dns' -T fields -e ip.src -e ip.dst -e dns.qry.name -e  ip.ttl -E header=y -E separator='/t' -E quote='d' -E occurrence=f
+```
+
+### Iptables 常用命令
+关于 iptables 的扩展内容： [[Linux/Linux_Iptables-and-conntrack|Linux_Iptables-and-conntrack]] 
+#### 清理Kubernetes所有的路由条目（流量会中断
+```shell
+iptables -X && iptables -F && iptables -Z && iptables -t nat -F && iptables -t nat -X && iptables -t nat -Z
+```
+#### 查看 Iptables 中的规则，并标记显示行号
+```shell
+# 查看 nat 表
+iptables -t nat -nvL --line-number
+
+# 爱看 filter 表
+iptables -nvL --line-number
+
+# 查看 raw 表
+iptables -t raw -nvL --line-number
+```
+#### 增加、删除规则
+```shell
+# 增加规则在 nat 表上先进行 DNAT
+# 这个规则的意义是， 将收到所有来源的udp报文中的端口， 从 20000 - 30000 范围内， 重写成dport 32124 并继续判断下一个规则， 这个规则会在PREROUTING上第一个被执行。 
+iptables -t nat -I PREROUTING 1 -i eth0 -p udp --dport 20000:30000 -j DNAT --to-destination :32124
+
+# 删除 nat 表 PRERTOUING 上的第一个规则
+iptables -t nat -D PREROUTING 1
 ```
