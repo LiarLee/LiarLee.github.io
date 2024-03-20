@@ -29,3 +29,14 @@ kubectl debug mypod -it --image=nicolaka/netshoot
 ```shell
 aws eks describe-addon-versions --kubernetes-version 1.25 --addon-name vpc-cni | grep addonVersion
 ```
+### 列出节点上所有容器的镜像名称
+```shell
+# ssh 到节点上面执行
+nerdctl inspect $(nerdctl ps -a -q) | grep -i "image.:"  | sort -f
+
+# 清理节点上未使用的镜像，不仅仅是 dangling image
+nerdctl image prune -af
+
+# 设置 nerdctl 命令的自动补全
+nerdctl completion bash > /etc/bash_completion.d/nerdctl
+```
