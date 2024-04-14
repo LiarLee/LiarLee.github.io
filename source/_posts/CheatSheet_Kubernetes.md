@@ -40,3 +40,9 @@ nerdctl image prune -af
 # 设置 nerdctl 命令的自动补全
 nerdctl completion bash > /etc/bash_completion.d/nerdctl
 ```
+### Nsenter 进入容器
+```shell
+ ~]$ nerdctl inspect 02182f3e9137 | grep -i pid
+                "Pid": 10306,
+ ~]$ nsenter -t 10306 -n
+```
