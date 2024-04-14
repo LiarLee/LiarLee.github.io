@@ -281,7 +281,7 @@ Max nice priority         0                    0
 Max realtime priority     0                    0
 Max realtime timeout      unlimited            unlimited            us
 ```
-当我 openfile 的软限制提高到 65535 的时候,  连接数现在是正常的了. 
+当我 openfile 的软限制提高到 65535 的时候,  连接数现在是正常的了.  
 ```shell
 ~]$ ss -s 
 Total: 60285
@@ -300,6 +300,30 @@ fd]# ll | grep socket | wc -l
 
 那么有多少个端口可以使用呢? 
 > 60999 - 1024 = 59975
+
+补充一些其他的信息, 内核对于整体的文件系统打开文件的数量限制, 需要查看内核参数, 这个在现代的操作系统中一般来说是不会达到上限的,  可以看看这个参数, 这个是总的数量: 
+```bash
+mnt]$ cat /proc/sys/fs/file-max
+1000000
+
+或者 
+
+mnt]$ sysctl -a | grep file-max
+fs.file-max = 1000000
+```
+之后才是 ulimit 生效的限制 
+在上面直接使用了 ulimit 命令, 打印出的是 当前 bash shell 的limit 值, 并且是 hard limit 值.
+如果需要查看具体的软硬限制的不同, 有两个方法: 
+```bash
+1 使用ulimit命令, 需要关注自己运行程序的用户身份,ulimit 和 用户身份是相关的
+# 输出软限制
+ulimit -Sn
+# 输出硬限制
+ulimit -Hn
+
+2 找到这个进程的pid, 查看proc下的记录, 这会列出所有限制的值
+cat /proc/self/limits
+```
 
 这个问题结案啦. 回到 sysbench 的分析.
 
