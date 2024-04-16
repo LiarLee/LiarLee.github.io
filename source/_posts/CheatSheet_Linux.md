@@ -175,3 +175,16 @@ iptables -t nat -I PREROUTING 1 -i eth0 -p udp --dport 20000:30000 -j DNAT --to-
 # 删除 nat 表 PRERTOUING 上的第一个规则
 iptables -t nat -D PREROUTING 1
 ```
+
+### 命令 Ss 用法
+查看处于 close wait 状态的 Socket
+```bash
+ss --tcp state CLOSE-WAIT
+```
+
+关闭所有处于 closewait 的socket ,通过 ss 命令干预, 通常应该由应用程序关闭, 而不是 ss 命令关闭, 这个命令只是记录一下用法. 
+最佳的方式是找到异常的进程, 并查看为什么程序不能及时的关闭 socket , 或者 kill 掉这个进程. 
+
+```
+ss --tcp state CLOSE-WAIT --kill
+```

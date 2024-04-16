@@ -7,12 +7,11 @@ tags:
   - Linux
   - Network
 ---
+#### 复现方法
 使用下面的命令运行并进行测试:
-1. 创建 docker 容器.
+1. 创建 docker 容器, 运行 MySQL.
 ```shell
 docker run -it -d --net=host -e MYSQL_ROOT_PASSWORD=123 --name=mysql-server reg.liarlee.site/docker.io/mysql
-
-docker run --net=host --privileged -it reg.liarlee.site/docker.io/phantooom/plantegg:sysbench-lab bash
 ```
 2. 连接并创建数据库.
 ```bash
@@ -20,12 +19,14 @@ mysql -h127.1 --ssl-mode=DISABLED -utest -p123 -e "create database test"
 ```
 3. sysbench
 ```bash
+docker run --net=host --privileged -it reg.liarlee.site/docker.io/phantooom/plantegg:sysbench-lab bash
+
 sysbench --mysql-user='root' --mysql-password='123' --mysql-db='test' --mysql-host='127.0.0.1' --mysql-port='3306' --tables='16' --table-size='10000' --range-size='5' --db-ps-mode='disable' --skip-trx='on' --mysql-ignore-errors='all' --time='1180' --report-interval='1' --histogram='on' --threads=1 oltp_read_only prepare
 
 sysbench --mysql-user='root' --mysql-password='123' --mysql-db='test' --mysql-host='127.0.0.1' --mysql-port='3306' --tables='16' --table-size='10000' --range-size='5' --db-ps-mode='disable' --skip-trx='on' --mysql-ignore-errors='all' --time='1180' --report-interval='1' --histogram='on' --threads=1 oltp_read_only run
 ```
 4. 查看客户端进程.
-```shell
+```mysql
 MySQL [(none)]> show processlist;
 +----+-----------------+---------------------+------+---------+------+------------------------+------------------+
 | Id | User            | Host                | db   | Command | Time | State                  | Info             |
@@ -37,12 +38,12 @@ MySQL [(none)]> show processlist;
 3 rows in set, 1 warning (0.000 sec)
 
 ```
-1. kill进程
-```shell
+5. kill进程
+```mysql
 MySQL [(none)]> kill 11;
 Query OK, 0 rows affected (0.001 sec)
 
-
+MySQL [(none)]> show processlist;
 +-----+----------------------+---------------------+------+---------+------+------------------------+------------------+
 | Id  | User                 | Host                | db   | Command | Time | State                  | Info             |
 +-----+----------------------+---------------------+------+---------+------+------------------------+------------------+
@@ -94,9 +95,35 @@ FRAG	  0         0         0
 
 #### TCP CLOSE_WAIT 代表什么?
 四次挥手的流程停止在最后一次FIN ack 之前. 
+代码层面忘记了 关闭相应的 socket 连接
+CLOSE_WAIT 状态在服务器停留时间很短，如果你发现大量的 CLOSE_WAIT 状态，那么就意味着被动关闭的一方没有及时发出 FIN 包.
 
-#### CPU 使用情况怎么样?
-Mysql 在持续一段时间之后连接数也都释放了, 没有任何旧连接, 压力也消失了.  sysbench大部分的CPU时间在 Sys. 集中在 kernel space 处理.   
+#### 所有的状态都是 CloseWait, 会不会超时? 多久超时?
+在网络断开连接的流程中, 其实是没有服务端的, 两端都可以发起连接的断开, 主要看主动发起是谁. 
+在这个问题里面, 按照抓包的结果, 主动断开的一方是:  MySQLServer:3306 ,  sysbench 是响应断开的一方, 因此 sysbench
+进入了 Close_Wait.
+
+![2024-04-16_14-31.png](https://s2.loli.net/2024/04/16/kJ9N1BVoshQpuMF.png)
+
+上面的这个抓包结果可以非常清楚的看到, MySQL 等待了10s之后超时了, 主动发送了FIN给 sysbench 断开这个连接.
+这时候 sysbench 也回复了ack, 表示收到了, 然后进入挥手流程的后半段, 应该由sysbench 发送 fin, mysql 回复 ack. 但是 sysbench 在这个时候没动.  可以确定是 sysbench 的问题了. 
+
+这个状态的持续时间没有一个固定的最大值，它取决于本地应用程序何时关闭连接。如果应用程序没有正确地关闭套接字，那么连接可能会无限期地保持在`CLOSE_WAIT`状态。
+
+> Refer:  
+  https://www.baeldung.com/linux/remove-close_wait-connection
+  https://www.ietf.org/rfc/rfc9293.html#name-state-machine-overview
+
+控制MySQL 超时时间的参数是:
+这个默认的参数是10s , 可以改成更长. 
+```ini
+[mysqld]
+connect_timeout=10  
+```
+
+#### CPU 使用情况?
+Mysql 在持续一段时间之后连接数也都释放了, 没有任何旧连接, 压力也消失了.  
+sysbench大部分的CPU时间在 Sys, 内核态花费的时间比较多.   
 ```shell
 ~]$ sar -P ALL 1 5
 Linux 5.10.213-201.855.amzn2.x86_64  	04/11/2024 	_x86_64_	(4 CPU)
@@ -146,67 +173,138 @@ Average:          3      0.80      0.00      4.39      0.00      1.80     93.01
 
 #### Sysbench 在做什么?
 ---
-
- ```shell
- ~]$ perf top -p `pgrep sysbench`
-   55.10%  [kernel]            [k] __inet_check_established
-   26.76%  [kernel]            [k] __inet_hash_connect
-   3.93%  [kernel]            [k] _cond_resched
-   3.80%  [kernel]            [k] inet_ehashfn
-   3.51%  [kernel]            [k] __raw_callee_save___pv_queued_spin_unlock
-   3.22%  [kernel]            [k] _raw_spin_lock_bh
-   1.24%  [kernel]            [k] _raw_spin_lock
-   0.86%  [kernel]            [k] srso_safe_ret
-   0.34%  [kernel]            [k] _raw_spin_unlock_bh
+#### 使用perf 查看热点函数
+```bash
+perf top -p `pgrep sysbench`
+  61.87%  [k] __inet_check_established
+   9.99%  [k] __inet_hash_connect
+   8.25%  [k] _raw_spin_lock
+   8.25%  [k] _raw_spin_lock_bh
+   3.99%  [k] inet_ehashfn
+   1.75%  [k] __local_bh_enable_ip
+   1.00%  [k] _raw_spin_unlock
+   0.57%  [k] _raw_spin_unlock_bh
+   0.42%  [k] finish_task_switch.isra.0
+   0.24%  [k] native_queued_spin_lock_slowpath
+   0.08%  [k] do_syscall_64
 ```
 
-在 sysbench 创建socket 的过程中使用 strace 查看: 
-```c
-[pid 23606] getpid()                    = 45
-[pid 23606] mprotect(0x7f0cdb5bd000, 8192, PROT_READ|PROT_WRITE) = 0
-[pid 23606] socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 19623
-[pid 23606] fcntl(19623, F_SETFL, O_RDONLY|O_NONBLOCK) = 0
-[pid 23606] connect(19623, {sa_family=AF_INET, sin_port=htons(3306), sin_addr=inet_addr("172.31.47.174")}, 16) = -1 EINPROGRESS (Operation now in progress)
-[pid 23606] poll([{fd=19623, events=POLLOUT}], 1, -1) = 1 ([{fd=19623, revents=POLLOUT}])
-[pid 23606] getsockopt(19623, SOL_SOCKET, SO_ERROR, [0], [4]) = 0
-[pid 23606] fcntl(19623, F_SETFL, O_RDONLY) = 0
-[pid 23606] mprotect(0x7f0cdb5bf000, 8192, PROT_READ|PROT_WRITE) = 0
-[pid 23606] clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=0, tv_nsec=1000000}, NULL) = 0
-[pid 23606] getpid()                    = 45
-[pid 23606] mprotect(0x7f0cdb5c1000, 8192, PROT_READ|PROT_WRITE) = 0
-[pid 23606] socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 19624
-[pid 23606] fcntl(19624, F_SETFL, O_RDONLY|O_NONBLOCK) = 0
-[pid 23606] connect(19624, {sa_family=AF_INET, sin_port=htons(3306), sin_addr=inet_addr("172.31.47.174")}, 16) = -1 EINPROGRESS (Operation now in progress)
-[pid 23606] poll([{fd=19624, events=POLLOUT}], 1, -1) = 1 ([{fd=19624, revents=POLLOUT}])
-[pid 23606] getsockopt(19624, SOL_SOCKET, SO_ERROR, [0], [4]) = 0
-[pid 23606] fcntl(19624, F_SETFL, O_RDONLY) = 0
-[pid 23606] mprotect(0x7f0cdb5c3000, 8192, PROT_READ|PROT_WRITE) = 0
-[pid 23606] clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=0, tv_nsec=1000000}, NULL) = 0
-[pid 23606] getpid()                    = 45
-[pid 23606] mprotect(0x7f0cdb5c5000, 8192, PROT_READ|PROT_WRITE) = 0
-[pid 23606] socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 19625
-[pid 23606] fcntl(19625, F_SETFL, O_RDONLY|O_NONBLOCK) = 0
-[pid 23606] connect(19625, {sa_family=AF_INET, sin_port=htons(3306), sin_addr=inet_addr("172.31.47.174")}, 16) = -1 EINPROGRESS (Operation now in progress)
-[pid 23606] poll([{fd=19625, events=POLLOUT}], 1, -1) = 1 ([{fd=19625, revents=POLLOUT}])
-[pid 23606] getsockopt(19625, SOL_SOCKET, SO_ERROR, [0], [4]) = 0
-[pid 23606] fcntl(19625, F_SETFL, O_RDONLY) = 0
-[pid 23606] mprotect(0x7f0cdb5c7000, 8192, PROT_READ|PROT_WRITE) = 0
-[pid 23606] clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=0, tv_nsec=1000000}, NULL) = 0
-[pid 23606] getpid()                    = 45
-[pid 23606] mprotect(0x7f0cdb5c9000, 8192, PROT_READ|PROT_WRITE) = 0
-[pid 23606] socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 19626
-[pid 23606] fcntl(19626, F_SETFL, O_RDONLY|O_NONBLOCK) = 0
-[pid 23606] connect(19626, {sa_family=AF_INET, sin_port=htons(3306), sin_addr=inet_addr("172.31.47.174")}, 16) = -1 EINPROGRESS (Operation now in progress)
-[pid 23606] poll([{fd=19626, events=POLLOUT}], 1, -1) = 1 ([{fd=19626, revents=POLLOUT}])
-[pid 23606] getsockopt(19626, SOL_SOCKET, SO_ERROR, [0], [4]) = 0
-[pid 23606] fcntl(19626, F_SETFL, O_RDONLY) = 0
-[pid 23606] mprotect(0x7f0cdb5cb000, 8192, PROT_READ|PROT_WRITE) = 0
-[pid 23606] clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=0, tv_nsec=1000000}, NULL) = 0
+这个部分我并不了解,  直接丢给 Bing AI. 
+> [具体来说，当一个新的连接请求到来时，`__inet_check_established`会遍历已经建立的连接列表，比较现有连接的四元组与新请求的四元组是否完全一致。如果不一致，说明该端口仍然可用于新的连接。这个函数是TCP三次握手过程中非常重要的一部分，确保了连接的正确建立和网络的稳定运行](https://blog.csdn.net/qq_40378034/article/details/134475987)[1](https://blog.csdn.net/qq_40378034/article/details/134475987)。
+
+>  - `__inet_hash_connect` 用于在TCP连接建立时，为客户端分配一个可用的本地端口号。
+    - 它负责将新建立的连接的四元组（源IP地址、源端口号、目的IP地址、目的端口号）与已有连接进行比较，以确保端口的唯一性。
+    - 如果找到可用的端口号，就将连接状态设置为 `TCP_SYN_SENT`，表示正在发送SYN请求。
+
+可以看到, 内核是在忙于创建新的连接并尝试寻找端口, 那么现在的问题是 为什么 sysbench 在忙于创建新的进程呢?
+#### 为什么在忙于创建新的连接?
+继续使用perf命令观察这个进程, 当然这里其实是有点问题的, 重新建立连接, kill 进程, 观察发生问题时间的调用才有价值.
+因为上面提到的那个流程,  一段时间之后, 实在是没有可用的端口了, 就不会创建新的连接了, 这就观察不到sysbench程序的异常行为了.
+
+```bash
+╰─>$ perf trace -s -p 13193 -- sleep 10
+
+ Summary of events:
+
+ sysbench (13194), 30 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   clock_nanosleep       10      0  8986.912     0.000   898.691   998.558     11.11%
+   write                 10      0     0.167     0.014     0.017     0.018      2.91%
+
+
+ sysbench (13195), 145906 events, 100.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   poll               13088      0  6375.621     0.001     0.487  5004.016     78.49%
+   clock_nanosleep     2960      0  3156.472     1.020     1.066     3.842      0.10%
+   openat              2915      0    64.979     0.006     0.022     8.424     18.04%
+   connect             5929   2970    52.725     0.004     0.009     0.039      0.60%
+   recvfrom            5897      0    41.324     0.003     0.007     0.049      0.70%
+   socket              5936      0    30.225     0.002     0.005     0.036      0.69%
+   stat                1685      0    19.962     0.005     0.012     0.036      0.59%
+   close               5914      0    15.990     0.001     0.003     0.030      0.65%
+   sendto              2543      0    15.488     0.004     0.006     0.038      0.76%
+   sendmmsg            1685      0    13.396     0.004     0.008     0.035      0.80%
+   read                5904      0    12.030     0.001     0.002     0.032      0.75%
+   mprotect            2939      0    11.497     0.003     0.004     0.029      0.61%
+   ioctl               5908      0     9.831     0.001     0.002     0.035      0.88%
+   fcntl               5894      0     8.531     0.001     0.001     0.021      0.66%
+   getsockopt          2949      0     6.692     0.001     0.002     0.344      9.16%
+   setsockopt          2959      0     5.314     0.001     0.002     0.021      1.02%
+   fstat               2960      0     5.162     0.001     0.002     0.028      1.85%
+   lseek               2960      0     4.312     0.001     0.001     0.020      0.95%
+   getpid              2959      0     4.102     0.001     0.001     0.019      0.90%
+   mmap                   1      0     0.008     0.008     0.008     0.008      0.00%
+   madvise                1      0     0.005     0.005     0.005     0.005      0.00%
 ```
 
-#### 为什么sysbench 没处理
+使用 perf trace 查看系统调用的细节: 
+这里面看到的系统调用是疯狂创建进程的时候
+```
+  6853.284 ( 0.002 ms): sysbench/13322 getsockopt(fd: 1044<socket:[1213745]>, level: 1, optname: 4, optval: 0x7e678543d400, optlen: 0x7e678543d404) = 0
+  6853.288 ( 0.002 ms): sysbench/13322 fcntl(fd: 1044<socket:[1213745]>, cmd: SETFL)                         = 0
+  6853.288 ( 1.082 ms): sysbench/13322  ... [continued]: clock_nanosleep())                                  = 0
+  6854.379 ( 0.002 ms): sysbench/13322 getpid()                                                              = 47
+  6854.379 ( 0.022 ms): sysbench/13322  ... [continued]: stat())                                             = 0
+  6854.379 ( 0.048 ms): sysbench/13322  ... [continued]: openat())                                           = 1045
+  6854.429 ( 0.002 ms): sysbench/13322 fstat(fd: 1045<socket:[1213748]>, statbuf: 0x7e678543c950)            = 0
+  6854.437 ( 0.002 ms): sysbench/13322 lseek(fd: 1045<socket:[1213748]>, whence: SET)                        = 0
+  6854.441 ( 0.003 ms): sysbench/13322 read(fd: 1045<socket:[1213748]>, buf: 0x7e677909def0, count: 4096)    = 605
+  6854.449 ( 0.002 ms): sysbench/13322 read(fd: 1045<socket:[1213748]>, buf: 0x7e677909def0, count: 4096)    = 0
+  6854.454 ( 0.004 ms): sysbench/13322 close(fd: 1045<socket:[1213748]>)                                     = 0
+  6854.462 ( 0.007 ms): sysbench/13322 socket(family: INET, type: DGRAM|CLOEXEC|NONBLOCK)                    = 1045
+  6854.471 ( 0.002 ms): sysbench/13322 setsockopt(fd: 1045<socket:[1213748]>, level: IP, optname: 11, optval: 0x7e678543b794, optlen: 4) = 0
+  6854.471 ( 0.009 ms): sysbench/13322  ... [continued]: connect())                                          = 0
+  6854.482 ( 0.002 ms): sysbench/13322 poll(ufds: 0x7e678543b918, nfds: 1)                                   = 1
+  6854.486 ( 0.016 ms): sysbench/13322 sendmmsg(fd: 1045<socket:[1213748]>, mmsg: 0x7e678543b940, vlen: 2, flags: NOSIGNAL) = 2
+  6854.504 ( 0.193 ms): sysbench/13322 poll(ufds: 0x7e678543b918, nfds: 1, timeout_msecs: 5000)              = 1
+  6854.699 ( 0.003 ms): sysbench/13322 ioctl(fd: 1045<socket:[1213748]>, cmd: FIONREAD, arg: 0x7e678543b8dc) = 0
+  6854.699 ( 0.007 ms): sysbench/13322  ... [continued]: recvfrom())                                         = 50
+  6854.710 ( 0.003 ms): sysbench/13322 poll(ufds: 0x7e678543b918, nfds: 1, timeout_msecs: 4999)              = 1
+  6854.714 ( 0.001 ms): sysbench/13322 ioctl(fd: 1045<socket:[1213748]>, cmd: FIONREAD, arg: 0x7e678543cb94) = 0
+  6854.718 ( 0.005 ms): sysbench/13322 mprotect(start: 0x7e67790aa000, len: 16384, prot: READ|WRITE)         = 0
+  6854.718 ( 0.013 ms): sysbench/13322  ... [continued]: recvfrom())                                         = 125
+  6854.734 ( 0.004 ms): sysbench/13322 close(fd: 1045<socket:[1213748]>)                                     = 0
+  6854.742 ( 0.005 ms): sysbench/13322 socket(family: INET, type: STREAM, protocol: TCP)                     = 1045
+  6854.749 ( 0.002 ms): sysbench/13322 fcntl(fd: 1045<socket:[1213748]>, cmd: SETFL, arg: RDONLY|NONBLOCK)   = 0
+  6854.749 ( 0.019 ms): sysbench/13322  ... [continued]: connect())                                          = -1 EINPROGRESS (Operation now in progress)
+  6854.769 ( 0.169 ms): sysbench/13322 poll(ufds: 0x7e678543d3b0, nfds: 1, timeout_msecs: 4294967295)        = 1
+  6854.942 ( 0.002 ms): sysbench/13322 getsockopt(fd: 1045<socket:[1213748]>, level: 1, optname: 4, optval: 0x7e678543d400, optlen: 0x7e678543d404) = 0
+  6854.947 ( 0.002 ms): sysbench/13322 fcntl(fd: 1045<socket:[1213748]>, cmd: SETFL)                         = 0
+  6854.947 ( 1.072 ms): sysbench/13322  ... [continued]: clock_nanosleep())                                  = 0
+  6856.025 ( 0.002 ms): sysbench/13322 getpid()                                                              = 47
+  6856.025 ( 0.019 ms): sysbench/13322  ... [continued]: stat())                                             = 0
+  6856.025 ( 0.026 ms): sysbench/13322  ... [continued]: openat())                                           = 1046
+  6856.054 ( 0.002 ms): sysbench/13322 fstat(fd: 1046<socket:[1211228]>, statbuf: 0x7e678543c950)            = 0
+  6856.059 ( 0.001 ms): sysbench/13322 lseek(fd: 1046<socket:[1211228]>, whence: SET)                        = 0
+  6856.063 ( 0.003 ms): sysbench/13322 read(fd: 1046<socket:[1211228]>, buf: 0x7e67790a1f90, count: 4096)    = 605
+  6856.071 ( 0.001 ms): sysbench/13322 read(fd: 1046<socket:[1211228]>, buf: 0x7e67790a1f90, count: 4096)    = 0
+  6856.074 ( 0.003 ms): sysbench/13322 close(fd: 1046<socket:[1211228]>)                                     = 0
+  6856.081 ( 0.006 ms): sysbench/13322 socket(family: INET, type: DGRAM|CLOEXEC|NONBLOCK)                    = 1046
+  6856.088 ( 0.002 ms): sysbench/13322 setsockopt(fd: 1046<socket:[1211228]>, level: IP, optname: 11, optval: 0x7e678543b794, optlen: 4) = 0
+  6856.088 ( 0.008 ms): sysbench/13322  ... [continued]: connect())                                          = 0
+  6856.097 ( 0.001 ms): sysbench/13322 poll(ufds: 0x7e678543b918, nfds: 1)                                   = 1
+  6856.100 ( 0.014 ms): sysbench/13322 sendmmsg(fd: 1046<socket:[1211228]>, mmsg: 0x7e678543b940, vlen: 2, flags: NOSIGNAL) = 2
+  6856.115 ( 0.173 ms): sysbench/13322 poll(ufds: 0x7e678543b918, nfds: 1, timeout_msecs: 5000)              = 1
+  6856.290 ( 0.002 ms): sysbench/13322 ioctl(fd: 1046<socket:[1211228]>, cmd: FIONREAD, arg: 0x7e678543b8dc) = 0
+  6856.290 ( 0.006 ms): sysbench/13322  ... [continued]: recvfrom())                                         = 50
+  6856.299 ( 0.002 ms): sysbench/13322 poll(ufds: 0x7e678543b918, nfds: 1, timeout_msecs: 4999)              = 1
+  6856.302 ( 0.002 ms): sysbench/13322 ioctl(fd: 1046<socket:[1211228]>, cmd: FIONREAD, arg: 0x7e678543cb94) = 0
+  6856.305 ( 0.005 ms): sysbench/13322 mprotect(start: 0x7e67790ae000, len: 16384, prot: READ|WRITE)         = 0
+  6856.305 ( 0.010 ms): sysbench/13322  ... [continued]: recvfrom())                                         = 125
+  6856.317 ( 0.004 ms): sysbench/13322 close(fd: 1046<socket:[1211228]>)                                     = 0
+  6856.326 ( 0.005 ms): sysbench/13322 socket(family: INET, type: STREAM, protocol: TCP)                     = 1046
+  6856.332 ( 0.002 ms): sysbench/13322 fcntl(fd: 1046<socket:[1211228]>, cmd: SETFL, arg: RDONLY|NONBLOCK)   = 0
+  6856.332 ( 0.016 ms^C): sysbench/13322  ... [continued]: connect())                                          = -1 EINPROGRESS (Operation now in progress)
 
-##### 插曲1 连接数好少
+```
+
+##### 其他 1 连接数好少
 为什么我的docker 容器只创建了 20000+ 个连接就停止了, 我看了其他人的测试, 测试的结果都是 40000+,  我看到我的 sysbench 不在继续了,strace 停止在了 wait4(. 
 28271 到底是什么地方限制的? 我的 max connection 数量 是   65535 ?  现在还远远没有达到 os 的上限 ? 
 
@@ -325,9 +423,8 @@ ulimit -Hn
 cat /proc/self/limits
 ```
 
-这个问题结案啦. 回到 sysbench 的分析.
-
-##### 插曲2 我的数据报文大小和大佬们的不一样.
+这部分结束了.
+##### 其他 2 我的数据报文大小和大佬们的不一样.
 查看当前的连接状态, 这里非常奇怪, 我显示 RecvQ 是 **28** 或者 **132**, 我看大佬们的测试结果是 **79**. 
 ```shell
 [root@reg fd]# netstat -anop | grep 3306 | head -n 30
@@ -373,7 +470,7 @@ CLOSE-WAIT 28     0      172.31.55.230:44820 172.31.47.174:3306  users:(("sysben
 > .......Too many connections
 
 好吧... 这说明MySQL server 给回复 Too many connections 这个文本(笑. 
-然后我意识到, 这个回复应该是我的MySQL 可能限制了最大连接数..... 
+然后我意识到, 这个回复应该是我的 MySQL 可能限制了最大连接数..... 
 ```mysql
 MySQL [(none)]> show variables like '%max_connections%';
 +------------------------+-------+
@@ -414,4 +511,3 @@ ESTAB      77     0      172.31.55.230:42964 172.31.47.174:3306  users:(("sysben
 ```
 
 --- 
-Mark 还在继续写... 

@@ -164,3 +164,25 @@ iptables -F PREROUTING -t raw
 详细的命令参考这个Blog ： https://blog.csdn.net/qq_43684922/article/details/126815699
 
 注： 这个功能非常清晰， 但是如果网络流量比较大会导致内核输出了太多的信息， 会卡， 谨慎写策略。
+
+---
+## 关于nf_conntrack的说明
+
+refer: https://jusene.github.io/2020/10/29/conntrack/#%E8%83%8C%E6%99%AF
+会遇到这样的日志:  
+```bash
+kernel: nf_conntrack: table full, dropping packet.
+```
+
+和这个模块的相关的参数可以在这里找到: https://www.kernel.org/doc/Documentation/networking/nf_conntrack-sysctl.txt
+
+通常情况下, 例如在 Kubernetes 中连接数以及并发比较高的情况, 可以使用这个: 
+nf_conntrack_buckets = 65535
+这个参数指定了 hash 表的大小,  通常对于 4GB 以上内存大小的os, 设置为 65535. 如果需要追踪更多的连接, 应该增加.
+我看到 archlinux 的默认值是: 
+```bash
+net.netfilter.nf_conntrack_buckets = 262144
+net.netfilter.nf_conntrack_max = 262144
+# max 应该 等于 Bucket * 4 
+```
+
