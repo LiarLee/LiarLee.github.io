@@ -8,10 +8,17 @@ tags:
   - Network
 ---
 #### 复现方法
+
+我的测试环境是完全使用容器的, 还是遇到了一点点小差异. 
+
+案例来自
+[一次故障的诊断过程--实验重现 2024年必做实验](https://articles.zsxq.com/id_zj5qazqa4odz.html "一次故障的诊断过程--实验重现 2024年必做实验") 的过程, 看看自己差在哪儿.
+
 使用下面的命令运行并进行测试:
+分离了 server 和 client 在不同的实例上,  开始是放在一起的,  后来为了方便确认范围, 就给分开了.
 1. 创建 docker 容器, 运行 MySQL.
 ```shell
-docker run -it -d --net=host -e MYSQL_ROOT_PASSWORD=123 --name=mysql-server reg.liarlee.site/docker.io/mysql
+docker run -it -d --net=host -e MYSQL_ROOT_PASSWORD=123 --name=mysql-server regprox.liarlee.site/docker.io/mysql
 ```
 2. 连接并创建数据库.
 ```bash
@@ -19,13 +26,13 @@ mysql -h127.1 --ssl-mode=DISABLED -utest -p123 -e "create database test"
 ```
 3. sysbench
 ```bash
-docker run --net=host --privileged -it reg.liarlee.site/docker.io/phantooom/plantegg:sysbench-lab bash
+docker run --net=host --privileged -it regprox.liarlee.site/docker.io/phantooom/plantegg:sysbench-lab bash
 
 sysbench --mysql-user='root' --mysql-password='123' --mysql-db='test' --mysql-host='127.0.0.1' --mysql-port='3306' --tables='16' --table-size='10000' --range-size='5' --db-ps-mode='disable' --skip-trx='on' --mysql-ignore-errors='all' --time='1180' --report-interval='1' --histogram='on' --threads=1 oltp_read_only prepare
 
 sysbench --mysql-user='root' --mysql-password='123' --mysql-db='test' --mysql-host='127.0.0.1' --mysql-port='3306' --tables='16' --table-size='10000' --range-size='5' --db-ps-mode='disable' --skip-trx='on' --mysql-ignore-errors='all' --time='1180' --report-interval='1' --histogram='on' --threads=1 oltp_read_only run
 ```
-4. 查看客户端进程.
+4. 查看客户端进程.( 这个记录还是在同一个节点上面测试的记录.
 ```mysql
 MySQL [(none)]> show processlist;
 +----+-----------------+---------------------+------+---------+------+------------------------+------------------+
@@ -81,31 +88,46 @@ MySQL [(none)]> show processlist;
 ```
 问题复现了.
 ```bash
-~]$ ss -s
-Total: 18710
-TCP:   36551 (estab 331, closed 18115, orphaned 7, timewait 18077)
+╰─>$ ss -s
+Total: 28781
+TCP:   28260 (estab 11, closed 2, orphaned 0, timewait 0)
 
 Transport Total     IP        IPv6
-RAW	  1         1         0
-UDP	  9         5         4
-TCP	  18436     18271     165
-INET	  18446     18277     169
+RAW	  3         1         2
+UDP	  5         2         3
+TCP	  28258     28250     8
+INET	  28266     28253     13
 FRAG	  0         0         0
+
+╰─>$ ss -tnapo | grep sysbench | head -n 10
+CLOSE-WAIT 28     0                                  172.31.47.174:58237                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=23277))
+CLOSE-WAIT 28     0                                  172.31.47.174:43369                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=21937))
+CLOSE-WAIT 28     0                                  172.31.47.174:35635                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=19215))
+CLOSE-WAIT 132    0                                  172.31.47.174:37239                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=24057))
+CLOSE-WAIT 28     0                                  172.31.47.174:52934                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=10649))
+CLOSE-WAIT 28     0                                  172.31.47.174:34869                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=17359))
+CLOSE-WAIT 28     0                                  172.31.47.174:52715                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=21048))
+CLOSE-WAIT 28     0                                  172.31.47.174:33084                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=11452))
+CLOSE-WAIT 28     0                                  172.31.47.174:51338                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=442))
+CLOSE-WAIT 28     0                                  172.31.47.174:36098                        172.31.55.230:3306  users:(("sysbench",pid=16873,fd=11751))
+
+╰─>$ ss -tnapo | grep 172.31.55.230:3306 | wc -l
+28230
 ```
 
 #### TCP CLOSE_WAIT 代表什么?
-四次挥手的流程停止在最后一次FIN ack 之前. 
-代码层面忘记了 关闭相应的 socket 连接
-CLOSE_WAIT 状态在服务器停留时间很短，如果你发现大量的 CLOSE_WAIT 状态，那么就意味着被动关闭的一方没有及时发出 FIN 包.
+四次挥手的流程完成了一半, 只做了一次FIN+ack, 后面的半部分没了. 
+(好多文档是说, 代码层面忘记了 关闭相应的 socket 连接, 这个在perf trace的时候看起来不是这样的....能看到close调用... 这地方目前还存疑, 我能看到 close 被调用过了 5000+.
+如果你发现大量的 CLOSE_WAIT 状态，那么就意味着被动关闭的一方没有及时发出 FIN 包.
 
-#### 所有的状态都是 CloseWait, 会不会超时? 多久超时?
+CloseWait, 会不会超时? 多久超时?
 在网络断开连接的流程中, 其实是没有服务端的, 两端都可以发起连接的断开, 主要看主动发起是谁. 
-在这个问题里面, 按照抓包的结果, 主动断开的一方是:  MySQLServer:3306 ,  sysbench 是响应断开的一方, 因此 sysbench
+在这个过程里面, 按照抓包的结果, 主动断开的一方是:  MySQLServer:3306 ,  sysbench 是响应断开的一方, 因此 sysbench
 进入了 Close_Wait.
 
 ![2024-04-16_14-31.png](https://s2.loli.net/2024/04/16/kJ9N1BVoshQpuMF.png)
 
-上面的这个抓包结果可以非常清楚的看到, MySQL 等待了10s之后超时了, 主动发送了FIN给 sysbench 断开这个连接.
+上面的这个抓包结果可以非常清楚的看到, MySQL 等待了10s之后超时了, 主动发送了 FIN 给 sysbench 断开这个连接.
 这时候 sysbench 也回复了ack, 表示收到了, 然后进入挥手流程的后半段, 应该由sysbench 发送 fin, mysql 回复 ack. 但是 sysbench 在这个时候没动.  可以确定是 sysbench 的问题了. 
 
 这个状态的持续时间没有一个固定的最大值，它取决于本地应用程序何时关闭连接。如果应用程序没有正确地关闭套接字，那么连接可能会无限期地保持在`CLOSE_WAIT`状态。
@@ -113,13 +135,6 @@ CLOSE_WAIT 状态在服务器停留时间很短，如果你发现大量的 CLOSE
 > Refer:  
   https://www.baeldung.com/linux/remove-close_wait-connection
   https://www.ietf.org/rfc/rfc9293.html#name-state-machine-overview
-
-控制MySQL 超时时间的参数是:
-这个默认的参数是10s , 可以改成更长. 
-```ini
-[mysqld]
-connect_timeout=10  
-```
 
 #### CPU 使用情况?
 Mysql 在持续一段时间之后连接数也都释放了, 没有任何旧连接, 压力也消失了.  
@@ -199,7 +214,7 @@ perf top -p `pgrep sysbench`
 可以看到, 内核是在忙于创建新的连接并尝试寻找端口, 那么现在的问题是 为什么 sysbench 在忙于创建新的进程呢?
 #### 为什么在忙于创建新的连接?
 继续使用perf命令观察这个进程, 当然这里其实是有点问题的, 重新建立连接, kill 进程, 观察发生问题时间的调用才有价值.
-因为上面提到的那个流程,  一段时间之后, 实在是没有可用的端口了, 就不会创建新的连接了, 这就观察不到sysbench程序的异常行为了.
+因为上面提到的那个流程,  一段时间之后, 实在是没有可用的端口了, 就不会创建新的连接了, 这就观察不到sysbench程序创建连接的完整行为了. 
 
 ```bash
 ╰─>$ perf trace -s -p 13193 -- sleep 10
@@ -304,7 +319,7 @@ perf top -p `pgrep sysbench`
 
 ```
 
-##### 其他 1 连接数好少
+##### 其他 1 连接数少
 为什么我的docker 容器只创建了 20000+ 个连接就停止了, 我看了其他人的测试, 测试的结果都是 40000+,  我看到我的 sysbench 不在继续了,strace 停止在了 wait4(. 
 28271 到底是什么地方限制的? 我的 max connection 数量 是   65535 ?  现在还远远没有达到 os 的上限 ? 
 
@@ -510,4 +525,10 @@ ESTAB      77     0      172.31.55.230:49022 172.31.47.174:3306  users:(("sysben
 ESTAB      77     0      172.31.55.230:42964 172.31.47.174:3306  users:(("sysbench",pid=3277,fd=8129))
 ```
 
---- 
+##### 其他 3 MySQL 连接超时时间
+控制 MySQL 连接超时时间的参数是:
+这个默认的参数是10s , 可以改. my.ini 里面的配置.
+```ini
+[mysqld]
+connect_timeout=10  
+```
