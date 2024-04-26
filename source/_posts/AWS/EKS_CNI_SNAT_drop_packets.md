@@ -20,6 +20,11 @@ NLB 开启了保留源地址就意味着 NLB 在转发网络流量的时候不�
 写下这些的时候我已经知道了问题的答案是由于 VPC CNI 的一个 env ， `AWS_VPC_K8S_CNI_EXTERNALSNAT` 会指定是否做 SNAT， 比较早的版本，  cni 插件没有对 SNAT 在iptables上面进行标记和处理， 这样会导致 过不了操作系统的网络报文地址校验， 进而导致丢包。
 关于 linux 的数据包源地址校验，也就是 rp_filter 的参数， 在EKS中默认都是1 。 
 
+```shell
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+```
+
 rp_filter参数用于控制系统是否开启对数据包源地址的校验。rp_filter参数有三个值，0、1、2，具体含义：  
 0：不开启源地址校验。  
 1：开启严格的反向路径校验。对每个进来的数据包，校验其反向路径是否是最佳路径。如果反向路径不是最佳路径，则直接丢弃该数据包。  

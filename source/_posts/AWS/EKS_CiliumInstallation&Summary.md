@@ -305,6 +305,21 @@ Nodes:
 
 2. EC2 部署的 Kubernetes： 集群不能开启HostRouting， 开启之后cilium-health status 无法完成对端节点上面Endpoint的检查， Connection Timeout。也不能完全work。
 
+# 启用 Wireguard 节点间加密
+官方文档: https://docs.cilium.io/en/stable/security/network/encryption/
+1. 启用 wireguard 节点间通信加密
+```bash
+~> cilium upgrade --version 1.15.4 --set kubeProxyReplacement=true --set bpf.masquerade=true --set encryption.enabled=true    --set encryption.type=wireguard
+```
+2. 验证
+```bash
+hayden@arch ~> kubectl -n kube-system exec -ti ds/cilium -- bash
+Defaulted container "cilium-agent" out of: cilium-agent, config (init), mount-cgroup (init), apply-sysctl-overwrites (init), mount-bpf-fs (init), clean-cilium-state (init), install-cni-binaries (init)
+root@haydenzgo:/home/cilium# cilium-dbg status | grep Encryption
+Encryption:              Wireguard       [NodeEncryption: Disabled, cilium_wg0 (Pubkey: OvYVIjFwbWphY2DQl5MbJqd48qbGLCyhbqGJaqkz4yM=, Port: 51871, Peers: 1)]
+root@haydenzgo:/home/cilium#
+```
+
 # 其他资料
 
 > 其他公司业务的配置以及测试。
@@ -328,3 +343,4 @@ cilium upgrade --version 1.14.5 --set kubeProxyReplacement=true --set=ipam.opera
 # 使用如下的命令进行确认：
 kubectl -n kube-system exec ds/cilium -- cilium status | grep BandwidthManager
 ```
+
