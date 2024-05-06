@@ -101,7 +101,7 @@ harbor_admin_password: Harbor12345
 3. 在所有podman节点上配置不安全的私有仓库，podman login [HARBORIP:PORT]
 4. 提示Login Successed， 登录成功，可以正常pull镜像了
 
-# Cephadm Bootstrap
+# Cephadm Bootstrap 阶段使用 Harbor
 ## 编辑cephadm文件，修改如下的镜像名称，和仓库的前缀
 这里其实还是需要再测试的， 按照这个脚本的逻辑， 应该会把所有的镜像都从指定的仓库Pull下来，但是我执行的时候只有ceph/ceph:v16一个镜像下来了， 感觉还是有点儿问题的。
 ```python
