@@ -6,6 +6,7 @@ tags:
   - Steam
   - EC2
   - Nvidia
+  - "Linux"
 ---
 
 接上面的测试， 既然显卡都已经能用了， 为啥不能直接启动一个steam呢？ 于是。。。 

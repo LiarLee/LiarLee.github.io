@@ -3,10 +3,9 @@ title: 2024 Harbor 部署记录
 category: Kubernetes
 date: 2024-05-06 23:26:56
 tags:
-  - Linux
   - Application
-  - EKS
   - Kubernetes
+  - Harbor
 ---
 这次更新的目的是, 将原来的LVM切换成btrfs(真香!
 

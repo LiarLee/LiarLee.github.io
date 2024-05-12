@@ -7,9 +7,6 @@ tags:
 ---
 
 docker基础命令的说明。
-
-<!-- more -->
-
 ## Docker常用命令的说明
 
 ### Docker Pull

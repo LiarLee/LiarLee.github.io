@@ -5,6 +5,7 @@ categories: Healthcare-IT
 tags:
   - Orthanc
   - Docker
+  - Application
 ---
 
 记录了Orthanc的安装过程。只有简单的安装，复杂没研究，待补全。  
@@ -33,4 +34,3 @@ iptables-save
 [Windows安装包下载地址](https://www.orthanc-server.com/download-windows.php)
 直接下载之后运行即可。
 
-## 插件部分
