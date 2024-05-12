@@ -146,6 +146,10 @@ fio 324148 87167.271746:     250000 cpu-clock:pppH:
                        0 [unknown] ([unknown])
 ```
 
+## Psync Vs Libaio
+libaio 用来提供较高的iops测试, 异步 io 的优势
+psync 用来提供延迟的基准,  延迟敏感的测试或者 同步IO 的测试可以使用 psync. 
+
 ## 观测
 
 [[Linux_iostat|Linux_iostat]] 

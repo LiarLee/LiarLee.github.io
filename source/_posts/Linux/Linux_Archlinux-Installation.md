@@ -22,8 +22,112 @@ pacman命令的常用说明：
 	[root@LiarLee ~]# pacman -Ql 包名：列出该包的文件
 	[root@LiarLee ~]# pacman -Syyu 下载已经更新本地的所有软件包
 ```
+# Archlinux Installation Version 2.0
 
-## 安装Archlinux
+Update at 2024-05-12 12:39
+### 船新版本
+设置一下子时区
+```shell
+timedatectl set-timezone Asia/Shanghai
+```
+格式化磁盘, 划分分区
+这次安装的分区划分是: 
+
+| disk | mountpoint| description | filesystem type|
+| -- | -- | -- | -- | 
+| /dev/vda1 |/boot | uefi_partitation  | xfs | 
+| /dev/vda2 | /  | archroot  | btrfs |
+
+fdisk 或者 gpartd 什么的都行
+```shell
+fdisk -l
+```
+格式化文件系统
+```shell
+mkfs.vfat -F 32 /dev/vda1
+mkfs.btrfs -L archroot /dev/vda2
+```
+挂载btrfs root, 在其中创建子卷.
+```shell
+mount /dev/vda2 /mnt
+```
+创建子卷
+```shell
+btrfs su cr /mnt/@
+```
+卸载 btrfs 的 root 卷
+```shell
+umount -R /mnt
+```
+分别挂载创建的子卷 和 uefi 分区
+```shell
+mount -t btrfs -o subvol=@ /dev/vda2 /mnt
+mkdir -pv /mnt/boot
+mount /dev/vda1 /mnt/boot
+```
+检查下挂载的和分区什么的是不是符合预期.
+```shell
+lsblk -f
+```
+配置livecd软件repo地址, 准备开始安装.
+```shell
+reflector --country='china' > /etc/pacman.d/mirrorlist
+```
+pacstrap 安装内核, 基本文件系统, 固件, 常用软件,大概能想起来的就这么多.
+```shell
+pacstrap -K /mnt base linux linux-firmware vim htop wget curl btrfs-progs fastfetch openssh sudo containerd nerdctl zstd ttf-jetbrains-mono-nerd ttf-lxgw-wenkai ttf-lxgw-wenkai-mono tree ranger ncdu mtr fish eza util-linux
+```
+生成fstab, 需要**编辑一下**, 修改里面不合理的内容参数.
+```shell
+genfstab -U /mnt >> /mnt/etc/fstab
+```
+chroot 切换 根文件系统
+```shell
+arch-chroot /mnt
+```
+编辑字符集, 文件里面写英语字符, 偷懒
+```shell
+vim /etc/locale.gen
+
+en_US.UTF-8 UTF-8
+
+locale-gen
+```
+编辑 mkinitcpio 的配置文件, 按需改, 必须 ec2 可能会需要 ena 什么的.... 
+```shell
+vim /etc/mkinitcpio.conf
+mkinitcpio -P
+```
+更改一下root用户的密码.
+```shell
+passwd
+```
+安装 Bootloader, 我懒了, 直接用 systemd-boot 了, 挺好用的. 
+```shell
+bootctl install
+systemctl enable systemd-boot-update.service
+```
+创建一个 bootloader 新的启动项.
+```shell
+vim /boot/loader/entries/arch.conf
+
+  title   Arch Linux
+  linux   /vmlinuz-linux
+  initrd  /initramfs-linux.img
+  options root=UUID=2538f94c-df39-43e5-be97-8a2bc7cd2f44 rootflags=subvol=@ rw
+```
+检查启动配置文件是否存在异常.
+```shell
+bootctl list
+```
+检查没有问题了之后, 就可以退出chroot\卸载\重启了.
+```shell
+exit
+umount -R /mnt
+sync 
+reboot
+```
+# Archlinux Installation Version 1.0
 ### 1. 获取Archlinux镜像
 从这个页面获取镜像： [LINK HERE](https://www.archlinux.org/download/)
 ### 2. 启动到Archlinux Live环境
@@ -95,7 +199,8 @@ root@archiso ~ # ping baidu.com
 
 ### 6. 建立系统的硬盘分区
 建立硬盘分区，我建立了两个分区，一个根分区和一个交换分区。  
-```
+```shell
+
 root@archiso ~ # fdisk -l 
 	Disk /dev/sda: 50 GiB, 53687091200 bytes, 104857600 sectors
 	Disk model: VMware Virtual S
@@ -117,23 +222,23 @@ root@archiso ~ # fdisk -l
 ```
 ### 7. 已经建立分区的格式化
 1. 格式化ext4分区
-```
+```shell
 	root@archiso ~ # mkfs.ext4 /dev/sda2
 ```
 1. 格式化swap分区
-```
+```shell
 	root@archiso ~ # mkswap /dev/sda1  # 将/dev/sda1格式化为swap分区
 	root@archiso ~ # swapon /dev/sda1  # 将/dev/sda1启用为swap分区
 ```
 ### 8. 挂载分区
 使用系统挂载点/mnt，将/dev/sda2作为系统的根目录挂载到/mnt上。 
-```
+```shell
 	root@archiso ~ # mount /dev/sda2 /mnt
 ```
 ### 9. 定义安装所需的Mirrorlist
 ### 10. 安装基础的Archlinux系统组件
 部署安装linux的文件系统，安装系统基础组建的软件包。  
-```
+```shell
 	[root@LiarLee /]# pacstrap /mnt base
 ```
 ### 11. 新系统的相关配置

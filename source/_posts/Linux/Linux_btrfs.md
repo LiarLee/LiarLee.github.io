@@ -7,15 +7,18 @@ tags:
   - IO
   - FileSystem
 ---
-
+学习btrfs文件系统的笔记. 
 ## 创建BTRFS卷
 
     mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 
 
 ## 更改btrfs的元数据冗余
+可以将文件系统的冗余方式进行转换, 例如 raid0, raid1, single.
 
   这里最好的办法当然是创建的时候就规划和指定好。
+  
     btrfs balance start -dconvert=raid1 -mconvert=raid1 /mnt
+    
 ## 创建轻量副本文件
     cp --reflink source dest 
 
@@ -42,7 +45,6 @@ thread
 [job1]
 iodepth=2
 ```
-
 ## Result
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1
@@ -198,3 +200,118 @@ READ: 读取的速率
 
 关于fio 几个参数的测试， 这是我目前见到测试最完整的一个： 
 https://blog.csdn.net/get_set/article/details/108001674
+
+## 文件系统快照
+#### 创建文件系统快照
+
+申请一个新的 EBS 卷, 挂载到之前的实例上面, 格式化文件系统, 创建新的 BTRFS 文件系统设备: 
+```shell
+mkfs.btrfs -L btrfs_snapshot_vault -d single -m single -n 16k /dev/nvme3n1
+```
+列出所有的subvolume
+```shell
+btrfs su li -t  .
+```
+创建新的磁盘挂载点
+```shell
+mkdir -pv /mnt/btrfs_snapshot_loc/
+
+mount -v /dev/nvme3n1 /mnt/btrfs_snapshot_loc/
+```
+创建子卷的快照: 
+```shell
+btrfs su sn -r @harbor_data ".snapshots/harbor_data-2024-05-08-12:46-ro"
+```
+创建增量快照
+```shell
+btrfs send -p ".snapshots/harbor_data-2024-05-08-12:46-ro/" ".snapshots/harbor_data-2024-05-08-13:03-ro/" | btrfs receive /mnt/btrfs_snapshot_loc/
+
+btrfs send -p ".snapshots/harbor_data-2024-05-08-13:03-ro/" ".snapshots/harbor_data-2024-05-08-13:10-ro/" | btrfs receive /mnt/btrfs_snapshot_loc/
+```
+查看目录内容, 分析目录内容和大小.
+磁盘占用空间实际是 15GB, 总文件大小是 47GB. 
+```shell
+
+┬─[root@arch:/mnt]─[01:45:12 PM]
+╰─>$ ll
+total 0
+drwxr-xr-x 1 10000 10000 122 May  8 12:53 harbor_data-2024-05-08-12:46-ro/
+drwxr-xr-x 1 10000 10000 122 May  8 13:06 harbor_data-2024-05-08-13:03-ro/
+drwxr-xr-x 1 10000 10000 122 May  8 13:11 harbor_data-2024-05-08-13:10-ro/
+
+┬─[root@arch:/mnt]─[01:45:13 PM]
+╰─>$ compsize .
+Processed 14560 files, 2192 regular extents (6504 refs), 7311 inline.
+Type       Perc     Disk Usage   Uncompressed Referenced
+TOTAL      100%       15G          15G          47G
+none       100%       15G          15G          47G
+
+```
+## 为btrfs文件系统添加新的磁盘
+添加新的磁盘并列出, 这个时候不会自动平衡文件系统容量, 新添加的磁盘使用容量是空的.
+```shell
+╰─>$ btrfs device add -f /dev/nvme3n1 /mnt/btrfs/root
+```
+进行文件系统再平衡
+```shell
+╰─>$ btrfs balance start --full-balance /mnt/btrfs/root
+
+╰─>$ btrfs balance status .
+Balance on '.' is running
+37 out of about 46 chunks balanced (38 considered),  20% left
+```
+查看平衡之后的文件系统空间使用情况.
+```shell
+╰─>$ btrfs fi us .
+Overall:
+    Device size:		 300.00GiB
+    Device allocated:		  90.06GiB
+    Device unallocated:		 209.94GiB
+    Device missing:		     0.00B
+    Used:			  87.12GiB
+    Free (estimated):		 105.56GiB	(min: 105.56GiB)
+    Data ratio:			      2.00
+    Metadata ratio:		      2.00
+    Global reserve:		  49.48MiB	(used: 48.00KiB)
+
+Data,RAID1: Size:44.00GiB, Used:43.41GiB
+   /dev/nvme1n1	  21.00GiB
+   /dev/nvme2n1	  23.00GiB
+   /dev/nvme3n1	  44.00GiB
+
+Metadata,RAID1: Size:1.00GiB, Used:155.47MiB
+   /dev/nvme1n1	   1.00GiB
+   /dev/nvme3n1	   1.00GiB
+
+System,RAID1: Size:32.00MiB, Used:16.00KiB
+   /dev/nvme1n1	  32.00MiB
+   /dev/nvme3n1	  32.00MiB
+
+Unallocated:
+   /dev/nvme1n1	  27.97GiB
+   /dev/nvme2n1	  27.00GiB
+   /dev/nvme3n1	 154.97GiB
+
+╰─>$ btrfs device us .
+/dev/nvme1n1, ID: 1
+   Device size:            50.00GiB
+   Device slack:              0.00B
+   Data,RAID1:             21.00GiB
+   Metadata,RAID1:          1.00GiB
+   System,RAID1:           32.00MiB
+   Unallocated:            27.97GiB
+
+/dev/nvme2n1, ID: 2
+   Device size:            50.00GiB
+   Device slack:              0.00B
+   Data,RAID1:             23.00GiB
+   Unallocated:            27.00GiB
+
+/dev/nvme3n1, ID: 3
+   Device size:           200.00GiB
+   Device slack:              0.00B
+   Data,RAID1:             44.00GiB
+   Metadata,RAID1:          1.00GiB
+   System,RAID1:           32.00MiB
+   Unallocated:           154.97GiB
+```
