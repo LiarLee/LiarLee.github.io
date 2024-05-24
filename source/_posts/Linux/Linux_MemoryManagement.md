@@ -187,7 +187,8 @@ int main(int argc, char *argv[]) {
 ```
 1. 尝试使用 gdb 调试.
 ```shell
-╰─>$ gdb ./a.out -c ./123.c
+╰─>$ gdb ./a.out -d .
+╰─>$ gdb ./a.out -c ./COREDUMP_FILE
 ```
 #### 指令说明
 - list -  list 指令会列出 10 行代码. 可以重复使用, 每10行一次.
@@ -520,5 +521,21 @@ Breakpoint 15, main (argc=<optimized out>, argv=<optimized out>) at ./123.c:18
 18	    for (int i = 0; i < 100; ++i) {
 1: i = 13
 // 可以看到 上面的 i 的数值恢复到了 13 , checkpoint 回滚了全部的代码, 或者说在 调试的过程中, 在特定的状态 fork 新的一个进程出来, 在需要的时候将状态切换到当前备份出来的新进程上. 
+
+```
+
+#### Fluentbit-aws 的 DEBUG 教程
+> https://github.com/aws/aws-for-fluent-bit/blob/mainline/troubleshooting/tutorials/remote-core-dump/README.md
+
+提供了一些更加有效的命令: 
+- 在 GDB 里面生成 corefile.
+```shell
+gdb -p {Fluent Bit PID}
+generate-core-file
+
+```
+- 在 GDB 调试中, 打印出所有线程的堆栈.
+```shell
+thread apply all bt full 
 
 ```
