@@ -10,13 +10,11 @@ tags:
 ```shell
 kubectl delete pod --field-selector="status.phase==Failed"
 ```
-
 ### 查看证书信息
 查看 AWS LoadBalancer 证书的信息，检查证书的有效期： 
 ```bash
 kubectl get validatingwebhookconfigurations.admissionregistration.k8s.io aws-load-balancer-webhook -ojsonpath={.webhooks[0].clientConfig.caBundle}  | base64 -d  | openssl x509 -noout -text
 ```
-
 ### 使用 Debug 容器
 ```bash
 # 给特定的容器附加一个Sidecar， 并启动shell。
@@ -45,4 +43,9 @@ nerdctl completion bash > /etc/bash_completion.d/nerdctl
  ~]$ nerdctl inspect 02182f3e9137 | grep -i pid
                 "Pid": 10306,
  ~]$ nsenter -t 10306 -n
+```
+### 给系统加上一点点压力
+```shell
+~]$ nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --help
+~]$ nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --cpu 1
 ```
