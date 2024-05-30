@@ -188,3 +188,63 @@ ss --tcp state CLOSE-WAIT
 ```
 ss --tcp state CLOSE-WAIT --kill
 ```
+
+### 内存 Compact
+激活内核进行内存碎片的整理; ( 重启也行...
+```shell
+echo 1 > /proc/sys/vm/compact_memory
+```
+
+### Rpm 相关
+#### 查看rpm包内所有文件列表
+```shell
+~]$ rpm -ql htop
+/usr/bin/htop
+/usr/lib/.build-id
+/usr/lib/.build-id/e8
+/usr/lib/.build-id/e8/939e1f5899cf129565f8c695e8f6e05845d244
+/usr/share/applications/htop.desktop
+/usr/share/doc/htop
+/usr/share/doc/htop/AUTHORS
+/usr/share/doc/htop/ChangeLog
+/usr/share/doc/htop/README
+/usr/share/icons/hicolor/scalable/apps/htop.svg
+/usr/share/licenses/htop
+/usr/share/licenses/htop/COPYING
+/usr/share/man/man1/htop.1.gz
+/usr/share/pixmaps/htop.png
+```
+
+#### 对比rpm包内和系统实际的文件是否有更改
+```shell
+\\ 不指定的时候是列出所有权限或者内容变化的文件.
+~]$ rpm -Va 
+\\ 指定一个 rpm 包的名称.
+~]$ rpm -Va htop
+```
+#### 重置linux文件权限为 Rpm 包内记录
+
+```shell
+~]$ rpm --setperms htop
+
+\\ 尝试变更一个无关文件的权限
+~]$ chmod 0000 /usr/share/pixmaps/htop.png
+\\ 使用命令校验rpm文件是否发生变化.
+~]$ rpm -Va htop
+.M.......    /usr/share/pixmaps/htop.png
+\\ 使用这个命令将文件的权限置为与rpm包一致.
+~]$ rpm --setperms htop
+\\ 再次校验.
+~]$ rpm -Va htop
+~]$ stat /usr/share/pixmaps/htop.png
+  File: /usr/share/pixmaps/htop.png
+  Size: 3537      	Blocks: 8          IO Block: 4096   regular file
+Device: 10301h/66305d	Inode: 1542971     Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Context: system_u:object_r:usr_t:s0
+Access: 2022-06-03 00:54:39.000000000 +0000
+Modify: 2022-06-03 00:54:39.000000000 +0000
+Change: 2024-05-30 01:55:00.225771761 +0000
+ Birth: 2024-04-24 05:39:08.826700372 +0000
+
+```

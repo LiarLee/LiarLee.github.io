@@ -536,6 +536,34 @@ generate-core-file
 ```
 - 在 GDB 调试中, 打印出所有线程的堆栈.
 ```shell
+
 thread apply all bt full 
 
 ```
+
+### 内存页面的规整, 迁移, 和compaction
+
+> https://lwn.net/Articles/368869/
+> https://docs.kernel.org/admin-guide/sysctl/vm.html
+> https://www.uninformativ.de/blog/postings/2017-12-23/0/POSTING-en.html
+> https://docs.kernel.org/admin-guide/sysctl/vm.html
+
+操作的方式是使用内核proc文件系统, 直接提供指令让内核整理, 通常情况下会自动进行规整, 或者无须规整; 
+另外重启可能也是一个好的选择. 
+
+```
+这个图像的来源是上面的最后一个链接:
+Looks like this:
+1)    [ ----- ][ ----- ][ ----- ][ ----- ]    All empty
+2)    [ - A - ][ - B - ][ - C - ][ ----- ]    A, B, C allocated
+3)    [ - A - ][ ----- ][ - C - ][ ----- ]    B freed again
+4)    [ - A - ][ - C - ][ ----- ][ ----- ]    compact
+```
+
+命令是: 
+```shell
+
+echo 1 > /proc/sys/vm/compact_memory
+
+```
+
