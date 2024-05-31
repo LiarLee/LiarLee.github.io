@@ -1,11 +1,11 @@
 ---
 title: Hexo备份和恢复
 date: 2018-07-03 16:39:23
+category: Hexo
 tags:
   - Hexo
   - Application
   - Git
-category: Linux, Application
 ---
 hexo 博客的备份和还原方法。
 

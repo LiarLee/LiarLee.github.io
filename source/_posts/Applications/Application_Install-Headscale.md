@@ -1,7 +1,7 @@
 ---
-title: 配置自管理的Tailscale网络
-category: Linux
+title: 安装 headscale 建立自己的 Tailnet
 date: 2023-12-27 21:51:13
+category: Application
 tags:
   - Linux
   - Tailscale
@@ -14,7 +14,7 @@ Tailscale 虽然是 mesh 的网络模式, 可以点对点的连接所有设备, 
 开始的时候直接使用的tailscale + github账户登录的方式使用, 然后发现  github 账户直接托管的中心服务不能关闭国外的中转服务器, 这就比较难受, 本来可以直通的线路走了国外的中转不稳定, 会断, 最后还是走国内的便宜云服务器自己维护了一个开源的headscale作为中心服务.
 
 大概的步骤如下吧: 
-## 安装headscale
+### 安装 headscale
 
 [官方文档](https://headscale.net/) 
 
@@ -29,7 +29,7 @@ Tailscale 虽然是 mesh 的网络模式, 可以点对点的连接所有设备, 
 需要注意的地方就是备案, 不备案会导致无法使用 443, 那么需要在tailscale的配置文件中指定端口, 让tailscale 监听在一个不常用的端口上.
 记录一下命令, 我因为没有写清楚 server 的地址和端口,  折腾了一天... 一度怀疑是不是换端口也不行, 必须备案 ...
 
-### 配置文件
+#### 配置文件
 ```shell
 headscale ~$ vim /etc/headscale/config.yaml
 # 大约在配置文件的 13行左右.
@@ -52,10 +52,10 @@ server_url 这个字段需要写成 https://YOURHOSTNAME.YOURDOMAIN:PORT 就可�
    183	tls_cert_path: /path/to/cert.pem
 ```
 
-## 安装tailscale客户端
+### 安装tailscale客户端
 按照[安装文档](https://tailscale.com/kb/installation)直接安装, 不一样的发行版(是的, Windows 也是 Linux 发行版) 安装方式不同, 基本上启动之后都能用, 完成度非常高.
 
-### 注册节点的命令
+#### 注册节点的命令
 节点注册命令记录. 
 ```shell
 sudo tailscale up --accept-dns=false --advertise-exit-node --advertise-routes=192.168.31.0/24 --login-server=https://YOURHOSTNAME.YOURDOMAIN:PORT --accept-routes
@@ -68,7 +68,7 @@ sudo tailscale up --accept-dns=true --login-server=https://YOURHOSTNAME.YOURDOMA
 ```
 这个命令执行完毕之后, 会返回一个网页, 网页打开里面有一个命令, 复制命令去 headscale 服务器的命令行(bash)里面执行一下,节点就注册进来了.
 
-## 更新现在已经存在的设置
+### 更新现在已经存在的设置
 最近需要更新我的一个节点， 发布 VPC内的 CIDR 块, 这个设置之前没有 advertise-route, 已经跑了很久, 是是否更新一下了 。
 这个实例在我的默认VPC里面， 这样的话这个实例就直接变成了这个VPC内的IGW, 流量会通过这个实例发送到VPC内, 试了一下, 可以直接将这个网络范围内的DNS指向VPC内的.2, 甚至可以直接在家用 EFS 这类的东西了. 
 

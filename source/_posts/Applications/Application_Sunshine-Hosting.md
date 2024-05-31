@@ -1,15 +1,15 @@
 ---
-title: archlinux 使用 tailscale + Sunshine 串流
-category: Linux
+title: tailscale 结合 Sunshine 串流
 date: 2023-12-27 11:15:31
+category: Application
 tags:
   - Steam
   - EC2
   - Nvidia
-  - "Linux"
+  - Linux
 ---
 
-接上面的测试， 既然显卡都已经能用了， 为啥不能直接启动一个 steam 呢？ 于是。。。 
+既然 EC2 显卡都已经能用了， 为啥不能直接启动一个 steam 呢？ 于是。。。 
 
 ---
 安装的步骤比较简单： 

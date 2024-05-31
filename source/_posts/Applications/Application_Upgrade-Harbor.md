@@ -1,5 +1,5 @@
 ---
-title: 2024 Harbor 部署记录
+title: Harbor 的升级记录
 category: Kubernetes
 date: 2024-05-06 23:26:56
 tags:
@@ -7,7 +7,7 @@ tags:
   - Kubernetes
   - Harbor
 ---
-这次更新的目的是, 将原来的LVM切换成btrfs(真香!
+这次更新的目的是, 将原来的LVM切换成btrfs (真香!
 
 存储主要将两个部分迁移到btrfs上:
 - docker daemon 的工作目录

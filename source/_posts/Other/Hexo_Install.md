@@ -1,7 +1,7 @@
 ---
 title: Hexo+Github建立个人博客记录
 date: 2017-12-27 16:07:34
-categories: Linux
+categories: Hexo
 tags:
   - Linux
   - Hexo

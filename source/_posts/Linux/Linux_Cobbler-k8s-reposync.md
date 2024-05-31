@@ -10,7 +10,7 @@ tags:
 昨天晚上尝试使用阿里云的时候出现问题 ，阿里云的k8s源安装的时候报错，无法正常通过yum安装。内网正好放了一台Cobbler，所以直接从Cobbler同步阿里的repo过来放到内网，防止这个事情再次发生。
 
 # Cobbler是什么
-> Cobbler是一个免费开源系统安装部署软件，用于自动化网络安装操作系统。 Cobbler 集成了 DNS, DHCP,[1][2]软件包更新， 带外管理以及配置管理， 方便操作系统安装自动化。Cobbler 可以支持PXE启动, 操作系统重新安装, 以及虚拟化客户机创建，包括Xen, KVM or VMware. Cobbler透过koan程序以支持虚拟化客户机安装。Cobbler 可以支持管理复杂网路环境，如创建在链路聚合以太网的桥接环境。 [FROM Wikipedia](https://en.wikipedia.org/wiki/Cobbler_(software))
+> Cobbler是一个免费开源系统安装部署软件，用于自动化网络安装操作系统。 Cobbler 集成了 DNS, DHCP,软件包更新， 带外管理以及配置管理， 方便操作系统安装自动化。Cobbler 可以支持PXE启动, 操作系统重新安装, 以及虚拟化客户机创建，包括Xen, KVM or VMware. Cobbler透过koan程序以支持虚拟化客户机安装。Cobbler 可以支持管理复杂网路环境，如创建在链路聚合以太网的桥接环境。 [FROM Wikipedia](https://en.wikipedia.org/wiki/Cobbler_(software))
 
 # Cobbler Repo的建立
 k8s的源，Cobbler直接建立的同步不可以是因为k8s的目录结构和一般软件源的结构不同。（开始以为阿里云会一直保持带有Pool文件夹的那个结构， 今天早上看到结构已经和普通的yumrepo一样了，记录一下出现这种问题怎么办好了。）其实解决的方案就是手动同步，使用Cobbler进行源的发布。其实也就是httpd发布出去。

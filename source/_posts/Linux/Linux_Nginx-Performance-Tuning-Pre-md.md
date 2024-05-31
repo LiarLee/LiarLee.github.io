@@ -332,7 +332,7 @@ Percentage of the requests served within a certain time (ms)
 在调整之后， CPU1 上面会触发大量的RES中断， 这会导致当前的CPU无法完全的跑满， 这个部分还是一个问题， 我不知道RES的中断能不能也移除， 不过我感觉这个可能并不能， 应该是调度的需要， 但是过多的中断数量本身也会导致性能问题， 可能还有其他的解法， 暂时不去考虑了。遗留。
 
 # 附加静态页面之后的测试
-Hexo Render Project
+
 ## 调整之后的测试
 命令： `ab -c 3000 -n 50000 http://172.31.37.166:80/index.html`
 ### 第一次

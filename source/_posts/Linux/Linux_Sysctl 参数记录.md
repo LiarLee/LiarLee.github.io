@@ -1,5 +1,5 @@
 ---
-title: Sysctl 云平台参数的收集以及一部分解释
+title: sysctl 参数笔记
 date: 2022-04-19 17:45:39
 category: Linux
 tags:
