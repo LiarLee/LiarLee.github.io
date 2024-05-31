@@ -42,6 +42,7 @@ ip和端口
 
 - **buffer**: 作为buffer cache的内存，是块设备的读写缓冲区  
 - **cache**: 作为page cache的内存， 文件系统的cache
+- 
 如果 cache 的值很大，说明cache住的文件数很多。如果频繁访问到的文件都能被cache住，那么磁盘的读IO 必会非常小。
 ### windows中手动计算的内存使用值，和任务管理器中显示出来的值相差巨大？
 windows隐藏了类似linux中的cache和buffer，windows10在任务管理器中已经开始显示cache了
