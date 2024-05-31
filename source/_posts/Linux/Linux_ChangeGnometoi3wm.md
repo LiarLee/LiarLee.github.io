@@ -8,7 +8,7 @@ categories: Linux
 
 将自己的桌面环境迁移到了i3。Gnome好用是好用的，但是体量还是有点儿大了，吃资源有点多。
 
-这个现在已经更新到 DWM上面了， 对于这里面还有其他的工具是一直在用的 ， 比如 picom 等等。 
+这个现在已经更新到 DWM 上面了， 对于这里面还有其他的工具是一直在用的， 比如 picom 等等。 
 
 # 安装i3-gaps
 
@@ -80,7 +80,7 @@ bindsym $mod+Return exec --no-startup-id alacritty
 
 alacritty 是一个使用GPU进行渲染的terminal模拟器，它有自己的配置文件，我的**配置文件路径**在:$HOME/.config/alacritty/alacritty.conf
 
-*NOTE： 关于Alacritty的问题目前已经解决的差不多了。 还有还有一个问题是关于ssh过去之后不能正确的识别终端类型的BUG，解决方案在后面。
+*NOTE： 关于Alacritty的问题目前已经解决的差不多了。 还有还有一个问题是关于ssh过去之后不能正确的识别终端类型的问题，解决方案在后面。
 
 ### 默认打开Firefox
 

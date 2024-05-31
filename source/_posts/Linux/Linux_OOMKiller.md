@@ -117,7 +117,7 @@ EarlyOOM的作用是提前OOM，这样可以保障用户空间的图形桌面不
     ```
     kern  :warn  : [Thu Aug 17 17:29:27 2023] xray invoked oom-killer: gfp_mask=0x100cca(GFP_HIGHUSER_MOVABLE), order=0, oom_score_adj=-997
     ```
-    
+
 - 这个部分是触发kprint的信息， 解释如下：
   在哪个CPU（1）上， 运行的进程PID（1586622）， commandline的名称（xray）， 哪个版本的内核， 是否被标记为 taint.
     ```
@@ -173,7 +173,7 @@ EarlyOOM的作用是提前OOM，这样可以保障用户空间的图形桌面不
     kern  :warn  : [Thu Aug 17 17:29:27 2023] R13: 000000c000aa6c00 R14: 000000c0000064e0 R15: 0000000000001000
     ```
     
-- oom时刻的内存信息 和 /sys/fs/cgroup/memory.stat， 当前发生oom下面的Cgroup 的信息
+- oom时刻的内存信息 和 /sys/fs/cgroup/memory.stat， 当前发生oom下面的 Cgroup 的信息
     ```
     kern  :warn  : [Thu Aug 17 17:29:27 2023]  </TASK>
     kern  :info  : [Thu Aug 17 17:29:27 2023] memory: usage 208204kB, limit 204800kB, failcnt 7470

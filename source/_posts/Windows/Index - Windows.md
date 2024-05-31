@@ -11,7 +11,7 @@ tags:
 - [[Windows_本地方式安装-Net3-5教程]]
 - [[Windows_DISM命令]]
 
-### Windows 10 
+### Windows 10
 - [[Windows_如何给自己的电脑重装系统]]
 
 ### Windows Container

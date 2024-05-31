@@ -6,8 +6,7 @@ tags:
   - Kubernetes
   - EKS
 ---
-重装Prometheus operator 的时候报错， 提示annotation 太长了， 不能 apply
-
+重装 Prometheus operator 的时候报错， 提示 annotation 太长了，不能 apply
 ```shell
 > kubectl apply -f ./setup
 customresourcedefinition.apiextensions.k8s.io/alertmanagerconfigs.monitoring.coreos.com created
@@ -22,10 +21,9 @@ Warning: Detected changes to resource monitoring which is currently being delete
 namespace/monitoring unchanged
 Error from server (Invalid): error when creating "setup/0prometheusCustomResourceDefinition.yaml": CustomResourceDefinition.apiextensions.k8s.io "prometheuses.monitoring.coreos.com" is invalid: metadata.annotations: Too long: must have at most 262144 bytes
 Error from server (Invalid): error when creating "setup/0prometheusagentCustomResourceDefinition.yaml": CustomResourceDefinition.apiextensions.k8s.io "prometheusagents.monitoring.coreos.com" is invalid: metadata.annotations: Too long: must have at most 262144 bytes
-
 ```
-## 解决方案
-### 使用 Create 或者 Replace
+### 解决方案
+#### 使用 Kubectl Create
 ```shell
 > kubectl create -f ./setup
 customresourcedefinition.apiextensions.k8s.io/prometheuses.monitoring.coreos.com created
@@ -39,9 +37,9 @@ Error from server (AlreadyExists): error when creating "setup/0scrapeconfigCusto
 Error from server (AlreadyExists): error when creating "setup/0servicemonitorCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "servicemonitors.monitoring.coreos.com" already exists
 Error from server (AlreadyExists): error when creating "setup/0thanosrulerCustomResourceDefinition.yaml": customresourcedefinitions.apiextensions.k8s.io "thanosrulers.monitoring.coreos.com" already exists
 Error from server (AlreadyExists): error when creating "setup/namespace.yaml": object is being deleted: namespaces "monitoring" already exists
-
 ```
-使用create命令去创建crd ，使用replace更新crd，他们都不添加 `last-applied-configuration`  这个字段，
+#### 使用 Kubectl Replace
+使用 create 命令去创建 crd ，使用 replace 更新 crd，他们都不添加 `last-applied-configuration` 这个字段，
 ```shell
 > kubectl replace -f ./setup
 customresourcedefinition.apiextensions.k8s.io/alertmanagerconfigs.monitoring.coreos.com replaced
@@ -56,8 +54,8 @@ customresourcedefinition.apiextensions.k8s.io/servicemonitors.monitoring.coreos.
 customresourcedefinition.apiextensions.k8s.io/thanosrulers.monitoring.coreos.com replaced
 namespace/monitoring replaced
 ```
-### SSA 的方式创建
-当然还有另一个方法就是使用server-side apply： 
+#### SSA 的方式创建
+当然还有另一个方法就是使用 server-side apply： 
 ```shell
 > kubectl apply --server-side -f ./setup
 ```

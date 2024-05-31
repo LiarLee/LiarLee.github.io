@@ -215,14 +215,14 @@ echo 1 > /proc/sys/vm/compact_memory
 /usr/share/pixmaps/htop.png
 ```
 
-#### 对比rpm包内和系统实际的文件是否有更改
+#### 对比 Rpm 包内和系统实际的文件是否有更改
 ```shell
 \\ 不指定的时候是列出所有权限或者内容变化的文件.
 ~]$ rpm -Va 
 \\ 指定一个 rpm 包的名称.
 ~]$ rpm -Va htop
 ```
-#### 重置linux文件权限为 Rpm 包内记录
+#### 重置 Linux 文件权限为 Rpm 包内记录
 
 ```shell
 ~]$ rpm --setperms htop

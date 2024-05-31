@@ -29,7 +29,7 @@ Availability Zone(s)
 1-AZ without standby
 
 ## 构建Supervisor管理的容器
-### 创建dockerfile
+### 创建 Dockerfile
 创建dockerfile的部分， 比较难的是 ， 需要找到合适的filebeat版本
 参考页面:  [Agents and ingestion tools](https://opensearch.org/docs/latest/tools/index/#agents-and-ingestion-tools)
 其他的步骤就下载安装就可以. 

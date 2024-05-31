@@ -1,5 +1,5 @@
 ---
-title: 发送一个NMI unknown 事件给OS
+title: Linux OS Debug 方法记录
 date: 2023-06-28 17:12:22
 category: Linux
 tags:
@@ -7,9 +7,9 @@ tags:
   - EC2
 ---
 
-## 在ec2触发linux的crash
+### 触发 EC2 Linux 的 NMI Unknown 中断
 
-发送一个诊断请求给EC2， 触发os本身NMI Unknown事件，这个时间会触发Kdump记录当时的现场。
+发送一个诊断请求给 EC2， 触发 os 本身 NMI Unknown 事件，这个时间会触发 Kdump 记录当时的现场。
 
 ```bash
 aws ec2 send-diagnostic-interrupt --region cn-north-1 --instance-id i-********************
@@ -36,11 +36,7 @@ drwxr-xr-x. 2 root root 67 Jun  9 09:39 127.0.0.1-2023-06-09-09:39:56
 相关文档： 
 
 [New – Trigger a Kernel Panic to Diagnose Unresponsive EC2 Instances](https://aws.amazon.com/blogs/aws/new-trigger-a-kernel-panic-to-diagnose-unresponsive-ec2-instances/)
-
 [发送诊断中断（适用于高级用户）](https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/UserGuide/diagnostic-interrupt.html)
-
-主要的问题是怎么解读这个结果， 目前我的理解是 找大佬。
-
 ## Cscope 查看内核源代码
 
 ```bash
@@ -59,21 +55,19 @@ make tags ARCH=x86
 cscope -d
 ```
 
-## Dracut的使用和命令
+## Dracut 的使用和命令
 
 ```bash
-# 添加驱动程序到ramfs
-]$ dracut -fv --add-drivers "nvme ena" /boot/initramfs-$(uname -r).img $(uname -r)
-# 查看是否有模块在ramfs中
+# 添加驱动程序到 ramfs
+]$ dracut -f -v --add-drivers "nvme ena" /boot/initramfs-$(uname -r).img $(uname -r)
+# 查看是否有模块在 ramfs 中
 ]$ lsinitrd /boot/initramfs-$(uname -r).img | grep -E "nvme|ena"
 ```
 
-## 安全软件引起的用户空间进程失去响应：
-
+## 安全软件引起的用户空间进程失去响应
 Redhat关于这个问题的文档说明： 
 
 - https://access.redhat.com/solutions/5201171
-
 - https://access.redhat.com/solutions/2838901
 
 使用Ftrace的方法，和一部分命令的使用方法： 

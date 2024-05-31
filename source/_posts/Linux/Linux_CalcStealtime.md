@@ -27,5 +27,5 @@ hayden@VM-16-6-ubuntu /p/3720475> cat schedstat
 - 2236062 进程在CPU的时间
 - 223986 进程在CPU调度上面等待的时间
 - 22 在这个CPU运行的时间片数量
-  NOTE: 有一个博客写这个是 上下文交换的次数 ， 和sched 文件中的 nr_switches 数量相同， 不能确定是否正确。
+  NOTE: 有一个博客写这个是 上下文交换的次数 ， 和 sched 文件中的 nr_switches 数量相同， 不能确定是否正确。
 

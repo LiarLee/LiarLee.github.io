@@ -6,10 +6,10 @@ tags:
   - EKS
   - AWS
 ---
-看了下说明， 这个东西的主要作用是用于节点间Pod流量的加密。
+看了下说明， 这个东西的主要作用是用于节点间 Pod 流量的加密。
 ### 启动集群
 略
-### Helm命令安装 Calico
+### Helm 命令安装 Calico
 1. 添加一个helm repo
 ```shell
 helm repo add projectcalico https://docs.tigera.io/calico/charts
