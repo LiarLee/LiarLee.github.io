@@ -11,7 +11,8 @@ tags:
 
 # Hexo部署环境
 Hexo运行在Linux环境中的配置及其简单，只需要确认系统中安装了git和Nodejs就好，在Fedora27中已经默认有Git软件包，如果需要安装git使用`dnf install -y git`就好。目前我们只需要添加nodejs就可以了，准备工作开始～  
-**使用`git version` 进行git是否存在于系统中的检测。**
+
+**使用`git version` 看看是否已经安装了git。**
 
 ### 安装Node.js
 Node.js的安装只需要两条命令，按照顺序执行就好：  
@@ -26,46 +27,41 @@ Node.js的安装只需要两条命令，按照顺序执行就好：
 2. 那么需要确定工作目录并且切换过去  
 > `[root@localhost test]# cd /root/Document/Hexo/test`  
 
-3. 之后所有的操作都会在这个目录或者它的子目录，请留意。  
+3. 之后所有的操作都会在这个目录或者它的子目录。  
 > `[root@localhost test]# npm install hexo -g`  
 
-4. 等待安装结果.......  
-5. 安装结束之后，查看是否安装成功,使用：  
+1. 安装结束之后，查看是否安装成功,使用：  
 > `[root@localhost test]# hexo -v`  
 
-6. 如输出如下信息则说明安装成功，可以执行下一步。  
-> [root@localhost test]# hexo -v  
-hexo: 3.4.4  
-hexo-cli: 1.0.4  
-os: Linux 4.13.13-300.fc27.x86_64 linux x64  
-http_parser: 2.7.1  
-node: 8.9.3  
-v8: 6.1.534.48  
-uv: 1.16.0  
-zlib: 1.2.11  
-ares: 1.10.1-DEV  
-modules: 57  
-nghttp2: 1.25.0  
-openssl: 1.0.2m-fips  
-icu: 57.1  
-unicode: 8.0  
-cldr: 29.0  
-tz: 2016b  
-
-安装成功，没有写安装失败的解决方法，因为我觉得难以失败，成功率很高的。  
-
+1. 如输出如下信息则说明安装成功，可以执行下一步。  
+    [root@localhost test]# hexo -v  
+    hexo: 3.4.4  
+    hexo-cli: 1.0.4  
+    os: Linux 4.13.13-300.fc27.x86_64 linux x64  
+    http_parser: 2.7.1  
+    node: 8.9.3  
+    v8: 6.1.534.48  
+    uv: 1.16.0  
+    zlib: 1.2.11  
+    ares: 1.10.1-DEV  
+    modules: 57  
+    nghttp2: 1.25.0  
+    openssl: 1.0.2m-fips  
+    icu: 57.1  
+    unicode: 8.0  
+    cldr: 29.0  
+    tz: 2016 
 #### 失败解决方案
-1. 失败请更换cnpm 或者 更换淘宝源重试。  
+1. 失败请更换 cnpm 或者 更换淘宝源重试。  
 2. 如果安装，确认自己在正确的目录下，执行`npm install`重试  
-
-### 安装Hexo-server
+### 安装 Hexo-server
 安装Hexo-server主要是作为本地测试使用，通过本地localhost:4000访问来预览，方便调整。  
 1. 使用如下命令执行安装：  
 > `[root@localhost test]npm install hexo-server -g`
 
 2. 执行启动hexo-server，确认是否可以正常使用：  
 > `[root@localhost test]hexo s`  
-OR   
+    OR   
 > `[root@localhost test]hexo server`  
 
 3. 输入如下结果则正常启动：  
@@ -177,4 +173,4 @@ Hexo目录下常用的命令有：
 "use strict";function updateCoords(e){pointerX=(e.clientX||e.touches[0].clientX)-canvasEl.getBoundingClientRect().left,pointerY=e.clientY||e.touches[0].clientY-canvasEl.getBoundingClientRect().top}function setParticuleDirection(e){var t=anime.random(0,360)*Math.PI/180,a=anime.random(50,180),n=[-1,1][anime.random(0,1)]*a;return{x:e.x+n*Math.cos(t),y:e.y+n*Math.sin(t)}}function createParticule(e,t){var a={};return a.x=e,a.y=t,a.color=colors[anime.random(0,colors.length-1)],a.radius=anime.random(16,32),a.endPos=setParticuleDirection(a),a.draw=function(){ctx.beginPath(),ctx.arc(a.x,a.y,a.radius,0,2*Math.PI,!0),ctx.fillStyle=a.color,ctx.fill()},a}function createCircle(e,t){var a={};return a.x=e,a.y=t,a.color="#F00",a.radius=0.1,a.alpha=0.5,a.lineWidth=6,a.draw=function(){ctx.globalAlpha=a.alpha,ctx.beginPath(),ctx.arc(a.x,a.y,a.radius,0,2*Math.PI,!0),ctx.lineWidth=a.lineWidth,ctx.strokeStyle=a.color,ctx.stroke(),ctx.globalAlpha=1},a}function renderParticule(e){for(var t=0;t<e.animatables.length;t++){e.animatables[t].target.draw()}}function animateParticules(e,t){for(var a=createCircle(e,t),n=[],i=0;i<numberOfParticules;i++){n.push(createParticule(e,t))}anime.timeline().add({targets:n,x:function(e){return e.endPos.x},y:function(e){return e.endPos.y},radius:0.1,duration:anime.random(1200,1800),easing:"easeOutExpo",update:renderParticule}).add({targets:a,radius:anime.random(80,160),lineWidth:0,alpha:{value:0,easing:"linear",duration:anime.random(600,800)},duration:anime.random(1200,1800),easing:"easeOutExpo",update:renderParticule,offset:0})}function debounce(e,t){var a;return function(){var n=this,i=arguments;clearTimeout(a),a=setTimeout(function(){e.apply(n,i)},t)}}var canvasEl=document.querySelector(".fireworks");if(canvasEl){var ctx=canvasEl.getContext("2d"),numberOfParticules=30,pointerX=0,pointerY=0,tap="mousedown",colors=["#FF1461","#18FF92","#5A87FF","#FBF38C"],setCanvasSize=debounce(function(){canvasEl.width=2*window.innerWidth,canvasEl.height=2*window.innerHeight,canvasEl.style.width=window.innerWidth+"px",canvasEl.style.height=window.innerHeight+"px",canvasEl.getContext("2d").scale(2,2)},500),render=anime({duration:1/0,update:function(){ctx.clearRect(0,0,canvasEl.width,canvasEl.height)}});document.addEventListener(tap,function(e){"sidebar"!==e.target.id&&"toggle-sidebar"!==e.target.id&&"A"!==e.target.nodeName&&"IMG"!==e.target.nodeName&&(render.play(),updateCoords(e),animateParticules(pointerX,pointerY))},!1),setCanvasSize(),window.addEventListener("resize",setCanvasSize,!1)}"use strict";function updateCoords(e){pointerX=(e.clientX||e.touches[0].clientX)-canvasEl.getBoundingClientRect().left,pointerY=e.clientY||e.touches[0].clientY-canvasEl.getBoundingClientRect().top}function setParticuleDirection(e){var t=anime.random(0,360)*Math.PI/180,a=anime.random(50,180),n=[-1,1][anime.random(0,1)]*a;return{x:e.x+n*Math.cos(t),y:e.y+n*Math.sin(t)}}function createParticule(e,t){var a={};return a.x=e,a.y=t,a.color=colors[anime.random(0,colors.length-1)],a.radius=anime.random(16,32),a.endPos=setParticuleDirection(a),a.draw=function(){ctx.beginPath(),ctx.arc(a.x,a.y,a.radius,0,2*Math.PI,!0),ctx.fillStyle=a.color,ctx.fill()},a}function createCircle(e,t){var a={};return a.x=e,a.y=t,a.color="#F00",a.radius=0.1,a.alpha=0.5,a.lineWidth=6,a.draw=function(){ctx.globalAlpha=a.alpha,ctx.beginPath(),ctx.arc(a.x,a.y,a.radius,0,2*Math.PI,!0),ctx.lineWidth=a.lineWidth,ctx.strokeStyle=a.color,ctx.stroke(),ctx.globalAlpha=1},a}function renderParticule(e){for(var t=0;t<e.animatables.length;t++){e.animatables[t].target.draw()}}function animateParticules(e,t){for(var a=createCircle(e,t),n=[],i=0;i<numberOfParticules;i++){n.push(createParticule(e,t))}anime.timeline().add({targets:n,x:function(e){return e.endPos.x},y:function(e){return e.endPos.y},radius:0.1,duration:anime.random(1200,1800),easing:"easeOutExpo",update:renderParticule}).add({targets:a,radius:anime.random(80,160),lineWidth:0,alpha:{value:0,easing:"linear",duration:anime.random(600,800)},duration:anime.random(1200,1800),easing:"easeOutExpo",update:renderParticule,offset:0})}function debounce(e,t){var a;return function(){var n=this,i=arguments;clearTimeout(a),a=setTimeout(function(){e.apply(n,i)},t)}}var canvasEl=document.querySelector(".fireworks");if(canvasEl){var ctx=canvasEl.getContext("2d"),numberOfParticules=30,pointerX=0,pointerY=0,tap="mousedown",colors=["#FF1461","#18FF92","#5A87FF","#FBF38C"],setCanvasSize=debounce(function(){canvasEl.width=2*window.innerWidth,canvasEl.height=2*window.innerHeight,canvasEl.style.width=window.innerWidth+"px",canvasEl.style.height=window.innerHeight+"px",canvasEl.getContext("2d").scale(2,2)},500),render=anime({duration:1/0,update:function(){ctx.clearRect(0,0,canvasEl.width,canvasEl.height)}});document.addEventListener(tap,function(e){"sidebar"!==e.target.id&&"toggle-sidebar"!==e.target.id&&"A"!==e.target.nodeName&&"IMG"!==e.target.nodeName&&(render.play(),updateCoords(e),animateParticules(pointerX,pointerY))},!1),setCanvasSize(),window.addEventListener("resize",setCanvasSize,!1)};
 ```
 
-[Hexo_BackupRestore](Hexo_BackupRestore.md)
+创建的时候没有想到后面会炸， 然后补充了 备份和还原的方法：[Hexo_BackupRestore](Hexo_BackupRestore.md)

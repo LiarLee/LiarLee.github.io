@@ -6,6 +6,12 @@ tags:
   - Linux
   - CheatSheet
 ---
+### 强制退出程序并生成 corefile
+组合键用于发送 SIGQUIT 信号，用于终止正在运行的进程。与Ctrl+C不同的是，Ctrl+\会生成一个core文件，用于调试程序。
+同时在某些特定的场景下， 这个指令并Ctrl+c停止进程的速度快。 
+```shell
+Ctrl+\
+```
 ### 查看当前系统中 CPU 使用率最高的前 20 个进程
 ```shell
 ps auxwww --sort -%cpu | head -20
@@ -223,9 +229,3 @@ Change: 2024-05-30 01:55:00.225771761 +0000
 ```shell
 find ./ -type d ! -name . | xargs rm -rf
 ```
-
-组合键用于发送 SIGQUIT 信号，用于终止正在运行的进程。与Ctrl+C不同的是，Ctrl+\会生成一个core文件，用于调试程序。
-```shell
-Ctrl+\
-```
-

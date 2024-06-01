@@ -1,10 +1,12 @@
 ---
-title: title
+title: Light From Twitter
 date: 1980-12-08 13:56:27
 category: Linux
 tags:
   - 书
 ---
+
+开一个单独的文档记录一些想要保存 或者 感觉自己需要学习的内容。 
 
 ---
 > 听说你们没有女朋友，不好打发时间，玩起来：[https://t.co/bFsK2OfHVc](https://t.co/bFsK2OfHVc)

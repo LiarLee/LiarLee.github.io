@@ -5,22 +5,20 @@ date: 2024-05-03 14:59:05
 tags:
   - Kubernetes
 ---
-### 背景
-一个GKE集群使用了autopliot创建专有集群, 创建完成之后, 怎么在另一个VPC下的实例内使用 kubectl 管理集群.
+### 需求
+一个GKE集群使用了autopilot创建专有集群, 创建完成之后, 怎么在另一个VPC下的实例内使用 kubectl 管理集群.
 两个实例:
 - instance-20240430-111240: 和 GKE 在相同的VPC内, 可以直接访问控制平面进行集群管理. 
 - instance-20240430-053004: 在另一个VPC内, 无法直接访问.
 
-#### 使用 Kubectl Proxy 直接暴露 Apiserver 端口到当前
+#### 使用 Kubectl Proxy 直接暴露 Apiserver 端口
 1. 和GKE相同VPC内启动一个新的实例, 在实例中配置 kubectl 可以正常连接到控制平面.
 2. 使用 kubectl 命令创建 proxy 监听在本机的所有地址:
 ```shell
 root@instance-20240430-111240:~ kubectl proxy --address=0.0.0.0  --kubeconfig .kube/config --accept-hosts "^.*" & 
-
 ```
 3. 在另一个VPC内的节点上, 使用kubectl 命令进行连接: 
 ```shell
-
 root@instance-20240430-053004:~ kubectl get pods -o wide -A -s instance-20240430-111240:8001
 ```
 

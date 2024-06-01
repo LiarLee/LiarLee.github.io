@@ -10,7 +10,7 @@ tags:
 
 对于 TCP 来说，会遇到如下的几个参数。
 
-如果我们需要查看一下当前OS内与tcp相关的 KernelParam， 命令如下：
+如果我们需要查看一下当前 OS 内与 tcp 相关的 Kernel 参数， 命令如下：
 
 ```bash
 ]$ sysctl -a | egrep "rmem|wmem|tcp_mem|adv_win|moderate"
@@ -18,7 +18,7 @@ tags:
 
 其中主要需要关注的是:
 
-```
+```shell
 net.ipv4.tcp_rmem = 4096	131072	6291456
 net.ipv4.tcp_wmem = 4096	16384	4194304
 ```

@@ -7,15 +7,15 @@ tags:
   - Kubernetes
   - Harbor
 ---
-这次更新的目的是, 将原来的LVM切换成btrfs (真香!
+这次更新的目的是, 将原来的 LVM 切换成 btrfs (真香!
 
-存储主要将两个部分迁移到btrfs上:
-- docker daemon 的工作目录
-- harbor 的数据 日志和证书
+存储主要将两个部分迁移到 [[Linux_btrfs|btrfs]] 上。
+- docker daemon 的工作目录. 
+- harbor 的数据 日志和证书.
 
 ### 下载源代码
-从官方的项目下载这个版本的offlie安装包.
-不用online的原因是 : online还需要从dockerhub下载镜像, 国内实在一言难尽.
+从官方的项目下载这个版本的 offline 安装包.
+不用 online 的原因是 : online 还需要从 dockerhub 下载镜像, 国内实在一言难尽.
 
 > https://github.com/goharbor/harbor/releases/tag/v2.9.4
 

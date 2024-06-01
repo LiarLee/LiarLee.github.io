@@ -8,6 +8,8 @@ tags:
 ---
 hexo 博客的备份和还原方法。
 
+这里是介绍安装步骤：[Hexo_Install](Hexo_Install.md)
+
 尝试在我写博客的虚拟机里面使用了一个破坏性的命令，`dnf autoremove` 这个命令导致我的虚拟机彻底坏了。我恢复了快照，但是是两个月前的记录了， 对于如何回复自己的博客内容， 找到了这样一个解决方案。
 ### 思路
 
@@ -45,7 +47,7 @@ git add --all
 ```
   1. 提交到github的hexo分支  
 ```shell
-git commit -m "Some statement..."
+git commit -m "SaySomethingHERE“
 ```
   1. 推送到自己博客项目的hexo分支下    
 ```shell
