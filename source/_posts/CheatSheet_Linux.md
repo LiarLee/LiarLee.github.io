@@ -223,3 +223,9 @@ Change: 2024-05-30 01:55:00.225771761 +0000
 ```shell
 find ./ -type d ! -name . | xargs rm -rf
 ```
+
+组合键用于发送 SIGQUIT 信号，用于终止正在运行的进程。与Ctrl+C不同的是，Ctrl+\会生成一个core文件，用于调试程序。
+```shell
+Ctrl+\
+```
+
