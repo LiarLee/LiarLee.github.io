@@ -8,26 +8,25 @@ tags:
   - Headscale
   - Network
 ---
-Tailscale 虽然是 mesh 的网络模式, 可以点对点的连接所有设备, 能直连会尽量直接连接, 然鹅还是需要一个默认的server来进行服务发现和临时中转流量. 
+Tailscale 虽然是 mesh 的网络模式, 可以点对点的连接所有设备, 能直连会尽量直接连接, 然鹅还是需要一个默认的 server 来进行服务发现和临时中转流量. 
 
 那么大概的配置框架就已经出现了, 一个服务发现中心, 和多个不同的客户端.
-开始的时候直接使用的tailscale + github账户登录的方式使用, 然后发现  github 账户直接托管的中心服务不能关闭国外的中转服务器, 这就比较难受, 本来可以直通的线路走了国外的中转不稳定, 会断, 最后还是走国内的便宜云服务器自己维护了一个开源的headscale作为中心服务.
-
-大概的步骤如下吧: 
+开始的时候直接使用的 tailscale + github 账户登录的方式使用, 然后发现  github 账户直接托管的中心服务不能关闭国外的中转服务器, 这就比较难受, 本来可以直通的线路走了国外的中转不稳定, 会断, 最后还是走国内的便宜云服务器自己维护了一个开源的 headscale 作为中心服务.
 ### 安装 headscale
+[headscale 官方文档](https://headscale.net/)
+现在的 headscale 容器镜像的是有问题的， 不太好用， 还得花时间修。
 
-[官方文档](https://headscale.net/) 
-
-现在的 docker 的版本是有问题的。。。。别用
-
+---
 我准备了这些: 
-- 域名, 域名证书
-- 一台debian的云服务器
-- 公网ip地址
+- 域名 和 域名证书
+- 一台 Debian 的云服务器
+- 公网 ip 地址
 
 具体的[安装步骤](https://headscale.net/running-headscale-linux/#installation)就是按照官方网站走下来就可以了. 
-需要注意的地方就是备案, 不备案会导致无法使用 443, 那么需要在tailscale的配置文件中指定端口, 让tailscale 监听在一个不常用的端口上.
-记录一下命令, 我因为没有写清楚 server 的地址和端口,  折腾了一天... 一度怀疑是不是换端口也不行, 必须备案 ...
+- 需要注意的地方就是备案, 不备案会导致无法使用 443.
+那么需要在tailscale的配置文件中指定端口, 让 tailscale 监听在一个不常用的端口上.
+
+> 因为没有写清楚 server 的地址和端口,  折腾了一天... 一度怀疑是不是换端口也不行, 必须备案 ...
 
 #### 配置文件
 ```shell
@@ -36,8 +35,8 @@ headscale ~$ vim /etc/headscale/config.yaml
 server_url 这个字段需要写成 https://YOURHOSTNAME.YOURDOMAIN:PORT 就可以了. 
 ```
 
-大约在配置文件的77行左右, 会有一个 DEPR 集成的服务, 开启这个服务之后, 可以使用当前的服务器直接作为DEPR中转节点, 我开了.
-```
+大约在配置文件的77行左右, 会有一个 DEPR 集成的服务, 开启这个服务之后, 可以使用当前的服务器直接作为DEPR中转节点.
+```yaml
     77	derp:
     78	  server:
     79	    # If enabled, runs the embedded DERP server and merges it into the rest of the DERP config
@@ -46,7 +45,7 @@ server_url 这个字段需要写成 https://YOURHOSTNAME.YOURDOMAIN:PORT 就可�
 ```
 
 绑定证书的位置在大约 151行之后, 我使用自己签发的证书, 就是直接配置 182 183 两行的参数就行. 
-```
+```yaml
    181	## Use already defined certificates:
    182	tls_key_path: /path/to/cert.key
    183	tls_cert_path: /path/to/cert.pem
@@ -69,8 +68,8 @@ sudo tailscale up --accept-dns=true --login-server=https://YOURHOSTNAME.YOURDOMA
 这个命令执行完毕之后, 会返回一个网页, 网页打开里面有一个命令, 复制命令去 headscale 服务器的命令行(bash)里面执行一下,节点就注册进来了.
 
 ### 更新现在已经存在的设置
-最近需要更新我的一个节点， 发布 VPC内的 CIDR 块, 这个设置之前没有 advertise-route, 已经跑了很久, 是是否更新一下了 。
-这个实例在我的默认VPC里面， 这样的话这个实例就直接变成了这个VPC内的IGW, 流量会通过这个实例发送到VPC内, 试了一下, 可以直接将这个网络范围内的DNS指向VPC内的.2, 甚至可以直接在家用 EFS 这类的东西了. 
+最近需要更新我的一个节点， 发布 VPC 内的 CIDR 块, 这个设置之前没有 advertise-route 参数进行更新 。
+这个实例在我的默认VPC里面， 这样的话这个实例就直接变成了这个VPC内的IGW, 流量会通过这个实例发送到VPC内, 可以直接将这个网络范围内的DNS指向VPC内的 .2 Resolver, 甚至感觉可以直接在家用 EFS 这类的东西了. 
 
 当然, 如果节点需要变动之前运行的参数, 是需要给出和之前一致的参数, 然后添加 或者 变更其中的一部分的.
 

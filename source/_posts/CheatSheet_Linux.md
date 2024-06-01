@@ -23,6 +23,7 @@ ps auxf --width=200
 ps auxwwwf
 ```
 ### Curl 输出各个阶段所花费的时间
+[Network_tc控制流量-update](Network/Network_tc控制流量-update.md)
 ```shell
 curl -s -w "time_namelookup:%{time_namelookup}\ntime_connect: %{time_connect}\ntime_appconnect: %{time_appconnect}\ntime_redirect:  %{time_redirect}\ntime_pretransfer:  %{time_pretransfer}\ntime_starttransfer: %{time_starttransfer}\ntime_total: %{time_total}\n" -o /dev/null $HTTP_URL 
 ```
@@ -170,7 +171,7 @@ iptables -t nat -D PREROUTING 1
 ```bash
 ss --tcp state CLOSE-WAIT
 ```
-关闭所有处于 closewait 的socket ,通过 ss 命令干预, 通常应该由应用程序关闭, 而不是 ss 命令关闭, 这个命令只是记录一下用法. 
+关闭所有处于 [[Databases_MySQLConnetionTroubleshooting#^de7c10]] closewait 的socket ,通过 ss 命令干预, 通常应该由应用程序关闭, 而不是 ss 命令关闭, 这个命令只是记录一下用法. 
 最佳的方式是找到异常的进程, 并查看为什么程序不能及时的关闭 socket , 或者 kill 掉这个进程. 
 ```shell
 ss --tcp state CLOSE-WAIT --kill

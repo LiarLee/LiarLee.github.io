@@ -94,6 +94,8 @@ https://fio.readthedocs.io/en/latest/fio_doc.html
 
 ebs设置默认的 Block Size是 16k ， 其他厂商可能是 4k的。 这个部分可能会在测试的时候造成差异。 
 
+关于fio 几个参数的测试， 这是我找到测试最完整的一个： 
+[探索fio参数](https://blog.csdn.net/get_set/article/details/108001674)
 ### 测试命令
 
 ```bash

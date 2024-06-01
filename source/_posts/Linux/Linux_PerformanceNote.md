@@ -482,6 +482,8 @@ https://www.cnblogs.com/yubo/archive/2010/04/23/1718810.html
 
 ## 更改内核参数
 
+^93c177
+
 1. 系统的内核参数在/proc/sys目录下，有如下的几个方面：
 
    - vm

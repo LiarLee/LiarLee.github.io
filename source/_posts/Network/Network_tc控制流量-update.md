@@ -23,7 +23,7 @@ net.ipv4.tcp_rmem = 4096	131072	6291456
 net.ipv4.tcp_wmem = 4096	16384	4194304
 ```
 
-这两个参数其实表示的是当前内核预留的 Socket Buffer， 单位是Bytes， 也是具体指 内存 的大小。具体的说明我找到 [Kernel文档的说明](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt)如下：
+这两个参数表示的是当前内核预留的 Socket Buffer， 单位是Bytes， 也是具体指 内存 的大小。具体的说明我找到 [Kernel文档的说明](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt)如下：
 
 > ```
 > tcp_rmem - vector of 3 INTEGERs: min, default, max
@@ -64,9 +64,9 @@ net.ipv4.tcp_wmem = 4096	16384	4194304
 > 
 > ```
 
-这文档中的说明，默认的三个值分别是： 最小， 默认， 最大。测试了一下， 如果只是需要实际调整的话， 调整那个最大值即可， 在高延迟的链路中， 调整默认值或者最大值就可以生效。 在测试的过程中， 将三个值都固定到预期，控制变量。
+这文档中的说明，默认的三个值分别是： 最小， 默认， 最大。测试了一下， 如果只是需要实际调整的话， 调整那个最大值即可， 在高延迟的链路中， 调整默认值或者最大值就可以生效。 在测试的过程中， 将三个值都写成一致，控制变量。
 
-对于TCP协议的接收与发送两方， 各自有自己的 RecvBuffer 和 SendBuffer， 发送方会考虑链路上面可以承载的数据量（带宽）， 以及 对方可以承载的数据量（rmem）。
+对于TCP协议的接收与发送两方， 各自有自己的 RecvBuffer 和 SendBuffer， 发送方会考虑链路上面可以承载的数据量（带宽）， 以及 对方可以承载的数据量（rmem）参数使用的内存用量。 
 
 实际上， 只是更新 max 的值， 并不会更新 Recvbuffer. 
 如果想增大 receive buffer 的大小, 可以增加 tcp_rmem 的 default 的值大小.
@@ -117,13 +117,13 @@ http {
   net.ipv4.tcp_rmem = 4096	16384	4194304
   ```
 
-curl 的 测试命令 如下：（更新版本， 之前的测试版本少了一些参数 
+curl 的 测试命令 如下：
 
 ```bash
 ~]$ curl -o /dev/null -s -w "time_namelookup:%{time_namelookup}\ntime_connect: %{time_connect}\ntime_appconnect: %{time_appconnect}\ntime_redirect:  %{time_redirect}\ntime_pretransfer:  %{time_pretransfer}\ntime_starttransfer: %{time_starttransfer}\ntime_total: %{time_total}\n"  http://nginx.liarlee.site/Fedora-Workstation-Live-x86_64-38_Beta-1.3.iso 
 ```
 
-如果使用默认的参数， 那么2G的 ISO 文件可以快速的传完， 这是两个实例的基准表现， 这也是创建了一个TCP Connection 的较好的性能表现， EC2 之间的带宽较大 10Gbps。
+如果使用默认的参数， 那么2G的 ISO 文件可以快速的传完， 这是两个实例的基准表现， 这也是创建了一个TCP Connection 的较好的性能表现， EC2 之间的带宽 10Gbps。
 
 ```bash
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -420,4 +420,4 @@ https://arthurchiao.art/blog/lartc-qdisc-zh/
 
 https://www.kawabangga.com/posts/4794
 
-这个里面有比较清晰的描述， 例如图里面的每条线是做什么的， 其实应该看的是 tcptrace 不是 steven 这个图。
+这个里面有比较清晰的描述， 例如图里面的每条线是做什么的， 其实看 tcptrace 的那个图像会更清楚。

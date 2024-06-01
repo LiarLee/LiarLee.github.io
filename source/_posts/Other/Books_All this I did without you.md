@@ -5,10 +5,6 @@ tags:
   - English
 categories: Books
 ---
-English Text for exercise the Reading and listening.
-
-<!-- more -->
-
 Letter No. 028
 
 July 31st, 1978

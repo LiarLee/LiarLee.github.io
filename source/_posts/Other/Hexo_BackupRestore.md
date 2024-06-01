@@ -4,8 +4,7 @@ date: 2018-07-03 16:39:23
 category: Hexo
 tags:
   - Hexo
-  - Application
-  - Git
+  - Linux
 ---
 hexo 博客的备份和还原方法。
 

@@ -39,13 +39,14 @@ nerdctl image prune -af
 nerdctl completion bash > /etc/bash_completion.d/nerdctl
 ```
 ### Nsenter 进入容器
+[[EKS_nsenter_into_container]]
 ```shell
- ~]$ nerdctl inspect 02182f3e9137 | grep -i pid
+nerdctl inspect 02182f3e9137 | grep -i pid
                 "Pid": 10306,
- ~]$ nsenter -t 10306 -n
+nsenter -t 10306 -n
 ```
 ### 给系统加上一点点压力
 ```shell
-~]$ nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --help
-~]$ nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --cpu 1
+nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --help
+nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --cpu 1
 ```

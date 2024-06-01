@@ -1,5 +1,5 @@
 ---
-title: 关于BTRFS的一些测试
+title: btrfs 的使用体验
 date: 2022-04-19 17:45:39
 category: Linux
 tags:
@@ -8,25 +8,71 @@ tags:
   - FileSystem
 ---
 学习btrfs文件系统的笔记. 
-## 创建BTRFS卷
 
-    mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 
-
-## 更改btrfs的元数据冗余
+btrfs 管理模式和标准的文件系统不同。 btrfs 的顶级卷可以理解为 存储池， 跨越多个设备添加所有的空间到顶级卷。
+在顶级卷中可以直接创建目录结构进行使用， 但是并不推荐。推荐的方式是在顶级卷下面创建子卷， 然后挂载子卷使用， 这样可以最大程度的发挥 btrfs 文件系统的高级特性。
+子卷可以和标准目录使用 ls 命令输出没有任何差异， 为了在更好的区分 子卷 还是 普通目录， 在创建子卷的时候使用 @VOLUME_NAME 的格式进行创建。
+例如： 
+```shell
+/mnt/btrfs/ <-- 这一层还是 xfs 文件系统的范围，下面的三个目录都是手动创建的挂载点
+|-- docker_data  <-- 在这里挂载 @docker_data
+|-- harbor_data  <-- 在这里挂载 @harbor_data
+`-- root  <-- 在这里挂载 btrfs top volume，
+    |-- @docker_data  <-- 在这里创建 btrfs subvolume @docker_data
+    `-- @harbor_data  <-- 在这里创建 btrfs subvolume @harbor_data
+```
+在 top volume 里面创建 subvolume 挂载到其他位置使用。
+实际使用中不管理子卷的时候 top volume 可以不挂载。
+配置完成之后， 看到的应该是这样的。
+```shell
+/mnt/btrfs/ <-- 这一层还是 xfs 文件系统的范围
+|-- docker_data  <-- 在这里挂载 btrfs subvolume @docker_data
+`-- harbor_data  <-- 在这里挂载 btrfs subvolume @harbor_data
+```
+### 创建 btrfs 卷
+```shell
+mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 
+```
+### 更改 btrfs 的 raid 存储方式
 可以将文件系统的冗余方式进行转换, 例如 raid0, raid1, single.
+最好在初始的时候就设定好， 后面的转换会导致一段时间的IO不可用。
+ ```shell
+btrfs balance start -dconvert=raid1 -mconvert=raid1 /mnt
+ ```
+### 创建轻量副本文件
+```shell
+cp --reflink source dest 
+```
+### 创建 Subvolume 和 删除 Subvolume
+创建 Subvolume
+```shell
+btrfs su create @test
+Create subvolume './@test'
+```
+删除 Subvolume 
+```shell
+btrfs su del @test/
+Delete subvolume (no-commit): '/mnt/btrfs/root/@test'
+```
+### 挂载 btrfs 顶级卷
+```shell
+mkdir /mnt/btrfs/root/
+mount -t btrfs /dev/nvme1n1 /mnt/btrfs/root/
+```
+### 挂载 btrfs 子卷
+```shell
+mkdir /mnt/btrfs/test/
+mount -t btrfs -o subvol=@test/ /dev/nvme1n1 /mnt/btrfs/test/
+```
+写入 fstab 
+```
+UUID=519abb44-a6a3-4ed1-b99d-506e9443e73f   /mnt/btrfs/root          btrfs   defaults,compress=zstd,autodefrag,ssd,space_cache=v2,vol=@
+UUID=519abb44-a6a3-4ed1-b99d-506e9443e73f   /mnt/btrfs/docker_data   btrfs   defaults,compress=zstd,autodefrag,ssd,space_cache=v2,subvol=@docker_data
+UUID=519abb44-a6a3-4ed1-b99d-506e9443e73f   /mnt/btrfs/harbor_data   btrfs   defaults,compress=zstd,autodefrag,ssd,space_cache=v2,subvol=@harbor_data
+```
 
-  这里最好的办法当然是创建的时候就规划和指定好。
-  
-    btrfs balance start -dconvert=raid1 -mconvert=raid1 /mnt
-    
-## 创建轻量副本文件
-    cp --reflink source dest 
-
-记录测试结果：
-1. 如果是 -d raid0 -m raid1 可以直接将三个EBS IO1 3000IOPS的卷吃满， 直接到9000
-2. 如果是 -d raid1 -m raid1 只能达到3000IOPS， 但是容量会有冗余。
-
-## Randread
+###  btrfs 测试
+Read Throughput
 ```ini
 [global]
 directory=/mnt
@@ -45,7 +91,7 @@ thread
 [job1]
 iodepth=2
 ```
-## Result
+Read 测试结果
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1
 job1: (g=0): rw=randread, bs=16M-16M/16M-16M/16M-16M, ioengine=libaio, iodepth=2
@@ -76,8 +122,7 @@ job1: (groupid=0, jobs=1): err= 0: pid=26359: Thu Nov 18 07:59:17 2021
 Run status group 0 (all jobs):
    READ: io=5232.0MB, aggrb=266744KB/s, minb=266744KB/s, maxb=266744KB/s, mint=20085msec, maxt=20085msec
 ```
-
-## Randwrite
+Write Throughtput
 ```ini
 [global]
 directory=/mnt
@@ -96,7 +141,7 @@ thread
 [job1]
 iodepth=2
 ```
-## Result
+Write 测试结果
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1
 job1: (g=0): rw=randwrite, bs=16M-16M/16M-16M/16M-16M, ioengine=libaio, iodepth=2
@@ -125,9 +170,11 @@ job1: (groupid=0, jobs=1): err= 0: pid=26385: Thu Nov 18 08:00:56 2021
 Run status group 0 (all jobs):
   WRITE: io=5248.0MB, aggrb=267987KB/s, minb=267987KB/s, maxb=267987KB/s, mint=20053msec, maxt=20053msec
 ```
-
-## Xfs 单独磁盘
-### Randwrite
+记录测试结果：
+1. 如果是 -d raid0 -m raid1 可以直接将三个EBS IO1 3000IOPS的卷吃满， 直接到 9000
+2. 如果是 -d raid1 -m raid1 只能达到3000IOPS， 但是容量会有冗余。
+### 对比  xfs 测试
+Write Throughput
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1
 job1: (g=0): rw=randwrite, bs=16M-16M/16M-16M/16M-16M, ioengine=libaio, iodepth=2
@@ -160,7 +207,7 @@ Run status group 0 (all jobs):
 Disk stats (read/write):
   nvme4n1: ios=0/10699, merge=0/0, ticks=0/720588, in_queue=702508, util=99.40%
 ```
-### Randread
+Read Throughput
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1
 job1: (g=0): rw=randread, bs=16M-16M/16M-16M/16M-16M, ioengine=libaio, iodepth=2
@@ -191,17 +238,14 @@ Run status group 0 (all jobs):
 
 Disk stats (read/write):
   nvme4n1: ios=10711/1, merge=0/0, ticks=598336/56, in_queue=579492, util=99.49%
-```
 
 slat 表示submission latency，也就是发送这个IO给内核处理的提交时间花费。  （请求抵达内核的时间）
 clat 是提交IO请求给内核之后到IO完成之间的时间，不包括submission latency。 （内核到块设备 ——> 请求处理完成的时间）
 bw Bandwidth  带宽
-READ: 读取的速率
+READ 读取的速率
 
-关于fio 几个参数的测试， 这是我目前见到测试最完整的一个： 
-https://blog.csdn.net/get_set/article/details/108001674
 
-## 文件系统快照
+### 文件系统快照
 #### 创建文件系统快照
 
 申请一个新的 EBS 卷, 挂载到之前的实例上面, 格式化文件系统, 创建新的 BTRFS 文件系统设备: 
@@ -218,11 +262,11 @@ mkdir -pv /mnt/btrfs_snapshot_loc/
 
 mount -v /dev/nvme3n1 /mnt/btrfs_snapshot_loc/
 ```
-创建子卷的快照: 
+创建子卷只读快照: 
 ```shell
 btrfs su sn -r @harbor_data ".snapshots/harbor_data-2024-05-08-12:46-ro"
 ```
-创建增量快照
+在快照的基础上创建增量快照， 并发送到另外一个 btrfs 文件系统的设备， 例如 USB。
 ```shell
 btrfs send -p ".snapshots/harbor_data-2024-05-08-12:46-ro/" ".snapshots/harbor_data-2024-05-08-13:03-ro/" | btrfs receive /mnt/btrfs_snapshot_loc/
 
@@ -231,23 +275,19 @@ btrfs send -p ".snapshots/harbor_data-2024-05-08-13:03-ro/" ".snapshots/harbor_d
 查看目录内容, 分析目录内容和大小.
 磁盘占用空间实际是 15GB, 总文件大小是 47GB. 
 ```shell
-
-┬─[root@arch:/mnt]─[01:45:12 PM]
 ╰─>$ ll
 total 0
 drwxr-xr-x 1 10000 10000 122 May  8 12:53 harbor_data-2024-05-08-12:46-ro/
 drwxr-xr-x 1 10000 10000 122 May  8 13:06 harbor_data-2024-05-08-13:03-ro/
 drwxr-xr-x 1 10000 10000 122 May  8 13:11 harbor_data-2024-05-08-13:10-ro/
 
-┬─[root@arch:/mnt]─[01:45:13 PM]
 ╰─>$ compsize .
 Processed 14560 files, 2192 regular extents (6504 refs), 7311 inline.
 Type       Perc     Disk Usage   Uncompressed Referenced
 TOTAL      100%       15G          15G          47G
 none       100%       15G          15G          47G
-
 ```
-## 为btrfs文件系统添加新的磁盘
+### 为 btrfs 文件系统添加新的磁盘
 添加新的磁盘并列出, 这个时候不会自动平衡文件系统容量, 新添加的磁盘使用容量是空的.
 ```shell
 ╰─>$ btrfs device add -f /dev/nvme3n1 /mnt/btrfs/root
@@ -315,3 +355,84 @@ Unallocated:
    System,RAID1:           32.00MiB
    Unallocated:           154.97GiB
 ```
+### 为 btrfs 文件系统移除磁盘
+使用 btrfs dev delete 指令移除磁盘， 之后会自动重新平衡数据。
+```shell
+btrfs dev delete /dev/nvme4n1 .
+ERROR: error removing device '/dev/nvme4n1': unable to go below four devices on raid10
+
+btrfs balance start -dconvert=raid0 -mconvert=raid1 /mnt/btrfs/root/
+Done, had to relocate 26 out of 26 chunks
+
+btrfs fi us .
+Overall:
+    Device size:		 800.00GiB
+    Device allocated:		 100.12GiB
+    Device unallocated:		 699.88GiB
+    Device missing:		     0.00B
+    Used:			  48.06GiB
+    Free (estimated):		 748.42GiB	(min: 398.49GiB)
+    Data ratio:			      1.00
+    Metadata ratio:		      2.00
+    Global reserve:		  66.77MiB	(used: 0.00B)
+
+Data,RAID0: Size:96.00GiB, Used:47.45GiB
+   /dev/nvme1n1	  24.00GiB
+   /dev/nvme2n1	  24.00GiB
+   /dev/nvme3n1	  24.00GiB
+   /dev/nvme4n1	  24.00GiB
+
+Metadata,RAID1: Size:2.00GiB, Used:312.45MiB
+   /dev/nvme1n1	   1.00GiB
+   /dev/nvme2n1	   1.00GiB
+   /dev/nvme3n1	   1.00GiB
+   /dev/nvme4n1	   1.00GiB
+
+System,RAID1: Size:64.00MiB, Used:16.00KiB
+   /dev/nvme1n1	  32.00MiB
+   /dev/nvme2n1	  32.00MiB
+   /dev/nvme3n1	  32.00MiB
+   /dev/nvme4n1	  32.00MiB
+
+Unallocated:
+   /dev/nvme1n1	 174.97GiB
+   /dev/nvme2n1	 174.97GiB
+   /dev/nvme3n1	 174.97GiB
+   /dev/nvme4n1	 174.97GiB
+```
+btrfs dev remove 设备并不会再平衡数据， 所以如果冗余不够的话，可能会丢数据，在设备坏了的时候使用。
+```shell
+btrfs dev remove /dev/nvme3n1 .
+
+btrfs fi us .
+Overall:
+    Device size:		 400.00GiB
+    Device allocated:		  50.06GiB
+    Device unallocated:		 349.94GiB
+    Device missing:		     0.00B
+    Used:			  48.06GiB
+    Free (estimated):		 350.48GiB	(min: 175.51GiB)
+    Data ratio:			      1.00
+    Metadata ratio:		      2.00
+    Global reserve:		  67.02MiB	(used: 0.00B)
+
+Data,RAID0: Size:48.00GiB, Used:47.45GiB
+   /dev/nvme1n1	  24.00GiB
+   /dev/nvme2n1	  24.00GiB
+
+Metadata,RAID1: Size:1.00GiB, Used:312.70MiB
+   /dev/nvme1n1	   1.00GiB
+   /dev/nvme2n1	   1.00GiB
+
+System,RAID1: Size:32.00MiB, Used:16.00KiB
+   /dev/nvme1n1	  32.00MiB
+   /dev/nvme2n1	  32.00MiB
+
+Unallocated:
+   /dev/nvme1n1	 174.97GiB
+   /dev/nvme2n1	 174.97GiB
+```
+
+
+
+

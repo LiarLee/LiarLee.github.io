@@ -8,8 +8,6 @@ category: Linux
 
 荣耀8刷LineageOS 14.1 , 感谢XDA的大神们。用到的刷机包我转存了一份到微云，链接在末尾。  
 
-<!-- more -->  
-
 ![SystemHome.png](https://i.loli.net/2018/08/02/5b628ca68c86f.png)
 
 ## 一 基本情况

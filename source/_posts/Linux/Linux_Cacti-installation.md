@@ -20,7 +20,6 @@ Required Packages : LAMP, RRDTool
 yum install -y httpd httpd-devel  
 dnf install -y httpd httpd-devel  
 ```
-安装完毕。  
 
 2. 安装MySQL  
 命令如下：
@@ -34,7 +33,6 @@ OR
 yum install -y Mariadb-server  
 dnf install -y Mariadb-server
 ```
-安装完毕。  
 
 3. 安装PHP  
 命令如下：  
@@ -42,7 +40,6 @@ dnf install -y Mariadb-server
 yum install -y php-mysql php-pear php-common php-gd php-devel php php-mbstring php-cli  
 dnf install -y php-mysql php-pear php-common php-gd php-devel php php-mbstring php-cli  
 ```
-安装完毕。  
 
 4. 安装PHP-SNMP
 命令如下：
@@ -50,7 +47,6 @@ dnf install -y php-mysql php-pear php-common php-gd php-devel php php-mbstring p
 yum install -y php-snmp  
 dnf install -y php-snmp  
 ```
-安装完毕。  
 
 5. 安装NET-SNMP
 命令如下：
@@ -63,7 +59,6 @@ dnf install -y net-snmp-utils net-snmp-libs net-snmp
 yum install -y net-snmp-devel
 dnf install -y net-snmp-devel
 ```
-安装完毕。
 
 6. 安装RRDTool
 命令如下：
@@ -71,7 +66,6 @@ dnf install -y net-snmp-devel
 yum install -y rrdtool  
 dnf install -y rrdtool  
 ```
-安装完毕。  
 
 7. 开始所有的服务：
 命令如下：
@@ -86,7 +80,6 @@ systemctl start httpd.service
 systemctl start mariadb.service
 systemctl start snmpd.service
 ```
-安装完毕。  
 
 8. 调整服务开机启动：
 ```
@@ -100,7 +93,6 @@ systemctl enable httpd.service
 systemctl enable mariadb.service
 systemctl enable snmpd.service
 ```
-安装完毕。
 
 9. 开启EPEL REPO & 安装Cacti
 ```
@@ -108,7 +100,6 @@ wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -ivh epel-release-latest-7.noarch.rpm
 yum makecache
 ```
-安装完毕。  
 **所有的安装内容已经部署完毕。**
 
 ## 进行配置
@@ -125,7 +116,6 @@ mysql> GRANT ALL ON cacti.* TO cacti@localhost IDENTITFIED BY 'YOURSELF_PASSWORD
 mysql> FLUSH PRIVILEGES;
 mysql> quit;
 ```
-安装完毕。
 
 3. MySQL-数据库初始化  
 ```
@@ -199,5 +189,3 @@ Default Password : **admin**
 3. 在Spine的目录下，执行./configure && make && make install。  
 **NOTE：** 这里出现了的问题，提示找不到net-snmp header file--->没有安装net-snmp-devel
 4. 进入控制台进行Spine是否安装成功。   
-
-## 待续

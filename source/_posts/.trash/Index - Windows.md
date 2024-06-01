@@ -15,4 +15,4 @@ tags:
 - [[Windows_如何给自己的电脑重装系统]]
 
 ### Windows Container
-
+- [[EKS_Windows core 节点管理]]

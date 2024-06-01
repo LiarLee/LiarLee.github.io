@@ -4,6 +4,8 @@ date: 2023-09-06 14:24:46
 category: Linux
 tags:
   - Linux
+  - AWS
+  - EC2
 ---
 
 使用Cloud-init提供读取Userdata的功能。 
