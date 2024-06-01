@@ -79,22 +79,18 @@ blockdev --getra /dev/nvme1n1 # 查看参数是否生效。
 ## 压测工具
 
 - dd 
-
 - hdparm 
-
 - sysbench
-
 - iometer
-
 - iozone
 
-推荐fio 
+推荐使用的工具是 ： 
+[fio](Linux_fio.md#^e1023e)
+[fio项目文档](https://fio.readthedocs.io/en/latest/fio_doc.html)
 
-https://fio.readthedocs.io/en/latest/fio_doc.html
+ebs设置默认的 Block Size是 16k ， 其他厂商可能是 4k 的。 这个部分可能会在测试的时候造成差异。 
+关于 fio 几个参数的测试， 这是我找到测试最完整的一个： 
 
-ebs设置默认的 Block Size是 16k ， 其他厂商可能是 4k的。 这个部分可能会在测试的时候造成差异。 
-
-关于fio 几个参数的测试， 这是我找到测试最完整的一个： 
 [探索fio参数](https://blog.csdn.net/get_set/article/details/108001674)
 ### 测试命令
 
@@ -152,16 +148,11 @@ fio 324148 87167.271746:     250000 cpu-clock:pppH:
 libaio 用来提供较高的iops测试, 异步 io 的优势
 psync 用来提供延迟的基准,  延迟敏感的测试或者 同步IO 的测试可以使用 psync. 
 
-## 观测
-
-[[Linux_iostat|Linux_iostat]] 
+## 观测 
 可以直接使用这个命令来观察磁盘的使用情况， 磁盘的使用率其实并不太准确，这个表示单位时间内cpu时间被io请求占用的时间。 
-
 个别的 10ms 之上的IO请求的长尾现象是正常的， 这个无法避免。
 
 关于长尾现象的说明： 
-
 > 长尾请求一般是指明显高于均值的那部分占比较小的请求。  业界关于延迟有一个常用的P99标准， 也就是99%的请求延迟要满足在一定耗时以内， 1%的请求会大于这个耗时， 而这1%就可以认为是长尾请求。  
 >
 > Refer to:  https://zhuanlan.zhihu.com/p/35516682
-

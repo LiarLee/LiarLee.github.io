@@ -26,5 +26,5 @@ tags:
 ### 在fedora-wiki找到的说明页面
 [Libvirt_Managed_Timers页面链接](https://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/Virtualization_Deployment_and_Administration_Guide/sect-Virtualization-Tips_and_tricks-Libvirt_Managed_Timers.html)  
 在字段中‘rtc'并不是主要的问题，主要问题是后面的tickpolicy='catchcup'。fedora wiki给出的答案是catchup--Deliver at a higher rate to catch up.   
-所以这就是为什么我们删除了这个timer之后系统正常的原因。
+所以这就是为什么删除了这个timer之后系统正常的原因。
 

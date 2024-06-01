@@ -7,6 +7,7 @@ tags:
   - Kernel
 ---
 
+
 Ubuntu 18.04 上编译内核，生成deb安装包的过程和遇到的问题。 
 使用工具： Linux-tkg 
 系统版本： Ubuntu18.04 

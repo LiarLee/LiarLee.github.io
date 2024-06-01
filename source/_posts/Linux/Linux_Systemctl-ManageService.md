@@ -8,7 +8,7 @@ tags:
 
 通过systemctl 来管理系统的服务和软件，但是如果是自己安装的软件就没有办法使用了。其实是可以自己定义systemd的管理脚本的，类似与之前的SysV风格的管理脚本。
 
-## Systemd是什么
+## Systemd
 > systemd is a suite of basic building blocks for a Linux system. It provides a system and service manager that runs as PID 1 and starts the rest of the system. systemd provides aggressive parallelization capabilities, uses socket and D-Bus activation for starting services, offers on-demand starting of daemons, keeps track of processes using Linux control groups, maintains mount and automount points, and implements an elaborate transactional dependency-based service control logic. systemd supports SysV and LSB init scripts and works as a replacement for sysvinit. Other parts include a logging daemon, utilities to control basic system configuration like the hostname, date, locale, maintain a list of logged-in users and running containers and virtual machines, system accounts, runtime directories and settings, and daemons to manage simple network configuration, network time synchronization, log forwarding, and name resolution.
 
 管得还是挺多的，主要是启动PID为1的进程并启动其他的程序，并行执行，维护挂载点及自动挂载，服务之间的依赖关系，日志进程，

@@ -8,7 +8,7 @@ tags:
   - Nvidia
 ---
 
-最近的一个想法，基于之前 hacking 到中国区域的 archlinux， 可以尝试直接改改 xorg， 用用 nvidia 的显卡。
+最近的一个想法，基于 dd 到中国区域的 archlinux， 可以尝试直接改改 xorg， 用用 nvidia 的显卡。
 
 大概折腾了一天， 记录一下步骤和过程。
 
@@ -64,8 +64,7 @@ name:           nvidia
 vermagic:       6.6.7-zen1-1-zen SMP preempt mod_unload
 ```
 ## 配置xrdp
-1. 这里已经可以正常的驱动显卡， 但是xorg不会去调用显卡启动图形，查看了archwiki之后，发现如果使用 xrdp ， 那么还需要重新安装 xrdp 的后端。 需要使用来自aur的后端来匹配nvidia显卡的支
-持， 而不是 archlinux 的主仓库里面的默认软件包， 我这边使用的是paru 进行的下面步骤。
+1. 这里已经可以正常的驱动显卡， 但是xorg不会去调用显卡启动图形，查看了archwiki之后，发现如果使用 xrdp ， 那么还需要重新安装 xrdp 的后端。 需要使用来自aur的后端来匹配nvidia显卡的支持， 而不是 archlinux 的主仓库里面的默认软件包， 使用 paru 进行的下面步骤。
     aur 里面的 xorgxrdp，会自动拉取编译 xrdp-git， 因此这里的版本显示和 aur 仓库的不完全一致。
 ```shell
 > paru -Ss xrdp
@@ -94,8 +93,7 @@ aur/xrdp-git 0.9.18.r565.geb1c3cd4-1 [+30 ~0.01] [Installed: 0.9.18.r599.g9fbe0a
 > nvidia-xconfig -c /etc/X11/xrdp/xorg_nvidia.conf
 # 这里面可以不手动备份， 该命令会自动备份之前的配文件， 如果有不同的配置会自动merge。
 ```
-5. 最后，我在这样做完之后， 重启 xrdp ， xorg 确实开始使用显卡了， 但是所有启动的程序不会使用显卡， 默认还是CPU在计算， 这是因为 xorg 的配置文件里面少了 FILE Section, 这个文件的位
-置可能会不同，我这边确实在这个位置， 文件存在的情况下直接拿来用了。
+5. 最后，我在这样做完之后， 重启 xrdp ， xorg 确实开始使用显卡了， 但是所有启动的程序不会使用显卡， 默认还是CPU在计算， 这是因为 xorg 的配置文件里面少了 FILE Section, 这个文件的位置可能会不同，我这边确实在这个位置， 文件存在的情况下直接拿来用了。
 ```shell
 Section "Files"
   ModulePath   "/usr/lib64/nvidia/xorg"
@@ -275,8 +273,8 @@ EndSection
 
 主要还是这个字段生效 `    Option         "metamodes" "1920x1080 +0+0"` ， 2023 年年末的正确设置分辨率的写法。 我对于网络串流的效果本身表示担心， 所以并没有开到 4k ， 1080p 体验游戏基本上够了。
 
-## 目前最后的一点点坑：
-重启之后， sunshine 需要先通过xrdp进入到 ec2 里面，连接一次启动图形化， 我最后还是没有把整体配置成 headless 模式， 如果 sunshine 可以在启动的时候叫一下 xserver 可能会使比较好的方案， 不过平时应该没有需要这个的时候， 问题不大。 我对这个事情还是认为在整活的范围里面。
+## 目前最后的一点点坑
+重启之后， sunshine 需要先通过 xrdp 进入到 ec2 里面，连接一次启动图形化， 我最后还是没有把整体配置成 headless 模式， 如果 sunshine 可以在启动的时候叫一下 xserver 可能会使比较好的方案， 不过平时应该没有需要这个的时候， 问题不大。 我对这个事情还是认为在整活的范围里面。
 
 ## Final
 正常配置的情况下， 启动的程序应该都可以直接使用显卡， 可以在 `nvtop` 或者 `nvidia-smi` 找到对应的进程。
