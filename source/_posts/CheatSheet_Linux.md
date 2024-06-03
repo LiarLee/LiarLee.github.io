@@ -6,7 +6,18 @@ tags:
   - Linux
   - CheatSheet
 ---
-### 强制退出程序并生成 corefile
+### Rsync 命令传输数据
+保留文件的原本的信息, 归档模式, 传输前压缩, 以及展示进度 和 暂存发送文件进度.
+```shell
+rsync -azP /source/path/ /destination/path/
+rsync -aP /source/path/ /destination/path/
+```
+### 查看磁盘设备的详细信息
+包括 EBS Volume ID 和 设备驱动类型
+```shell
+lsblk -f -o +SERIAL,SCHED,TRAN,STATE
+```
+### 强制退出程序并生成 Corefile
 组合键用于发送 SIGQUIT 信号，用于终止正在运行的进程。与Ctrl+C不同的是，Ctrl+\会生成一个core文件，用于调试程序。
 同时在某些特定的场景下， 这个指令并Ctrl+c停止进程的速度快。 
 ```shell
@@ -173,7 +184,7 @@ iptables -t nat -I PREROUTING 1 -i eth0 -p udp --dport 20000:30000 -j DNAT --to-
 # 删除 nat 表 PRERTOUING 上的第一个规则
 iptables -t nat -D PREROUTING 1
 ```
-###  查看 close wait 状态的 Socket
+### 查看 close Wait 状态的 Socket
 ```bash
 ss --tcp state CLOSE-WAIT
 ```

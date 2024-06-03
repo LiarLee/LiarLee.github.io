@@ -1,5 +1,5 @@
 ---
-title: btrfs 的使用体验
+title: btrfs 笔记
 date: 2022-04-19 17:45:39
 category: Linux
 tags:
@@ -7,7 +7,7 @@ tags:
   - IO
   - FileSystem
 ---
-学习btrfs文件系统的笔记. 
+学习btrfs文件系统笔记. 
 
 btrfs 管理模式和标准的文件系统不同。 btrfs 的顶级卷可以理解为 存储池， 跨越多个设备添加所有的空间到顶级卷。
 在顶级卷中可以直接创建目录结构进行使用， 但是并不推荐。推荐的方式是在顶级卷下面创建子卷， 然后挂载子卷使用， 这样可以最大程度的发挥 btrfs 文件系统的高级特性。
@@ -18,9 +18,9 @@ btrfs 管理模式和标准的文件系统不同。 btrfs 的顶级卷可以理�
 /mnt/btrfs/ <-- 这一层还是 xfs 文件系统的范围，下面的三个目录都是手动创建的挂载点
 |-- docker_data  <-- 在这里挂载 @docker_data
 |-- harbor_data  <-- 在这里挂载 @harbor_data
-`-- root  <-- 在这里挂载 btrfs top volume，
-    |-- @docker_data  <-- 在这里创建 btrfs subvolume @docker_data
-    `-- @harbor_data  <-- 在这里创建 btrfs subvolume @harbor_data
+`-- root  <-- 在这里挂载 btrfs top volume， subvolume=/
+    |-- @docker_data  <-- 在这里创建 btrfs subvolume @docker_data. subvolume=@docker_data
+    `-- @harbor_data  <-- 在这里创建 btrfs subvolume @harbor_data, subvolume=@harbor_data
 ```
 在 top volume 里面创建 subvolume 挂载到其他位置使用。
 实际使用中不管理子卷的时候 top volume 可以不挂载。
@@ -31,17 +31,43 @@ btrfs 管理模式和标准的文件系统不同。 btrfs 的顶级卷可以理�
 |-- docker_data  <-- 在这里挂载 btrfs subvolume @docker_data
 `-- harbor_data  <-- 在这里挂载 btrfs subvolume @harbor_data
 ```
-### 创建 btrfs 卷
+### 查看当前os支持的特性
+```shell
+➤ mkfs.btrfs -O list-all
+Filesystem features available:
+mixed-bg            - mixed data and metadata block groups (compat=2.6.37, safe=2.6.37)
+quota               - hierarchical quota group support (qgroups) (compat=3.4)
+extref              - increased hardlink limit per file to 65536 (compat=3.7, safe=3.12, default=3.12)
+raid56              - raid56 extended format (compat=3.9)
+skinny-metadata     - reduced-size metadata extent refs (compat=3.10, safe=3.18, default=3.18)
+no-holes            - no explicit hole extents for files (compat=3.14, safe=4.0, default=5.15)
+fst                 - free-space-tree alias
+free-space-tree     - free space tree, improved space tracking (space_cache=v2) (compat=4.5, safe=4.9, default=5.15)
+raid1c34            - RAID1 with 3 or 4 copies (compat=5.5)
+zoned               - support zoned (SMR/ZBC/ZNS) devices (compat=5.12)
+bgt                 - block-group-tree alias
+block-group-tree    - block group tree, more efficient block group tracking to reduce mount time (compat=6.1)
+rst                 - raid-stripe-tree alias
+raid-stripe-tree    - raid stripe tree, enhanced file extent tracking (compat=6.7)
+squota              - squota support (simple accounting qgroups) (compat=6.7)
+```
+### 创建 Btrfs 卷
+单一设备文件系统: 
+```shell
+mkfs.btrfs -n 64k -m single -d single -L liarlee_test /dev/nvme1n1
+```
+多设备文件系统:
 ```shell
 mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 
 ```
-### 更改 btrfs 的 raid 存储方式
+### 更改 Btrfs 的 Raid 存储方式
 可以将文件系统的冗余方式进行转换, 例如 raid0, raid1, single.
 最好在初始的时候就设定好， 后面的转换会导致一段时间的IO不可用。
  ```shell
 btrfs balance start -dconvert=raid1 -mconvert=raid1 /mnt
  ```
 ### 创建轻量副本文件
+默认情况下 cp 命令的行为是不启用 CoW 特性的, 需要这个参数.
 ```shell
 cp --reflink source dest 
 ```
@@ -56,12 +82,13 @@ Create subvolume './@test'
 btrfs su del @test/
 Delete subvolume (no-commit): '/mnt/btrfs/root/@test'
 ```
-### 挂载 btrfs 顶级卷
+### 挂载 Btrfs 顶级卷
 ```shell
 mkdir /mnt/btrfs/root/
 mount -t btrfs /dev/nvme1n1 /mnt/btrfs/root/
 ```
-### 挂载 btrfs 子卷
+### 挂载 Btrfs 子卷
+命令行挂载
 ```shell
 mkdir /mnt/btrfs/test/
 mount -t btrfs -o subvol=@test/ /dev/nvme1n1 /mnt/btrfs/test/
@@ -72,8 +99,20 @@ UUID=519abb44-a6a3-4ed1-b99d-506e9443e73f   /mnt/btrfs/root          btrfs   def
 UUID=519abb44-a6a3-4ed1-b99d-506e9443e73f   /mnt/btrfs/docker_data   btrfs   defaults,compress=zstd,autodefrag,ssd,space_cache=v2,subvol=@docker_data
 UUID=519abb44-a6a3-4ed1-b99d-506e9443e73f   /mnt/btrfs/harbor_data   btrfs   defaults,compress=zstd,autodefrag,ssd,space_cache=v2,subvol=@harbor_data
 ```
-
-###  btrfs 测试
+### Btrfs 文件系统碎片整理
+```shell
+btrfs filesystem defragment -r /mnt/btrfs/root
+```
+### Btrfs 文件系统在线检查
+```shell
+btrfs scrub start /mnt/btrfs/root
+```
+### Btrfs 对特定的文件进行压缩
+一般来说, 压缩选项是挂载的时候指定的 `compress=zstd` 执行自动压缩, `compress-force=zstd` 执行强制压缩. 这会对挂载之后写入的新文件生效, 旧文件是需要手动处理的.
+```shell
+btrfs property set <PATH> compression <VALUE>
+```
+### Btrfs 测试
 Read Throughput
 ```ini
 [global]
@@ -175,7 +214,7 @@ Run status group 0 (all jobs):
 记录测试结果：
 1. 如果是 -d raid0 -m raid1 可以直接将三个EBS IO1 3000IOPS的卷吃满， 直接到 9000
 2. 如果是 -d raid1 -m raid1 只能达到3000IOPS， 但是容量会有冗余。
-### 对比  xfs 测试
+### 对比 Xfs 测试
 Write Throughput
 ```bash
 [root@ip-172-31-10-64 fio]# fio ./job1
@@ -289,7 +328,7 @@ Type       Perc     Disk Usage   Uncompressed Referenced
 TOTAL      100%       15G          15G          47G
 none       100%       15G          15G          47G
 ```
-### 为 btrfs 文件系统添加新的磁盘
+### 为 Btrfs 文件系统添加新的磁盘
 添加新的磁盘并列出, 这个时候不会自动平衡文件系统容量, 新添加的磁盘使用容量是空的.
 ```shell
 ╰─>$ btrfs device add -f /dev/nvme3n1 /mnt/btrfs/root
@@ -357,7 +396,7 @@ Unallocated:
    System,RAID1:           32.00MiB
    Unallocated:           154.97GiB
 ```
-### 为 btrfs 文件系统移除磁盘
+### 为 Btrfs 文件系统移除磁盘
 使用 btrfs dev delete 指令移除磁盘， 之后会自动重新平衡数据。
 ```shell
 btrfs dev delete /dev/nvme4n1 .
@@ -434,7 +473,4 @@ Unallocated:
    /dev/nvme1n1	 174.97GiB
    /dev/nvme2n1	 174.97GiB
 ```
-
-
-
 
