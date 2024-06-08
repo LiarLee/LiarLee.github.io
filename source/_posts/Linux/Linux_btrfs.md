@@ -66,6 +66,9 @@ mkfs.btrfs -d single -m raid1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1
  ```shell
 btrfs balance start -dconvert=raid1 -mconvert=raid1 /mnt
  ```
+
+^9c4bbd
+
 ### 创建轻量副本文件
 默认情况下 cp 命令的行为是不启用 CoW 特性的, 需要这个参数.
 ```shell
@@ -313,6 +316,9 @@ btrfs send -p ".snapshots/harbor_data-2024-05-08-12:46-ro/" ".snapshots/harbor_d
 
 btrfs send -p ".snapshots/harbor_data-2024-05-08-13:03-ro/" ".snapshots/harbor_data-2024-05-08-13:10-ro/" | btrfs receive /mnt/btrfs_snapshot_loc/
 ```
+
+^08cd21
+
 查看目录内容, 分析目录内容和大小.
 磁盘占用空间实际是 15GB, 总文件大小是 47GB. 
 ```shell
