@@ -20,7 +20,8 @@ pacman命令的常用说明：
 	[root@LiarLee ~]# pacman -Qs 关键字： 搜索已安装的包
 	[root@LiarLee ~]# pacman -Qi 包名：查看有关包的详尽信息
 	[root@LiarLee ~]# pacman -Ql 包名：列出该包的文件
-	[root@LiarLee ~]# pacman -Syyu 下载已经更新本地的所有软件包
+	[root@LiarLee ~]# pacman -Syyu 下载 和 更新本地的所有软件包
+	[root@LiarLee ~]# pacman -U /var/cache/pacman/pkg/linux-aarch64-6.8.9-1-aarch64.pkg.tar.xz 使用cache软件包进行降级（如果需要的话
 ```
 # Archlinux Installation Version 2.0
 
