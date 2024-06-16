@@ -6,6 +6,10 @@ tags:
   - Linux
   - CheatSheet
 ---
+### 使用 ssh-keygen 从 pem 文件中导出公钥
+```shell
+ssh-keygen -y -f awesome.pem > public.pub
+```
 ### Rsync 命令传输数据
 保留文件的原本的信息, 归档模式, 传输前压缩, 以及展示进度 和 暂存发送文件进度.
 ```shell
