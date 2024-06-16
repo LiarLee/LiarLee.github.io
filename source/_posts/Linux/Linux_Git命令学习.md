@@ -16,9 +16,9 @@ https://github.com/LiarLee/vps-init.git
 #### Step 2
 本地创建目录， 并初始化本地的仓库路径。
 ```bash
-mkdir vps-init
-cd ./vps-init
-git clone https://github.com/LiarLee/test-init.git
+mkdir project-init
+cd ./project-init
+git clone https://github.com/LiarLee/project-init.git
 ```
 ### 关联远端仓库
 创建一个本地仓库。
@@ -27,7 +27,7 @@ mkdir test-init
 cd ./test-init
 git init .
 touch README
-echo "For test server use DroneCI."
+echo "For test"
 git add -A
 git commit -m "init"
 git remote add origin https://github.com/LiarLee/test-init.git
@@ -37,8 +37,8 @@ git -u origin master
 ### 配置代理
 ```bash
 # 设置代理
-ec2-user@arch ~> gitc config --global http.proxy socks5://1.1.1.1:7890
-ec2-user@arch ~> git config --global https.proxy socks5://1.1.1.1:7890
+arch ~> git config --global http.proxy socks5://1.1.1.1:7890
+arch ~> git config --global https.proxy socks5://1.1.1.1:7890
 # 取消代理
 git config --global --unset http.proxy git config --global --unset https.proxy
 ```
