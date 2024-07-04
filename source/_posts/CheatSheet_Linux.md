@@ -6,7 +6,15 @@ tags:
   - Linux
   - CheatSheet
 ---
-### 使用 ssh-keygen 从 pem 文件中导出公钥
+### 查看时间范围内的 atop 记录
+```shell
+atop -r /var/log/atop_20240704 -b 03:53 -e 03:59
+```
+### 查找 Grafana 日志中remote_addr字段出现次数
+``` shell
+awk '{ match($0, /remote_addr=([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/, ip); if(ip[1]) print ip[1] }' grafana.log | sort | uniq -c
+```
+### 使用 Ssh-keygen 从 Pem 文件中导出公钥
 ```shell
 ssh-keygen -y -f awesome.pem > public.pub
 ```
@@ -71,7 +79,7 @@ sysctl -a | egrep "rmem|wmem|tcp_mem|adv_win|moderate|slow_start"
 cat /etc/passwd | cut -f 1 -d : | xargs -I {} crontab -l -u {}
 ```
 ### 查看 AWS EC2 的 Billing Code
-Redhat / SUSE 的 Enterprise 版本在 AWS  EC2 上面运行实例会带有 Billing Code 的， 这标记 OS 是否是付过费用的，有没有安全补丁和技术支持。 
+Redhat / SUSE 的 Enterprise 版本在 AWS  EC2 上面运行实例会带有 Billing Code 的， 这标记 OS 是否是付过费用的,会不会收到安全补丁, 不会使用系统内的订阅管理器。 
 [Finding AMI billing and usage details](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/view-billing-info.html)
 [AMI billing information fields](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)
 
@@ -97,11 +105,15 @@ ethtool -S eth0 | grep drop
 ```
 ### OpenSSL 测试指定域名并输出调试信息
 ```shell
-openssl s_client -debug --connect YOUR_SITE:443
+openssl s_client -debug --connect $URL:443
 ```
 指定算法和协议版本
 ```shell
-openssl s_client -debug --connect YOUR_SITE:443 -tls1_2 -cipher RC4
+openssl s_client -debug --connect $URL:443 -tls1_2 -cipher RC4
+```
+查看证书的有效期: 
+```shell
+echo | openssl s_client -servername $URL:443 -connect $URL:443 2>/dev/null | openssl x509 -noout -dates
 ```
 ### 查看启动以来的内核日志
 ```shell
