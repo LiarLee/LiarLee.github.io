@@ -76,7 +76,7 @@ reflector --country='china' > /etc/pacman.d/mirrorlist
 ```
 pacstrap 安装内核, 基本文件系统, 固件, 常用软件,大概能想起来的就这么多.
 ```shell
-pacstrap -K /mnt base linux linux-firmware vim htop wget curl btrfs-progs fastfetch openssh sudo containerd nerdctl zstd ttf-jetbrains-mono-nerd tree ranger ncdu mtr fish eza util-linux fzf bat
+pacstrap -K /mnt base linux linux-firmware vim htop wget curl btrfs-progs fastfetch openssh sudo containerd nerdctl zstd ttf-jetbrains-mono-nerd tree ranger ncdu mtr fish eza util-linux fzf bat xfsprogs alacritty git
 ```
 生成fstab, 需要**编辑一下**, 修改里面不合理的内容参数.
 ```shell
@@ -120,6 +120,10 @@ vim /boot/loader/entries/arch.conf
 检查启动配置文件是否存在异常.
 ```shell
 bootctl list
+```
+开一些服务的自动启动
+```shell
+systemctl enable sshd
 ```
 检查没有问题了之后, 就可以退出chroot\卸载\重启了.
 ```shell

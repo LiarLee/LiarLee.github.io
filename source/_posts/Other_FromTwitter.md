@@ -81,3 +81,7 @@ tags:
 
 ---
 
+Best Practices for OpenZFS L2ARC in the Era of NVMe (SDC 2019) 
+https://www.youtube.com/watch?v=yHgSU6iqrlE
+
+---

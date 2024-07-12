@@ -1,6 +1,6 @@
 ---
 title: MySQL 无法重连问题的分析
-category: Linux
+category: Database
 date: 2024-04-12 15:36:25
 tags:
   - MySQL

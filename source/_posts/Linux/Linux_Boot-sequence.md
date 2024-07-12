@@ -19,3 +19,24 @@ POST -- GRUB(Bootloader-MBR) -- Kernel -- init
 1. 通过grub的引导，计算机挂载内核，识别的根文件系统.
 1. 启动init进程，通过SysV管理其他进程的启动及执行.
 
+### Grub 内核参数
+grub的菜单里面有几个参数, 这几个参数是用来控制内核行为的.
+AWS ec2 的串行端口是通过这个东西控制的, 如果不添加这个参数, 串口就是黑的. 
+
+```
+linux	/boot/vmlinuz-linux-zen root=UUID=7a1c634b-4d44-4136-87b1-6232d31b7c3b rw  console=ttyS0 earlyprintk=serial,ttyS0,keep transparent_hugepage=never
+```
+
+- 初始化 Serial Console.
+```
+console=ttyS0   
+```
+- 设置初始化端口的选项.
+- Append ",keep" to not disable it when the real console takes over.
+```
+earlyprintk=serial,ttyS0,keep 
+```
+- 关闭透明巨页.
+```
+transparent_hugepage=never
+```
