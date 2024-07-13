@@ -7,16 +7,18 @@ tags:
   - Linux
   - Network
 ---
-被问了一个数据库的问题, 主从复制需要 主库锁表 和 主库重启吗? 
+被问了一个数据库的问题, 主从复制需要 主库锁表 和 主库重启 吗? 
 
-使用docker配置一遍, 测试一下, 记录了步骤, 有些东西还是 MySQL 的官方文档好用.
+[Setting Up Binary Log File Position Based Replication](https://dev.mysql.com/doc/refman/8.4/en/replication-howto.html)
+使用docker配置一遍, 测试一下记录了步骤, 有些东西还是 MySQL 的官方文档好用.
 
 ### 主库需要做的事情
 
 1. 需要有唯一的 server id.
-    这个可以设置 var , 不需要重启.
+    这个可以设置 variables , 不需要重启.
 ```mysql
-MySQL [(none)]> show variables like 'server_id';
+MySQL [(none)]> 
+SHOW variables LIKE 'server_id';
 +---------------+-------+
 | Variable_name | Value |
 +---------------+-------+
@@ -25,15 +27,18 @@ MySQL [(none)]> show variables like 'server_id';
 1 row in set (0.001 sec)
 ```
 
-2. 创建一个用户用来和从库同步数据. 这个也不需要重启.
+2. 创建一个用户用来让从库同步数据. 这个也不需要重启.
 ```mysql
-MySQL [(none)]> create user 'replication-user'@'172.31.62.236' identified by '123123';
+MySQL [(none)]> 
+CREATE USER 'replication-user'@'172.31.62.236' IDENTIFYED BY '123123';
 Query OK, 0 rows affected (0.006 sec)
 
-MySQL [(none)]> GRANT REPLICATION SLAVE ON *.* TO 'replication-user'@'172.31.62.236';
+MySQL [(none)]> 
+GRANT REPLICATION SLAVE ON *.* TO 'replication-user'@'172.31.62.236';
 Query OK, 0 rows affected (0.004 sec)
 
-MySQL [(none)]> SHOW GRANTS FOR 'replication-user'@'172.31.62.236';
+MySQL [(none)]> 
+SHOW GRANTS FOR 'replication-user'@'172.31.62.236';
 +----------------------------------------------------------------------+
 | Grants for replication-user@172.31.62.236                            |
 +----------------------------------------------------------------------+
@@ -41,10 +46,12 @@ MySQL [(none)]> SHOW GRANTS FOR 'replication-user'@'172.31.62.236';
 +----------------------------------------------------------------------+
 1 row in set (0.000 sec)
 
-MySQL [(none)]> FLUSH PRIVILEGES;
+MySQL [(none)]> 
+FLUSH PRIVILEGES;
 Query OK, 0 rows affected (0.002 sec)
 
-MySQL [(none)]> select Host,User,authentication_string from mysql.user;
+MySQL [(none)]> 
+SELECT Host,User,authentication_string FROM mysql.user;
 +---------------+------------------+------------------------------------------------------------------------+
 | Host          | User             | authentication_string                                                  |
 +---------------+------------------+------------------------------------------------------------------------+
@@ -58,10 +65,17 @@ MySQL [(none)]> select Host,User,authentication_string from mysql.user;
 6 rows in set (0.001 sec)
 ```
 
-3. 确保主库启用了binlog, 或者是特定的数据库启用了binlog. MySQL 8.0 以后默认会启用 binlog, 所以这个重启实际上没有发生.
-4. 在主库上面查询 binlog 的状态, 也就是之前的 `show master status;` 现在这个命令已经被替换成:
+3. 确保主库会记录binlog, 或者是特定的 database 会记录 binlog. MySQL 8.0 以后默认会启用 binlog, 所以这个实际也不会需要重启.
+4. 文档中有描述, 在这个位置应该上一个 **主库** 的 **read** lock, 是为了确保记住的 binlog 是不变的, 如果业务比较忙的情况下, 会导致 binlog position 一直动.
 ```mysql
-MySQL [test]> SHOW BINARY LOG STATUS\G
+mysql> 
+FLUSH TABLES WITH READ LOCK;
+```
+
+5. 在主库上面查询 binlog 的状态, 也就是之前的 `show master status;` 现在这个命令已经被替换成:
+```mysql
+MySQL [test]> 
+SHOW BINARY LOG STATUS\G
 *************************** 1. row ***************************
 File: binlog.000002
 Position: 1086
@@ -71,23 +85,32 @@ Executed_Gtid_Set:
 1 row in set (0.000 sec)
 ```
 
+6. 看完位置之后就可以 unlock 了.
+```mysql
+mysql> 
+UNLOCK TABLES;
+```
+
 ### 从库需要做的事情
 1. 确认可以连接到主库. 网络部分. 
-2. 创建一个复制任务, 指定worker去做.
+2. 创建一个复制任务, 设置下面的信息.
 ```mysql
-mysql> CHANGE REPLICATION SOURCE TO
+mysql> 
+CHANGE REPLICATION SOURCE TO
      SOURCE_HOST='172.31.54.198',
      SOURCE_USER='replication-user',
      SOURCE_PASSWORD='123123',
      SOURCE_LOG_FILE='binlog.000002',
      SOURCE_LOG_POS=4, # 这个是默认值, 4 表示从开始就同步.
-     GET_SOURCE_PUBLIC_KEY=1;   # 这个是由于会报错, 提示
+     GET_SOURCE_PUBLIC_KEY=1;   # 这个是由于会报错
 ```
 3. 启动同步.
 ```mysql
-mysql> START REPLICA;
+mysql> 
+START REPLICA;
 
-mysql> SHOW PROCESSLIST;
+mysql> 
+SHOW PROCESSLIST;
 +----+-----------------+---------------------+------+---------+------+----------------------------------------------------------+------------------+
 | Id | User            | Host                | db   | Command | Time | State                                                    | Info             |
 +----+-----------------+---------------------+------+---------+------+----------------------------------------------------------+------------------+
@@ -102,7 +125,8 @@ mysql> SHOW PROCESSLIST;
 +----+-----------------+---------------------+------+---------+------+----------------------------------------------------------+------------------+
 8 rows in set, 1 warning (0.00 sec)
 
-mysql> SHOW REPLICA STATUS\G;
+mysql> 
+SHOW REPLICA STATUS\G;
 *************************** 1. row ***************************
              Replica_IO_State: Waiting for source to send event
                   Source_Host: 172.31.54.198
@@ -169,18 +193,128 @@ Source_SSL_Verify_Server_Cert: No
 ERROR:
 No query specified
 ```
-4. 清空之前的channel配置.
+4. 错误的情况下需要重新配置, 清空IOTHREAD的配置.
 ```mysql
-mysql> STOP REPLICA IO_THREAD FOR CHANNEL '';
+mysql> 
+STOP REPLICA IO_THREAD FOR CHANNEL '';
 ```
-5. 停止同步.
 ---
 ### 错误
+文档对于命令的说明: 
+[CHANGE REPLICATION SOURCE TO Statement](https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html)
+
 > Last_Error: Coordinator stopped because there were error(s) in the worker(s). The most recent failure being: Worker 1 failed executing transaction 'ANONYMOUS' at source log binlog.000002, end_log_pos 340. See error log and/or 
 
-这个是没写 OURCE_LOG_POS=4 造成的, 应该写, 写4进去就是从头开始同步.
+这个是没写 SOURCE_LOG_POS=4 造成的, 应该写, 写4进去就是从头开始同步.
 
 > requires secure connection. Error_code: MY-002061
 
-这个参数 GET_SOURCE_PUBLIC_KEY 需要添加, 这个参数不添加的话, 就会有这个报错, 实际是需要信任主库.
+参数 GET_SOURCE_PUBLIC_KEY 需要添加, 这个参数不添加的话, 就会有这个报错, 实际是需要信任主库.
+
+---
+### Docker-run
+primary: 
+```shell
+ #!/bin/bash
+ #
+
+ docker run --name mysql-pri -e MYSQL_ROOT_PASSWORD=123123 \
+     --network=host \
+     --restart=always \
+     -u root \
+     -v ./my.cnf:/etc/my.cnf \
+     -v ./datadir/mysql:/var/lib/mysql \
+     -d reg.liarlee.site/docker.io/mysql:8
+```
+replica:
+```shell
+ #!/bin/bash
+ #
+
+ docker run --name mysql-rep -e MYSQL_ROOT_PASSWORD=123123 \
+     --network=host \
+     --restart=always \
+     -u root \
+     -v ./my.cnf:/etc/my.cnf \
+     -v ./datadir/mysql:/var/lib/mysql \
+     -d reg.liarlee.site/docker.io/mysql:8
+```
+---
+### Mycnf
+```toml
+ # For advice on how to change settings please see
+ # http://dev.mysql.com/doc/refman/8.4/en/server-configuration-defaults.html
+
+ [mysqld]
+ #
+ # Remove leading # and set to the amount of RAM for the most important data
+ # cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+ innodb_buffer_pool_size = 2G
+ #
+ # Remove leading # to turn on a very important data integrity option: logging
+ # changes to the binary log between backups.
+ # log_bin
+ #
+ # Remove leading # to set options mainly useful for reporting servers.
+ # The server defaults are faster for transactions and fast SELECTs.
+ # Adjust sizes as needed, experiment to find the optimal values.
+ # join_buffer_size = 128M
+ # sort_buffer_size = 2M
+ # read_rnd_buffer_size = 2M
+
+ server-id=1
+ read-only=0
+ 
+ host-cache-size=0
+ skip-name-resolve
+ datadir=/var/lib/mysql
+ socket=/var/run/mysqld/mysqld.sock
+ secure-file-priv=/var/lib/mysql-files
+ user=mysql
+
+ pid-file=/var/run/mysqld/mysqld.pid
+ [client]
+ socket=/var/run/mysqld/mysqld.sock
+
+ !includedir /etc/mysql/conf.d/
+```
+
+Replica: 
+```toml
+ # For advice on how to change settings please see
+ # http://dev.mysql.com/doc/refman/8.4/en/server-configuration-defaults.html
+
+ [mysqld]
+ #
+ # Remove leading # and set to the amount of RAM for the most important data
+ # cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+ innodb_buffer_pool_size = 2G
+ #
+ # Remove leading # to turn on a very important data integrity option: logging
+ # changes to the binary log between backups.
+ # log_bin
+ #
+ # Remove leading # to set options mainly useful for reporting servers.
+ # The server defaults are faster for transactions and fast SELECTs.
+ # Adjust sizes as needed, experiment to find the optimal values.
+ # join_buffer_size = 128M
+ # sort_buffer_size = 2M
+ # read_rnd_buffer_size = 2M
+
+ server-id=2
+ read-only=1
+
+ host-cache-size=0
+ skip-name-resolve
+ datadir=/var/lib/mysql
+ socket=/var/run/mysqld/mysqld.sock
+ secure-file-priv=/var/lib/mysql-files
+ user=mysql
+
+ pid-file=/var/run/mysqld/mysqld.pid
+ [client]
+ socket=/var/run/mysqld/mysqld.sock
+
+ !includedir /etc/mysql/conf.d/
+```
 

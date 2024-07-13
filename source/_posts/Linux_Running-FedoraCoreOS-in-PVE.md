@@ -13,7 +13,6 @@ https://forum.proxmox.com/threads/howto-startup-vm-using-an-ignition-file.63782/
 CoreOS Butane Config Spec：
 https://coreos.github.io/butane/config-fcos-v1_5/
 
-
 之前使用使用了另一个方案 让 PVE coreos 可以直接使用 cloudinit 注入密钥。 
 现在感觉也没有必要， 直接关闭 cloudinit 使用 ignition file 就可以了。
 
@@ -48,5 +47,4 @@ sockets: 1
 virtio0: local-lvm:vm-101-disk-0,iothread=1,size=10G
 vmgenid: c309f3f2-0bf0-42d6-bdaa-641122b82b54
 ```
-
 
