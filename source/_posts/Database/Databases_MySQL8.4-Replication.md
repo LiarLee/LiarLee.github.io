@@ -213,8 +213,7 @@ STOP REPLICA IO_THREAD FOR CHANNEL '';
 
 ---
 ### DockerRun 命令
----
-primary: 
+primary 的 docker 命令启动容器
 ```shell
  #!/bin/bash
  #
@@ -227,8 +226,7 @@ primary:
      -v ./datadir/mysql:/var/lib/mysql \
      -d reg.liarlee.site/docker.io/mysql:8
 ```
----
-replica:
+replica 的 docker 命令启动容器
 ```shell
  #!/bin/bash
  #
@@ -241,9 +239,7 @@ replica:
      -v ./datadir/mysql:/var/lib/mysql \
      -d reg.liarlee.site/docker.io/mysql:8
 ```
----
 ### Mycnf
----
 primary
 ```toml
  # For advice on how to change settings please see
@@ -282,8 +278,7 @@ primary
 
  !includedir /etc/mysql/conf.d/
 ```
----
-Replica: 
+Replica
 ```toml
  # For advice on how to change settings please see
  # http://dev.mysql.com/doc/refman/8.4/en/server-configuration-defaults.html
