@@ -212,7 +212,8 @@ STOP REPLICA IO_THREAD FOR CHANNEL '';
 参数 GET_SOURCE_PUBLIC_KEY 需要添加, 这个参数不添加的话, 就会有这个报错, 实际是需要信任主库.
 
 ---
-### Docker-run
+### DockerRun 命令
+---
 primary: 
 ```shell
  #!/bin/bash
@@ -226,6 +227,7 @@ primary:
      -v ./datadir/mysql:/var/lib/mysql \
      -d reg.liarlee.site/docker.io/mysql:8
 ```
+---
 replica:
 ```shell
  #!/bin/bash
@@ -241,6 +243,8 @@ replica:
 ```
 ---
 ### Mycnf
+---
+primary
 ```toml
  # For advice on how to change settings please see
  # http://dev.mysql.com/doc/refman/8.4/en/server-configuration-defaults.html
@@ -278,7 +282,7 @@ replica:
 
  !includedir /etc/mysql/conf.d/
 ```
-
+---
 Replica: 
 ```toml
  # For advice on how to change settings please see
