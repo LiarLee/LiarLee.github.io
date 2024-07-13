@@ -30,7 +30,7 @@ SHOW variables LIKE 'server_id';
 2. 创建一个用户用来让从库同步数据. 这个也不需要重启.
 ```mysql
 MySQL [(none)]> 
-CREATE USER 'replication-user'@'172.31.62.236' IDENTIFYED BY '123123';
+CREATE USER 'replication-user'@'172.31.62.236' IDENTIFIED BY '123123';
 Query OK, 0 rows affected (0.006 sec)
 
 MySQL [(none)]> 
