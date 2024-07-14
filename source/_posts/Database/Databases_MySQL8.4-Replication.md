@@ -101,8 +101,9 @@ CHANGE REPLICATION SOURCE TO
      SOURCE_USER='replication-user',
      SOURCE_PASSWORD='123123',
      SOURCE_LOG_FILE='binlog.000002',
-     SOURCE_LOG_POS=4, # 这个是默认值, 4 表示从开始就同步.
-     GET_SOURCE_PUBLIC_KEY=1;   # 这个是由于会报错
+     SOURCE_LOG_POS=4,
+     GET_SOURCE_PUBLIC_KEY=1;   
+     # 如果您使用的复制用户帐户通过 `caching_sha2_password` 插件（默认）进行身份验证，并且您没有使用安全连接，则必须指定此选项或 `SOURCE_PUBLIC_KEY_PATH` 选项向副本提供 RSA 公钥。
 ```
 3. 启动同步.
 ```mysql
@@ -218,7 +219,9 @@ primary 的 docker 命令启动容器
  #!/bin/bash
  #
 
- docker run --name mysql-pri -e MYSQL_ROOT_PASSWORD=123123 \
+ hostnamectl set-hostname mysql-master.aws.liarlee.site
+ 
+ docker run --name mysql-master -e MYSQL_ROOT_PASSWORD=123123 \
      --network=host \
      --restart=always \
      -u root \
@@ -231,7 +234,9 @@ replica 的 docker 命令启动容器
  #!/bin/bash
  #
 
- docker run --name mysql-rep -e MYSQL_ROOT_PASSWORD=123123 \
+  hostnamectl set-hostname mysql-slave.aws.liarlee.site
+  
+ docker run --name mysql-slave -e MYSQL_ROOT_PASSWORD=123123 \
      --network=host \
      --restart=always \
      -u root \

@@ -58,11 +58,12 @@ Added:
   setroubleshoot-server-3.3.33-1.fc40.x86_64
 Changes queued for next boot. Run "systemctl reboot" to start a reboot
 root@ip-172-31-54-198:/var/mnt/docker_root# systemctl reboot
-
-
 ```
 
 查看建议的方案
+这个命令会给出建议的安全上下文, 对于通常的解决方案来说应该是足够的. 
+我这里尝试容器里面运行的mysqld进程去写用户的家目录, 遇到了拒绝, 在调整之后,还是没有办法完全匹配上下文, 导致被拒绝, 后面还是设置了 permissive. 
+默认情况下 Fedora CoreOS SElinux 是开启的状态, 关闭的话需要同时关闭系统的selinux 以及 docker 的selinux support, 比较麻烦, 还是 permissive 吧.
 ```
 root@ip-172-31-54-198:~# sealert -l "*"
 SELinux is preventing mysqld from write access on the directory mysql.
