@@ -16,6 +16,8 @@ https://coreos.github.io/butane/config-fcos-v1_5/
 之前使用使用了另一个方案 让 PVE coreos 可以直接使用 cloudinit 注入密钥。 
 现在感觉也没有必要， 直接关闭 cloudinit 使用 ignition file 就可以了。
 
+---
+
 按照上面连接中的文档， 编辑 PVE VM 的配置文件， 将args 附加到QemuServer的配置文件里面即可。
 
 ```shell
