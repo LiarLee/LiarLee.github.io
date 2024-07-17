@@ -10,7 +10,8 @@ tags:
 ### 统计 MySQL 数据库占用的空间
 ```mysql
 mysql  Ver 8.4.1 for Linux on x86_64 (MySQL Community Server - GPL)
-mysql> select  TABLE_SCHEMA,  concat(truncate(sum(data_length)/1024/1024,2),' MB') as data_size, concat(truncate(sum(index_length)/1024/1024,2),'MB') as index_size from information_schema.tables group by TABLE_SCHEMA ORDER BY data_size desc;
+mysql> 
+select TABLE_SCHEMA, concat(truncate(sum(data_length)/1024/1024,2),' MB') as data_size, concat(truncate(sum(index_length)/1024/1024,2),'MB') as index_size from information_schema.tables group by TABLE_SCHEMA ORDER BY data_size desc;
 +--------------------+-----------+------------+
 | TABLE_SCHEMA       | data_size | index_size |
 +--------------------+-----------+------------+
@@ -25,7 +26,8 @@ mysql> select  TABLE_SCHEMA,  concat(truncate(sum(data_length)/1024/1024,2),' MB
 
 ### 查看 MYSQL 的版本
 ```mysql
-mysql> status;
+mysql> 
+status;
 --------------
 mysql  Ver 8.4.1 for Linux on x86_64 (MySQL Community Server - GPL)
 
@@ -60,7 +62,8 @@ long_query_time=10
 ```
 查看当前运行中的慢日志设置
 ```mysql
-mysql> show variables like 'slow_query%';
+mysql> 
+show variables like 'slow_query%';
 +---------------------+--------------------------------------+
 | Variable_name       | Value                                |
 +---------------------+--------------------------------------+
@@ -69,7 +72,8 @@ mysql> show variables like 'slow_query%';
 +---------------------+--------------------------------------+
 2 rows in set (0.01 sec)
 
-mysql> show variables like 'long_query_time';
+mysql> 
+show variables like 'long_query_time';
 +-----------------+-----------+
 | Variable_name   | Value     |
 +-----------------+-----------+
@@ -82,6 +86,6 @@ mysql> show variables like 'long_query_time';
 
 ### 查看 Binlog 的内容
 ```mysql
-mysql> show binlog events in 'binlog.000005';
-```
-2
+mysql> 
+show binlog events in 'binlog.000005';
+```r
