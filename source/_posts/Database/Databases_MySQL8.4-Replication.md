@@ -322,3 +322,94 @@ Replica
  !includedir /etc/mysql/conf.d/
 ```
 
+### 启用 GTID
+[`gtid_mode=ON`](https://dev.mysql.com/doc/refman/8.4/en/replication-options-gtids.html#sysvar_gtid_mode)
+
+primary
+```toml
+ # For advice on how to change settings please see
+ # http://dev.mysql.com/doc/refman/8.4/en/server-configuration-defaults.html
+
+ [mysqld]
+ #
+ # Remove leading # and set to the amount of RAM for the most important data
+ # cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+ innodb_buffer_pool_size = 2G
+ #
+ # Remove leading # to turn on a very important data integrity option: logging
+ # changes to the binary log between backups.
+ # log_bin
+ #
+ # Remove leading # to set options mainly useful for reporting servers.
+ # The server defaults are faster for transactions and fast SELECTs.
+ # Adjust sizes as needed, experiment to find the optimal values.
+ # join_buffer_size = 128M
+ # sort_buffer_size = 2M
+ # read_rnd_buffer_size = 2M
+
+ server-id=1
+ read-only=0
+ gtid_mode=ON
+ enforce_gtid_consistency=ON
+ host-cache-size=0
+ skip-name-resolve
+ datadir=/var/lib/mysql
+ socket=/var/run/mysqld/mysqld.sock
+ secure-file-priv=/var/lib/mysql-files
+ user=mysql
+ pid-file=/var/run/mysqld/mysqld.pid
+ 
+ [client]
+ socket=/var/run/mysqld/mysqld.sock
+ !includedir /etc/mysql/conf.d/
+```
+
+Replica same as Primary.
+```mysql
+mysql> 
+CHANGE REPLICATION SOURCE TO
+    SOURCE_HOST = host,
+    SOURCE_PORT = port,
+    SOURCE_USER = user,
+    SOURCE_PASSWORD = password,
+    SOURCE_AUTO_POSITION = 1;
+```
+
+### 查看主从同步失败卡在什么位置
+mysql
+```mysql
+mysql> table performance_schema.replication_applier_status_by_worker\G;
+*************************** 1. row ***************************
+                                           CHANNEL_NAME:
+                                              WORKER_ID: 1
+                                              THREAD_ID: NULL
+                                          SERVICE_STATE: OFF
+                                      LAST_ERROR_NUMBER: 1008
+                                     LAST_ERROR_MESSAGE: Worker 1 failed executing transaction '31a0eafe-4354-11ef-b41c-02f9bff33582:1' at source log binlog.000005, end_log_pos 348; Error 'Can't drop database 'test_db'; database doesn't exist' on query. Default database: 'test_db'. Query: 'drop database test_db'
+                                   LAST_ERROR_TIMESTAMP: 2024-07-17 05:53:07.291805
+                               LAST_APPLIED_TRANSACTION:
+     LAST_APPLIED_TRANSACTION_ORIGINAL_COMMIT_TIMESTAMP: 0000-00-00 00:00:00.000000
+    LAST_APPLIED_TRANSACTION_IMMEDIATE_COMMIT_TIMESTAMP: 0000-00-00 00:00:00.000000
+         LAST_APPLIED_TRANSACTION_START_APPLY_TIMESTAMP: 0000-00-00 00:00:00.000000
+           LAST_APPLIED_TRANSACTION_END_APPLY_TIMESTAMP: 0000-00-00 00:00:00.000000
+                                   APPLYING_TRANSACTION: 31a0eafe-4354-11ef-b41c-02f9bff33582:1
+         APPLYING_TRANSACTION_ORIGINAL_COMMIT_TIMESTAMP: 2024-07-17 05:48:51.628448
+        APPLYING_TRANSACTION_IMMEDIATE_COMMIT_TIMESTAMP: 2024-07-17 05:48:51.628448
+             APPLYING_TRANSACTION_START_APPLY_TIMESTAMP: 2024-07-17 05:53:07.289218
+                 LAST_APPLIED_TRANSACTION_RETRIES_COUNT: 0
+   LAST_APPLIED_TRANSACTION_LAST_TRANSIENT_ERROR_NUMBER: 0
+  LAST_APPLIED_TRANSACTION_LAST_TRANSIENT_ERROR_MESSAGE:
+
+mysql> show binlog events in 'binlog.000005';
++---------------+--------+----------------+-----------+-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Log_name      | Pos    | Event_type     | Server_id | End_log_pos | Info                                                                                                                                                                                                                                         |
++---------------+--------+----------------+-----------+-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| binlog.000005 |      4 | Format_desc    |         1 |         127 | Server ver: 8.4.1, Binlog ver: 4                                                                                                                                                                                                             |
+| binlog.000005 |    127 | Previous_gtids |         1 |         158 |                                                                                                                                                                                                                                              |
+| binlog.000005 |    158 | Gtid           |         1 |         235 | SET @@SESSION.GTID_NEXT= '31a0eafe-4354-11ef-b41c-02f9bff33582:1'                                                                                                                                                                            |
+| binlog.000005 |    235 | Query          |         1 |         348 | drop database test_db /* xid=55 */                                                                                                                                                                                                           |
+| binlog.000005 |    348 | Gtid           |         1 |         425 | SET @@SESSION.GTID_NEXT= '31a0eafe-4354-11ef-b41c-02f9bff33582:2'                                                                                                                                                                            |
+| binlog.000005 |    425 | Query          |         1 |         542 | create database test_bd /* xid=57 */                                                                                                                                                                                                         |
+| binlog.000005 |    542 | Gtid           |         1 |         619 | SET @@SESSION.GTID_NEXT= '31a0eafe-4354-11ef-b41c-02f9bff33582:3'                                                                                                                                                                            |
+```
+
