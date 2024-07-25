@@ -25,7 +25,8 @@ pacman命令的常用说明：
 ```
 # Archlinux Installation Version 2.0
 
-Update at 2024-05-12 12:39
+Update at 2024-05-12 12:39 关于 EC2 上面的步骤。 
+EC2 如何预期使用 metal 规格的实例是无法使用UEFI 的（x64） , 所以最后妥协了， 还是回到了BIOS。 
 ### 船新版本
 设置一下子时区
 ```shell
@@ -34,11 +35,12 @@ timedatectl set-timezone Asia/Shanghai
 格式化磁盘, 划分分区
 这次安装的分区划分是: 
 
-| disk | mountpoint| description | filesystem type|
-| -- | -- | -- | -- | 
-| /dev/vda1 |/boot | uefi_partitation  | xfs | 
-| /dev/vda2 | /  | archroot  | btrfs |
-
+| disk      | mountpoint | description      | filesystem type |     |
+| --------- | ---------- | ---------------- | --------------- | --- |
+| /dev/vda1 | /boot      | uefi_partitation | xfs             |     |
+| /dev/vda2 | /          | archroot         | btrfs           |     |
+> 如果使用的是 Grub 的方式， 那么现在创建一个 1M 的分区用来写入grub 的 core.img， 并且 1M 的分区需要标记为 BIOS Boot， 才可以正常启动。 
+ 
 fdisk 或者 gpartd 什么的都行
 ```shell
 fdisk -l
@@ -77,6 +79,8 @@ reflector --country='china' > /etc/pacman.d/mirrorlist
 pacstrap 安装内核, 基本文件系统, 固件, 常用软件,大概能想起来的就这么多.
 ```shell
 pacstrap -K /mnt base linux linux-firmware vim htop wget curl btrfs-progs fastfetch openssh sudo containerd nerdctl zstd ttf-jetbrains-mono-nerd tree ranger ncdu mtr fish eza util-linux fzf bat xfsprogs alacritty git
+
+pacstrap -K /mnt base linux linux-firmware vim htop wget curl btrfs-progs fastfetch openssh sudo containerd nerdctl zstd ttf-jetbrains-mono-nerd tree ranger ncdu mtr fish eza util-linux fzf bat git xfsprogs neovim grub cloud-init dnsmasq
 ```
 生成fstab, 需要**编辑一下**, 修改里面不合理的内容参数.
 ```shell
@@ -103,6 +107,46 @@ mkinitcpio -P
 ```shell
 passwd
 ```
+## 系统配置
+一些七七八八的命令和步骤， 方便复制。 
+```bash
+╰─>$ passwd
+╰─>$ useradd -m hayden
+╰─>$ passwd hayden
+╰─>$ chsh -s /usr/bin/fish root
+╰─>$ chsh -s /usr/bin/fish hayden
+╰─>$ visudo
+╰─>$ vim /etc/mkinitcpio.conf
+╰─>$ cat /etc/mkinitcpio.conf
+  MODULES=(ena)
+  COMPRESSION="zstd"
+  MODULES_DECOMPRESS="yes"
+╰─>$ mkinitcpio -P
+╰─>$ lsinitcpio /boot/initramfs-linux.img | grep ena
+╰─>$ lsinitcpio /boot/initramfs-linux.img | grep nvme
+╰─>$ cat /boot/loader/entries/arch.conf
+title   Hayden Arch Linux
+linux   /vmlinuz-linux
+initrd  /initramfs-linux.img
+options root=UUID=4a203946-565e-4cce-b5db-fb149ca0f7c0 rootflags=defaults,rw,subvolid=5 console=ttyS0 earlyprintk=serial,ttyS0,keep
+
+╰─>$ sync
+╰─>$ grub-mkconfig -o /boot/grub/grub.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-linux
+Found initrd image: /boot/initramfs-linux.img
+Adding boot menu entry for UEFI Firmware Settings ...
+done
+╰─>$ sudo systemctl enable cloud-init sshd systemd-networkd systemd-resolved 
+Created symlink '/etc/systemd/system/cloud-init.target.wants/cloud-init.service' → '/usr/lib/systemd/system/cloud-init.service'.
+Created symlink '/etc/systemd/system/multi-user.target.wants/sshd.service' → '/usr/lib/systemd/system/sshd.service'.
+Created symlink '/etc/systemd/system/dbus-org.freedesktop.network1.service' → '/usr/lib/systemd/system/systemd-networkd.service'.
+Created symlink '/etc/systemd/system/multi-user.target.wants/systemd-networkd.service' → '/usr/lib/systemd/system/systemd-networkd.service'.
+Created symlink '/etc/systemd/system/sockets.target.wants/systemd-networkd.socket' → '/usr/lib/systemd/system/systemd-networkd.socket'.
+Created symlink '/etc/systemd/system/sysinit.target.wants/systemd-network-generator.service' → '/usr/lib/systemd/system/systemd-network-generator.service'.
+Created symlink '/etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service' → '/usr/lib/systemd/system/systemd-networkd-wait-online.service'.
+```
+## UEFI+GPT
 安装 Bootloader, 我懒了, 直接用 systemd-boot 了, 挺好用的. 
 ```shell
 bootctl install
@@ -119,17 +163,28 @@ vim /boot/loader/entries/arch.conf
 ```
 检查启动配置文件是否存在异常.
 ```shell
-bootctl list
+╰─>$ bootctl list
 ```
 开一些服务的自动启动
 ```shell
-systemctl enable sshd
+╰─>$ systemctl enable sshd
 ```
+
+```
+## BIOS+GPT
+```bash
+grub-install /dev/nvme2n1
+vim /etc/default/grub
+  GRUB_TIMEOUT=1
+  GRUB_DISTRIBUTOR="Hayden's Arch"
+  GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 console=ttyS0 earlyprintk=serial,ttyS0,keep transparent_hugepage=never"
+```
+
 检查没有问题了之后, 就可以退出chroot\卸载\重启了.
 ```shell
 exit
-umount -R /mnt
 sync 
+umount -R /mnt
 reboot
 ```
 # Archlinux Installation Version 1.0
