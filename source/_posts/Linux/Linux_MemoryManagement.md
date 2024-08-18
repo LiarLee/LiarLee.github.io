@@ -567,3 +567,7 @@ echo 1 > /proc/sys/vm/compact_memory
 
 ```
 
+### 内存布局和结构
+抄来的这个图片, 这个图画的比较清晰. 
+![20081111_9477e6fe879a69d35b15pPat2RQUajuk.gif](https://s2.loli.net/2024/08/14/gTJ6QtwXPkC5n2v.gif)
+

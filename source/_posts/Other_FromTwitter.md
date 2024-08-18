@@ -85,3 +85,9 @@ Best Practices for OpenZFS L2ARC in the Era of NVMe (SDC 2019)
 https://www.youtube.com/watch?v=yHgSU6iqrlE
 
 ---
+
+SSH Tunnels Cheat Sheet:
+![GQ8g22YWAAA19Th.jpeg](https://s2.loli.net/2024/07/31/Idirtl9QneuGwqc.jpg)
+
+---
+linux 系统调用open和close: https://blog.csdn.net/weixin_42330983/article/details/127266412

@@ -60,9 +60,22 @@ tags:
   sysctl -w  net.ipv4.tcp_slow_start_after_idle = 0 
   echo "net.ipv4.tcp_slow_start_after_idle = 0" >> /etc/sysctl.conf
   ```
-  
+### vm.vfs_cache_pressure
+这是关于 vfs 层面内核回收 inode 和 dentry 倾向的设置.  
+- 大于 100 以为积极回收. 
+- 小于 100 以为尽可能减少回收,那么会占用更多内存. 
+- 等于 0 意味着不会回收 dentry 和 inode, 即使在内存压力的场景下. 
+
+基于 GlusterFS 的文档说明: https://docs.gluster.org/en/latest/Administrator-Guide/Linux-Kernel-Tuning/#vmvfs_cache_pressure
+
+通常情况下不应该更改默认值.
+```shell
+vm.vfs_cache_pressure = 100
+```
+
 ---
 ## 更多
 tcp协议的网络流量控制 [[../Network/Network_tc控制流量-update|Network_tc控制流量-update]]
 Amazon Linux 2 完整的sysctl参数 [[Linux_Sysctl 参数记录]]
 Linux操作系统触发NMI中断调试和Kdump [[Linux_DebugLinuxCrashOnEC2]]
+

@@ -50,3 +50,8 @@ nsenter -t 10306 -n
 nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --help
 nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --cpu 1
 ```
+### 强制删除 Pod
+```shell
+kubectl delete pod/applications-7c5f67d6bd-72jcf --force --grace-period=0
+当然也可以删除什么其他的资源, 都可以, 实在不行就是 Finalizer 的影响, 需要删除 finalizer 了; 还有另一个问题是 pdb 可能会阻止一部分资源的删除, 也是需要查的.
+```

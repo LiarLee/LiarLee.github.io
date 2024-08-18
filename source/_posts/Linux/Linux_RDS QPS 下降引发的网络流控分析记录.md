@@ -9,6 +9,7 @@ tags:
   - Network
 ---
 
+找到了另一个大佬对于TCP在linux内核的分析和测试: [Link](https://xiaodongq.github.io/2024/05/18/tcp_connect/)
 ### Topic 1 现象
 
 看到一个朋友的问题， 由 RDS QPS 下降引发的网络问题分析： 
