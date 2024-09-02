@@ -100,13 +100,13 @@ sudo tailscale up --accept-dns=true --login-server=https://YOURHOSTNAME.YOURDOMA
 sudo tailscale up --accept-dns=false --advertise-exit-node --login-server=https://YOURHOSTNAME.YOURDOMAIN:PORT --accept-routes --advertise-routes=172.31.0.0/16
 ```
 
-### 相关命令
+### 问题汇总
 查看当前客户端的网络状况
 ```shell
 ╰─>$ tailscale netcheck
 Report:
 	* UDP: true
-	* IPv4: yes, 127.0.0.1:35941
+	* IPv4: yes, PUBLIC_IP:35941
 	* IPv6: no, but OS has support
 	* MappingVariesByDestIP: false
 	* PortMapping:
@@ -114,4 +114,9 @@ Report:
 	* Nearest DERP: Headscale Embedded DERP
 	* DERP latency:
 		- headscale: 24.3ms  (Headscale Embedded DERP)
+```
+测试ping:
+```shell
+╰─>$ tailscale ping --until-direct -c 0 100.64.0.9
+pong from home-SOME_NODE (100.64.0.9) via PUBLIC_IP:50177 in 6ms
 ```
