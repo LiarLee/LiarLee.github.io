@@ -115,3 +115,33 @@ root@ip-172-31-59-13:~$ vim /etc/default/grub
 其中Entry的变量应该设置为下面的格式:
 Advanced options for Ubuntu>Ubuntu, with Linux 5.4.0-1126-aws
 ```
+
+### 清理内核的步骤 - Version 2
+#### Deb 包管理工具清理步骤
+- 列出所有已经安装的内核版本：
+```shell
+dpkg --list | grep linux-image
+```
+- 列出所有旧的内核并自动删除除当前内核之外的旧内核：
+```shell
+sudo apt-get autoremove --purge`
+```
+- 如果想手动删除旧内核，可以使用以下命令，
+```shell
+sudo apt-get remove --purge linux-image-X.X.X-X-generic
+```
+
+#### Rpm 包管理工具的清理步骤
+- 查看安装的内核
+```shell
+rpm -qa | grep kernel
+```
+- 使用yum卸载
+```shell
+sudo yum install yum-utils
+```
+- 设置只保留两个内核
+```shell
+sudo package-cleanup --oldkernels --count=2
+```
+ 
