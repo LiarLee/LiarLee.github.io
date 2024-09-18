@@ -6,6 +6,14 @@ tags:
   - Linux
   - CheatSheet
 ---
+### 公网IP地址检测
+```shell
+IP质量体检报告 https://github.com/xykt/IPQuality
+双栈
+bash <(curl -sL IP.Check.Place)
+v4
+bash <(curl -Ls IP.Check.Place) -4
+```
 ### 查看时间范围内的 atop 记录
 ```shell
 atop -r /var/log/atop_20240704 -b 03:53 -e 03:59
