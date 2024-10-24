@@ -6,7 +6,11 @@ tags:
   - Linux
   - CheatSheet
 ---
-### 公网IP地址检测
+### 显示文件中所有未注释的行
+```shell
+grep -v "#" /usr/local/nginx/conf/nginx.conf |grep -v "^$"
+```
+### 公网IP地址质量测试
 ```shell
 IP质量体检报告 https://github.com/xykt/IPQuality
 双栈

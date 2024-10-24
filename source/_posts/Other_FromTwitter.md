@@ -91,3 +91,10 @@ SSH Tunnels Cheat Sheet:
 
 ---
 linux 系统调用open和close: https://blog.csdn.net/weixin_42330983/article/details/127266412
+
+---
+有时候我也不知道为什么我总能找到这些报告，来自intel spdk的ssd性能测试，我觉得没有比这更加详细全面严谨具有时效性的测试了。
+https://twitter.com/SuJinYan123/status/1838588144108892355
+https://spdk.io/cn/
+[SSD Performance Test](https://ci.spdk.io/download/performance-reports/SPDK_nvme_bdev_perf_report_2309.pdf)
+
