@@ -109,11 +109,25 @@ sudo SUSEConnect --list-extensions
 ### 查看网络可能存在的丢包和异常
 ip 命令查看链路层丢包指标.
 ```shell
-ip -s link show eth0
+ip -s link show ens18
+2: ens18: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether bc:24:11:6f:db:1c brd ff:ff:ff:ff:ff:ff
+    RX:   bytes  packets errors dropped  missed   mcast
+    29865128113 35188796      0    4316       0       0
+    TX:   bytes  packets errors dropped carrier collsns
+     6054383278  2278239      0       0       0       0
+    altname enp0s18
 ```
 ethtool 命令查看网卡硬件队列的丢包
 ```shell
 ethtool -S eth0 | grep drop
+```
+查看 由于 UDP Buffer 造成的丢包
+```
+nstat -az UdpSndbufErrors UdpRcvbufErrors
+#kernel
+UdpRcvbufErrors                 0                  0.0
+UdpSndbufErrors                 0                  0.0
 ```
 ### OpenSSL 测试指定域名并输出调试信息
 ```shell
