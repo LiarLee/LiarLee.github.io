@@ -55,3 +55,9 @@ nerdctl run -ti --rm reg.liarlee.site/docker.io/polinux/stress-ng:latest --cpu 1
 kubectl delete pod/applications-7c5f67d6bd-72jcf --force --grace-period=0
 当然也可以删除什么其他的资源, 都可以, 实在不行就是 Finalizer 的影响, 需要删除 finalizer 了; 还有另一个问题是 pdb 可能会阻止一部分资源的删除, 也是需要查的.
 ```
+### 转换docker compose文件为Kubernetes定义
+Source: https://kompose.io/installation/
+```shell
+curl -L https://github.com/kubernetes/kompose/releases/download/v1.35.0/kompose-linux-amd64 -o kompose
+kompose convert --controller statefulset
+```

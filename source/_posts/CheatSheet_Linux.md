@@ -230,7 +230,7 @@ iptables -t nat -D PREROUTING 1
 ```bash
 ss --tcp state CLOSE-WAIT
 ```
-关闭所有处于 [[Databases_MySQLConnetionTroubleshooting#^de7c10]] closewait 的socket ,通过 ss 命令干预, 通常应该由应用程序关闭, 而不是 ss 命令关闭, 这个命令只是记录一下用法. 
+关闭所有处于 [[Databases_MySQLConnetionTroubleshooting#^de7c10]] close wait 的socket ,通过 ss 命令干预, 通常应该由应用程序关闭, 而不是 ss 命令关闭, 这个命令只是记录一下用法. 
 最佳的方式是找到异常的进程, 并查看为什么程序不能及时的关闭 socket , 或者 kill 掉这个进程. 
 ```shell
 ss --tcp state CLOSE-WAIT --kill
