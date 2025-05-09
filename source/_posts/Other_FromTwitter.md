@@ -98,3 +98,13 @@ https://twitter.com/SuJinYan123/status/1838588144108892355
 https://spdk.io/cn/
 [SSD Performance Test](https://ci.spdk.io/download/performance-reports/SPDK_nvme_bdev_perf_report_2309.pdf)
 
+---
+我挺喜欢如图这个技巧的,MySQL/Java 就是典型的申请大块内存自己管理，不需要频繁跟 OS 申请归还，导致内存碎片，所以你看他们在图上表现就比较优秀
+https://x.com/plantegg/status/1920080169056006199
+-- [plantegg](https://x.com/plantegg)
+
+---
+压力测试工具 Fortio 
+Fortio (Φορτίο)开始是 Istio 的负载测试工具，现在已经发展成为自己的开源项目。
+Fortio是一个快速、小型（3MB的docker镜像，最小的依赖性）、可重用、可嵌入的go库以及一个命令行工具和服务器进程，服务器包括一个简单的web UI和结果的图形表示（既有单一的延迟图，也有多个结果的比较min、max、avg、qps和百分比图）。
+https://skyao.io/learning-fortio/docs/introduction/fortio.html
