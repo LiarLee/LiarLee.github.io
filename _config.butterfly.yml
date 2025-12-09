@@ -66,14 +66,14 @@ social:
 favicon: /img/favicon.png
 
 avatar:
-  img: /img/avator.jpg
+  img: /img/avatar.jpg
   effect: false
 
 # Disable all banner images
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img:
+default_top_img: /img/wallhaven-gww27e.png
 
 # The banner image of index page
 index_img:
@@ -103,7 +103,7 @@ footer_img: false
 # Website Background
 # Can set it to color, image URL or an array containing colors and/or image URLs
 # If an array is provided, a random background will be selected from the array on each load
-background:
+background: 
 
 cover:
   # Disable the cover or not
@@ -112,9 +112,9 @@ cover:
   archives_enable: true
   # When cover is not set, the default cover is displayed
   default_cover:
-    - https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png
-    - https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png
-    - https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png
+    - https://w.wallhaven.cc/full/0w/wallhaven-0we3wp.png
+    - https://w.wallhaven.cc/full/nm/wallhaven-nm95lk.png
+    - https://w.wallhaven.cc/full/je/wallhaven-jexqqm.png
 
 # Replace Broken Images
 error_img:
@@ -188,7 +188,7 @@ subtitle:
 # 5: Info displayed on the cover
 # 6: Masonry layout - Cover on top, info on the bottom
 # 7: Masonry layout - Info displayed on the cover
-index_layout: 3
+index_layout: 7
 
 # Display the article introduction on homepage
 # 1: description
@@ -279,7 +279,7 @@ footer:
   copyright:
     enable: true
 
-    version: true
+    version: false
   custom_text:
 
 # --------------------------------------
@@ -313,7 +313,7 @@ aside:
   card_recent_post:
     enable: true
     # If set 0 will show all
-    limit: 5
+    limit: 3
     # Sort: date / updated
     sort: date
     sort_order:
@@ -329,7 +329,7 @@ aside:
 
     enable: true
     # If set 0 will show all
-    limit: 8
+    limit: 5
     # Choose: none / true / false
     expand: none
     sort_order:
@@ -410,8 +410,8 @@ darkmode:
 
   autoChangeMode: false
   # Set the light mode time. The value is between 0 and 24. If not set, the default value is 6 and 18
-  start:
-  end:
+  start: 
+  end: 
 
 # Show scroll percent in scroll-to-top button
 rightside_scroll_percent: false
@@ -905,11 +905,11 @@ canvas_fluttering_ribbon:
 # canvas_nest
 # https://github.com/hustcc/canvas-nest.js
 canvas_nest:
-  enable: false
+  enable: true
 
   # Color of lines, default: '0,0,0'; RGB values: (R,G,B).(note: use ',' to separate.)
 
-  color: '0,0,255'
+  color: '255,250,240' #color of lines, default: '0,0,0'; RGB values: (R,G,B).(note: use ',' to separate.)
   # The opacity of line (0~1)
   opacity: 0.7
   # The z-index property of the background
