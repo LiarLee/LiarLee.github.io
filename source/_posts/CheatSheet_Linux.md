@@ -282,3 +282,10 @@ Change: 2024-05-30 01:55:00.225771761 +0000
 ```shell
 find ./ -type d ! -name . | xargs rm -rf
 ```
+
+## ss 命令统计 tcp 信息
+统计当前系统中建立（Established）的 TCP 连接中，**远程 IP 地址**的连接数量，并按数量从高到低排序，显示前 10 个。
+```shell
+ss -antp4 state established | awk '{print $4}' | cut -d: -f1 | sort | uniq -c | sort -rn | head -10
+```
+
