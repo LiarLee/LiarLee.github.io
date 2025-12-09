@@ -112,7 +112,6 @@ cover:
   archives_enable: true
   # When cover is not set, the default cover is displayed
   default_cover:
-  default_cover:
     - https://w.wallhaven.cc/full/j3/wallhaven-j3m8y5.png
     - https://w.wallhaven.cc/full/zx/wallhaven-zx12wj.png
     - https://w.wallhaven.cc/full/9d/wallhaven-9d6r6d.png
