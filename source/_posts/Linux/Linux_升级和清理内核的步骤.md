@@ -6,9 +6,9 @@ tags:
   - Linux
   - Kernel
 ---
-
+## CentOS
 ### 通常情况下升级内核版本的步骤
-CentOS 升级步骤
+升级步骤
 ```bash
 yum makecache -y 
 
@@ -23,20 +23,33 @@ systemctl reboot
 
 ### 清理旧版本的步骤
 RHEL 或者 Centos
-```bash
+这个命令会列出所有当前已经安装的版本的内核， 然后手动使用命令移除对应的软件包即可。 
+```shell
 rpm -qa  kernel* 
+```
 
-# 这个命令会列出所有当前已经安装的版本的内核， 然后手动使用命令移除对应的软件包即可。 
-直接使用yum 移除不需要的版本即可. 
+使用yum 移除不需要的版本即可. 
+```
 yum remove -y kernel-devel-5.10.216-204.855.amzn2.x86_64 kernel-devel-5.10.218-208.862.amzn2.x86_64 kernel-5.10.216-204.855.amzn2.x86_64 kernel-5.10.218-208.862.amzn2.x86_64
-
+```
+列出当前已经安装的内核文件。 
+```
 rpm -qa | grep kernel
 kernel-tools-5.10.219-208.866.amzn2.x86_64
 kernel-headers-5.10.219-208.866.amzn2.x86_64
 kernel-devel-5.10.219-208.866.amzn2.x86_64
 kernel-5.10.219-208.866.amzn2.x86_64
+```
 
-列出确认一下是不是已经清理出来.
+对这四个rpm包的作用和必要性说明： 
+
+- **kernel**：操作系统的核心二进制文件，负责硬件调度与系统运行，**绝对必须，删除后系统无法启动**。
+- **kernel-headers**：供用户态程序（如 C 库）调用内核接口的头文件，**系统基础依赖，建议保留**。
+- **kernel-devel**：用于编译第三方内核模块（如显卡驱动、DKMS）的开发环境，**纯软件运行环境不必须，可删除**。
+- **kernel-tools**：包含 cpupower 等 CPU 频率控制与性能分析工具，运维选装，**建议保留以便排查问题**。
+
+查看 /boot 下面的文件.
+```
 ls -alh /boot/
 total 29M
 dr-xr-xr-x  4 root root 4.0K Jul 19 15:02 ./
@@ -50,13 +63,14 @@ drwx------  5 root root   79 Jul 19 15:02 grub2/
 -rw-r--r--  1 root root 643K Oct 14  2022 initrd-plymouth.img
 -rw-r--r--  1 root root 268K Jun 18 22:05 symvers-5.10.219-208.866.amzn2.x86_64.gz
 -rwxr-xr-x  1 root root 9.7M Jun 18 22:04 vmlinuz-5.10.219-208.866.amzn2.x86_64*
-
-当然 如果全都卸载了. 也是可以重装的(doge.
-yum groupinstall -y "Development Tools"
-yum install -y kernel kernel-devel kernel-debug
+```
+当然 如果刚刚全部卸载了所有的内核软件包，在不重启的情况下，及时重装就可以.
+```
+yum install -y kernel kernel-headers kernel-devel kernel-debug 
 ```
 
-Ubuntu 降级
+## Ubuntu 
+内核降级
 Ubuntu Online 的内核不能直接卸载, 需要安装, 然后切换, 卸载新的
 ```shell
 root@ip-172-31-59-13:~# update-initramfs -k all -c
