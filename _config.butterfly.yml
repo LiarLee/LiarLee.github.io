@@ -38,7 +38,7 @@ menu:
 
 code_blocks:
   # Code block theme: darker / pale night / light / ocean / false
-  theme: light
+  theme: darker
   macStyle: false
   # Code block height limit (unit: px)
   height_limit: false
@@ -112,7 +112,6 @@ cover:
   archives_enable: true
   # When cover is not set, the default cover is displayed
   default_cover:
-    - https://w.wallhaven.cc/full/0w/wallhaven-0we3wp.png
     - https://w.wallhaven.cc/full/nm/wallhaven-nm95lk.png
     - https://w.wallhaven.cc/full/je/wallhaven-jexqqm.png
 
@@ -452,8 +451,7 @@ copy:
 
 # Need to install the hexo-wordcount plugin
 wordcount:
-
-  enable: false
+  enable: true
   # Display the word count of the article in post meta
   post_wordcount: true
   # Display the time to read the article in post meta
@@ -477,7 +475,7 @@ busuanzi:
 math:
   # Choose: mathjax, katex
   # Leave it empty if you don't need math
-  use:
+  use: katex
   per_page: true
   hide_scrollbar: false
 
@@ -860,7 +858,7 @@ font:
   global_font_size:
   code_font_size:
   font_family:
-  code_font_family: 'JetBrains Mono', sans-serif
+  code_font_family: "JetBrains Mono"
 
 # Font settings for the site title and site subtitle
 blog_title_font:
