@@ -860,7 +860,7 @@ font:
   global_font_size:
   code_font_size:
   font_family:
-  code_font_family:
+  code_font_family: 'JetBrains Mono', sans-serif
 
 # Font settings for the site title and site subtitle
 blog_title_font:
