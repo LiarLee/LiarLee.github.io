@@ -6,6 +6,7 @@ tags:
   - Application
   - Kubernetes
   - Docker
+  - Performance
 ---
 [Fortio 官方网站](https://fortio.org/)
 [Fortio Github Repo](https://github.com/fortio/fortio#fortio)
@@ -17,6 +18,17 @@ Fortio 是一个快速、小型（4Mb docker 镜像，最小依赖项）、可�
 我比较感兴趣的是两个工具
 一个是 **Fortio 本身**， 可以支持 tcp 和 udp 的负载测试并且生成好观察的图表。 
 还有一个是 **DNSping**， 通过命令发送 dns 请求并记录 dns 响应的延迟情况。
+### fortio 快速命令笔记
+单次测试：
+```bash
+docker run --rm --network host fortio/fortio load -c 1 -qps 1000 -t 30s -logger-force-color http://www.baidu.com/
+```
+### server模式， 查看 webui 
+运行启动 server 模式之后， 访问12345 端口可以打开webui。 http://localhost:12345/fortio/
+```bash
+docker run --rm -p 12345:12345 fortio/fortio server -http-port 12345
+```
+
 
 ### dnsping
 通过这样的工具可以非常轻松的看到在集群内的 pod 解析 dns **请求成功与否**以及**延迟情况**， 例如：

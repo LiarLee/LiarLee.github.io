@@ -11,7 +11,7 @@
 
 nav:
   # Navigation bar logo image
-  logo: /img/logo.png
+  logo: /img/logo_512x512.png
   display_title: true
   display_post_title: true
   # Whether to fix navigation bar
@@ -63,7 +63,7 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
+favicon: /img/favicon_32x32.png
 
 avatar:
   img: /img/avatar.jpg
