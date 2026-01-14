@@ -160,7 +160,7 @@ index_top_img_height:
 
 # The subtitle on homepage
 subtitle:
-  enable: false
+  enable: true
   # Typewriter Effect
   effect: true
   # Customize typed.js
@@ -177,6 +177,20 @@ subtitle:
 
   # If you close the typewriter effect, the subtitle will only show the first line of sub
   sub:
+    - 砌下落梅如雪乱，拂了一身还满。
+    - 此时情绪此时天。无事小神仙。
+    - 叶上初阳干宿雨，水面清圆，一一风荷举。
+    - 并刀如水，吴盐胜雪，纤手破新橙。
+    - 谁知江上酒，还与故人倾。
+    - 晚来风起撼花铃。人在碧山亭。
+    - 凤箫声动，玉壶光转，一夜鱼龙舞。
+    - 蛾儿雪柳黄金缕，笑语盈盈暗香去。
+    - 欲寄彩笺兼尺素，山长水阔知何处？
+    - 梦里不知身是客，一晌贪欢。
+    - 胭脂泪，相留醉，几时重。
+    - 离恨恰如春草，更行更远还生。 
+    - 我今因病魂颠倒，唯梦闲人不梦君。
+    - 自是人生长恨水长东。
 
 
 # Article layout on the homepage
