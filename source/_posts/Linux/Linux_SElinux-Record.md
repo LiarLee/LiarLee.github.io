@@ -1,7 +1,7 @@
 ---
 title: SElinux问题排查
 date: 2024-07-13 11:36:11
-category: Linux
+categories: Linux
 tags:
   - Docker
   - SElinux

@@ -1,7 +1,7 @@
 ---
 title: TrueNAS Core 自动更新UI证书
 date: 2024-11-15 11:53:27
-category: Application
+categories: Application
 tags:
   - NAS
   - TrueNasCore

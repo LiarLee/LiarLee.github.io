@@ -1,6 +1,6 @@
 ---
 title: TrueNas Scale 让 ZFS 占用更多内存作为 ARC
-category: Application
+categories: Application
 date: 2023-10-08 13:57:57
 tags:
   - TrueNasScale

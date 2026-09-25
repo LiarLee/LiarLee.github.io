@@ -1,6 +1,6 @@
 ---
 title: CheatSheet_Linux
-category: Linux
+categories: Linux
 date: 2333-12-08 13:57:57
 tags:
   - Linux

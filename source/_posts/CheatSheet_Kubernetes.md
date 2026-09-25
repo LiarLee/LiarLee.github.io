@@ -1,6 +1,6 @@
 ---
 title: CheatSheet_Kubernetes
-category: Kubernetes
+categories: Kubernetes
 date: 2333-12-08 13:57:57
 tags:
   - Kubernetes

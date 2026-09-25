@@ -1,6 +1,6 @@
 ---
 title: Portainer 使用记录
-category: Linux
+categories: Linux
 date: 2024-04-14 12:12:47
 tags:
   - Linux

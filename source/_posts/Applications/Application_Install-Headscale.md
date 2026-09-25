@@ -1,7 +1,7 @@
 ---
 title: 安装 headscale 建立自己的 Tailnet
 date: 2023-12-27 21:51:13
-category: Application
+categories: Application
 tags:
   - Linux
   - Tailscale

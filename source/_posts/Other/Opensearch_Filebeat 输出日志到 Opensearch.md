@@ -1,6 +1,6 @@
 ---
 title: Filebeat 输出日志到 Opensearch
-category: Docker
+categories: Docker
 date: 2023-12-08 13:57:57
 tags:
   - AWS

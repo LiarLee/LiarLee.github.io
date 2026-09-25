@@ -1,7 +1,7 @@
 ---
 title: tailscale 结合 Sunshine 串流
 date: 2023-12-27 11:15:31
-category: Application
+categories: Application
 tags:
   - Steam
   - EC2

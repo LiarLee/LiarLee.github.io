@@ -1,7 +1,7 @@
 ---
 title: Kubernetes NFS CSI 启动 bitnami postgres 镜像权限不足
 date: 2024-09-08 22:42:33
-category: Kubernetes
+categories: Kubernetes
 tags:
   - Kubernetes
   - TrueNasCore

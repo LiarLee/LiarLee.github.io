@@ -1,7 +1,7 @@
 ---
 title: fish shell 配置开关代理
 date: 2026-01-26 21:29:32
-category: Linux
+categories: Linux
 tags:
   - Application
   - fish

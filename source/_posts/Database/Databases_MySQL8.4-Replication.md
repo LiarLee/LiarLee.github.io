@@ -1,6 +1,6 @@
 ---
 title: MySQL 主从复制
-category: Database
+categories: Database
 date: 2024-07-13 01:24:55
 tags:
   - MySQL

@@ -1,7 +1,7 @@
 ---
 title: 如何配置kubelet的节点自动回收资源
 date: 2022-04-19 17:45:39
-category: Kubernetes
+categories: Kubernetes
 tags:
   - Kubernetes
   - EKS

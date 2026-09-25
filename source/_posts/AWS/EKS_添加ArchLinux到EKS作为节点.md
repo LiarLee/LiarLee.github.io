@@ -1,6 +1,6 @@
 ---
 title: 将ArchLinux作为节点加入EKS UnmanagedNode
-category: Kubernetes
+categories: Kubernetes
 date: 2023-04-20 00:42:22
 tags:
   - Kubernetes

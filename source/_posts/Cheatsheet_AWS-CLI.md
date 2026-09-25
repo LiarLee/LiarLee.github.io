@@ -1,6 +1,6 @@
 ---
 title: CheatSheet_awscli
-category: AWS
+categories: AWS
 date: 2333-12-08 13:56:27
 tags:
   - AWS

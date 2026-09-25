@@ -1,7 +1,7 @@
 ---
 title: 一些英语学习
 date: 2025-12-13 11:48:53
-category: English
+categories: English
 tags:
   -
 ---

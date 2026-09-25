@@ -1,6 +1,6 @@
 ---
 title: GKE 专有集群创建BastionHost连接apiserver的方式
-category: Kubernetes
+categories: Kubernetes
 date: 2024-05-03 14:59:05
 tags:
   - Kubernetes

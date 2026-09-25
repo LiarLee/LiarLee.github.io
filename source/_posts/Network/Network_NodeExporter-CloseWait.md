@@ -1,6 +1,6 @@
 ---
 title: 容器运行的NodeExporter出现异常的 CloseWait
-category: Linux
+categories: Linux
 date: 2024-05-30 01:46:37
 tags:
   - Linux

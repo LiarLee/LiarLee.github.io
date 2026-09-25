@@ -1,6 +1,6 @@
 ---
 title: 自管理节点加入集群
-category: EKS
+categories: EKS
 date: 2023-12-08 14:39:16
 tags:
   - Kubernetes

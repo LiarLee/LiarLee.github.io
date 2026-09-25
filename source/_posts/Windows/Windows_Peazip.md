@@ -1,7 +1,7 @@
 ---
 title: PeaZip添加智能解压到win11右键菜单
 date: 2025-09-14 10:18
-category: Application
+categories: Application
 tags:
   - Windows
   - Application

@@ -5,7 +5,7 @@ categories: Linux
 tags:
   - Linux
   - LVM
-  - Filesystem
+  - FileSystem
   - IO
 ---
 

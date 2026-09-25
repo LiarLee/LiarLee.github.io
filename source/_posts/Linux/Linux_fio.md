@@ -1,7 +1,7 @@
 ---
 title: Fio 命令说明
 date: 2022-04-19 17:45:39
-category: Linux
+categories: Linux
 tags:
   - Linux
   - EBS

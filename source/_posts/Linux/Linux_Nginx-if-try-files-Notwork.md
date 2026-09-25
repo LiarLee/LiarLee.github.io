@@ -1,7 +1,7 @@
 ---
 title: Nginx配置文件中if判断与try_files
 date: 2019-09-19 09:52:13
-category: Linux
+categories: Linux
 tags:
   - Nginx
   - Application

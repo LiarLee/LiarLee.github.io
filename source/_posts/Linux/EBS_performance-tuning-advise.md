@@ -1,7 +1,7 @@
 ---
 title: EBS 性能优化笔记
 date: 2023-08-16 14:17:31
-category: Linux
+categories: Linux
 tags:
   - Linux
   - EBS

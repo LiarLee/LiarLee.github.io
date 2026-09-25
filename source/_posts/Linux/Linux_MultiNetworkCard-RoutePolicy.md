@@ -1,7 +1,7 @@
 ---
 title: Linux配置网卡策略路由
 date: 2023-07-25 16:41:36
-category: Linux
+categories: Linux
 tags:
   - Linux
   - EC2

@@ -1,7 +1,7 @@
 ---
 title: Light From Twitter
 date: 1980-12-08 13:56:27
-category: Linux
+categories: Linux
 tags:
   - 书
 ---

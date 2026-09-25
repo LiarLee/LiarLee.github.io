@@ -4,7 +4,7 @@ tags:
   - RIME
   - Linux
   - Windows
-category: Other
+categories: Other
 date: 2023-08-13 10:39:06
 ---
 

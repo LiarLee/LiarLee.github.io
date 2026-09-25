@@ -1,7 +1,7 @@
 ---
 title: Fortio 笔记
 date: 2025-05-09 23:26:39
-category: Kubernetes
+categories: Kubernetes
 tags:
   - Application
   - Kubernetes

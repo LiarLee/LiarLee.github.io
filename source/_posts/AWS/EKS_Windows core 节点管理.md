@@ -1,6 +1,6 @@
 ---
 title: Windows Core EKS 节点管理命令
-category: Kubernetes
+categories: Kubernetes
 date: 2023-12-05 10:11:22
 tags:
   - Kubernetes

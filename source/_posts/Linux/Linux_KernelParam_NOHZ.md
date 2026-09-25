@@ -1,7 +1,7 @@
 ---
 title: 关于内核Config中的参数 CONFIG_NO_HZ
 date: 2022-04-19 17:45:39
-category: Linux
+categories: Linux
 tags:
   - Linux
 ---

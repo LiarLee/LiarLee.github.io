@@ -1,6 +1,6 @@
 ---
 title: Iostat 参数说明
-category: Linux
+categories: Linux
 date: 2023-12-22 12:44:27
 tags:
   - Linux

@@ -1,7 +1,7 @@
 ---
 title: buffer/cache 无法释放
 date: 2023-05-12 22:15:35
-category: Linux
+categories: Linux
 tags:
   - Linux
   - Memory

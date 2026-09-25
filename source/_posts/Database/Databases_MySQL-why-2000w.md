@@ -1,6 +1,6 @@
 ---
 title: 数据库单表的测试
-category: Database
+categories: Database
 date: 2023-05-19 18:10:52
 tags:
   - MySQL

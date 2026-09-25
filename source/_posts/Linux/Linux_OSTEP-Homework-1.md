@@ -1,6 +1,6 @@
 ---
 title: Linux open()调用的理解
-category: Linux
+categories: Linux
 date: 2024-05-19 02:10:01
 tags:
   - Linux

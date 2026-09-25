@@ -1,7 +1,7 @@
 ---
 title: B+树笔记
 date: 2024-09-20 23:08:56
-category: Database
+categories: Database
 tags:
   - Database
 ---

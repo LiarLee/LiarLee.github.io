@@ -1,7 +1,7 @@
 ---
 title: 在 PVE 上使用 Ignition 文件启动 Fedora CoreOS
 date: 2024-06-15 13:06:22
-category: Linux
+categories: Linux
 tags:
   - PVE
   - Fedora

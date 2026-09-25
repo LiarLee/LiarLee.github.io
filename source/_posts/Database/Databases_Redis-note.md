@@ -1,6 +1,6 @@
 ---
 title: Redis 笔记
-category: Database
+categories: Database
 date: 2023-12-22 12:54:23
 tags:
   - Database

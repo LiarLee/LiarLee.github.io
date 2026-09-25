@@ -1,6 +1,6 @@
 ---
 title: BufferIO与DirectIO的比较
-category: Linux
+categories: Linux
 date: 2023-07-10 11:34:36
 tags:
   - Linux

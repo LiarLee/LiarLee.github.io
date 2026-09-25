@@ -2,5 +2,5 @@
 title: {{ title }}
 date: {{ date }}
 tags: Linux
-category: Linux
+categories: Linux
 ---

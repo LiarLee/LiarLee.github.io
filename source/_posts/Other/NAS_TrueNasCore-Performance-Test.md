@@ -1,6 +1,6 @@
 ---
 title: TrueNas Core 当前基准测试指标
-category: Application
+categories: Application
 date: 2023-10-08 13:57:57
 tags:
   - TrueNasCore

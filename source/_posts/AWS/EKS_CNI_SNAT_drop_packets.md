@@ -1,6 +1,6 @@
 ---
 title: 源地址检查造成丢包的分析
-category: EKS
+categories: EKS
 date: 2024-01-10 13:18:03
 tags:
   - EKS

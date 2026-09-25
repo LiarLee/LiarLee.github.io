@@ -1,7 +1,7 @@
 ---
 title: 记录安装Office LTSC 2024 的步骤
 date: 2026-01-15 00:50
-category: Windows
+categories: Windows
 tags:
   - Windows
   - Application

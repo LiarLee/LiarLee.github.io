@@ -1,7 +1,7 @@
 ---
 title: Linux OS Debug 方法记录
 date: 2023-06-28 17:12:22
-category: Linux
+categories: Linux
 tags:
   - Linux
   - EC2

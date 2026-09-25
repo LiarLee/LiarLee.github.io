@@ -1,7 +1,7 @@
 ---
 title: Neovim 全 Lua 配置 
 date: 2023-08-05 00:36:04
-category: Linux
+categories: Linux
 tags:
   - VIM
   - Linux

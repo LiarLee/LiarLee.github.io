@@ -1,7 +1,7 @@
 ---
 title: TigerVNC 在 RHEL9 的安装和配置
 date: 2024-08-21 14:02:57
-category: Linux
+categories: Linux
 tags:
   - Application
 ---

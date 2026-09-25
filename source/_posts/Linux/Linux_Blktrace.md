@@ -1,7 +1,7 @@
 ---
 title: blktrace 命令说明
-date: 1980-12-08 13:56:27
-category: Linux
+date: 2024-06-01 19:57:47
+categories: Linux
 tags:
   - IO
   - Linux

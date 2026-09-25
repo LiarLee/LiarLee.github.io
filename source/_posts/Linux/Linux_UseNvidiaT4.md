@@ -1,6 +1,6 @@
 ---
 title: archlinux 配置 xorg 使用 nvidia T4
-category: Linux
+categories: Linux
 date: 2023-12-21 13:56:27
 tags:
   - AWS

@@ -1,6 +1,6 @@
 ---
 title: Harbor 的升级记录
-category: Kubernetes
+categories: Kubernetes
 date: 2024-05-06 23:26:56
 tags:
   - Application

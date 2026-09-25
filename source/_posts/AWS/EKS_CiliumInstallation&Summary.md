@@ -1,7 +1,7 @@
 ---
 title: Cilium 踩坑总结
 date: 2022-08-19 22:21:48
-category: Kubernetes
+categories: Kubernetes
 tags:
   - Kubernetes
   - Cilium

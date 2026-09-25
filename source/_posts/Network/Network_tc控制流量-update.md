@@ -1,6 +1,6 @@
 ---
 title: Linux OS 网络流量控制测试
-category: Linux
+categories: Linux
 date: 2023-04-14 17:41:03
 tags:
   - Linux

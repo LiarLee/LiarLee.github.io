@@ -1,7 +1,7 @@
 ---
 title: RabbitMQ_SysV风格管理脚本模板
 date: 2019-09-23 15:48:52
-category: Linux
+categories: Linux
 tags:
   - Application
   - RabbitMQ

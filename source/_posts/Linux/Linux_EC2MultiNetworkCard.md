@@ -1,7 +1,7 @@
 ---
 title: Linux 路由表以及多网卡路由策略
 date: 2023-07-25 22:00:04
-category: Linux
+categories: Linux
 tags:
   - Linux
   - Network

@@ -1,7 +1,7 @@
 ---
 title: MySQL 计算内存用量
 date: 2024-07-31 17:15:18
-category: Database
+categories: Database
 tags:
   - Database
   - Memory

@@ -1,6 +1,6 @@
 ---
 title: CheatSheet_Databases
-category: Database
+categories: Database
 date: 2333-12-08 13:56:27
 tags:
   - CheatSheet

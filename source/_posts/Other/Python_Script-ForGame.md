@@ -2,7 +2,7 @@
 title: pyautogui自动脚本
 date: 2019-05-17 22:21:08
 tags: Python 
-category: Python
+categories: Python
 ---
 最近一个游戏非常的上头， 实在是肝不动了，自己写了个脚本帮我点点点。  
 ### Pyautogui 库

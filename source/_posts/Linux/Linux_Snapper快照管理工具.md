@@ -1,7 +1,7 @@
 ---
 title: 使用 Snapper 管理快照
 date: 2024-06-08 12:26:18
-category: Linux
+categories: Linux
 tags:
   - Linux
   - FileSystem

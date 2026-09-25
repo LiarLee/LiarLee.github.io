@@ -3,7 +3,7 @@ title: 荣耀8-刷LineageOS14.1简述
 date: 2018-07-08 17:47:39
 tags:
   - Android
-category: Linux
+categories: Linux
 ---
 
 荣耀8刷LineageOS 14.1 , 感谢XDA的大神们。用到的刷机包我转存了一份到微云，链接在末尾。  

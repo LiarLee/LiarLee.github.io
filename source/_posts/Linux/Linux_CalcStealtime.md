@@ -1,7 +1,7 @@
 ---
 title: 由 CPU Steal Time 指标解释
 date: 2022-04-19 17:45:39
-category: Linux
+categories: Linux
 tags:
   - Linux
   - CPU

@@ -1,6 +1,6 @@
 ---
 title: 使用 nsenter 从Kubernetes Node 进入容器网络 Namespace
-category: EKS
+categories: EKS
 date: 2024-01-10 17:16:21
 tags:
   - Docker

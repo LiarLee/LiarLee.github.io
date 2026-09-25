@@ -1,6 +1,6 @@
 ---
 title: Kubectl Apply 报错 annotation Too long
-category: Kubernetes
+categories: Kubernetes
 date: 2023-12-22 00:53:54
 tags:
   - Kubernetes

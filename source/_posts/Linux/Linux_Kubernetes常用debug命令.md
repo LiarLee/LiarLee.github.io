@@ -1,7 +1,7 @@
 ---
 title: Linux_Kubernetes常用debug命令
 date: 2023-09-04 09:08:02
-category: Linux
+categories: Linux
 tags:
   - Linux
   - Kubernetes

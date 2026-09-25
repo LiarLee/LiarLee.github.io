@@ -1,6 +1,6 @@
 ---
 title: VPCFlowlog 解析
-category: AWS
+categories: AWS
 date: 2023-07-05 11:33:43
 tags:
   - AWS

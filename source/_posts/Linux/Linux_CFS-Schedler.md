@@ -1,6 +1,6 @@
 ---
 title: CFS 调度器资料
-category: Linux
+categories: Linux
 date: 2023-12-22 12:51:25
 tags:
   - Linux

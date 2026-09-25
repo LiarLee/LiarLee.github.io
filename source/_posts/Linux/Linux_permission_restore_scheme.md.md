@@ -1,7 +1,7 @@
 ---
 title: Linux 系统级权限误操作救命指南：利用 ACL 实现 "克隆" 恢复
 date: 2026-02-07 22:24:23
-category: Linux
+categories: Linux
 tags:
   - FileSystem
   - Linux

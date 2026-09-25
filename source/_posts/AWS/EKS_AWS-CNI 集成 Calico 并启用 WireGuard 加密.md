@@ -1,6 +1,6 @@
 ---
 title: AWS-CNI 集成 Calico 并启用 WireGuard 加密
-category: EKS
+categories: EKS
 date: 2024-02-23 16:10:32
 tags:
   - EKS

@@ -1,6 +1,6 @@
 ---
 title: serviceAccount 获取 Token 以及权限的方式
-category: Kubernetes
+categories: Kubernetes
 date: 2023-08-05 23:42:22
 tags:
   - Kubernetes
