@@ -103,7 +103,8 @@ footer_img: /img/wallhaven-nm95lk.png
 # Website Background
 # Can set it to color, image URL or an array containing colors and/or image URLs
 # If an array is provided, a random background will be selected from the array on each load
-background: '#3D3D3D'
+# Sampled from the mist tone at the bottom edge of the default top img
+background: '#908070'
 
 cover:
   # Disable the cover or not
@@ -507,7 +508,7 @@ math:
 
   katex:
     # Enable the copy KaTeX formula
-    copy_tex: false
+    copy_tex: true
 
 # --------------------------------------
 # Search
@@ -927,9 +928,10 @@ canvas_nest:
 
   # Color of lines, default: '0,0,0'; RGB values: (R,G,B).(note: use ',' to separate.)
 
-  color: '255,250,240' #color of lines, default: '0,0,0'; RGB values: (R,G,B).(note: use ',' to separate.)
+  # Ivory lines, visible again on the dark warm-brown background
+  color: '255,250,240'
   # The opacity of line (0~1)
-  opacity: 0.7
+  opacity: 0.45
   # The z-index property of the background
   zIndex: -1
   # The number of lines
