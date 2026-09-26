@@ -30,6 +30,7 @@ menu:
   #   Music: /music/ || fas fa-music
   #   Movie: /movies/ || fas fa-video
   Link: /link/ || fas fa-link
+  Gallery: /gallery/ || fas fa-images
   About: /about/ || fas fa-heart
 
 # --------------------------------------
@@ -38,7 +39,7 @@ menu:
 
 code_blocks:
   # Code block theme: darker / pale night / light / ocean / false
-  theme: darker
+  theme: light
   macStyle: false
   # Code block height limit (unit: px)
   height_limit: false
