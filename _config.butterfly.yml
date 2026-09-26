@@ -74,7 +74,7 @@ avatar:
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img: /img/wallhaven-48w1xj.jpg
+default_top_img: /img/wallhaven-x6jo5o.jpg
 
 # The banner image of index page
 index_img:
@@ -99,7 +99,7 @@ category_img:
 category_per_img:
 
 # The background image of footer
-footer_img: /img/wallhaven-nm95lk.png
+footer_img: /img/wallhaven-x6jo5o.jpg
 
 # Website Background
 # Can set it to color, image URL or an array containing colors and/or image URLs
