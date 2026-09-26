@@ -8,4 +8,5 @@ public/
 _multiconfig.yml
 source/_posts/.obsidian/
 source/_posts/.trash/
+.wrangler/
 
