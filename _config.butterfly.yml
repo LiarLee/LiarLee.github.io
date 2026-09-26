@@ -114,8 +114,20 @@ cover:
   archives_enable: true
   # When cover is not set, the default cover is displayed
   default_cover:
-    - /img/wallhaven-nm95lk.png
-    - /img/wallhaven-jexqqm.png
+    - /img/wallhaven-gw1q1l.jpg
+    - /img/wallhaven-5y3vx7.jpg
+    - /img/wallhaven-8g8eg1.jpg
+    - /img/wallhaven-lyg25p.jpg
+    - /img/wallhaven-m9y7v1.jpg
+    - /img/wallhaven-3qqqkv.jpg
+    - /img/wallhaven-qz1omr.jpg
+    - /img/wallhaven-jxq6wp.jpg
+    - /img/wallhaven-m373o9.jpg
+    - /img/wallhaven-qzpj95.jpg
+    - /img/wallhaven-1pojx3.jpg
+    - /img/wallhaven-p97rkp.jpg
+    - /img/wallhaven-jxyr5m.jpg
+    - /img/wallhaven-z87vow.jpg
 
 # Replace Broken Images
 error_img:
