@@ -1,12 +1,16 @@
 ---
 title: fish shell 配置开关代理
 date: 2026-01-26 21:29:32
+description: 在 fish shell 中定义 proxy / unproxy 两个自动加载函数，一键设置与清空终端代理环境变量。
 categories: Linux
 tags:
   - Application
   - fish
   - proxy
 ---
+通过 fish shell 的命令来控制是否启用代理服务器.  直接创建这2个配置, 并通过命令 `proxy`, `unproxy`, 开启或者关闭.  
+
+
 `touch ~/.config/fish/functions/proxy.fish`
 
 ```fish
