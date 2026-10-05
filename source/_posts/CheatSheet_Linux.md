@@ -2,6 +2,7 @@
 title: CheatSheet_Linux
 categories: Linux
 date: 2333-12-08 13:57:57
+description: Linux 命令与一行流的手头速查，用到就记一笔，持续更新。
 tags:
   - Linux
   - CheatSheet

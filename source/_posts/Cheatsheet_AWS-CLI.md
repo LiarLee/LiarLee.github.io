@@ -2,6 +2,7 @@
 title: CheatSheet_awscli
 categories: AWS
 date: 2333-12-08 13:56:27
+description: AWS CLI 常用查询的随手积累，持续更新。
 tags:
   - AWS
   - CheatSheet

@@ -2,6 +2,7 @@
 title: CheatSheet_Databases
 categories: Database
 date: 2333-12-08 13:56:27
+description: MySQL 运维 SQL 的随手积累，持续更新。
 tags:
   - CheatSheet
   - Database

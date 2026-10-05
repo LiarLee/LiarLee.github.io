@@ -2,6 +2,7 @@
 title: CheatSheet_Kubernetes
 categories: Kubernetes
 date: 2333-12-08 13:57:57
+description: kubectl 日常运维命令的随手积累，遇到好用的就记下来，持续更新。
 tags:
   - Kubernetes
   - CheatSheet
