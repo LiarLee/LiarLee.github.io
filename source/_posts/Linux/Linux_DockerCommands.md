@@ -1,5 +1,6 @@
 ---
 title: Docker基本命令说明
+description: docker 常用命令说明与输出示例，涵盖 pull、run、kill、images 等基础操作。
 date: 2018-05-28 12:38:06
 categories: Docker
 tags:

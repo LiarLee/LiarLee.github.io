@@ -1,5 +1,6 @@
 ---
 title: Portainer 使用记录
+description: Portainer 部署备忘，docker-compose 起主服务，其余节点跑 Agent 接入管理。
 categories: Linux
 date: 2024-04-14 12:12:47
 tags:

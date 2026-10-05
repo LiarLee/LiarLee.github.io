@@ -1,5 +1,6 @@
 ---
 title: Git常见的命令
+description: git 常用操作的随手记录，关联远端仓库、配置代理与取消文件追踪等。
 date: 2023-07-12 06:52:18
 categories: Linux
 tags:

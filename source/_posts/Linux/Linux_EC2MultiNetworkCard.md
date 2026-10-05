@@ -1,5 +1,6 @@
 ---
 title: Linux 路由表以及多网卡路由策略
+description: EC2 多网卡的策略路由实践，解决默认路由选错网卡导致公网不通的问题。
 date: 2023-07-25 22:00:04
 categories: Linux
 tags:

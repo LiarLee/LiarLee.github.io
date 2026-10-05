@@ -1,5 +1,6 @@
 ---
 title: 由 CPU Steal Time 指标解释
+description: 解读 vmstat/top 输出里的 Steal Time 指标，附 schedstat 三个字段的含义。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

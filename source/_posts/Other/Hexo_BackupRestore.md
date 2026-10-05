@@ -1,5 +1,6 @@
 ---
 title: Hexo备份和恢复
+description: 把 Hexo 工作目录推上 GitHub 的 hexo 分支备份，换机时 clone 下来就能恢复。
 date: 2018-07-03 16:39:23
 categories: Hexo
 tags:

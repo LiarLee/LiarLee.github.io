@@ -1,5 +1,6 @@
 ---
 title: grub2手动修复引导错误
+description: grub2 引导损坏的手动修复方法，从救援命令行逐条指回内核到 grub2-mkconfig 重建配置。
 date: 2018-01-09 13:27:57
 categories: Linux
 tags:

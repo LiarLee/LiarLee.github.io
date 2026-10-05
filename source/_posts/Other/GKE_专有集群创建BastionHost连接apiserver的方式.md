@@ -1,5 +1,6 @@
 ---
 title: GKE 专有集群创建BastionHost连接apiserver的方式
+description: 跨 VPC 连接 GKE 专有集群 apiserver 的两条路，kubectl proxy 和 ssh 隧道加代理。
 categories: Kubernetes
 date: 2024-05-03 14:59:05
 tags:

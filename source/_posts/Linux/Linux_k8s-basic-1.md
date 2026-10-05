@@ -1,5 +1,6 @@
 ---
 title: Kubernetes集群的学习笔记(1)
+description: k8s 入门第一篇，Pod、Service 等概念梳理，加 kubeadm 搭建三节点集群的完整步骤。
 date: 2019-07-21 16:49:56
 categories: Kubernetes
 tags:

@@ -1,5 +1,6 @@
 ---
 title: blktrace 命令说明
+description: blktrace 与 blkparse 使用笔记，解读块层 I/O 的 Q--G--I--D--C 各阶段事件与输出。
 date: 2024-06-01 19:57:47
 categories: Linux
 tags:

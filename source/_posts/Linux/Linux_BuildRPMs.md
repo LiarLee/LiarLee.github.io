@@ -1,5 +1,6 @@
 ---
 title: RPM制作的笔记
+description: rpmbuild 打包笔记，从目录结构、SPEC 文件编写到构建与测试的完整流程。
 date: 2018-07-03 11:46:36
 categories: Linux
 tags:

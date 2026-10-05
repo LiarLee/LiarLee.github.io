@@ -1,5 +1,6 @@
 ---
 title: VMwareTools共享文件夹方案
+description: Fedora 虚拟机里解决 VMware 剪贴板共享与 /mnt/hgfs 共享文件夹不挂载的方案。
 date: 2019-01-08 14:13:00
 categories: Linux
 tags:

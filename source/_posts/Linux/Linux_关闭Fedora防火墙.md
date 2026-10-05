@@ -1,5 +1,6 @@
 ---
 title: Systemd 关闭 Firewalld
+description: Fedora 上彻底关掉 Firewalld 的 stop、disable、mask 三步，顺带配好 rc.local 开机自启。
 date: 2018-05-11 14:21:36
 categories: Linux
 tags:

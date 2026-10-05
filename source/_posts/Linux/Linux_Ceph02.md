@@ -1,5 +1,6 @@
 ---
 title: Ceph Cluster 02 - OSD/RBD
+description: Ceph 系列第二篇，涵盖存储池创建、PG 状态查看与 RBD 块设备的使用命令。
 date: 2021-08-23 15:04:12
 categories: Linux
 tags:

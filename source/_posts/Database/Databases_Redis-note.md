@@ -1,5 +1,6 @@
 ---
 title: Redis 笔记
+description: Redis 与 ElastiCache 的杂记，从集群概念、缓存穿透击穿雪崩到内存碎片与驱逐策略。
 categories: Database
 date: 2023-12-22 12:54:23
 tags:

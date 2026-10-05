@@ -1,5 +1,6 @@
 ---
 title: TrueNAS Core 自动更新UI证书
+description: 在 TrueNAS Core 的 Jail 里跑 certbot 和 deploy-freenas，自动续期并部署 UI 证书。
 date: 2024-11-15 11:53:27
 categories: Application
 tags:

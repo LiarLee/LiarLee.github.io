@@ -1,5 +1,6 @@
 ---
 title: 关于内核Config中的参数 CONFIG_NO_HZ
+description: 内核 CONFIG_NO_HZ 参数研究笔记，理解 Tick、Tickless 与时钟中断对 Jitter 的影响。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

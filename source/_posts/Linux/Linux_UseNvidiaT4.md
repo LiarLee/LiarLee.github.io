@@ -1,5 +1,6 @@
 ---
 title: archlinux 配置 xorg 使用 nvidia T4
+description: 在 EC2 的 Arch 上给 xrdp 挂上 Tesla T4，记录 nvidia-dkms 驱动与 xorg 配置的折腾过程。
 categories: Linux
 date: 2023-12-21 13:56:27
 tags:

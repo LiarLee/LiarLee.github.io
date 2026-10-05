@@ -1,5 +1,6 @@
 ---
 title: IO重定向笔记
+description: Bash 输入输出重定向复习笔记，梳理 fd 概念与 >、2>&1 等操作符的组合用法。
 date: 2019-06-25 15:43:33
 categories: Linux
 tags:

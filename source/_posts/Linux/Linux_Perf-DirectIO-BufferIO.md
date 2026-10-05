@@ -1,5 +1,6 @@
 ---
 title: BufferIO与DirectIO的比较
+description: 用 dd 加 perf record 对比 BufferIO 与 DirectIO 的写入路径、耗时和 CPU 占用差异。
 categories: Linux
 date: 2023-07-10 11:34:36
 tags:

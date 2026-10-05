@@ -1,5 +1,6 @@
 ---
 title: Nginx性能调整（不一定对
+description: 从 sysctl、CPU 隔离到中断亲和一路调优 Nginx，再用 ab 压测对比默认配置的差距。
 date: 2022-12-27 12:53:02
 categories: Linux
 tags:

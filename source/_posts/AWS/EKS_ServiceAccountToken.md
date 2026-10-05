@@ -1,5 +1,6 @@
 ---
 title: serviceAccount 获取 Token 以及权限的方式
+description: 读取 Pod 内挂载的 ServiceAccount Token，直接 curl kubelet 10250 端口拉取 metrics。
 categories: Kubernetes
 date: 2023-08-05 23:42:22
 tags:

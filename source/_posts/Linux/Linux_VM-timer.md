@@ -1,5 +1,6 @@
 ---
 title: KVM中windows7虚拟机时间问题
+description: KVM 里 Windows7 时间跑得飞快，定位到 libvirt 的 rtc tickpolicy=catchup，删掉即恢复。
 date: 2019-06-25 15:45:56
 categories: Linux
 tags:

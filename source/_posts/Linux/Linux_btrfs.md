@@ -1,5 +1,6 @@
 ---
 title: btrfs 笔记
+description: btrfs 从建卷、子卷、RAID 转换到快照 send/receive 的操作笔记，附 fio 与 xfs 的对比测试。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

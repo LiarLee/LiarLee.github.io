@@ -1,5 +1,6 @@
 ---
 title: 在EC2实例每次启动的时候都运行Userdata
+description: 在 Userdata 里加 MIME 多段头部覆盖 cloud-init 默认行为，让脚本每次启动都执行。
 date: 2023-09-06 14:24:46
 categories: Linux
 tags:

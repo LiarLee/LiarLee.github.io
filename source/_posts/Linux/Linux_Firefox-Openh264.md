@@ -1,5 +1,6 @@
 ---
 title: Firefox-Openh264的问题
+description: Fedora 上 Firefox 的 OpenH264 插件始终无法启用的解决记录，开启 cisco 源安装插件即可。
 date: 2017-12-28 17:24:52
 categories: Linux
 tags:

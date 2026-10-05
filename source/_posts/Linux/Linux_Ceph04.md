@@ -1,5 +1,6 @@
 ---
 title: Ceph Cluster 04 - CRUSH算法
+description: Ceph 系列第四篇，梳理五种运行图与 CRUSH 算法，以及 weight/reweight 调整 PG 分布。
 date: 2021-09-01 22:29:26
 tags:
   - Ceph

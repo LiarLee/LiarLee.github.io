@@ -1,5 +1,6 @@
 ---
 title: Kubernetes集群的学习笔记(3)
+description: 用 YAML 定义 Pod 的字段说明，加上标签选择器、Pod 生命周期和存活探测的整理。
 date: 2019-09-24 17:30:50
 categories: Kubernetes
 tags:

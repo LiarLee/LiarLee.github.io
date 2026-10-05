@@ -1,5 +1,6 @@
 ---
 title: less命令占用内存过高
+description: 一次日志脚本把内存打到 OOM 的排障记录，讲清 less 与 zcat 处理大文件的差异。
 date: 2020-04-06 12:28:03
 categories: Linux
 tags:

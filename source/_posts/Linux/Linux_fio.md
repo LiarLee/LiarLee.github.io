@@ -1,5 +1,6 @@
 ---
 title: Fio 命令说明
+description: fio 的 ini 配置说明，连带 iostat 的 await、util 等指标解读和 IOPS 排查思路。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

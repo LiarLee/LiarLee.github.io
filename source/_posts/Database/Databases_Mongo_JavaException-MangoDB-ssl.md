@@ -1,5 +1,6 @@
 ---
 title: Java连接数据库报错No subject alternative names present
+description: Java 连 MongoDB 开 SSL 报证书无 SAN，运维侧在连接串加 sslinvalidhostnameallowed 绕过。
 date: 2020-11-16 21:28:41
 tags:
   - MongoDB

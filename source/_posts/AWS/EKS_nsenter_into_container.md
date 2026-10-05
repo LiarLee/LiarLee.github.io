@@ -1,5 +1,6 @@
 ---
 title: 使用 nsenter 从Kubernetes Node 进入容器网络 Namespace
+description: 从节点上用 nsenter 进入 Pod 的 network namespace，借宿主机上的 tcpdump 抓包排障。
 categories: EKS
 date: 2024-01-10 17:16:21
 tags:

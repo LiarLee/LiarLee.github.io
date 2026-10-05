@@ -1,5 +1,6 @@
 ---
 title: Harbor 的升级记录
+description: Harbor 升级记录，顺带把数据存储从 LVM 迁移到 btrfs 的步骤。
 categories: Kubernetes
 date: 2024-05-06 23:26:56
 tags:

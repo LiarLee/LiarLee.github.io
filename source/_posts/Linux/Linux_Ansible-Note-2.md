@@ -1,5 +1,6 @@
 ---
 title: Ansible笔记-2 
+description: Ansible Playbook 学习笔记，梳理 YAML 语法与 tasks、handlers 等关键字写法。
 date: 2019-07-07 21:57:06
 categories: Linux
 tags:

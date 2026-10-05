@@ -1,5 +1,6 @@
 ---
 title: 添加一个Redhat到EKS集群， 基于Packer的步骤
+description: 手动复现 amazon-eks-ami 的 Packer 构建步骤，基于 Redhat 9 做自定义 AMI 加入 EKS。
 categories: Kubernetes
 date: 2023-07-11 11:29:53
 tags:

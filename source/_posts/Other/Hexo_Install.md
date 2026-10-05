@@ -1,5 +1,6 @@
 ---
 title: Hexo+Github建立个人博客记录
+description: Fedora 下从装 Node.js 到 hexo-server 的博客搭建步骤，第一次建站时的记录。
 date: 2017-12-27 16:07:34
 categories: Hexo
 tags:

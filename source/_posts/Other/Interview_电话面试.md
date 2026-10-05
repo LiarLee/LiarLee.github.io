@@ -1,5 +1,6 @@
 ---
 title: Linux-电话面试
+description: 一次 Linux 电话面试的问题回忆，keepalived、LVS 和 cache 与 buffer 的区别。
 date: 2018-01-29 19:14:57
 tags:
   - Linux

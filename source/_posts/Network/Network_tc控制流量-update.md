@@ -1,5 +1,6 @@
 ---
 title: Linux OS 网络流量控制测试
+description: 用 tc 注入延迟丢包做传输实验，结合 tcp_rmem/wmem 与 BDP 分析缓冲区对吞吐的影响。
 categories: Linux
 date: 2023-04-14 17:41:03
 tags:

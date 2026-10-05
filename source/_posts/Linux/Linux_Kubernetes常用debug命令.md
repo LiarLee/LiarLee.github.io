@@ -1,5 +1,6 @@
 ---
 title: Linux_Kubernetes常用debug命令
+description: kubectl 排障命令积累，解码 webhook 证书信息，用 debug 容器附加 netshoot 调网络。
 date: 2023-09-04 09:08:02
 categories: Linux
 tags:

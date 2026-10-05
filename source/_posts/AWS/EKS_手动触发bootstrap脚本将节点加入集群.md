@@ -1,5 +1,6 @@
 ---
 title: 自管理节点加入集群
+description: 手动执行 /etc/eks/bootstrap.sh 把自管理节点加入 EKS，并拆解脚本做了哪些配置。
 categories: EKS
 date: 2023-12-08 14:39:16
 tags:

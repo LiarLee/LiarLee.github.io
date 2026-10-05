@@ -1,5 +1,6 @@
 ---
 title: TrueNas Scale 让 ZFS 占用更多内存作为 ARC
+description: 调大 zfs_arc_max 让 TrueNAS Scale 的 ARC 用上更多内存，附按总内存比例设置的脚本。
 categories: Application
 date: 2023-10-08 13:57:57
 tags:

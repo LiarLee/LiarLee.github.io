@@ -1,5 +1,6 @@
 ---
 title: Ansible笔记-1
+description: Ansible 入门笔记，从安装配置、密钥认证到 ad-hoc 命令与常用模块用法。
 date: 2019-06-26 12:32:52
 categories: Linux
 tags:

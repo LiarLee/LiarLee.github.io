@@ -1,5 +1,6 @@
 ---
 title: DockerFile笔记
+description: Dockerfile 书写笔记，从镜像分层与 Overlay 存储到两种自定义镜像的方式。
 date: 2019-04-24 14:27:38
 categories: Docker
 tags:

@@ -1,5 +1,6 @@
 ---
 title: 记一次旧LVM硬盘挂载失败
+description: 旧硬盘 LVM2_member 挂载报 Device busy 的排障记录，dmsetup remove 后重新激活解决。
 date: 2020-05-30 17:54:47
 categories: Linux
 tags:

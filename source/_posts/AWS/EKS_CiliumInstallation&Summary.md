@@ -1,5 +1,6 @@
 ---
 title: Cilium 踩坑总结
+description: 在 KVM 和 EKS 里折腾 Cilium 的记录，含 kubeProxyReplacement、WireGuard 加密与 BBR。
 date: 2022-08-19 22:21:48
 categories: Kubernetes
 tags:

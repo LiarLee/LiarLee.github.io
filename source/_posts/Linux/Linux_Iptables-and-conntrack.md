@@ -1,5 +1,6 @@
 ---
 title: 追踪数据包经过的iptables规则
+description: 用 iptables 的 TRACE 目标追踪数据包经过的链，附 nf_conntrack 表满丢包的调参记录。
 categories: Linux
 date: 2023-12-22 12:49:30
 tags:

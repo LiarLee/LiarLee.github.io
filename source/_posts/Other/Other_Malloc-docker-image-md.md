@@ -1,5 +1,6 @@
 ---
 title: 制作一个可用的malloc image
+description: 写一个按参数分配内存的 C 程序，打包成镜像方便在 Docker 和 K8s 里做占用测试。
 categories: Linux
 date: 2023-01-03 12:58:47
 tags:

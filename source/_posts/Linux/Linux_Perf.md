@@ -1,5 +1,6 @@
 ---
 title: Perf 命令的Performance分析
+description: perf 的常用玩法，覆盖 stat、record、火焰图、动态追踪和 off-cpu 分析，附参数备忘。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: sysctl 参数笔记
+description: sysctl 参数的收集与解释，从 printk、ARP 缓存到 rp_filter、tcp_tw 系列的坑。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

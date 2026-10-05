@@ -1,5 +1,6 @@
 ---
 title: 容器运行的NodeExporter出现异常的 CloseWait
+description: NodeExporter 堆积 CLOSE_WAIT 假死的排障记录，根因是 CPU 限额过低的资源饥饿。
 categories: Linux
 date: 2024-05-30 01:46:37
 tags:

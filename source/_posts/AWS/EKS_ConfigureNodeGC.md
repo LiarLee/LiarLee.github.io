@@ -1,5 +1,6 @@
 ---
 title: 如何配置kubelet的节点自动回收资源
+description: 调整 kubelet 的 imageGC 上下阈值，让节点按磁盘使用率自动回收镜像空间。
 date: 2022-04-19 17:45:39
 categories: Kubernetes
 tags:

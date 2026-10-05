@@ -1,5 +1,6 @@
 ---
 title: Archlinux安装过程记录
+description: Arch Linux 安装步骤记录，从分区格式化、btrfs 子卷到 grub 引导，附 pacman 常用命令。
 date: 2019-05-17 14:03:08
 categories: Linux
 tags:

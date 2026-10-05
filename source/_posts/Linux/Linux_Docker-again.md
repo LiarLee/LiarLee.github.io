@@ -1,5 +1,6 @@
 ---
 title: Docker基础知识二周目
+description: Docker 基础的二周目复习，梳理六大 namespace、containerd 架构与 cgroup 资源限制。
 date: 2021-09-04 23:43:42
 categories: Docker
 tags:

@@ -1,5 +1,6 @@
 ---
 title: Docker/Containerd/Harbor 配置代理
+description: 给 Docker、Containerd 和 Harbor 配置代理的步骤笔记，不常用但要用时好找。
 date: 2022-12-20 12:39:07
 categories: Docker
 tags:

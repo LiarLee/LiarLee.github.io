@@ -1,5 +1,6 @@
 ---
 title: Orthanc的安装
+description: 开源 DICOM 服务器 Orthanc 的快速安装记录，含 Fedora RPM 包和 Windows 安装包两种方式。
 date: 2018-04-25 17:02:01
 categories: Healthcare-IT
 tags:

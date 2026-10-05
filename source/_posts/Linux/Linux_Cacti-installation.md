@@ -1,5 +1,6 @@
 ---
 title: Cacti的安装教程
+description: 在 CentOS 7 上部署 Cacti 监控的安装记录，从 LAMP 基础组件到 SNMP 的完整步骤。
 date: 2018-04-01 16:01:48
 categories: Linux
 tags:

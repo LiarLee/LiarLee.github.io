@@ -1,5 +1,6 @@
 ---
 title: Ceph Cluster 03 - CephFS
+description: Ceph 系列第三篇，CephFS 的搭建与挂载，从 MDS、双存储池到内核直接挂载。
 date: 2021-08-24 22:29:26
 tags:
   - Ceph

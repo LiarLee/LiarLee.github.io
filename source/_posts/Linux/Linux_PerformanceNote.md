@@ -1,5 +1,6 @@
 ---
 title: Linux性能调优笔记
+description: 性能调优书的存货笔记，从 CPU、内存、文件系统到 IO 和网络子系统过一遍原理与指标。
 date: 2020-08-20 17:50:39
 categories: Linux
 tags:

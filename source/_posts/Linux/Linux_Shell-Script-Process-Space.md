@@ -1,5 +1,6 @@
 ---
 title: Shell脚本处理目录或者文件名中的空格
+description: Shell 遍历文件名带空格会被拆开，重设 IFS 为换行符就能拿到完整目录名。
 date: 2022-04-15 14:10:54
 categories: Linux
 tags:

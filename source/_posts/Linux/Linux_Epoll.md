@@ -1,5 +1,6 @@
 ---
 title: Epoll vs select vs poll vs io_uring
+description: 对比 select、poll、epoll 与 io_uring 四种 I/O 多路复用机制的原理和优劣。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

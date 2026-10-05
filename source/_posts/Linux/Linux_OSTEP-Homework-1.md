@@ -1,5 +1,6 @@
 ---
 title: Linux open()调用的理解
+description: 做 OSTEP 作业时 fork 共享 fd 报 EBADF，用 perf trace 定位到 O_WRONLY 打开模式的坑。
 categories: Linux
 date: 2024-05-19 02:10:01
 tags:

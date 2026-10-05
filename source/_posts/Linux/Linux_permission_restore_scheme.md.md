@@ -1,5 +1,6 @@
 ---
 title: Linux 系统级权限误操作救命指南：利用 ACL 实现 "克隆" 恢复
+description: chmod -R 误操作后的救命方案，从同构健康机器 getfacl 导出全盘权限再 setfacl 恢复。
 date: 2026-02-07 22:24:23
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: 查看EKS集群节点上的容器和ENI的对应关系
+description: 通过 veth 的 iflink 和策略路由，把 Pod 的虚拟网卡对应到节点的具体 ENI 上。
 categories: EKS
 date: 2023-12-08 14:39:16
 tags:

@@ -1,5 +1,6 @@
 ---
 title: AWS-CNI 集成 Calico 并启用 WireGuard 加密
+description: EKS 上用 Helm 装好 Calico，再改 FelixConfiguration 开启 WireGuard 加密 Pod 流量。
 categories: EKS
 date: 2024-02-23 16:10:32
 tags:

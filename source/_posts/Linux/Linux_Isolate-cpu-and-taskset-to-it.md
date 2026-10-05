@@ -1,5 +1,6 @@
 ---
 title: 完全隔离CPU的方法 
+description: 用 isolcpus 与 nohz_full 内核参数把 CPU 从调度器完全隔离，再用 taskset 绑定指定任务。
 date: 2022-10-11 13:05:26
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: KVM虚拟机开启内存大页
+description: KVM 虚拟机启用 HugePage 的配置，讲清标准大页与透明大页的区别再到 libvirt 挂载。
 date: 2020-05-02 15:09:50
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: 快速启动一个 prometheus 和 grafana 
+description: 用 docker-compose 快速拉起 prometheus 与 grafana，数据落在宿主机目录重启不丢。
 date: 2023-05-25 15:52:20
 categories: Docker
 tags:

@@ -1,5 +1,6 @@
 ---
 title: Linux_Cobbler搭建本地YUM源同步k8s阿里云
+description: 用 reposync 把阿里云 k8s 源同步到 Cobbler 再 createrepo 发布内网 YUM 源的记录。
 date: 2019-09-30 11:02:49
 categories: Linux
 tags:

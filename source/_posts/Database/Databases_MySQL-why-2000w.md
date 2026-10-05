@@ -1,5 +1,6 @@
 ---
 title: 数据库单表的测试
+description: 实测单表 200w 到 3200w 的 count 耗时，还用宽表和 hexdump 数 B+ 树的层数。
 categories: Database
 date: 2023-05-19 18:10:52
 tags:

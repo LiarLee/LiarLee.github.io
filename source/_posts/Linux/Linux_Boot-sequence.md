@@ -1,5 +1,6 @@
 ---
 title: Linux启动流程简述
+description: Linux MBR 启动流程梳理，从 POST、GRUB 各阶段到 init 进程，附 grub 内核参数说明。
 date: 2019-07-13 17:18:40
 categories: Linux
 tags:

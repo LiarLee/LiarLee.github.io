@@ -1,5 +1,6 @@
 ---
 title: Network 相关知识不知道放那儿
+description: TCP/IP 入门与 Linux 网络栈资料的链接收藏，含 RFC1180 教程与 initcwnd 调优。
 categories: Network
 date: 2023-05-12 22:48:45
 tags:

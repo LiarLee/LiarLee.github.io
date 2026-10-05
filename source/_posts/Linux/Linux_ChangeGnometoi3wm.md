@@ -1,5 +1,6 @@
 ---
 title: i3wm的简单配置
+description: 从 Gnome 迁移到 i3-gaps 的配置记录，整理常用快捷键与 polybar、rofi 等周边工具。
 date: 2019-10-22 15:09:59
 tags:
   - Linux

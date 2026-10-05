@@ -1,5 +1,6 @@
 ---
 title: Docker中运行DCM4CHEE-arc-light
+description: Docker 最小化跑起 DCM4CHEE-arc-light，连同 OpenLDAP 和 PostgreSQL 的启动命令。
 date: 2018-07-02 20:34:52
 tags:
   - Docker

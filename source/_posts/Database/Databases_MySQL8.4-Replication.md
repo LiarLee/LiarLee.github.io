@@ -1,5 +1,6 @@
 ---
 title: MySQL 主从复制
+description: 用 Docker 搭一遍 MySQL 8.4 主从复制，验证锁表与重启是否必须，含 GTID 和排错。
 categories: Database
 date: 2024-07-13 01:24:55
 tags:

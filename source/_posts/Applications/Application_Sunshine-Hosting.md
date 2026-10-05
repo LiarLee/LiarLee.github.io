@@ -1,5 +1,6 @@
 ---
 title: tailscale 结合 Sunshine 串流
+description: 在 EC2 显卡实例上用 Sunshine 搭 Steam 串流，解决手柄权限的几处报错。
 date: 2023-12-27 11:15:31
 categories: Application
 tags:

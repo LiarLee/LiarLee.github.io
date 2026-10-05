@@ -1,5 +1,6 @@
 ---
 title: Nginx配置文件中if判断与try_files
+description: location 里 if 判断切换 root 会让 try_files 失效，改用 proxy_pass 分流 PC 与手机站来解决。
 date: 2019-09-19 09:52:13
 categories: Linux
 tags:

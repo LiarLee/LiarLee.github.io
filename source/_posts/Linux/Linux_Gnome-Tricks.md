@@ -1,5 +1,6 @@
 ---
 title: Gnome快捷键
+description: Gnome 桌面常用快捷键整理，从 Super 全局搜索到截图与工作区切换。
 date: 2019-09-19 16:02:35
 categories: Linux
 tags:

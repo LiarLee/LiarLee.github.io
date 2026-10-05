@@ -1,5 +1,6 @@
 ---
 title: Windows Core EKS 节点管理命令
+description: Windows Core 节点的日常运维命令，查磁盘、扩容卷以及带凭据拉取 ECR 镜像。
 categories: Kubernetes
 date: 2023-12-05 10:11:22
 tags:

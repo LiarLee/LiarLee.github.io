@@ -1,5 +1,6 @@
 ---
 title: Nginx Performance Test
+description: 用 wrk 压测 Nginx 验证 QPS 与 RT 的换算，并排查 fd 限制、orphan 连接等问题。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

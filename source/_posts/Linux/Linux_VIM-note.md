@@ -1,5 +1,6 @@
 ---
 title: vim笔记
+description: vim 常用命令速记，从模式切换、光标移动到 vimrc 个性化设置和 tab 空格互转。
 date: 2019-07-08 21:49:04
 tags:
   - Linux

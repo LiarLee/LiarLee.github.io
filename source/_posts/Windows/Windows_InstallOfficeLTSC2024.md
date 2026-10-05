@@ -1,5 +1,6 @@
 ---
 title: 记录安装Office LTSC 2024 的步骤
+description: 用 Office 部署工具的 configuration.xml 安装 LTSC 2024，附 KMS 激活步骤。
 date: 2026-01-15 00:50
 categories: Windows
 tags:

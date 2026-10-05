@@ -1,5 +1,6 @@
 ---
 title: VPCFlowlog 解析
+description: 解读 VPC Flow Log 各字段的含义，重点是 tcp-flags 聚合值按位计算的方式。
 categories: AWS
 date: 2023-07-05 11:33:43
 tags:

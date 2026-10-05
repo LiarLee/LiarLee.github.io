@@ -1,5 +1,6 @@
 ---
 title: ElasticSearch 安装记录
+description: 三节点 ElasticSearch 集群的 yum 安装过程，附 Kibana 与 Filebeat 的部署。
 date: 2020-06-27 21:05:02
 categories: ElasticSearch
 tags:

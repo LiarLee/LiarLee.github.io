@@ -1,5 +1,6 @@
 ---
 title: CFS 调度器资料
+description: CFS 调度器的学习资料链接收集，含内核官方文档与中文设计解读。
 categories: Linux
 date: 2023-12-22 12:51:25
 tags:

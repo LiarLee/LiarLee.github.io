@@ -1,5 +1,6 @@
 ---
 title: Kubernetes day1
+description: Kubernetes 学习第一天的笔记，从云原生与十二因素应用到 Master 各组件职责梳理。
 date: 2021-09-11 10:41:37
 tags:
   - Kubernetes

@@ -1,5 +1,6 @@
 ---
 title: buffer/cache 无法释放
+description: drop_caches 后 buff/cache 降不下来，定位到 tmpfs 的 shmem 也计入统计，用 tmpfs 复现验证。
 date: 2023-05-12 22:15:35
 categories: Linux
 tags:

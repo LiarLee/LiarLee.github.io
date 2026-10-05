@@ -1,5 +1,6 @@
 ---
 title: 虚拟机制作模板的步骤及设置
+description: ESXi 上制作 CentOS 7 虚拟机模板的步骤，从装 open-vm-tools 到清理网卡与 SSH 指纹。
 date: 2019-09-18 16:41:11
 categories: ESXi
 tags:

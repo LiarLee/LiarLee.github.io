@@ -1,5 +1,6 @@
 ---
 title: Linux OS Debug 方法记录
+description: EC2 上排查 Linux 崩溃的方法，用诊断中断触发 NMI 配合 kdump 和 crash 分析内核现场。
 date: 2023-06-28 17:12:22
 categories: Linux
 tags:

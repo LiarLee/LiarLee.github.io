@@ -1,5 +1,6 @@
 ---
 title: Iostat 参数说明
+description: iostat 各列指标的含义解释，以及看 IO 瓶颈时 await、aqu-sz、util 的关注顺序。
 categories: Linux
 date: 2023-12-22 12:44:27
 tags:

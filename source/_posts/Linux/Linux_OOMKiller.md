@@ -1,5 +1,6 @@
 ---
 title: OOM行为 
+description: 梳理 OOM Killer 打分机制与 overcommit，记录用 oom_score_adj 保护进程和解读 OOM 日志。
 date: 2022-04-19 17:45:39
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: 面试记录
+description: 2019 年运维面试的复盘，Python、awk、nginx 到 load average，没答上的记下来。
 date: 2019-07-18 13:12:33
 tags:
   - Personal

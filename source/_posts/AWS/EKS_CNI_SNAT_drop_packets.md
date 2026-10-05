@@ -1,5 +1,6 @@
 ---
 title: 源地址检查造成丢包的分析
+description: NLB 保留客户端源 IP 后 EKS 偶发丢包，排查到 rp_filter 校验与 VPC CNI 的 SNAT 行为。
 categories: EKS
 date: 2024-01-10 13:18:03
 tags:

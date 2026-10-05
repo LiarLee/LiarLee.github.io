@@ -1,5 +1,6 @@
 ---
 title: RabbitMQ_SysV风格管理脚本模板
+description: RabbitMQ 的 SysV 管理脚本模板，记录 .erlang.cookie 认证和 $HOME 设置两个坑。
 date: 2019-09-23 15:48:52
 categories: Linux
 tags:

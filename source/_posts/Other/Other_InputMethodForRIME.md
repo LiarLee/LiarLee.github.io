@@ -1,5 +1,6 @@
 ---
 title: rime的配置
+description: rime 输入法的配置片段，小鹤双拼方案，加上中英标点和全半角的默认开关。
 tags:
   - RIME
   - Linux

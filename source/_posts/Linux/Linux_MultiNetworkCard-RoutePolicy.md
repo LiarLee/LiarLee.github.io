@@ -1,5 +1,6 @@
 ---
 title: Linux配置网卡策略路由
+description: 多网卡流量进出网卡不一致会被 AWS VPC 丢包，用 netplan 和 network-scripts 配置策略路由让流量同卡进出。
 date: 2023-07-25 16:41:36
 categories: Linux
 tags:

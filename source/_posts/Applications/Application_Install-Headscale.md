@@ -1,5 +1,6 @@
 ---
 title: 安装 headscale 建立自己的 Tailnet
+description: 自建 headscale 替代 Tailscale 官方控制中心，记录配置要点与节点注册命令。
 date: 2023-12-27 21:51:13
 categories: Application
 tags:

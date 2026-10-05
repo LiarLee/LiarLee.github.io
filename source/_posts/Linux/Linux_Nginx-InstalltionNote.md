@@ -1,5 +1,6 @@
 ---
 title: Nginx编译安装
+description: 早年间源码编译安装 Nginx 的记录，含 zlib、pcre 依赖安装和 SysV 服务脚本。
 date: 2018-01-22 18:03:58
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: bpftrace 使用tracepoint 追踪 tcp 状态变化
+description: bpftrace 入门实践，从查 tracepoint 参数格式到用 inet_sock_set_state 追踪 TCP 状态变化。
 date: 2023-03-19 00:08:52
 categories: Linux
 tags:

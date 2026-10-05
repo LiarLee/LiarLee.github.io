@@ -1,5 +1,6 @@
 ---
 title: Fedora开机启动速度的优化
+description: 用 systemd-analyze 定位 Fedora 开机慢的元凶，mask 掉 dnf-makecache 等服务后提速。
 date: 2019-01-13 17:02:11
 categories: Linux
 tags:

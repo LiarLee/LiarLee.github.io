@@ -1,5 +1,6 @@
 ---
 title: Kubernetes集群的学习笔记(5)
+description: 存储卷笔记，从 PV、PVC 的绑定到 ConfigMap 注入配置，再带到 StatefulSet 的三件套。
 date: 2019-10-18 11:48:48
 categories: Kubernetes
 tags:

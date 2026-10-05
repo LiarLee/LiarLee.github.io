@@ -1,5 +1,6 @@
 ---
 title: 通过systemd管理软件和服务
+description: 为自装软件写 systemd Unit，梳理 Unit、Service、Install 三段的常用字段，附 libvirtd 示例。
 date: 2019-09-17 14:30:30
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: Nginx反向代理笔记
+description: 梳理 SNAT/DNAT 与正反向代理的概念，记录 proxy_pass、proxy_set_header 的常用写法。
 date: 2019-07-13 17:50:39
 categories: Linux
 tags:

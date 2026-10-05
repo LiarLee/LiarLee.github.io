@@ -1,5 +1,6 @@
 ---
 title: Fortio 笔记
+description: Fortio 与 dnsping 的常用命令笔记，并实测 sidecar 链路下服务的承压上限。
 date: 2025-05-09 23:26:39
 categories: Kubernetes
 tags:

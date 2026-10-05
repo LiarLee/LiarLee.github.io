@@ -1,5 +1,6 @@
 ---
 title: TrueNas Core 当前基准测试指标
+description: 用 fio 给 TrueNAS Core 的 SSD 和 HDD 做读写基准，顺带记下监控里的吞吐和 IOPS。
 categories: Application
 date: 2023-10-08 13:57:57
 tags:

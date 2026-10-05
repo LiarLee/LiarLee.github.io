@@ -1,5 +1,6 @@
 ---
 title: TigerVNC 在 RHEL9 的安装和配置
+description: RHEL9 上安装配置 TigerVNC 的步骤，从 Server with GUI 到 systemd 服务与排障命令。
 date: 2024-08-21 14:02:57
 categories: Linux
 tags:

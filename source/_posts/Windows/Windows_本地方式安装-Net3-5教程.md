@@ -1,5 +1,6 @@
 ---
 title: 离线安装.Net3.5
+description: 无网络时用 DISM 从官方镜像的 sxs 目录离线启用 .NET 3.5。
 date: 2018-01-22 11:55:01
 tags:
   - Windows

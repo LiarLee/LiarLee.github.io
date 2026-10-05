@@ -1,5 +1,6 @@
 ---
 title: Neovim 全 Lua 配置 
+description: 从零攒的 Neovim 全 Lua 配置，记录 Telescope、LSP 补全和一套自己的 Leader 快捷键。
 date: 2023-08-05 00:36:04
 categories: Linux
 tags:

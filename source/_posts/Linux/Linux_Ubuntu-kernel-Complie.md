@@ -1,5 +1,6 @@
 ---
 title: Ubuntu 18.04 内核编译初试
+description: 用 linux-tkg 在 Ubuntu 18.04 编译带 muqss 调度器的内核，记录依赖坑和 deb 打包的玄学失败。
 date: 2021-07-01 12:48:29
 categories: Linux
 tags:

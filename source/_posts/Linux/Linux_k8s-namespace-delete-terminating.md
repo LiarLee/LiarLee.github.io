@@ -1,5 +1,6 @@
 ---
 title: k8s所有的NS删除的时候都进入Terminating状态
+description: Namespace 删不掉卡在 Terminating，用 kubectl proxy 走 finalize 强删，根因是异常的 apiservice。
 date: 2019-10-09 11:17:05
 categories: Kubernetes
 tags:

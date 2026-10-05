@@ -1,5 +1,6 @@
 ---
 title: Kubernetes集群的学习笔记(7)
+description: Dashboard 部署与 Token、kubeconfig 两种登录方式，顺带整理命令式与声明式配置的区别。
 date: 2019-11-06 16:07:53
 categories: Kubernetes
 tags:

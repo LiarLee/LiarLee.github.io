@@ -1,5 +1,6 @@
 ---
 title: 将ArchLinux作为节点加入EKS UnmanagedNode
+description: 把 ArchLinux 以非托管节点方式加入 EKS，记录做节点 AMI 前要还原 kubeconfig 变量的坑。
 categories: Kubernetes
 date: 2023-04-20 00:42:22
 tags:

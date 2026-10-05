@@ -1,5 +1,6 @@
 ---
 title: Linux Redhat 9 oom不触发
+description: RHEL 9 上 MySQL 吃满内存却不触发 OOM 直到实例僵死，记录复现步骤与排查思路。
 date: 2023-07-12 06:52:18
 categories: Linux
 tags:

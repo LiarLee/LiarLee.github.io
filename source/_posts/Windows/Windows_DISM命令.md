@@ -1,5 +1,6 @@
 ---
 title: DISM的备份与还原
+description: DISM 捕捉、挂载、拆分 WIM 映像的命令参数笔记，附常规备份还原流程。
 date: 2018-04-19 18:43:50
 tags:
   - Windows

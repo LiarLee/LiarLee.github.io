@@ -1,5 +1,6 @@
 ---
 title: Linux-内核参数笔记
+description: TCP 相关内核参数的含义与建议值，从 tw_buckets、syncookies 到 keepalive 系列。
 date: 2018-01-22 16:05:47
 categories: Linux
 tags:

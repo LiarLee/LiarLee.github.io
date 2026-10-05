@@ -1,5 +1,6 @@
 ---
 title: Kubernetes集群的学习笔记(2)
+description: kubectl 常用命令的分类速查，从查状态、跑 Pod 到 expose、升级回滚的使用流程。
 date: 2019-07-23 21:00:03
 categories: Kubernetes
 tags:

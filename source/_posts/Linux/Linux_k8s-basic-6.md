@@ -1,5 +1,6 @@
 ---
 title: Kubernetes集群的学习笔记(6) 
+description: RBAC 授权模型梳理，Role 与 ClusterRole 的层级区别，附 RoleBinding 绑 ClusterRole 的技巧。
 date: 2019-11-06 14:45:20
 categories: Kubernetes
 tags:

@@ -1,5 +1,6 @@
 ---
 title: Kubernetes day2 
+description: Kubernetes 学习第二天的笔记，etcd 的规划选型、etcdctl 操作与快照备份恢复。
 date: 2021-10-02 10:49:55
 tags:
   - Kubernetes

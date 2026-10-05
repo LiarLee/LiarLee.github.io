@@ -1,5 +1,6 @@
 ---
 title: pyautogui自动脚本
+description: 用 pyautogui 写的游戏挂机脚本，靠截图识别书本和食物替我点点点。
 date: 2019-05-17 22:21:08
 tags: Python 
 categories: Python

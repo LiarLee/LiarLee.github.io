@@ -1,5 +1,6 @@
 ---
 title: 使用 Snapper 管理快照
+description: 用 Snapper 给 btrfs 子卷做自动快照，从创建配置到启用 timeline 和 cleanup 的 systemd timer。
 date: 2024-06-08 12:26:18
 categories: Linux
 tags:

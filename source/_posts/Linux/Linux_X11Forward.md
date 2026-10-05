@@ -1,5 +1,6 @@
 ---
 title: X11 通过 ssh 转发图形化界面
+description: ssh 转发 X11 图形界面的配置步骤，顺带记录 -L、-R、-D 三种隧道参数的区别。
 date: 2023-08-16 14:17:31
 categories: Linux
 tags:

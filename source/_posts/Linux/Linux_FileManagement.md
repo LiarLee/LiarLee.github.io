@@ -1,5 +1,6 @@
 ---
 title: 文件系统及文件管理
+description: Linux 文件管理笔记，按 FHS 标准梳理根文件系统各目录的用途。
 date: 2019-07-24 15:07:34
 categories: Linux
 tags:

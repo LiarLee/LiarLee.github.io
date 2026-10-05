@@ -1,5 +1,6 @@
 ---
 title: MySQL 无法重连问题的分析
+description: 复现连接被 kill 后 MySQL 无法重连的故障，从 CLOSE_WAIT 和 perf 热点定位根因。
 categories: Database
 date: 2024-04-12 15:36:25
 tags:

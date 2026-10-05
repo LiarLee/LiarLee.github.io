@@ -1,5 +1,6 @@
 ---
 title: 荣耀8-刷LineageOS14.1简述
+description: 荣耀8 从 EMUI 刷 LineageOS 14.1 的完整记录，解锁、写入 TWRP 到刷入 OpenGAPPS。
 date: 2018-07-08 17:47:39
 tags:
   - Android

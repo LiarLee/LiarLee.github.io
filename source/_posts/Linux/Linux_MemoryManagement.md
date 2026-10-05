@@ -1,5 +1,6 @@
 ---
 title: Linux内存管理笔记
+description: Linux 内存管理笔记，用 crash 配合 kernel-debuginfo 分析进程的物理与虚拟内存映射。
 date: 2023-07-11 14:37:43
 categories: Linux
 tags:

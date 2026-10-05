@@ -1,5 +1,6 @@
 ---
 title: K8S将loop-lvm改为direct-lvm说明
+description: 因 loop 设备 IO 负载高把 docker 存储从 loop-lvm 切到 direct-lvm，记录配置与踩坑。
 date: 2019-09-24 11:10:36
 categories: Kubernetes
 tags:

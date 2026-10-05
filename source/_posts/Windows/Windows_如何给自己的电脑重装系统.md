@@ -1,5 +1,6 @@
 ---
 title: 如何使用微软官方镜像重装系统
+description: 面向新手的重装教程，Rufus 制作启动盘配官方镜像，从分区到装完的完整流程。
 date: 2018-01-02 19:25:50
 tags: Windows
 categories: Windows

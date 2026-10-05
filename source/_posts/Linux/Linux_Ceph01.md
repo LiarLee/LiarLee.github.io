@@ -1,5 +1,6 @@
 ---
 title: Ceph Cluster 01 - Installation
+description: Ceph 集群系列第一篇，用 cephadm 在 Fedora 上完成四节点集群的部署。
 date: 2021-08-21 23:09:06
 categories: Linux
 tags:

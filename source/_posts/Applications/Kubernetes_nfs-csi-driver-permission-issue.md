@@ -1,5 +1,6 @@
 ---
 title: Kubernetes NFS CSI 启动 bitnami postgres 镜像权限不足
+description: NFS CSI 挂 bitnami postgres 权限报错的排障记录，根因是 NFSv4 idmapping。
 date: 2024-09-08 22:42:33
 categories: Kubernetes
 tags:

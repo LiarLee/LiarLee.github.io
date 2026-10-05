@@ -1,5 +1,6 @@
 ---
 title: MySQL 计算内存用量
+description: RDS MySQL 内存占用的估算公式，buffer pool 加会话级 buffer 乘以最大连接数。
 date: 2024-07-31 17:15:18
 categories: Database
 tags:

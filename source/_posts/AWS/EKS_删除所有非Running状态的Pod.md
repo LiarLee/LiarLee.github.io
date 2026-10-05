@@ -1,5 +1,6 @@
 ---
 title: 删除所有非Running状态的Pod
+description: 用 field-selector 一键清理 Evicted 等 Failed 状态的 Pod，附 DiskPressure 驱逐复现。
 categories: Kubernetes
 date: 2023-03-23 23:42:22
 tags:

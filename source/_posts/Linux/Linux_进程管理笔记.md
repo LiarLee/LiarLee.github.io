@@ -1,5 +1,6 @@
 ---
 title: Linux-进程管理笔记
+description: 进程管理基础笔记，覆盖优先级 nice、进程状态、ps/top 读法和信号作业控制。
 date: 2018-01-29 11:27:14
 categories: Linux
 tags:

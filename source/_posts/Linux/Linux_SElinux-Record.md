@@ -1,5 +1,6 @@
 ---
 title: SElinux问题排查
+description: 容器里的 mysqld 写用户目录被 SELinux 拒绝，试过 sealert 的建议仍无法匹配，最终切到 permissive。
 date: 2024-07-13 11:36:11
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: 安装Maven教程
+description: Linux 下安装 Maven 的备忘，解压配好 M2_HOME 与 PATH 环境变量即可使用。
 date: 2018-06-25 21:05:26
 categories: Linux
 tags:

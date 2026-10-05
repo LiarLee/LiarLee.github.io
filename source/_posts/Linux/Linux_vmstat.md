@@ -1,5 +1,6 @@
 ---
 title: vmstat 命令说明
+description: vmstat 每一列指标的含义解读，以及从 r、b、wa 入手看系统瓶颈的分析顺序。
 categories: Linux
 date: 2023-12-22 12:44:27
 tags:

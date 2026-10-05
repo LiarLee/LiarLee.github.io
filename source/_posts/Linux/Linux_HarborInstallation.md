@@ -1,5 +1,6 @@
 ---
 title: Harbor Http 安装部署
+description: Harbor 的 HTTP 离线部署记录，为 Ceph 集群引导提供内网私有镜像仓库。
 date: 2021-09-27 11:21:47
 categories: Linux
 tags:

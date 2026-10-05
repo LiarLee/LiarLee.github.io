@@ -1,5 +1,6 @@
 ---
 title: ElasticSearch 安装记录
+description: ElasticSearch 7 的 tar 包安装记录，从内核参数、limits 调整到 elasticsearch.yml 配置。
 date: 2019-09-11 17:25:57
 categories: ElasticSearch
 tags:

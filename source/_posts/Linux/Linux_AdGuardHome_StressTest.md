@@ -1,5 +1,6 @@
 ---
 title: 性能工程实战：测试 2 核 AdGuard Home 的性能极限
+description: 用 dnsperf 压测 PVE 里的 2 核 AdGuard Home，按性能工程方法测出扩展性与饱和度极限。
 date: 2025-12-27 19:06
 categories: Linux
 tags:

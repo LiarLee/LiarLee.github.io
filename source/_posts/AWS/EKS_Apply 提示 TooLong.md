@@ -1,5 +1,6 @@
 ---
 title: Kubectl Apply 报错 annotation Too long
+description: kubectl apply 更新 CRD 时 annotation 超限，改用 replace 或 server-side apply 解决。
 categories: Kubernetes
 date: 2023-12-22 00:53:54
 tags:

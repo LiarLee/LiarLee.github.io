@@ -1,5 +1,6 @@
 ---
 title: RDS QPS 下降引发的网络流控分析记录
+description: 排查 RDS QPS 下降的悬案，用抓包和 CWND、RTT 的证据定位到 AWS 突增实例的带宽流控。
 date: 2023-05-09 01:34:00
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: B+树笔记
+description: 两篇讲清 B-Tree 插入与查找原理的资料，附 MySQL 索引如何用 B-Trees 的说明。
 date: 2024-09-20 23:08:56
 categories: Database
 tags:

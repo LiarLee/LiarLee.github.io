@@ -1,5 +1,6 @@
 ---
 title: Kubernetes集群的学习笔记(4)
+description: Service 各类型与请求转发链路，以及用 Ingress Controller 卸载 HTTPS 的思路。
 date: 2019-10-14 14:37:10
 categories: Kubernetes
 tags:

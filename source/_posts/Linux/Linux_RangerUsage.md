@@ -1,5 +1,6 @@
 ---
 title: Linux_Ranger_Usage
+description: ranger 文件管理器的快捷键备忘，覆盖移动、复制粘贴、书签标签、排序和批量重命名。
 date: 2021-08-26 01:49:46
 categories: Linux
 tags:

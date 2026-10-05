@@ -1,5 +1,6 @@
 ---
 title: Linux中一些常见的性能分析命令
+description: 从命令为什么卡住出发，整理 strace 追踪系统调用和 perf 采样出火焰图的分析思路。
 date: 2021-12-26 00:18:36
 categories: Linux
 tags:

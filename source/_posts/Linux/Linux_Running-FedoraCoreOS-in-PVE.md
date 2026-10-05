@@ -1,5 +1,6 @@
 ---
 title: 在 PVE 上使用 Ignition 文件启动 Fedora CoreOS
+description: 给 PVE 虚拟机配置加一行 args，把 Ignition 文件经 fw_cfg 传给 Fedora CoreOS，替代 cloudinit。
 date: 2024-06-15 13:06:22
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: 升级以及清理内核的步骤
+description: CentOS 与 Ubuntu 升级、降级和清理旧内核的操作步骤，含 kernel 系列四个包的去留建议。
 categories: Linux
 date: 2023-07-12 06:52:18
 tags:

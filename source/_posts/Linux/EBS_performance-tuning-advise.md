@@ -1,5 +1,6 @@
 ---
 title: EBS 性能优化笔记
+description: EBS 磁盘性能调优笔记，覆盖内核版本、Raid0、队列深度等参数与压测检测工具。
 date: 2023-08-16 14:17:31
 categories: Linux
 tags:

@@ -1,5 +1,6 @@
 ---
 title: PeaZip添加智能解压到win11右键菜单
+description: 导入 PeaZip 自带的注册表文件，把智能解压加进 Win11 右键菜单。
 date: 2025-09-14 10:18
 categories: Application
 tags:
