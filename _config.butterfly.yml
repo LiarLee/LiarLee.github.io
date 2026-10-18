@@ -180,6 +180,7 @@ subtitle:
   # Customize typed.js
   # https://github.com/mattboldt/typed.js/#customization
   typed_option:
+    shuffle: true
   # Source - Call the third-party service API (Chinese only)
   # It will show the source first, then show the content of sub
   # Choose: false/1/2/3
