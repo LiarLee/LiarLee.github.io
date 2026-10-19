@@ -50,12 +50,13 @@ highlight:
   tab_replace: ''
   wrap: true
   hljs: false
+  # mermaid 原样输出 <pre><code class="mermaid">，交给 butterfly 渲染成图
+  # （highlight.js 默认按 plaintext 高亮，输出 figure 表格，butterfly 的 pre > code.mermaid 选不中）
+  exclude_languages:
+    - mermaid
 prismjs:
   enable: true
   preprocess: true
-  # mermaid 交给 butterfly 渲染，不走 prismjs 高亮（否则输出 plaintext figure，butterfly 选不中）
-  exclude_languages:
-    - mermaid
   line_number: false
   line_threshold: 0
   tab_replace: '  '
