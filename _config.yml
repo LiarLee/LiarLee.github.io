@@ -53,6 +53,9 @@ highlight:
 prismjs:
   enable: true
   preprocess: true
+  # mermaid 交给 butterfly 渲染，不走 prismjs 高亮（否则输出 plaintext figure，butterfly 选不中）
+  exclude_languages:
+    - mermaid
   line_number: false
   line_threshold: 0
   tab_replace: '  '

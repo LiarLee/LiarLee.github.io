@@ -27,6 +27,7 @@ sequenceDiagram
 ## chartjs 标签写法
 
 {% chartjs %}
+<!-- chart -->
 {
   "type": "bar",
   "data": {
@@ -34,4 +35,5 @@ sequenceDiagram
     "datasets": [{ "label": "测试", "data": [3, 7, 5] }]
   }
 }
+<!-- endchart -->
 {% endchartjs %}
