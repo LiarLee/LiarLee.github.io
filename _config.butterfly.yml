@@ -1008,7 +1008,7 @@ abcjs:
 # Mermaid
 # https://github.com/mermaid-js/mermaid
 mermaid:
-  enable: false
+  enable: true
   # Write Mermaid diagrams using code blocks
   code_write: false
   # built-in themes: default / forest / dark / neutral
@@ -1019,7 +1019,7 @@ mermaid:
 # chartjs
 # see https://www.chartjs.org/docs/latest/
 chartjs:
-  enable: false
+  enable: true
   # Do not modify unless you understand how they work.
   # The default settings are only used when the MD syntax is not specified.
   # General font color for the chart
